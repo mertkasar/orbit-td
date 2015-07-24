@@ -7,8 +7,10 @@ class GameScene : public cocos2d::Layer {
 private:
     cocos2d::Size mVisibleSize;
     cocos2d::Vec2 mOrigin;
+    cocos2d::Vec2 mCanvasCenter;
 
     cocos2d::LayerColor *mBackgroundLayer;
+    cocos2d::Layer *mGameplayLayer;
 
 public:
     GameScene();

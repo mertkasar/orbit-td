@@ -125,12 +125,16 @@ endif( WIN32 )
 set(GAME_SRC
   Classes/AppDelegate.cpp
   Classes/Scenes/GameScene.cpp
+  Classes/Entities/Enemy.cpp
+  Classes/Entities/Tower.cpp
   ${PLATFORM_SPECIFIC_SRC}
 )
 
 set(GAME_HEADERS
   Classes/AppDelegate.h
   Classes/Scenes/GameScene.h
+  Classes/Entities/Enemy.h
+  Classes/Entities/Tower.h
   ${PLATFORM_SPECIFIC_HEADERS}
 )
 
