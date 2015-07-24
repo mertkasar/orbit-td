@@ -3,6 +3,7 @@
 #include <base/CCDirector.h>
 #include <base/CCEventDispatcher.h>
 #include <2d/CCActionInterval.h>
+#include <2d/CCActionInstant.h>
 #include <physics/CCPhysicsWorld.h>
 #include <physics/CCPhysicsContact.h>
 
@@ -57,17 +58,13 @@ void GameScene::buildScene() {
     auto tower2 = Tower::create();
     tower2->setPosition(mCanvasCenter - Vec2(200.f, 100.f));
 
-    auto enemy = Enemy::create();
-    enemy->setPosition(Vec2(mVisibleSize.width - 100.f, mVisibleSize.height / 2.f));
-    enemy->setRotation(-90.f);
-    enemy->runAction(MoveTo::create(10.f, Vec2(100, mVisibleSize.height / 2.f)));
-
     mGameplayLayer->addChild(tower1);
     mGameplayLayer->addChild(tower2);
-    mGameplayLayer->addChild(enemy);
 
     this->addChild(mBackgroundLayer);
     this->addChild(mGameplayLayer);
+
+    this->schedule(CC_SCHEDULE_SELECTOR(GameScene::spawnEnemy), 1.f);
 }
 
 void GameScene::connectListeners() {
@@ -79,7 +76,19 @@ void GameScene::connectListeners() {
 
         if ((a->getCategoryBitmask() == TOWER_RANGE_MASK && b->getCategoryBitmask() == ENEMY_MASK) ||
             (a->getCategoryBitmask() == ENEMY_MASK && b->getCategoryBitmask() == TOWER_RANGE_MASK)) {
-            CCLOG("Ship entered to tower's range");
+
+            Tower *tower = nullptr;
+            Enemy *enemy = nullptr;
+
+            if (a->getCategoryBitmask() == TOWER_RANGE_MASK) {
+                tower = static_cast<Tower *>(a->getNode());
+                enemy = static_cast<Enemy *>(b->getNode());
+            } else {
+                tower = static_cast<Tower *>(b->getNode());
+                enemy = static_cast<Enemy *>(a->getNode());
+            }
+
+            tower->addTarget(enemy);
         }
 
         return true;
@@ -90,9 +99,33 @@ void GameScene::connectListeners() {
 
         if ((a->getCategoryBitmask() == TOWER_RANGE_MASK && b->getCategoryBitmask() == ENEMY_MASK) ||
             (a->getCategoryBitmask() == ENEMY_MASK && b->getCategoryBitmask() == TOWER_RANGE_MASK)) {
-            CCLOG("Ship exit from tower's range");
+
+            Tower *tower = nullptr;
+            Enemy *enemy = nullptr;
+
+            if (a->getCategoryBitmask() == TOWER_RANGE_MASK) {
+                tower = static_cast<Tower *>(a->getNode());
+                enemy = static_cast<Enemy *>(b->getNode());
+            } else {
+                tower = static_cast<Tower *>(b->getNode());
+                enemy = static_cast<Enemy *>(a->getNode());
+            }
+
+            tower->removeTarget(enemy);
         }
     };
 
     Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
+}
+
+void GameScene::spawnEnemy(float pDelta) {
+    auto enemy = Enemy::create();
+    enemy->setPosition(Vec2(mVisibleSize.width - 100.f, mVisibleSize.height / 2.f));
+
+    auto seq = Sequence::create(
+            MoveTo::create(8.f, Vec2(100.f, mVisibleSize.height / 2.f)),
+            RemoveSelf::create(), NULL);
+    enemy->runAction(seq);
+
+    mGameplayLayer->addChild(enemy);
 }

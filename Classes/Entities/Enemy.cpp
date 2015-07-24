@@ -27,6 +27,7 @@ bool Enemy::init() {
     this->setPhysicsBody(mBody);
 
     this->setScale(0.5f);
+    this->setRotation(SPRITE_ANGLE);
 
     this->addChild(mSprite);
 

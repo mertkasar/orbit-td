@@ -27,6 +27,8 @@ private:
     void buildScene();
 
     void connectListeners();
+
+    void spawnEnemy(float pDelta);
 };
 
 #endif // HELLOWORLD_SCENE_H
