@@ -131,6 +131,7 @@ set(GAME_SRC
 )
 
 set(GAME_HEADERS
+  Classes/Globals.h
   Classes/AppDelegate.h
   Classes/Scenes/GameScene.h
   Classes/Entities/Enemy.h

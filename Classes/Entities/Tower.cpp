@@ -1,5 +1,6 @@
 #include <Entities/Tower.h>
 
+#include <Globals.h>
 #include <2d/CCSprite.h>
 #include <physics/CCPhysicsBody.h>
 
@@ -23,6 +24,12 @@ bool Tower::init() {
     mGun->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
 
     mBase->setScale(0.5f);
+
+    mBody = PhysicsBody::createCircle(100.f);
+    mBody->setCategoryBitmask(TOWER_RANGE_MASK);
+    mBody->setContactTestBitmask(ENEMY_MASK);
+    mBody->setCollisionBitmask(NULL_MASK);
+    this->setPhysicsBody(mBody);
 
     this->addChild(mBase);
     this->addChild(mGun);

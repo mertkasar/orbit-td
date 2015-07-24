@@ -5,11 +5,14 @@
 
 namespace cocos2d {
     class Sprite;
+
+    class PhysicsBody;
 }
 
 class Enemy : public cocos2d::Node {
 private:
     cocos2d::Sprite *mSprite;
+    cocos2d::PhysicsBody *mBody;
 
 public:
     Enemy();

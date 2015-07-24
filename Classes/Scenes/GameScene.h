@@ -25,6 +25,8 @@ public:
 
 private:
     void buildScene();
+
+    void connectListeners();
 };
 
 #endif // HELLOWORLD_SCENE_H

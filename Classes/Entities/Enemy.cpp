@@ -1,5 +1,6 @@
 #include <Entities/Enemy.h>
 
+#include <Globals.h>
 #include <2d/CCSprite.h>
 #include <physics/CCPhysicsBody.h>
 
@@ -18,6 +19,12 @@ bool Enemy::init() {
         return false;
 
     mSprite = Sprite::create("textures/enemy.png");
+
+    mBody = PhysicsBody::createCircle(mSprite->getContentSize().width / 2.f);
+    mBody->setCategoryBitmask(ENEMY_MASK);
+    mBody->setContactTestBitmask(TOWER_RANGE_MASK);
+    mBody->setCollisionBitmask(NULL_MASK);
+    this->setPhysicsBody(mBody);
 
     this->setScale(0.5f);
 

@@ -1,8 +1,12 @@
 #include <Scenes/GameScene.h>
 
 #include <base/CCDirector.h>
+#include <base/CCEventDispatcher.h>
 #include <2d/CCActionInterval.h>
+#include <physics/CCPhysicsWorld.h>
+#include <physics/CCPhysicsContact.h>
 
+#include <Globals.h>
 #include <Entities/Tower.h>
 #include <Entities/Enemy.h>
 
@@ -17,7 +21,9 @@ GameScene::~GameScene() {
 }
 
 Scene *GameScene::createScene() {
-    auto scene = Scene::create();
+    auto scene = Scene::createWithPhysics();
+    scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+    scene->getPhysicsWorld()->setGravity(Vect(0, 0));
 
     auto layer = GameScene::create();
 
@@ -36,6 +42,7 @@ bool GameScene::init() {
     mCanvasCenter = Vec2(mVisibleSize / 2.f) + mOrigin;
 
     buildScene();
+    connectListeners();
 
     return true;
 }
@@ -61,4 +68,31 @@ void GameScene::buildScene() {
 
     this->addChild(mBackgroundLayer);
     this->addChild(mGameplayLayer);
+}
+
+void GameScene::connectListeners() {
+    // Add contact event listener
+    auto contactListener = EventListenerPhysicsContact::create();
+    contactListener->onContactBegin = [](PhysicsContact &pContact) {
+        auto a = pContact.getShapeA()->getBody();
+        auto b = pContact.getShapeB()->getBody();
+
+        if ((a->getCategoryBitmask() == TOWER_RANGE_MASK && b->getCategoryBitmask() == ENEMY_MASK) ||
+            (a->getCategoryBitmask() == ENEMY_MASK && b->getCategoryBitmask() == TOWER_RANGE_MASK)) {
+            CCLOG("Ship entered to tower's range");
+        }
+
+        return true;
+    };
+    contactListener->onContactSeparate = [](PhysicsContact &pContact) {
+        auto a = pContact.getShapeA()->getBody();
+        auto b = pContact.getShapeB()->getBody();
+
+        if ((a->getCategoryBitmask() == TOWER_RANGE_MASK && b->getCategoryBitmask() == ENEMY_MASK) ||
+            (a->getCategoryBitmask() == ENEMY_MASK && b->getCategoryBitmask() == TOWER_RANGE_MASK)) {
+            CCLOG("Ship exit from tower's range");
+        }
+    };
+
+    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
 }
