@@ -3,7 +3,7 @@
 
 #define SPRITE_ANGLE -90.f
 
-#define ENEMY_MAX_VEL 200.f
+#define ENEMY_MAX_VEL 100.f
 
 //Collision bitmasks
 #define NULL_MASK 0x00

@@ -26,7 +26,7 @@ bool Enemy::init() {
     mBody->setCategoryBitmask(ENEMY_MASK);
     mBody->setContactTestBitmask(TOWER_RANGE_MASK);
     mBody->setCollisionBitmask(NULL_MASK);
-    mBody->setMass(6.f);
+    mBody->setMass(5.f);
     mBody->setVelocityLimit(ENEMY_MAX_VEL);
     this->setPhysicsBody(mBody);
 
@@ -41,9 +41,32 @@ bool Enemy::init() {
 }
 
 void Enemy::update(float pDelta) {
-    SteeringDirector::getInstance()->seek(this, mTarget);
+    bool dead = false;
+
+    Vec2 position = this->getPosition();
+    Vec2 target = mPath.getCurrentNode();
+
+    if (position.distance(target) <= mPath.getDensity()) {
+        if (mPath.eop())
+            dead = true;
+        else {
+            mPath.forward();
+            target = mPath.getCurrentNode();
+        }
+    }
+
+    SteeringDirector::getInstance()->seek(this, target);
 
     // Adapt rotation
     auto angle = CC_RADIANS_TO_DEGREES(mBody->getVelocity().getAngle());
     mSprite->setRotation(-angle);
+
+    if (dead)
+        removeFromParentAndCleanup(true);
+}
+
+void Enemy::constructPath(const Path &pPath) {
+    for (auto node : pPath.getWayPointList())
+        mPath.addNode(node);
+
 }

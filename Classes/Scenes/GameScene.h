@@ -2,6 +2,7 @@
 #define HELLOWORLD_SCENE_H
 
 #include <2d/CCLayer.h>
+#include <Utilities/Path.h>
 
 class Enemy;
 
@@ -14,7 +15,7 @@ private:
     cocos2d::LayerColor *mBackgroundLayer;
     cocos2d::Layer *mGameplayLayer;
 
-    Enemy* mEnemy;
+    Path mPath;
 
 public:
     GameScene();

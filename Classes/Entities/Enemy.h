@@ -2,6 +2,7 @@
 #define ENEMY_H
 
 #include <2d/CCNode.h>
+#include <Utilities/Path.h>
 
 namespace cocos2d {
     class Sprite;
@@ -14,6 +15,7 @@ private:
     cocos2d::Sprite *mSprite;
     cocos2d::PhysicsBody *mBody;
 
+    Path mPath;
     cocos2d::Vec2 mTarget;
 
 public:
@@ -34,6 +36,8 @@ public:
     void setTarget(const cocos2d::Vec2 &pTarget) {
         mTarget = pTarget;
     }
+
+    void constructPath(const Path &pPath);
 };
 
 

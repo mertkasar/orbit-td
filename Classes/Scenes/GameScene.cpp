@@ -4,13 +4,13 @@
 #include <base/CCEventDispatcher.h>
 #include <2d/CCActionInterval.h>
 #include <2d/CCActionInstant.h>
+#include <2d/CCDrawNode.h>
 #include <physics/CCPhysicsWorld.h>
 #include <physics/CCPhysicsContact.h>
 
 #include <Globals.h>
 #include <Entities/Tower.h>
 #include <Entities/Enemy.h>
-#include <base/CCEventListenerTouch.h>
 
 USING_NS_CC;
 
@@ -59,6 +59,28 @@ void GameScene::buildScene() {
     auto tower2 = Tower::create();
     tower2->setPosition(mCanvasCenter - Vec2(200.f, 100.f));
 
+    // Prepare path
+    const float PI = 3.14159265f;
+    float angle = 36.f;
+    float radius = 200;
+    Vec2 origin = tower1->getPosition();
+    for (float alfa = 0; alfa < 360; alfa = alfa + angle) {
+        Vec2 position = Vec2(radius * cos(alfa * PI / 180),
+                             radius * sin(alfa * PI / 180));
+        mPath.addNode(origin + position);
+    }
+
+    // Prepare visual representation of the path; Debug purposes only!
+    auto canvas = DrawNode::create();
+    auto waypoints = mPath.getWayPointList();
+    for (unsigned int i = 0; i < waypoints.size(); i++) {
+        canvas->drawSolidCircle(waypoints.at(i), 6.f, 0.f, 50, Color4F::RED);
+
+        if (i != 0)
+            canvas->drawLine(waypoints.at(i), waypoints.at(i - 1), Color4F::RED);
+    }
+
+    mGameplayLayer->addChild(canvas);
     mGameplayLayer->addChild(tower1);
     mGameplayLayer->addChild(tower2);
 
@@ -67,7 +89,8 @@ void GameScene::buildScene() {
 
     spawnEnemy(0.f);
 
-    //this->schedule(CC_SCHEDULE_SELECTOR(GameScene::spawnEnemy), 1.f);
+    this->schedule(CC_SCHEDULE_SELECTOR(GameScene::spawnEnemy), 1.f);
+
 }
 
 void GameScene::connectListeners() {
@@ -118,32 +141,13 @@ void GameScene::connectListeners() {
         }
     };
 
-    //Register touch listener
-    auto touchListener = EventListenerTouchOneByOne::create();
-    touchListener->setSwallowTouches(true);
-    touchListener->onTouchBegan = [&](Touch *pTouch, Event *pEvent) {
-        auto location = pTouch->getLocation();
-
-        mEnemy->setTarget(location);
-
-        CCLOG("Enemy is seeking: %f, %f", location.x, location.y);
-
-        return true;
-    };
-
     Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
-    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener, this);
 }
 
 void GameScene::spawnEnemy(float pDelta) {
-    mEnemy = Enemy::create();
-    mEnemy->setPosition(Vec2(mVisibleSize.width - 100.f, mVisibleSize.height / 2.f));
-    mEnemy->setTarget(Vec2(200.f, mVisibleSize.height / 2.f));
+    auto enemy = Enemy::create();
+    enemy->setPosition(Vec2(mVisibleSize.width - 100.f, mVisibleSize.height / 2.f));
+    enemy->constructPath(mPath);
 
-    /*auto seq = Sequence::create(
-            MoveTo::create(8.f, Vec2(100.f, mVisibleSize.height / 2.f)),
-            RemoveSelf::create(), NULL);
-    enemy->runAction(seq);*/
-
-    mGameplayLayer->addChild(mEnemy);
+    mGameplayLayer->addChild(enemy);
 }
