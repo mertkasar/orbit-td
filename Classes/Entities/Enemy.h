@@ -14,6 +14,8 @@ private:
     cocos2d::Sprite *mSprite;
     cocos2d::PhysicsBody *mBody;
 
+    cocos2d::Vec2 mTarget;
+
 public:
     Enemy();
 
@@ -21,7 +23,17 @@ public:
 
     virtual bool init();
 
+    virtual void update(float pDelta);
+
     CREATE_FUNC(Enemy);
+
+    const cocos2d::Vec2 &getTarget() const {
+        return mTarget;
+    }
+
+    void setTarget(const cocos2d::Vec2 &pTarget) {
+        mTarget = pTarget;
+    }
 };
 
 

@@ -127,6 +127,7 @@ set(GAME_SRC
   Classes/Scenes/GameScene.cpp
   Classes/Entities/Enemy.cpp
   Classes/Entities/Tower.cpp
+  Classes/Utilities/SteeringDirector.cpp
   ${PLATFORM_SPECIFIC_SRC}
 )
 
@@ -136,6 +137,7 @@ set(GAME_HEADERS
   Classes/Scenes/GameScene.h
   Classes/Entities/Enemy.h
   Classes/Entities/Tower.h
+  Classes/Utilities/SteeringDirector.h
   ${PLATFORM_SPECIFIC_HEADERS}
 )
 

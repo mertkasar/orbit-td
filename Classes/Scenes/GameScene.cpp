@@ -10,6 +10,7 @@
 #include <Globals.h>
 #include <Entities/Tower.h>
 #include <Entities/Enemy.h>
+#include <base/CCEventListenerTouch.h>
 
 USING_NS_CC;
 
@@ -64,7 +65,9 @@ void GameScene::buildScene() {
     this->addChild(mBackgroundLayer);
     this->addChild(mGameplayLayer);
 
-    this->schedule(CC_SCHEDULE_SELECTOR(GameScene::spawnEnemy), 1.f);
+    spawnEnemy(0.f);
+
+    //this->schedule(CC_SCHEDULE_SELECTOR(GameScene::spawnEnemy), 1.f);
 }
 
 void GameScene::connectListeners() {
@@ -115,17 +118,32 @@ void GameScene::connectListeners() {
         }
     };
 
+    //Register touch listener
+    auto touchListener = EventListenerTouchOneByOne::create();
+    touchListener->setSwallowTouches(true);
+    touchListener->onTouchBegan = [&](Touch *pTouch, Event *pEvent) {
+        auto location = pTouch->getLocation();
+
+        mEnemy->setTarget(location);
+
+        CCLOG("Enemy is seeking: %f, %f", location.x, location.y);
+
+        return true;
+    };
+
     Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
+    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener, this);
 }
 
 void GameScene::spawnEnemy(float pDelta) {
-    auto enemy = Enemy::create();
-    enemy->setPosition(Vec2(mVisibleSize.width - 100.f, mVisibleSize.height / 2.f));
+    mEnemy = Enemy::create();
+    mEnemy->setPosition(Vec2(mVisibleSize.width - 100.f, mVisibleSize.height / 2.f));
+    mEnemy->setTarget(Vec2(200.f, mVisibleSize.height / 2.f));
 
-    auto seq = Sequence::create(
+    /*auto seq = Sequence::create(
             MoveTo::create(8.f, Vec2(100.f, mVisibleSize.height / 2.f)),
             RemoveSelf::create(), NULL);
-    enemy->runAction(seq);
+    enemy->runAction(seq);*/
 
-    mGameplayLayer->addChild(enemy);
+    mGameplayLayer->addChild(mEnemy);
 }

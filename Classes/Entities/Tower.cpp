@@ -6,7 +6,7 @@
 #include <Globals.h>
 #include <Entities/Enemy.h>
 
-using namespace cocos2d;
+USING_NS_CC;
 
 Tower::Tower() {
     CCLOG("Tower created.");

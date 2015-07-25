@@ -3,6 +3,8 @@
 
 #include <2d/CCLayer.h>
 
+class Enemy;
+
 class GameScene : public cocos2d::Layer {
 private:
     cocos2d::Size mVisibleSize;
@@ -11,6 +13,8 @@ private:
 
     cocos2d::LayerColor *mBackgroundLayer;
     cocos2d::Layer *mGameplayLayer;
+
+    Enemy* mEnemy;
 
 public:
     GameScene();
