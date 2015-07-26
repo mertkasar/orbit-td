@@ -129,6 +129,7 @@ set(GAME_SRC
   Classes/Entities/Tower.cpp
   Classes/Utilities/SteeringDirector.cpp
   Classes/Utilities/Path.cpp
+  Classes/Utilities/Grid.cpp
   ${PLATFORM_SPECIFIC_SRC}
 )
 
@@ -140,6 +141,7 @@ set(GAME_HEADERS
   Classes/Entities/Tower.h
   Classes/Utilities/SteeringDirector.h
   Classes/Utilities/Path.h
+  Classes/Utilities/Grid.h
   ${PLATFORM_SPECIFIC_HEADERS}
 )
 

@@ -3,6 +3,7 @@
 
 #include <2d/CCLayer.h>
 #include <Utilities/Path.h>
+#include <Utilities/Grid.h>
 
 class Enemy;
 
@@ -15,6 +16,7 @@ private:
     cocos2d::LayerColor *mBackgroundLayer;
     cocos2d::Layer *mGameplayLayer;
 
+    Grid mGrid;
     Path mPath;
 
 public:

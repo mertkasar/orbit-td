@@ -53,44 +53,45 @@ void GameScene::buildScene() {
     mBackgroundLayer = LayerColor::create(Color4B(42, 45, 51, 255));
     mGameplayLayer = Layer::create();
 
-    auto tower1 = Tower::create();
-    tower1->setPosition(mCanvasCenter + Vec2(200.f, 100.f));
+    // Prepare sample grid
+    mGrid.create(Vec2(7, 10));
+    for (int i = 0; i < mGrid.getSize().y; i++)
+        mGrid.setNode(Vec2(4, i), 1);
+    for (int i = 0; i < mGrid.getSize().x; i++)
+        mGrid.setNode(Vec2(i, 0), 1);
 
-    auto tower2 = Tower::create();
-    tower2->setPosition(mCanvasCenter - Vec2(200.f, 100.f));
+    // Draw grid
+    auto grid = DrawNode::create();
+    Vec2 size = mGrid.getSize();
 
-    // Prepare path
-    const float PI = 3.14159265f;
-    float angle = 36.f;
-    float radius = 200;
-    Vec2 origin = tower1->getPosition();
-    for (float alfa = 0; alfa < 360; alfa = alfa + angle) {
-        Vec2 position = Vec2(radius * cos(alfa * PI / 180),
-                             radius * sin(alfa * PI / 180));
-        mPath.addNode(origin + position);
+    const Vec2 ORIGIN = Vec2(-400.f, mVisibleSize.height / 2.f);
+    const float RADIUS = 600.f;
+    float angle = 30.f;
+    for (int i = 0; i < size.x; i++) {
+        for (int j = 0; j < size.y; j++) {
+            Color4F color;
+            if (mGrid.getNode(Vec2(i, j)) == 0)
+                color = Color4F::GREEN;
+            else
+                color = Color4F::RED;
+
+            Vec2 position = Vec2((float) (RADIUS * cos(CC_DEGREES_TO_RADIANS(angle))),
+                                 (float) (RADIUS * sin(CC_DEGREES_TO_RADIANS(angle))));
+
+            Vec2 shift = j * Vec2(100.f, 0);
+
+            grid->drawSolidCircle(ORIGIN + shift + position, 5.f, 0.f, 50, color);
+        }
+
+        angle = angle - 10.f;
     }
 
-    // Prepare visual representation of the path; Debug purposes only!
-    auto canvas = DrawNode::create();
-    auto waypoints = mPath.getWayPointList();
-    for (unsigned int i = 0; i < waypoints.size(); i++) {
-        canvas->drawSolidCircle(waypoints.at(i), 6.f, 0.f, 50, Color4F::RED);
-
-        if (i != 0)
-            canvas->drawLine(waypoints.at(i), waypoints.at(i - 1), Color4F::RED);
-    }
-
-    mGameplayLayer->addChild(canvas);
-    mGameplayLayer->addChild(tower1);
-    mGameplayLayer->addChild(tower2);
+    mGameplayLayer->addChild(grid);
 
     this->addChild(mBackgroundLayer);
     this->addChild(mGameplayLayer);
 
-    spawnEnemy(0.f);
-
-    this->schedule(CC_SCHEDULE_SELECTOR(GameScene::spawnEnemy), 1.f);
-
+    //this->schedule(CC_SCHEDULE_SELECTOR(GameScene::spawnEnemy), 1.f);
 }
 
 void GameScene::connectListeners() {

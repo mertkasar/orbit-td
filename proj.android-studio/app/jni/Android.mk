@@ -17,6 +17,7 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../../Classes/Entities/Tower.cpp \
                    ../../../Classes/Utilities/SteeringDirector.cpp \
                    ../../../Classes/Utilities/Path.cpp \
+                   ../../../Classes/Utilities/Grid.cpp \
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../Classes
 
