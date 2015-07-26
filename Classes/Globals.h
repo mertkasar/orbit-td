@@ -5,6 +5,11 @@
 
 #define ENEMY_MAX_VEL 100.f
 
+#define GRID_RADIUS 600.f
+#define GRID_START_ANGLE 30.f
+#define GRID_SHIFT_ANGLE 10.f
+
+
 //Collision bitmasks
 #define NULL_MASK 0x00
 #define TOWER_RANGE_MASK 0x01

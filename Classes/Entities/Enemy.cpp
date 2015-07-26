@@ -26,7 +26,7 @@ bool Enemy::init() {
     mBody->setCategoryBitmask(ENEMY_MASK);
     mBody->setContactTestBitmask(TOWER_RANGE_MASK);
     mBody->setCollisionBitmask(NULL_MASK);
-    mBody->setMass(5.f);
+    mBody->setMass(4.f);
     mBody->setVelocityLimit(ENEMY_MAX_VEL);
     this->setPhysicsBody(mBody);
 

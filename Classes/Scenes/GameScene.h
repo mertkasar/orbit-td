@@ -36,6 +36,10 @@ private:
     void connectListeners();
 
     void spawnEnemy(float pDelta);
+
+    void placeTower(cocos2d::Vec2 pPosition);
+
+    cocos2d::Vec2 toCircularGrid(cocos2d::Vec2 pOrigin, cocos2d::Vec2 pNode);
 };
 
 #endif // HELLOWORLD_SCENE_H

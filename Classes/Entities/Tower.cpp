@@ -27,7 +27,7 @@ bool Tower::init() {
 
     mBase->setScale(0.5f);
 
-    mBody = PhysicsBody::createCircle(100.f);
+    mBody = PhysicsBody::createCircle(150.f);
     mBody->setCategoryBitmask(TOWER_RANGE_MASK);
     mBody->setContactTestBitmask(ENEMY_MASK);
     mBody->setCollisionBitmask(NULL_MASK);
