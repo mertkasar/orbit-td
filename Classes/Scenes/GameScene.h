@@ -6,8 +6,6 @@
 #include <Utilities/Path.h>
 #include <Utilities/Grid.h>
 
-class Enemy;
-
 class GameScene : public cocos2d::Layer {
 private:
     cocos2d::Size mVisibleSize;
@@ -39,6 +37,8 @@ private:
     void spawnEnemy(float pDelta);
 
     void placeTower(cocos2d::Vec2 pTile);
+
+    void constructPath(cocos2d::Vec2 pStart, cocos2d::Vec2 pGoal);
 };
 
 #endif // GAME_SCENE_H

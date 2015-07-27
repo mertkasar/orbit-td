@@ -25,7 +25,7 @@ GameScene::~GameScene() {
 
 Scene *GameScene::createScene() {
     auto scene = Scene::createWithPhysics();
-    scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+    //scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
     scene->getPhysicsWorld()->setGravity(Vect(0, 0));
 
     auto layer = GameScene::create();
@@ -82,35 +82,29 @@ void GameScene::buildScene() {
 
     grid->drawSolidCircle(Vec2(-80.f, 0.f), 600.f, 0.f, 50, Color4F::BLUE);
 
-    // Construct test path
-    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(3, 9)), 40.f);
-    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(2, 9)));
-    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(1, 9)));
-    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(0, 9)), 40.f);
-    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(0, 8)));
-    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(0, 7)), 100.f);
-    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(1, 7)));
-    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(2, 7)));
-    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(3, 7)));
-    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(4, 7)));
-    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(5, 7)));
-    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(6, 7)), 40.f);
-    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(6, 6)));
-    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(6, 5)), 100.f);
-    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(5, 5)));
-    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(4, 5)));
-    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(3, 5)));
-    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(2, 5)));
-    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(1, 5)));
-    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(0, 5)), 40.f);
-    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(0, 4)));
-    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(0, 3)), 100.f);
-    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(1, 3)));
-    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(2, 3)));
-    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(3, 3)), 40.f);
-    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(3, 2)));
-    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(3, 1)));
-    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(3, 0)));
+    placeTower(Vec2(3, 8));
+    placeTower(Vec2(2, 8));
+    placeTower(Vec2(1, 8));
+    placeTower(Vec2(0, 8));
+    placeTower(Vec2(4, 8));
+    placeTower(Vec2(5, 8));
+    placeTower(Vec2(6, 6));
+    placeTower(Vec2(5, 6));
+    placeTower(Vec2(4, 6));
+    placeTower(Vec2(3, 6));
+    placeTower(Vec2(2, 6));
+    placeTower(Vec2(1, 6));
+    placeTower(Vec2(0, 4));
+    placeTower(Vec2(1, 4));
+    placeTower(Vec2(2, 4));
+    placeTower(Vec2(3, 4));
+    placeTower(Vec2(4, 4));
+    placeTower(Vec2(5, 4));
+    placeTower(Vec2(6, 2));
+    placeTower(Vec2(5, 2));
+    placeTower(Vec2(4, 2));
+
+    constructPath(Vec2(3, 9), Vec2(3, 0));
 
     auto path = DrawNode::create();
     auto waypoints = mPath.getWaypointList();
@@ -128,11 +122,6 @@ void GameScene::buildScene() {
 
     mGameplayLayer->addChild(grid);
     mGameplayLayer->addChild(path);
-
-    placeTower(Vec2(1, 8));
-    placeTower(Vec2(0, 6));
-    placeTower(Vec2(1, 6));
-    placeTower(Vec2(2, 2));
 
     this->addChild(mBackgroundLayer);
     this->addChild(mGameplayLayer);
@@ -209,4 +198,44 @@ void GameScene::placeTower(Vec2 pTile) {
 
     mGameplayLayer->addChild(tower);
     mGrid.setNode(pTile, 1);
+}
+
+void GameScene::constructPath(Vec2 pStart, Vec2 pGoal) {
+    auto traversed = algorithm::traverse(mGrid, pStart, pGoal);
+    std::vector<Vec2> waypoints;
+
+    bool isInside = false;
+    for (auto pair : traversed) {
+        Vec2 loc = pair.second;
+
+        if (loc.x == pGoal.x && loc.y == pGoal.y) {
+            isInside = true;
+            break;
+        }
+    }
+
+    if (isInside) {
+        auto current = pGoal;
+
+        while (current != pStart) {
+            for (auto pair : traversed) {
+                if (current == pair.second) {
+                    current = pair.first;
+
+                    waypoints.push_back(pair.second);
+                    break;
+                }
+            }
+        }
+
+        waypoints.push_back(pStart);
+
+        std::reverse(waypoints.begin(), waypoints.end());
+
+        for (auto waypoint : waypoints) {
+            CCLOG("%i, %i", (int) waypoint.x, (int) waypoint.y);
+            mPath.addWaypoint(algorithm::toCircularGrid(waypoint));
+        }
+    } else
+        CCLOG("Path couldn't constructed!");
 }
