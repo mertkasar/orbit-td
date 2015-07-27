@@ -83,42 +83,47 @@ void GameScene::buildScene() {
     grid->drawSolidCircle(Vec2(-80.f, 0.f), 600.f, 0.f, 50, Color4F::BLUE);
 
     // Construct test path
-    mPath.addNode(algorithm::toCircularGrid(Vec2(3, 9)));
-    mPath.addNode(algorithm::toCircularGrid(Vec2(2, 9)));
-    mPath.addNode(algorithm::toCircularGrid(Vec2(1, 9)));
-    mPath.addNode(algorithm::toCircularGrid(Vec2(0, 9)));
-    mPath.addNode(algorithm::toCircularGrid(Vec2(0, 8)));
-    mPath.addNode(algorithm::toCircularGrid(Vec2(0, 7)));
-    mPath.addNode(algorithm::toCircularGrid(Vec2(1, 7)));
-    mPath.addNode(algorithm::toCircularGrid(Vec2(2, 7)));
-    mPath.addNode(algorithm::toCircularGrid(Vec2(3, 7)));
-    mPath.addNode(algorithm::toCircularGrid(Vec2(4, 7)));
-    mPath.addNode(algorithm::toCircularGrid(Vec2(5, 7)));
-    mPath.addNode(algorithm::toCircularGrid(Vec2(6, 7)));
-    mPath.addNode(algorithm::toCircularGrid(Vec2(6, 6)));
-    mPath.addNode(algorithm::toCircularGrid(Vec2(6, 5)));
-    mPath.addNode(algorithm::toCircularGrid(Vec2(5, 5)));
-    mPath.addNode(algorithm::toCircularGrid(Vec2(4, 5)));
-    mPath.addNode(algorithm::toCircularGrid(Vec2(3, 5)));
-    mPath.addNode(algorithm::toCircularGrid(Vec2(2, 5)));
-    mPath.addNode(algorithm::toCircularGrid(Vec2(1, 5)));
-    mPath.addNode(algorithm::toCircularGrid(Vec2(0, 5)));
-    mPath.addNode(algorithm::toCircularGrid(Vec2(0, 4)));
-    mPath.addNode(algorithm::toCircularGrid(Vec2(0, 3)));
-    mPath.addNode(algorithm::toCircularGrid(Vec2(1, 3)));
-    mPath.addNode(algorithm::toCircularGrid(Vec2(2, 3)));
-    mPath.addNode(algorithm::toCircularGrid(Vec2(3, 3)));
-    mPath.addNode(algorithm::toCircularGrid(Vec2(3, 2)));
-    mPath.addNode(algorithm::toCircularGrid(Vec2(3, 1)));
-    mPath.addNode(algorithm::toCircularGrid(Vec2(3, 0)));
+    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(3, 9)), 40.f);
+    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(2, 9)));
+    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(1, 9)));
+    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(0, 9)), 40.f);
+    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(0, 8)));
+    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(0, 7)), 100.f);
+    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(1, 7)));
+    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(2, 7)));
+    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(3, 7)));
+    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(4, 7)));
+    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(5, 7)));
+    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(6, 7)), 40.f);
+    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(6, 6)));
+    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(6, 5)), 100.f);
+    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(5, 5)));
+    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(4, 5)));
+    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(3, 5)));
+    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(2, 5)));
+    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(1, 5)));
+    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(0, 5)), 40.f);
+    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(0, 4)));
+    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(0, 3)), 100.f);
+    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(1, 3)));
+    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(2, 3)));
+    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(3, 3)), 40.f);
+    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(3, 2)));
+    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(3, 1)));
+    mPath.addWaypoint(algorithm::toCircularGrid(Vec2(3, 0)));
 
     auto path = DrawNode::create();
-    auto waypoints = mPath.getWayPointList();
+    auto waypoints = mPath.getWaypointList();
     for (unsigned int i = 0; i < waypoints.size(); i++) {
-        path->drawSolidCircle(waypoints.at(i), 6.f, 0.f, 50, Color4F::RED);
+        auto currentWaypoint = waypoints.at(i);
 
-        if (i != 0)
-            path->drawLine(waypoints.at(i), waypoints.at(i - 1), Color4F::RED);
+        path->drawSolidCircle(currentWaypoint.first, 6.f, 0.f, 50, Color4F::RED);
+        path->drawCircle(currentWaypoint.first, currentWaypoint.second, 0.f, 50, false, Color4F::RED);
+
+        if (i != 0) {
+            auto previousWaypoint = waypoints.at(i - 1);
+            path->drawLine(currentWaypoint.first, previousWaypoint.first, Color4F::RED);
+        }
     }
 
     mGameplayLayer->addChild(grid);
@@ -132,7 +137,8 @@ void GameScene::buildScene() {
     this->addChild(mBackgroundLayer);
     this->addChild(mGameplayLayer);
 
-    this->schedule(CC_SCHEDULE_SELECTOR(GameScene::spawnEnemy), 1.f);
+    spawnEnemy(0.f);
+    this->schedule(CC_SCHEDULE_SELECTOR(GameScene::spawnEnemy), 2.f);
 }
 
 void GameScene::connectListeners() {
@@ -188,7 +194,8 @@ void GameScene::connectListeners() {
 
 void GameScene::spawnEnemy(float pDelta) {
     auto enemy = Enemy::create();
-    enemy->setPosition(mPath.getCurrentNode());
+    Vec2 spawnPosition = Vec2(mVisibleSize.width - 50.f, mVisibleSize.height / 2.f);
+    enemy->setPosition(mGameplayLayer->convertToNodeSpace(spawnPosition));
     enemy->constructPath(mPath);
 
     mGameplayLayer->addChild(enemy);

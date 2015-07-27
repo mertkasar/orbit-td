@@ -4,15 +4,15 @@
 
 USING_NS_CC;
 
-Path::Path() : mWayPoints(), mCurrentNode(0), mDensity(10.f) {
+Path::Path() : mWaypoints(), mCurrentNode(0) {
 }
 
 Path::~Path() {
 
 }
 
-void Path::addNode(Vec2 pPosition) {
-    mWayPoints.push_back(pPosition);
+void Path::addWaypoint(Vec2 pPosition, float pDensity) {
+    mWaypoints.push_back(std::make_pair(pPosition, pDensity));
 }
 
 void Path::forward() {

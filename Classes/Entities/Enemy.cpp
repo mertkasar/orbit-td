@@ -26,7 +26,7 @@ bool Enemy::init() {
     mBody->setCategoryBitmask(ENEMY_MASK);
     mBody->setContactTestBitmask(TOWER_RANGE_MASK);
     mBody->setCollisionBitmask(NULL_MASK);
-    mBody->setMass(4.f);
+    mBody->setMass(5.5f);
     mBody->setVelocityLimit(ENEMY_MAX_VEL);
     this->setPhysicsBody(mBody);
 
@@ -43,15 +43,15 @@ bool Enemy::init() {
 void Enemy::update(float pDelta) {
     bool dead = false;
 
-    Vec2 position = this->getPosition();
-    Vec2 target = mPath.getCurrentNode();
+    auto waypoint = mPath.getCurrentWaypoint();
+    Vec2 target = waypoint.first;
 
-    if (position.distance(target) <= mPath.getDensity()) {
+    if (this->getPosition().distance(target) <= waypoint.second + mSprite->getContentSize().width / 2.f) {
         if (mPath.eop())
             dead = true;
         else {
             mPath.forward();
-            target = mPath.getCurrentNode();
+            target = mPath.getCurrentWaypoint().first;
         }
     }
 
@@ -66,7 +66,7 @@ void Enemy::update(float pDelta) {
 }
 
 void Enemy::constructPath(const Path &pPath) {
-    for (auto node : pPath.getWayPointList())
-        mPath.addNode(node);
+    for (auto node : pPath.getWaypointList())
+        mPath.addWaypoint(node.first, node.second);
 
 }

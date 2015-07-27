@@ -5,44 +5,40 @@
 
 #include <vector>
 
+#include <Globals.h>
+
 namespace cocos2d {
     class DrawNode;
 }
 
 class Path {
+public:
+    typedef std::pair<cocos2d::Vec2, float> Waypoint;
+
 private:
-    std::vector<cocos2d::Vec2> mWayPoints;
+    std::vector<Waypoint> mWaypoints;
 
     unsigned int mCurrentNode;
-    float mDensity;
 
 public:
     Path();
 
     ~Path();
 
-    void addNode(cocos2d::Vec2 pPosition);
+    void addWaypoint(cocos2d::Vec2 pPosition, float pDensity = DEFAULT_WAYPOINT_DENSITY);
 
     void forward();
 
-    cocos2d::Vec2 getCurrentNode() const {
-        return mWayPoints.at(mCurrentNode);
+    Waypoint getCurrentWaypoint() const {
+        return mWaypoints.at(mCurrentNode);
     }
 
-    float getDensity() const {
-        return mDensity;
-    }
-
-    const std::vector<cocos2d::Vec2> &getWayPointList() const {
-        return mWayPoints;
+    const std::vector<Waypoint> &getWaypointList() const {
+        return mWaypoints;
     }
 
     bool eop() const {
-        return mCurrentNode >= mWayPoints.size() - 1;
-    }
-
-    void setDensity(float pDensity) {
-        mDensity = pDensity;
+        return mCurrentNode >= mWaypoints.size() - 1;
     }
 };
 

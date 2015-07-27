@@ -3,11 +3,12 @@
 
 #define SPRITE_ANGLE -90.f
 
-#define ENEMY_MAX_VEL 100.f
+#define ENEMY_MAX_VEL 80.f
 
 #define GRID_RADIUS 600.f
 #define GRID_START_ANGLE 30.f
 #define GRID_SHIFT_ANGLE 10.f
+#define DEFAULT_WAYPOINT_DENSITY 15.f
 
 
 //Collision bitmasks
