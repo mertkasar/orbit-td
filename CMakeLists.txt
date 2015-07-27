@@ -130,6 +130,7 @@ set(GAME_SRC
   Classes/Utilities/SteeringDirector.cpp
   Classes/Utilities/Path.cpp
   Classes/Utilities/Grid.cpp
+  Classes/Utilities/Algorithm.cpp
   ${PLATFORM_SPECIFIC_SRC}
 )
 
@@ -142,6 +143,7 @@ set(GAME_HEADERS
   Classes/Utilities/SteeringDirector.h
   Classes/Utilities/Path.h
   Classes/Utilities/Grid.h
+  Classes/Utilities/Algorithm.h
   ${PLATFORM_SPECIFIC_HEADERS}
 )
 

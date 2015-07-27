@@ -11,6 +11,7 @@
 #include <Globals.h>
 #include <Entities/Tower.h>
 #include <Entities/Enemy.h>
+#include <Utilities/Algorithm.h>
 
 USING_NS_CC;
 
@@ -51,7 +52,11 @@ bool GameScene::init() {
 
 void GameScene::buildScene() {
     mBackgroundLayer = LayerColor::create(Color4B(42, 45, 51, 255));
+
     mGameplayLayer = Layer::create();
+    mGameplayLayer->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    mGameplayLayer->setPosition(Vec2(-300.f, mVisibleSize.height / 2.f));
+    mGameplayLayer->setScale(0.85f);
 
     // Prepare sample grid
     mGrid.create(Vec2(7, 10));
@@ -61,9 +66,8 @@ void GameScene::buildScene() {
 
     // Draw grid
     auto grid = DrawNode::create();
-    Vec2 size = mGrid.getSize();
 
-    const Vec2 ORIGIN = Vec2(-400.f, mVisibleSize.height / 2.f);
+    Vec2 size = mGrid.getSize();
     for (int i = 0; i < size.x; i++) {
         for (int j = 0; j < size.y; j++) {
             Color4F color;
@@ -72,41 +76,41 @@ void GameScene::buildScene() {
             else
                 color = Color4F::RED;
 
-            grid->drawSolidCircle(toCircularGrid(ORIGIN, Vec2(i, j)), 5.f, 0.f, 50, color);
+            grid->drawSolidCircle(algorithm::toCircularGrid(Vec2(i, j)), 5.f, 0.f, 50, color);
         }
     }
 
-    grid->drawSolidCircle(ORIGIN - Vec2(80.f, 0.f), 600.f, 0.f, 50, Color4F::BLUE);
+    grid->drawSolidCircle(Vec2(-80.f, 0.f), 600.f, 0.f, 50, Color4F::BLUE);
 
     // Construct test path
-    mPath.addNode(toCircularGrid(ORIGIN, Vec2(3, 9)));
-    mPath.addNode(toCircularGrid(ORIGIN, Vec2(2, 9)));
-    mPath.addNode(toCircularGrid(ORIGIN, Vec2(1, 9)));
-    mPath.addNode(toCircularGrid(ORIGIN, Vec2(0, 9)));
-    mPath.addNode(toCircularGrid(ORIGIN, Vec2(0, 8)));
-    mPath.addNode(toCircularGrid(ORIGIN, Vec2(0, 7)));
-    mPath.addNode(toCircularGrid(ORIGIN, Vec2(1, 7)));
-    mPath.addNode(toCircularGrid(ORIGIN, Vec2(2, 7)));
-    mPath.addNode(toCircularGrid(ORIGIN, Vec2(3, 7)));
-    mPath.addNode(toCircularGrid(ORIGIN, Vec2(4, 7)));
-    mPath.addNode(toCircularGrid(ORIGIN, Vec2(5, 7)));
-    mPath.addNode(toCircularGrid(ORIGIN, Vec2(6, 7)));
-    mPath.addNode(toCircularGrid(ORIGIN, Vec2(6, 6)));
-    mPath.addNode(toCircularGrid(ORIGIN, Vec2(6, 5)));
-    mPath.addNode(toCircularGrid(ORIGIN, Vec2(5, 5)));
-    mPath.addNode(toCircularGrid(ORIGIN, Vec2(4, 5)));
-    mPath.addNode(toCircularGrid(ORIGIN, Vec2(3, 5)));
-    mPath.addNode(toCircularGrid(ORIGIN, Vec2(2, 5)));
-    mPath.addNode(toCircularGrid(ORIGIN, Vec2(1, 5)));
-    mPath.addNode(toCircularGrid(ORIGIN, Vec2(0, 5)));
-    mPath.addNode(toCircularGrid(ORIGIN, Vec2(0, 4)));
-    mPath.addNode(toCircularGrid(ORIGIN, Vec2(0, 3)));
-    mPath.addNode(toCircularGrid(ORIGIN, Vec2(1, 3)));
-    mPath.addNode(toCircularGrid(ORIGIN, Vec2(2, 3)));
-    mPath.addNode(toCircularGrid(ORIGIN, Vec2(3, 3)));
-    mPath.addNode(toCircularGrid(ORIGIN, Vec2(3, 2)));
-    mPath.addNode(toCircularGrid(ORIGIN, Vec2(3, 1)));
-    mPath.addNode(toCircularGrid(ORIGIN, Vec2(3, 0)));
+    mPath.addNode(algorithm::toCircularGrid(Vec2(3, 9)));
+    mPath.addNode(algorithm::toCircularGrid(Vec2(2, 9)));
+    mPath.addNode(algorithm::toCircularGrid(Vec2(1, 9)));
+    mPath.addNode(algorithm::toCircularGrid(Vec2(0, 9)));
+    mPath.addNode(algorithm::toCircularGrid(Vec2(0, 8)));
+    mPath.addNode(algorithm::toCircularGrid(Vec2(0, 7)));
+    mPath.addNode(algorithm::toCircularGrid(Vec2(1, 7)));
+    mPath.addNode(algorithm::toCircularGrid(Vec2(2, 7)));
+    mPath.addNode(algorithm::toCircularGrid(Vec2(3, 7)));
+    mPath.addNode(algorithm::toCircularGrid(Vec2(4, 7)));
+    mPath.addNode(algorithm::toCircularGrid(Vec2(5, 7)));
+    mPath.addNode(algorithm::toCircularGrid(Vec2(6, 7)));
+    mPath.addNode(algorithm::toCircularGrid(Vec2(6, 6)));
+    mPath.addNode(algorithm::toCircularGrid(Vec2(6, 5)));
+    mPath.addNode(algorithm::toCircularGrid(Vec2(5, 5)));
+    mPath.addNode(algorithm::toCircularGrid(Vec2(4, 5)));
+    mPath.addNode(algorithm::toCircularGrid(Vec2(3, 5)));
+    mPath.addNode(algorithm::toCircularGrid(Vec2(2, 5)));
+    mPath.addNode(algorithm::toCircularGrid(Vec2(1, 5)));
+    mPath.addNode(algorithm::toCircularGrid(Vec2(0, 5)));
+    mPath.addNode(algorithm::toCircularGrid(Vec2(0, 4)));
+    mPath.addNode(algorithm::toCircularGrid(Vec2(0, 3)));
+    mPath.addNode(algorithm::toCircularGrid(Vec2(1, 3)));
+    mPath.addNode(algorithm::toCircularGrid(Vec2(2, 3)));
+    mPath.addNode(algorithm::toCircularGrid(Vec2(3, 3)));
+    mPath.addNode(algorithm::toCircularGrid(Vec2(3, 2)));
+    mPath.addNode(algorithm::toCircularGrid(Vec2(3, 1)));
+    mPath.addNode(algorithm::toCircularGrid(Vec2(3, 0)));
 
     auto path = DrawNode::create();
     auto waypoints = mPath.getWayPointList();
@@ -120,14 +124,12 @@ void GameScene::buildScene() {
     mGameplayLayer->addChild(grid);
     mGameplayLayer->addChild(path);
 
-    placeTower(toCircularGrid(ORIGIN, Vec2(1, 8)));
-    placeTower(toCircularGrid(ORIGIN, Vec2(0, 6)));
-    placeTower(toCircularGrid(ORIGIN, Vec2(1, 6)));
-    placeTower(toCircularGrid(ORIGIN, Vec2(2, 2)));
+    placeTower(algorithm::toCircularGrid(Vec2(1, 8)));
+    placeTower(algorithm::toCircularGrid(Vec2(0, 6)));
+    placeTower(algorithm::toCircularGrid(Vec2(1, 6)));
+    placeTower(algorithm::toCircularGrid(Vec2(2, 2)));
 
     this->addChild(mBackgroundLayer);
-
-    mGameplayLayer->setScale(0.85f);
     this->addChild(mGameplayLayer);
 
     this->schedule(CC_SCHEDULE_SELECTOR(GameScene::spawnEnemy), 1.f);
@@ -196,15 +198,4 @@ void GameScene::placeTower(Vec2 pPosition) {
     auto tower = Tower::create();
     tower->setPosition(pPosition);
     mGameplayLayer->addChild(tower);
-}
-
-cocos2d::Vec2 GameScene::toCircularGrid(cocos2d::Vec2 pOrigin, cocos2d::Vec2 pNode) {
-    float angle = GRID_START_ANGLE - pNode.x * GRID_SHIFT_ANGLE;
-
-    Vec2 position = Vec2((float) (GRID_RADIUS * cos(CC_DEGREES_TO_RADIANS(angle))),
-                         (float) (GRID_RADIUS * sin(CC_DEGREES_TO_RADIANS(angle))));
-
-    Vec2 shift = pNode.y * Vec2(100.f, 0);
-
-    return pOrigin + position + shift;
 }
