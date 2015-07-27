@@ -124,10 +124,10 @@ void GameScene::buildScene() {
     mGameplayLayer->addChild(grid);
     mGameplayLayer->addChild(path);
 
-    placeTower(algorithm::toCircularGrid(Vec2(1, 8)));
-    placeTower(algorithm::toCircularGrid(Vec2(0, 6)));
-    placeTower(algorithm::toCircularGrid(Vec2(1, 6)));
-    placeTower(algorithm::toCircularGrid(Vec2(2, 2)));
+    placeTower(Vec2(1, 8));
+    placeTower(Vec2(0, 6));
+    placeTower(Vec2(1, 6));
+    placeTower(Vec2(2, 2));
 
     this->addChild(mBackgroundLayer);
     this->addChild(mGameplayLayer);
@@ -194,8 +194,12 @@ void GameScene::spawnEnemy(float pDelta) {
     mGameplayLayer->addChild(enemy);
 }
 
-void GameScene::placeTower(Vec2 pPosition) {
+void GameScene::placeTower(Vec2 pTile) {
     auto tower = Tower::create();
-    tower->setPosition(pPosition);
+
+    auto position = algorithm::toCircularGrid(pTile);
+    tower->setPosition(position);
+
     mGameplayLayer->addChild(tower);
+    mGrid.setNode(pTile, 1);
 }

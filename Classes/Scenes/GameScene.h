@@ -38,7 +38,7 @@ private:
 
     void spawnEnemy(float pDelta);
 
-    void placeTower(cocos2d::Vec2 pPosition);
+    void placeTower(cocos2d::Vec2 pTile);
 };
 
 #endif // GAME_SCENE_H
