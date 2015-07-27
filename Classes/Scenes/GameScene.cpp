@@ -55,14 +55,13 @@ void GameScene::buildScene() {
 
     mGameplayLayer = Layer::create();
     mGameplayLayer->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
-    mGameplayLayer->setPosition(Vec2(-300.f, mVisibleSize.height / 2.f));
-    mGameplayLayer->setScale(0.85f);
+    mGameplayLayer->setPosition(Vec2(-400.f, mVisibleSize.height / 2.f));
 
     // Prepare sample grid
-    mGrid.create(Vec2(7, 10));
+    mGrid.create(Vec2(5, 10));
     for (int i = 0; i < mGrid.getSize().x; i++)
         mGrid.setNode(Vec2(i, 0), 1);
-    mGrid.setNode(Vec2(3, 0), 0);
+    mGrid.setNode(Vec2(2, 0), 0);
 
     // Draw grid
     auto grid = DrawNode::create();
@@ -82,29 +81,20 @@ void GameScene::buildScene() {
 
     grid->drawSolidCircle(Vec2(-80.f, 0.f), 600.f, 0.f, 50, Color4F::BLUE);
 
-    placeTower(Vec2(3, 8));
-    placeTower(Vec2(2, 8));
-    placeTower(Vec2(1, 8));
+    mGameplayLayer->addChild(grid);
+
     placeTower(Vec2(0, 8));
-    placeTower(Vec2(4, 8));
-    placeTower(Vec2(5, 8));
-    placeTower(Vec2(6, 6));
-    placeTower(Vec2(5, 6));
+    placeTower(Vec2(1, 8));
+    placeTower(Vec2(2, 8));
+    placeTower(Vec2(3, 8));
     placeTower(Vec2(4, 6));
     placeTower(Vec2(3, 6));
     placeTower(Vec2(2, 6));
     placeTower(Vec2(1, 6));
     placeTower(Vec2(0, 4));
     placeTower(Vec2(1, 4));
-    placeTower(Vec2(2, 4));
-    placeTower(Vec2(3, 4));
-    placeTower(Vec2(4, 4));
-    placeTower(Vec2(5, 4));
-    placeTower(Vec2(6, 2));
-    placeTower(Vec2(5, 2));
-    placeTower(Vec2(4, 2));
 
-    constructPath(Vec2(3, 9), Vec2(3, 0));
+    constructPath(Vec2(2, 9), Vec2(2, 0));
 
     auto path = DrawNode::create();
     auto waypoints = mPath.getWaypointList();
@@ -120,7 +110,6 @@ void GameScene::buildScene() {
         }
     }
 
-    mGameplayLayer->addChild(grid);
     mGameplayLayer->addChild(path);
 
     this->addChild(mBackgroundLayer);

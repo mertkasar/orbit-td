@@ -20,7 +20,7 @@ cocos2d::Vec2 algorithm::toCircularGrid(Vec2 pPriTile) {
     return position + shift;
 }
 
-// Greedy Breadth First Search
+// Greedy Breadth-First Search
 typedef std::pair<int, cocos2d::Vec2> PrioritizedTile;
 
 class Comparator {
@@ -98,4 +98,4 @@ TraverseData algorithm::traverse(const Grid &pGrid, Vec2 pStart, Vec2 pGoal) {
 
     return traversed;
 }
-// Greedy Breadth First Search
+// Greedy Breadth-First Search
