@@ -2,6 +2,7 @@
 
 #include <base/CCDirector.h>
 #include <base/CCEventDispatcher.h>
+#include <base/CCEventListenerTouch.h>
 #include <2d/CCActionInterval.h>
 #include <2d/CCActionInstant.h>
 #include <2d/CCDrawNode.h>
@@ -14,6 +15,9 @@
 #include <Utilities/Algorithm.h>
 
 USING_NS_CC;
+
+const Vec2 START = Vec2(2, 9);
+const Vec2 GOAL = Vec2(2, 0);
 
 GameScene::GameScene() {
     CCLOG("GameScene created");
@@ -83,27 +87,17 @@ void GameScene::buildScene() {
 
     mGameplayLayer->addChild(grid);
 
-    placeTower(Vec2(0, 8));
-    placeTower(Vec2(1, 8));
-    placeTower(Vec2(2, 8));
-    placeTower(Vec2(3, 8));
-    placeTower(Vec2(4, 6));
-    placeTower(Vec2(3, 6));
-    placeTower(Vec2(2, 6));
-    placeTower(Vec2(1, 6));
-    placeTower(Vec2(0, 4));
-    placeTower(Vec2(1, 4));
-
     mPathCanvas = DrawNode::create();
-    constructPath(Vec2(2, 9), Vec2(2, 0));
+    auto traversed = algorithm::traverse(mGrid, START, GOAL);
+    constructPath(traversed, START, GOAL);
 
     mGameplayLayer->addChild(mPathCanvas);
 
     this->addChild(mBackgroundLayer);
     this->addChild(mGameplayLayer);
 
-    spawnEnemy(0.f);
-    this->schedule(CC_SCHEDULE_SELECTOR(GameScene::spawnEnemy), 2.f);
+    /*spawnEnemy(0.f);
+    this->schedule(CC_SCHEDULE_SELECTOR(GameScene::spawnEnemy), 2.f);*/
 }
 
 void GameScene::connectListeners() {
@@ -154,7 +148,45 @@ void GameScene::connectListeners() {
         }
     };
 
+    auto touchListener = EventListenerTouchOneByOne::create();
+    touchListener->setSwallowTouches(true);
+    touchListener->onTouchBegan = [&](Touch *pTouch, Event *pEvent) {
+        auto touchLocation = mGameplayLayer->convertTouchToNodeSpace(pTouch);
+
+        Vec2 size = mGrid.getSize();
+        for (int i = 0; i < size.x; i++) {
+            for (int j = 0; j < size.y; j++) {
+                Vec2 tile = Vec2(i, j);
+                if (mGrid.getNode(tile) == 0) {
+                    Vec2 location = algorithm::toCircularGrid(tile);
+                    Rect boundingBox = Rect(location.x - NODE_TOUCH_SIZE / 2.f,
+                                            location.y - NODE_TOUCH_SIZE / 2.f,
+                                            NODE_TOUCH_SIZE, NODE_TOUCH_SIZE);
+
+                    if (boundingBox.containsPoint(touchLocation)) {
+                        Grid testGrid = mGrid;
+                        testGrid.setNode(tile, 1);
+
+                        auto traversed = algorithm::traverse(testGrid, START, GOAL);
+
+                        if (algorithm::isReached(traversed, GOAL)) {
+                            placeTower(Vec2(i, j));
+                            constructPath(traversed, START, GOAL);
+
+                            CCLOG("Tower placed!");
+                        } else {
+                            CCLOG("You can't block the path!");
+                        }
+                    }
+                }
+            }
+        }
+
+        return true;
+    };
+
     Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
+    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener, this);
 }
 
 void GameScene::spawnEnemy(float pDelta) {
@@ -176,28 +208,24 @@ void GameScene::placeTower(Vec2 pTile) {
     mGrid.setNode(pTile, 1);
 }
 
-void GameScene::constructPath(Vec2 pStart, Vec2 pGoal) {
-    auto traversed = algorithm::traverse(mGrid, pStart, pGoal);
+void GameScene::constructPath(const TraverseData &pTraversed, const cocos2d::Vec2 pStart,
+                              const cocos2d::Vec2 pGoal) {
+    auto waypoints = algorithm::calculatePath(pTraversed, pStart, pGoal);
 
-    if (algorithm::isReached(traversed, pGoal)) {
-        auto waypoints = algorithm::calculatePath(traversed, pStart, pGoal);
+    mPath.clear();
+    mPathCanvas->clear();
+    for (unsigned int i = 0; i < waypoints.size(); i++) {
+        auto waypoint = algorithm::toCircularGrid(waypoints.at(i));
+        auto reachDensity = DEFAULT_WAYPOINT_DENSITY;
 
-        mPath.clear();
-        mPathCanvas->clear();
-        for (unsigned int i = 0; i < waypoints.size(); i++) {
-            auto waypoint = algorithm::toCircularGrid(waypoints.at(i));
-            auto reachDensity = DEFAULT_WAYPOINT_DENSITY;
+        mPath.addWaypoint(waypoint, reachDensity);
 
-            mPath.addWaypoint(waypoint, reachDensity);
+        mPathCanvas->drawSolidCircle(waypoint, 6.f, 0.f, 50, Color4F::RED);
+        mPathCanvas->drawCircle(waypoint, reachDensity, 0.f, 50, false, Color4F::RED);
 
-            mPathCanvas->drawSolidCircle(waypoint, 6.f, 0.f, 50, Color4F::RED);
-            mPathCanvas->drawCircle(waypoint, reachDensity, 0.f, 50, false, Color4F::RED);
-
-            if (i != 0) {
-                auto previousWaypoint = algorithm::toCircularGrid(waypoints.at(i - 1));
-                mPathCanvas->drawLine(waypoint, previousWaypoint, Color4F::RED);
-            }
+        if (i != 0) {
+            auto previousWaypoint = algorithm::toCircularGrid(waypoints.at(i - 1));
+            mPathCanvas->drawLine(waypoint, previousWaypoint, Color4F::RED);
         }
-    } else
-        CCLOG("Path couldn't constructed!");
+    }
 }

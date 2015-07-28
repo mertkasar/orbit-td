@@ -5,6 +5,7 @@
 
 #include <Utilities/Path.h>
 #include <Utilities/Grid.h>
+#include <Utilities/Algorithm.h>
 
 class GameScene : public cocos2d::Layer {
 private:
@@ -40,7 +41,8 @@ private:
 
     void placeTower(cocos2d::Vec2 pTile);
 
-    void constructPath(cocos2d::Vec2 pStart, cocos2d::Vec2 pGoal);
+    void constructPath(const TraverseData &pTraversed, const cocos2d::Vec2 pStart,
+                       const cocos2d::Vec2 pGoal);
 };
 
 #endif // GAME_SCENE_H

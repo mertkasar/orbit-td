@@ -9,7 +9,7 @@
 #define GRID_START_ANGLE 20.f
 #define GRID_SHIFT_ANGLE 10.f
 #define DEFAULT_WAYPOINT_DENSITY 15.f
-
+#define NODE_TOUCH_SIZE 50.f
 
 //Collision bitmasks
 #define NULL_MASK 0x00
