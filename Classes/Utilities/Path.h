@@ -29,6 +29,8 @@ public:
 
     void forward();
 
+    void clear();
+
     Waypoint getCurrentWaypoint() const {
         return mWaypoints.at(mCurrentNode);
     }

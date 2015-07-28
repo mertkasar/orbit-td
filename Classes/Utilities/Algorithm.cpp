@@ -55,7 +55,7 @@ int heuristic(Vec2 pStart, Vec2 pEnd) {
     return (int) (std::abs(pStart.x - pEnd.x) + std::abs(pStart.y - pEnd.y));
 }
 
-TraverseData algorithm::traverse(const Grid &pGrid, Vec2 pStart, Vec2 pGoal) {
+TraverseData algorithm::traverse(const Grid &pGrid, const Vec2 pStart, const Vec2 pGoal) {
     Frontier frontier;
     TraverseData traversed;
 
@@ -98,4 +98,40 @@ TraverseData algorithm::traverse(const Grid &pGrid, Vec2 pStart, Vec2 pGoal) {
 
     return traversed;
 }
+
+bool algorithm::isReached(const TraverseData &pTraversed, const cocos2d::Vec2 &pNode) {
+    for (auto pair : pTraversed) {
+        Vec2 loc = pair.second;
+
+        if (loc.x == pNode.x && loc.y == pNode.y)
+            return true;
+    }
+
+    return false;
+}
+
+std::vector<cocos2d::Vec2> algorithm::calculatePath(const TraverseData &pTraversed, const cocos2d::Vec2 pStart,
+                                                    const cocos2d::Vec2 pGoal) {
+    std::vector<cocos2d::Vec2> waypoints;
+    Vec2 current = pGoal;
+
+    while (current != pStart) {
+        for (auto pair : pTraversed) {
+            if (current == pair.second) {
+                current = pair.first;
+
+                waypoints.push_back(pair.second);
+                break;
+            }
+        }
+    }
+
+    waypoints.push_back(pStart);
+
+    std::reverse(waypoints.begin(), waypoints.end());
+
+    return waypoints;
+}
+
 // Greedy Breadth-First Search
+

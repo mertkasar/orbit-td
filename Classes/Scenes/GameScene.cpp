@@ -94,23 +94,10 @@ void GameScene::buildScene() {
     placeTower(Vec2(0, 4));
     placeTower(Vec2(1, 4));
 
+    mPathCanvas = DrawNode::create();
     constructPath(Vec2(2, 9), Vec2(2, 0));
 
-    auto path = DrawNode::create();
-    auto waypoints = mPath.getWaypointList();
-    for (unsigned int i = 0; i < waypoints.size(); i++) {
-        auto currentWaypoint = waypoints.at(i);
-
-        path->drawSolidCircle(currentWaypoint.first, 6.f, 0.f, 50, Color4F::RED);
-        path->drawCircle(currentWaypoint.first, currentWaypoint.second, 0.f, 50, false, Color4F::RED);
-
-        if (i != 0) {
-            auto previousWaypoint = waypoints.at(i - 1);
-            path->drawLine(currentWaypoint.first, previousWaypoint.first, Color4F::RED);
-        }
-    }
-
-    mGameplayLayer->addChild(path);
+    mGameplayLayer->addChild(mPathCanvas);
 
     this->addChild(mBackgroundLayer);
     this->addChild(mGameplayLayer);
@@ -191,39 +178,25 @@ void GameScene::placeTower(Vec2 pTile) {
 
 void GameScene::constructPath(Vec2 pStart, Vec2 pGoal) {
     auto traversed = algorithm::traverse(mGrid, pStart, pGoal);
-    std::vector<Vec2> waypoints;
 
-    bool isInside = false;
-    for (auto pair : traversed) {
-        Vec2 loc = pair.second;
+    if (algorithm::isReached(traversed, pGoal)) {
+        auto waypoints = algorithm::calculatePath(traversed, pStart, pGoal);
 
-        if (loc.x == pGoal.x && loc.y == pGoal.y) {
-            isInside = true;
-            break;
-        }
-    }
+        mPath.clear();
+        mPathCanvas->clear();
+        for (unsigned int i = 0; i < waypoints.size(); i++) {
+            auto waypoint = algorithm::toCircularGrid(waypoints.at(i));
+            auto reachDensity = DEFAULT_WAYPOINT_DENSITY;
 
-    if (isInside) {
-        auto current = pGoal;
+            mPath.addWaypoint(waypoint, reachDensity);
 
-        while (current != pStart) {
-            for (auto pair : traversed) {
-                if (current == pair.second) {
-                    current = pair.first;
+            mPathCanvas->drawSolidCircle(waypoint, 6.f, 0.f, 50, Color4F::RED);
+            mPathCanvas->drawCircle(waypoint, reachDensity, 0.f, 50, false, Color4F::RED);
 
-                    waypoints.push_back(pair.second);
-                    break;
-                }
+            if (i != 0) {
+                auto previousWaypoint = algorithm::toCircularGrid(waypoints.at(i - 1));
+                mPathCanvas->drawLine(waypoint, previousWaypoint, Color4F::RED);
             }
-        }
-
-        waypoints.push_back(pStart);
-
-        std::reverse(waypoints.begin(), waypoints.end());
-
-        for (auto waypoint : waypoints) {
-            CCLOG("%i, %i", (int) waypoint.x, (int) waypoint.y);
-            mPath.addWaypoint(algorithm::toCircularGrid(waypoint));
         }
     } else
         CCLOG("Path couldn't constructed!");

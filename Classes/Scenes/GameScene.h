@@ -15,6 +15,8 @@ private:
     cocos2d::LayerColor *mBackgroundLayer;
     cocos2d::Layer *mGameplayLayer;
 
+    cocos2d::DrawNode *mPathCanvas;
+
     Grid mGrid;
     Path mPath;
 

@@ -19,3 +19,8 @@ void Path::forward() {
     if (!eop())
         mCurrentNode++;
 }
+
+void Path::clear() {
+    mWaypoints.clear();
+    mCurrentNode = 0;
+}
