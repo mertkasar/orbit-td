@@ -7,40 +7,39 @@
 
 #include <Globals.h>
 
-namespace cocos2d {
-    class DrawNode;
-}
+struct WayPoint {
+    cocos2d::Vec2 tile;
+    cocos2d::Vec2 location;
+    float reachRadius;
+};
 
 class Path {
-public:
-    typedef std::pair<cocos2d::Vec2, float> Waypoint;
-
 private:
-    std::vector<Waypoint> mWaypoints;
+    std::vector<WayPoint> mWaypoints;
 
-    unsigned int mCurrentNode;
+    unsigned int mIndex;
 
 public:
     Path();
 
     ~Path();
 
-    void addWaypoint(cocos2d::Vec2 pPosition, float pDensity = DEFAULT_WAYPOINT_DENSITY);
+    void addWaypoint(WayPoint pWaypoint);
 
     void forward();
 
     void clear();
 
-    Waypoint getCurrentWaypoint() const {
-        return mWaypoints.at(mCurrentNode);
+    WayPoint getWaypoint() const {
+        return mWaypoints.at(mIndex);
     }
 
-    const std::vector<Waypoint> &getWaypointList() const {
+    const std::vector<WayPoint> &getWayPoints() const {
         return mWaypoints;
     }
 
     bool eop() const {
-        return mCurrentNode >= mWaypoints.size() - 1;
+        return mIndex >= mWaypoints.size() - 1;
     }
 };
 

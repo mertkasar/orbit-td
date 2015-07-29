@@ -96,8 +96,8 @@ void GameScene::buildScene() {
     this->addChild(mBackgroundLayer);
     this->addChild(mGameplayLayer);
 
-    /*spawnEnemy(0.f);
-    this->schedule(CC_SCHEDULE_SELECTOR(GameScene::spawnEnemy), 2.f);*/
+    spawnEnemy(0.f);
+    this->schedule(CC_SCHEDULE_SELECTOR(GameScene::spawnEnemy), 2.f);
 }
 
 void GameScene::connectListeners() {
@@ -210,22 +210,25 @@ void GameScene::placeTower(Vec2 pTile) {
 
 void GameScene::constructPath(const TraverseData &pTraversed, const cocos2d::Vec2 pStart,
                               const cocos2d::Vec2 pGoal) {
-    auto waypoints = algorithm::calculatePath(pTraversed, pStart, pGoal);
+    auto calculatedRoute = algorithm::calculatePath(pTraversed, pStart, pGoal);
 
     mPath.clear();
     mPathCanvas->clear();
-    for (unsigned int i = 0; i < waypoints.size(); i++) {
-        auto waypoint = algorithm::toCircularGrid(waypoints.at(i));
-        auto reachDensity = DEFAULT_WAYPOINT_DENSITY;
+    for (unsigned int i = 0; i < calculatedRoute.size(); i++) {
+        WayPoint waypoint{
+                calculatedRoute.at(i),
+                algorithm::toCircularGrid(waypoint.tile),
+                DEFAULT_WAYPOINT_DENSITY
+        };
 
-        mPath.addWaypoint(waypoint, reachDensity);
+        mPath.addWaypoint(waypoint);
 
-        mPathCanvas->drawSolidCircle(waypoint, 6.f, 0.f, 50, Color4F::RED);
-        mPathCanvas->drawCircle(waypoint, reachDensity, 0.f, 50, false, Color4F::RED);
+        mPathCanvas->drawSolidCircle(waypoint.location, 6.f, 0.f, 50, Color4F::RED);
+        mPathCanvas->drawCircle(waypoint.location, waypoint.reachRadius, 0.f, 50, false, Color4F::RED);
 
         if (i != 0) {
-            auto previousWaypoint = algorithm::toCircularGrid(waypoints.at(i - 1));
-            mPathCanvas->drawLine(waypoint, previousWaypoint, Color4F::RED);
+            auto previousWaypoint = algorithm::toCircularGrid(calculatedRoute.at(i - 1));
+            mPathCanvas->drawLine(waypoint.location, previousWaypoint, Color4F::RED);
         }
     }
 }

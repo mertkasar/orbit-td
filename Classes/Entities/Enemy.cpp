@@ -43,15 +43,15 @@ bool Enemy::init() {
 void Enemy::update(float pDelta) {
     bool dead = false;
 
-    auto waypoint = mPath.getCurrentWaypoint();
-    Vec2 target = waypoint.first;
-
-    if (this->getPosition().distance(target) <= waypoint.second + mSprite->getContentSize().width / 2.f) {
+    Vec2 target = mNextWaypoint.location;
+    float reachRadius = mNextWaypoint.reachRadius + mSprite->getContentSize().width / 2.f;
+    if (this->getPosition().distance(target) <= reachRadius) {
         if (mPath.eop())
             dead = true;
         else {
             mPath.forward();
-            target = mPath.getCurrentWaypoint().first;
+            mCurrentWaypoint = mNextWaypoint;
+            mNextWaypoint = mPath.getWaypoint();
         }
     }
 
@@ -66,7 +66,13 @@ void Enemy::update(float pDelta) {
 }
 
 void Enemy::constructPath(const Path &pPath) {
-    for (auto node : pPath.getWaypointList())
-        mPath.addWaypoint(node.first, node.second);
+    mPath.clear();
+    mNextWaypoint = WayPoint();
+    mCurrentWaypoint = WayPoint();
 
+    for (auto node : pPath.getWayPoints())
+        mPath.addWaypoint(node);
+
+    mNextWaypoint = pPath.getWaypoint();
+    mCurrentWaypoint = pPath.getWaypoint();
 }

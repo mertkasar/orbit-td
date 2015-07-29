@@ -7,6 +7,10 @@
 #include <Utilities/Grid.h>
 #include <Utilities/Algorithm.h>
 
+namespace cocos2d {
+    class DrawNode;
+};
+
 class GameScene : public cocos2d::Layer {
 private:
     cocos2d::Size mVisibleSize;

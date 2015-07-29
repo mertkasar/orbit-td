@@ -16,7 +16,8 @@ private:
     cocos2d::PhysicsBody *mBody;
 
     Path mPath;
-    cocos2d::Vec2 mTarget;
+    WayPoint mNextWaypoint;
+    WayPoint mCurrentWaypoint;
 
 public:
     Enemy();
@@ -29,15 +30,15 @@ public:
 
     CREATE_FUNC(Enemy);
 
-    const cocos2d::Vec2 &getTarget() const {
-        return mTarget;
-    }
-
-    void setTarget(const cocos2d::Vec2 &pTarget) {
-        mTarget = pTarget;
-    }
-
     void constructPath(const Path &pPath);
+
+    const WayPoint& getNextWaypoint() const {
+        return mNextWaypoint;
+    }
+
+    const WayPoint& getCurrentWaypoint() const {
+        return mCurrentWaypoint;
+    }
 };
 
 
