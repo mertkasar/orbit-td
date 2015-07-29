@@ -169,7 +169,7 @@ void GameScene::connectListeners() {
 
                         auto traversed = algorithm::traverse(testGrid, START, GOAL);
 
-                        if (algorithm::isReached(traversed, GOAL)) {
+                        if (traversed.count(GOAL)) {
                             placeTower(Vec2(i, j));
                             constructPath(traversed, START, GOAL);
 

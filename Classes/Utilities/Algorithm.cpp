@@ -20,78 +20,28 @@ cocos2d::Vec2 algorithm::toCircularGrid(Vec2 pPriTile) {
     return position + shift;
 }
 
-// Greedy Breadth-First Search
-typedef std::pair<int, cocos2d::Vec2> PrioritizedTile;
-
-class Comparator {
-public:
-    bool operator()(PrioritizedTile lhs, PrioritizedTile rhs) {
-        return lhs.first > rhs.first;
-    }
-};
-
-class Frontier {
-private:
-    std::priority_queue<PrioritizedTile, std::vector<PrioritizedTile>, Comparator> mQueue;
-
-public:
-    bool empty() {
-        return mQueue.empty();
-    }
-
-    void put(int pPriority, Vec2 pFrontier) {
-        mQueue.emplace(pPriority, pFrontier);
-    }
-
-    Vec2 get() {
-        auto best = mQueue.top().second;
-        mQueue.pop();
-
-        return best;
-    }
-};
-
-int heuristic(Vec2 pStart, Vec2 pEnd) {
-    return (int) (std::abs(pStart.x - pEnd.x) + std::abs(pStart.y - pEnd.y));
-}
-
+//Breadth-Fir Search
 TraverseData algorithm::traverse(const Grid &pGrid, const Vec2 pStart, const Vec2 pGoal) {
-    Frontier frontier;
+    std::queue<Vec2> frontier;
     TraverseData traversed;
 
-    frontier.put(0, pStart);
-    traversed.push_back(std::make_pair(pStart, pStart));
+    frontier.push(pStart);
+    traversed[pStart] = pStart;
 
     while (!frontier.empty()) {
-        Vec2 current = frontier.get();
+        auto current = frontier.front();
+        frontier.pop();
 
-        //Stop traversing when reached pGoal location
-        if (current == pGoal) {
-            break;
-        }
-
-        auto neighbours = pGrid.getNeighbours(current);
+        auto neighbors = pGrid.getNeighbours(current);
 
         //Cross-movement improve on grid
         if ((int) (current.x + current.y) % 2 == 0)
-            std::reverse(neighbours.begin(), neighbours.end());
+            std::reverse(neighbors.begin(), neighbors.end());
 
-        for (auto next : neighbours) {
-            if (pGrid.getNode(next) == 0) {
-
-                bool isHave = false;
-                for (auto pair : traversed) {
-                    Vec2 loc = pair.second;
-
-                    if (loc.x == next.x && loc.y == next.y)
-                        isHave = true;
-                }
-
-                if (!isHave) {
-                    auto priority = heuristic(pGoal, next);
-                    frontier.put(priority, next);
-                    traversed.push_back(std::make_pair(current, next));
-                }
+        for (auto next : neighbors) {
+            if (!traversed.count(next) && pGrid.getNode(next) == 0) {
+                frontier.push(next);
+                traversed[next] = current;
             }
         }
     }
@@ -99,39 +49,19 @@ TraverseData algorithm::traverse(const Grid &pGrid, const Vec2 pStart, const Vec
     return traversed;
 }
 
-bool algorithm::isReached(const TraverseData &pTraversed, const cocos2d::Vec2 &pNode) {
-    for (auto pair : pTraversed) {
-        Vec2 loc = pair.second;
-
-        if (loc.x == pNode.x && loc.y == pNode.y)
-            return true;
-    }
-
-    return false;
-}
-
-std::vector<cocos2d::Vec2> algorithm::calculatePath(const TraverseData &pTraversed, const cocos2d::Vec2 pStart,
-                                                    const cocos2d::Vec2 pGoal) {
-    std::vector<cocos2d::Vec2> waypoints;
+std::vector<Vec2> algorithm::calculatePath(const TraverseData &pTraversed, const cocos2d::Vec2 pStart,
+                                           const cocos2d::Vec2 pGoal) {
+    std::vector<Vec2> path;
     Vec2 current = pGoal;
 
+    path.push_back(current);
     while (current != pStart) {
-        for (auto pair : pTraversed) {
-            if (current == pair.second) {
-                current = pair.first;
-
-                waypoints.push_back(pair.second);
-                break;
-            }
-        }
+        current = pTraversed.find(current)->second;
+        path.push_back(current);
     }
 
-    waypoints.push_back(pStart);
+    std::reverse(path.begin(), path.end());
 
-    std::reverse(waypoints.begin(), waypoints.end());
-
-    return waypoints;
+    return path;
 }
-
-// Greedy Breadth-First Search
 
