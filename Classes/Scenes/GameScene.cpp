@@ -9,10 +9,8 @@
 #include <physics/CCPhysicsWorld.h>
 #include <physics/CCPhysicsContact.h>
 
-#include <Globals.h>
 #include <Entities/Tower.h>
 #include <Entities/Enemy.h>
-#include <Utilities/Algorithm.h>
 
 USING_NS_CC;
 
@@ -91,7 +89,7 @@ void GameScene::buildScene() {
 
     auto traversed = algorithm::traverse(mGrid, START, GOAL);
     if (mPath.isReached(traversed, START)) {
-        mPath.constructPath(traversed, START, GOAL);
+        mPath.construct(traversed, START, GOAL);
         drawPath();
     }
 
@@ -157,35 +155,45 @@ void GameScene::connectListeners() {
     touchListener->onTouchBegan = [&](Touch *pTouch, Event *pEvent) {
         auto touchLocation = mGameplayLayer->convertTouchToNodeSpace(pTouch);
 
+        Vec2 touched = Vec2(-1, -1);
         Vec2 size = mGrid.getSize();
         for (int i = 0; i < size.x; i++) {
             for (int j = 0; j < size.y; j++) {
-                Vec2 tile = Vec2(i, j);
-                if (mGrid.getNode(tile) == 0) {
-                    Vec2 location = algorithm::toCircularGrid(tile);
+                Vec2 current = Vec2(i, j);
+                if (mGrid.getNode(current) == 0) {
+                    Vec2 location = algorithm::toCircularGrid(current);
                     Rect boundingBox = Rect(location.x - NODE_TOUCH_SIZE / 2.f,
                                             location.y - NODE_TOUCH_SIZE / 2.f,
                                             NODE_TOUCH_SIZE, NODE_TOUCH_SIZE);
 
                     if (boundingBox.containsPoint(touchLocation)) {
-                        Grid testGrid = mGrid;
-                        testGrid.setNode(tile, 1);
-
-                        auto traversed = algorithm::traverse(testGrid, START, GOAL);
-
-                        if (mPath.isReached(traversed, START)) {
-                            placeTower(Vec2(i, j));
-                            mPath.constructPath(traversed, START, GOAL);
-                            drawPath();
-
-                            CCLOG("Tower placed!");
-                        } else {
-                            CCLOG("You can't block the path!");
-                        }
+                        touched = current;
+                        break;
                     }
                 }
             }
         }
+
+        if (touched.x > -1 && touched.y > -1) {
+            Grid testGrid = mGrid;
+            testGrid.setNode(touched, 1);
+
+            auto traversed = algorithm::traverse(testGrid, START, GOAL);
+
+            if (isAvailable(traversed, touched)) {
+                placeTower(touched);
+                mPath.construct(traversed, START, GOAL);
+                drawPath();
+
+                for (auto enemy : mEnemies) {
+                    auto &enemyPath = enemy->getPath();
+                    auto from = enemyPath.getCurrentWaypoint().tile;
+
+                    enemyPath.construct(traversed, from, GOAL);
+                }
+            }
+        } else
+            CCLOG("You can't place a tower here!");
 
         return true;
     };
@@ -201,6 +209,25 @@ void GameScene::spawnEnemy(float pDelta) {
     enemy->getPath().clone(mPath);
 
     mGameplayLayer->addChild(enemy);
+    mEnemies.pushBack(enemy);
+}
+
+bool GameScene::isAvailable(const TraverseData &pTraversed, cocos2d::Vec2 pTile) {
+    if (!mPath.isReached(pTraversed, START)) {
+        CCLOG("You can't block the path!");
+        return false;
+    }
+
+    for (auto enemy : mEnemies) {
+        auto current = enemy->getPath().getCurrentWaypoint().tile;
+
+        if ((current == pTile) || !enemy->getPath().isReached(pTraversed, current)) {
+            CCLOG("You can't block enemies!");
+            return false;
+        }
+    }
+
+    return true;
 }
 
 void GameScene::placeTower(Vec2 pTile) {

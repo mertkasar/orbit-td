@@ -16,4 +16,7 @@
 #define TOWER_RANGE_MASK 0x01
 #define ENEMY_MASK 0x02
 
+//Type definitions
+typedef std::map<cocos2d::Vec2, cocos2d::Vec2> TraverseData;
+
 #endif //GLOBALS_H

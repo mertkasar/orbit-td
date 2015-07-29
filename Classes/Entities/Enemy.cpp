@@ -9,11 +9,9 @@
 USING_NS_CC;
 
 Enemy::Enemy() {
-    CCLOG("Enemy created.");
 }
 
 Enemy::~Enemy() {
-    CCLOG("Enemy deleted.");
 }
 
 bool Enemy::init() {

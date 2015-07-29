@@ -32,7 +32,7 @@ public:
 
     bool isReached(const TraverseData &pTraversed, cocos2d::Vec2 pDestination);
 
-    void constructPath(const TraverseData &pTraversed, cocos2d::Vec2 pStart, cocos2d::Vec2 pGoal);
+    void construct(const TraverseData &pTraversed, cocos2d::Vec2 pStart, cocos2d::Vec2 pGoal);
 
     void forward();
 

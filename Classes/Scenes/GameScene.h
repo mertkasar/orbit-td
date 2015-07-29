@@ -6,9 +6,13 @@
 #include <Utilities/Path.h>
 #include <Utilities/Grid.h>
 
+#include <Globals.h>
+
 namespace cocos2d {
     class DrawNode;
 };
+
+class Enemy;
 
 class GameScene : public cocos2d::Layer {
 private:
@@ -20,6 +24,8 @@ private:
     cocos2d::Layer *mGameplayLayer;
 
     cocos2d::DrawNode *mPathCanvas;
+
+    cocos2d::Vector<Enemy *> mEnemies;
 
     Grid mGrid;
     Path mPath;
@@ -41,6 +47,8 @@ private:
     void connectListeners();
 
     void spawnEnemy(float pDelta);
+
+    bool isAvailable(const TraverseData &pTraversed, cocos2d::Vec2 pTile);
 
     void placeTower(cocos2d::Vec2 pTile);
 

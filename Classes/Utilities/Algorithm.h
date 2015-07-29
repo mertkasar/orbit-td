@@ -5,9 +5,9 @@
 
 #include <math/Vec2.h>
 
-class Grid;
+#include <Globals.h>
 
-typedef std::map<cocos2d::Vec2, cocos2d::Vec2> TraverseData;
+class Grid;
 
 namespace algorithm {
     cocos2d::Vec2 toCircularGrid(cocos2d::Vec2 pNode);

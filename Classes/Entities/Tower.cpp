@@ -9,11 +9,9 @@
 USING_NS_CC;
 
 Tower::Tower() {
-    CCLOG("Tower created.");
 }
 
 Tower::~Tower() {
-    CCLOG("Tower deleted.");
 }
 
 bool Tower::init() {

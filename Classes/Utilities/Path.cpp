@@ -1,7 +1,5 @@
 #include <Utilities/Path.h>
 
-#include <Globals.h>
-
 USING_NS_CC;
 
 Path::Path() : mWaypoints(), mIndex(0), mNextWaypoint(), mCurrentWaypoint() {
@@ -19,7 +17,7 @@ bool Path::isReached(const TraverseData &pTraversed, cocos2d::Vec2 pDestination)
     return (bool) pTraversed.count(pDestination);
 }
 
-void Path::constructPath(const TraverseData &pTraversed, cocos2d::Vec2 pStart, Vec2 pGoal) {
+void Path::construct(const TraverseData &pTraversed, cocos2d::Vec2 pStart, Vec2 pGoal) {
     this->clear();
 
     auto current = pStart;
@@ -28,7 +26,7 @@ void Path::constructPath(const TraverseData &pTraversed, cocos2d::Vec2 pStart, V
         current = pTraversed.find(current)->second;
     }
 
-    this->addWaypoint(WayPoint{pGoal, algorithm::toCircularGrid(pGoal), DEFAULT_WAYPOINT_DENSITY});
+    this->addWaypoint(WayPoint{pGoal, algorithm::toCircularGrid(pGoal), 0.f});
 
     mNextWaypoint = mWaypoints.at(mIndex);
     mCurrentWaypoint = mWaypoints.at(mIndex);
