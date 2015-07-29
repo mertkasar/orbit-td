@@ -43,19 +43,18 @@ bool Enemy::init() {
 void Enemy::update(float pDelta) {
     bool dead = false;
 
-    Vec2 target = mNextWaypoint.location;
-    float reachRadius = mNextWaypoint.reachRadius + mSprite->getContentSize().width / 2.f;
-    if (this->getPosition().distance(target) <= reachRadius) {
+    WayPoint target = mPath.getNextWaypoint();
+    float reachRadius = target.reachRadius + mSprite->getContentSize().width / 2.f;
+    if (this->getPosition().distance(target.location) <= reachRadius) {
         if (mPath.eop())
             dead = true;
         else {
             mPath.forward();
-            mCurrentWaypoint = mNextWaypoint;
-            mNextWaypoint = mPath.getWaypoint();
+            target = mPath.getNextWaypoint();
         }
     }
 
-    SteeringDirector::getInstance()->seek(this, target);
+    SteeringDirector::getInstance()->seek(this, target.location);
 
     // Adapt rotation
     auto angle = CC_RADIANS_TO_DEGREES(mBody->getVelocity().getAngle());
@@ -63,16 +62,4 @@ void Enemy::update(float pDelta) {
 
     if (dead)
         removeFromParentAndCleanup(true);
-}
-
-void Enemy::constructPath(const Path &pPath) {
-    mPath.clear();
-    mNextWaypoint = WayPoint();
-    mCurrentWaypoint = WayPoint();
-
-    for (auto node : pPath.getWayPoints())
-        mPath.addWaypoint(node);
-
-    mNextWaypoint = pPath.getWaypoint();
-    mCurrentWaypoint = pPath.getWaypoint();
 }

@@ -25,8 +25,8 @@ TraverseData algorithm::traverse(const Grid &pGrid, const Vec2 pStart, const Vec
     std::queue<Vec2> frontier;
     TraverseData traversed;
 
-    frontier.push(pStart);
-    traversed[pStart] = pStart;
+    frontier.push(pGoal);
+    traversed[pGoal] = pGoal;
 
     while (!frontier.empty()) {
         auto current = frontier.front();
@@ -47,21 +47,5 @@ TraverseData algorithm::traverse(const Grid &pGrid, const Vec2 pStart, const Vec
     }
 
     return traversed;
-}
-
-std::vector<Vec2> algorithm::calculatePath(const TraverseData &pTraversed, const cocos2d::Vec2 pStart,
-                                           const cocos2d::Vec2 pGoal) {
-    std::vector<Vec2> path;
-    Vec2 current = pGoal;
-
-    path.push_back(current);
-    while (current != pStart) {
-        current = pTraversed.find(current)->second;
-        path.push_back(current);
-    }
-
-    std::reverse(path.begin(), path.end());
-
-    return path;
 }
 

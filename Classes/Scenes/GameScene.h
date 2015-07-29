@@ -5,7 +5,6 @@
 
 #include <Utilities/Path.h>
 #include <Utilities/Grid.h>
-#include <Utilities/Algorithm.h>
 
 namespace cocos2d {
     class DrawNode;
@@ -45,8 +44,7 @@ private:
 
     void placeTower(cocos2d::Vec2 pTile);
 
-    void constructPath(const TraverseData &pTraversed, const cocos2d::Vec2 pStart,
-                       const cocos2d::Vec2 pGoal);
+    void drawPath();
 };
 
 #endif // GAME_SCENE_H

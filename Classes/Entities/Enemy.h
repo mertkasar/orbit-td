@@ -16,8 +16,6 @@ private:
     cocos2d::PhysicsBody *mBody;
 
     Path mPath;
-    WayPoint mNextWaypoint;
-    WayPoint mCurrentWaypoint;
 
 public:
     Enemy();
@@ -30,14 +28,8 @@ public:
 
     CREATE_FUNC(Enemy);
 
-    void constructPath(const Path &pPath);
-
-    const WayPoint& getNextWaypoint() const {
-        return mNextWaypoint;
-    }
-
-    const WayPoint& getCurrentWaypoint() const {
-        return mCurrentWaypoint;
+    Path &getPath() {
+        return mPath;
     }
 };
 

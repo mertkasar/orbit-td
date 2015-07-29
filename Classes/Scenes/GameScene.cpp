@@ -88,8 +88,12 @@ void GameScene::buildScene() {
     mGameplayLayer->addChild(grid);
 
     mPathCanvas = DrawNode::create();
+
     auto traversed = algorithm::traverse(mGrid, START, GOAL);
-    constructPath(traversed, START, GOAL);
+    if (mPath.isReached(traversed, START)) {
+        mPath.constructPath(traversed, START, GOAL);
+        drawPath();
+    }
 
     mGameplayLayer->addChild(mPathCanvas);
 
@@ -169,9 +173,10 @@ void GameScene::connectListeners() {
 
                         auto traversed = algorithm::traverse(testGrid, START, GOAL);
 
-                        if (traversed.count(GOAL)) {
+                        if (mPath.isReached(traversed, START)) {
                             placeTower(Vec2(i, j));
-                            constructPath(traversed, START, GOAL);
+                            mPath.constructPath(traversed, START, GOAL);
+                            drawPath();
 
                             CCLOG("Tower placed!");
                         } else {
@@ -193,7 +198,7 @@ void GameScene::spawnEnemy(float pDelta) {
     auto enemy = Enemy::create();
     Vec2 spawnPosition = Vec2(mVisibleSize.width - 50.f, mVisibleSize.height / 2.f);
     enemy->setPosition(mGameplayLayer->convertToNodeSpace(spawnPosition));
-    enemy->constructPath(mPath);
+    enemy->getPath().clone(mPath);
 
     mGameplayLayer->addChild(enemy);
 }
@@ -208,27 +213,19 @@ void GameScene::placeTower(Vec2 pTile) {
     mGrid.setNode(pTile, 1);
 }
 
-void GameScene::constructPath(const TraverseData &pTraversed, const cocos2d::Vec2 pStart,
-                              const cocos2d::Vec2 pGoal) {
-    auto calculatedRoute = algorithm::calculatePath(pTraversed, pStart, pGoal);
-
-    mPath.clear();
+void GameScene::drawPath() {
     mPathCanvas->clear();
-    for (unsigned int i = 0; i < calculatedRoute.size(); i++) {
-        WayPoint waypoint{
-                calculatedRoute.at(i),
-                algorithm::toCircularGrid(waypoint.tile),
-                DEFAULT_WAYPOINT_DENSITY
-        };
+    auto waypoints = mPath.getWayPoints();
 
-        mPath.addWaypoint(waypoint);
+    for (unsigned int i = 0; i < waypoints.size(); i++) {
+        auto waypoint = waypoints.at(i);
 
         mPathCanvas->drawSolidCircle(waypoint.location, 6.f, 0.f, 50, Color4F::RED);
         mPathCanvas->drawCircle(waypoint.location, waypoint.reachRadius, 0.f, 50, false, Color4F::RED);
 
         if (i != 0) {
-            auto previousWaypoint = algorithm::toCircularGrid(calculatedRoute.at(i - 1));
-            mPathCanvas->drawLine(waypoint.location, previousWaypoint, Color4F::RED);
+            auto previousWaypoint = waypoints.at(i - 1);
+            mPathCanvas->drawLine(waypoint.location, previousWaypoint.location, Color4F::RED);
         }
     }
 }
