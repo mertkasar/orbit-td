@@ -45,6 +45,8 @@ private:
     void findTarget();
 
     void adaptRotation();
+
+    virtual void shoot(float pDelta);
 };
 
 

@@ -99,7 +99,7 @@ void GameScene::buildScene() {
     this->addChild(mGameplayLayer);
 
     spawnEnemy(0.f);
-    this->schedule(CC_SCHEDULE_SELECTOR(GameScene::spawnEnemy), 2.f);
+    //this->schedule(CC_SCHEDULE_SELECTOR(GameScene::spawnEnemy), 2.f);
 }
 
 void GameScene::connectListeners() {

@@ -20,7 +20,7 @@ cocos2d::Vec2 algorithm::toCircularGrid(Vec2 pPriTile) {
     return position + shift;
 }
 
-//Breadth-Fir Search
+//Breadth-First Search
 TraverseData algorithm::traverse(const Grid &pGrid, const Vec2 pStart, const Vec2 pGoal) {
     std::queue<Vec2> frontier;
     TraverseData traversed;

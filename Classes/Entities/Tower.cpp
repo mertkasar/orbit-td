@@ -48,8 +48,15 @@ void Tower::update(float pDelta) {
     if (mTarget) {
         if (isTargetValid()) {
             adaptRotation();
-        } else
+
+            if (!this->isScheduled(CC_SCHEDULE_SELECTOR(Tower::shoot))) {
+                shoot(0.f);
+                this->schedule(CC_SCHEDULE_SELECTOR(Tower::shoot), 0.3f);
+            }
+        } else {
             mTarget = nullptr;
+            this->unschedule(CC_SCHEDULE_SELECTOR(Tower::shoot));
+        }
     } else
         findTarget();
 }
@@ -83,4 +90,8 @@ void Tower::adaptRotation() {
     auto angle = CC_RADIANS_TO_DEGREES(diff.getAngle());
 
     mGun->setRotation(-1 * angle);
+}
+
+void Tower::shoot(float pDelta) {
+    CCLOG("Shooting!");
 }
