@@ -3,8 +3,8 @@
 
 #define SPRITE_ANGLE -90.f
 
-#define TOWER_CD 0.3f
-#define TOWER_DMG 10.f
+#define TURRET_CD 0.3f
+#define TURRET_DMG 10.f
 
 #define ENEMY_MAX_VEL 80.f
 #define ENEMY_HP 100.f

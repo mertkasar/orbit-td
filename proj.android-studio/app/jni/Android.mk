@@ -15,6 +15,7 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../../Classes/Scenes/GameScene.cpp \
                    ../../../Classes/Entities/Enemy.cpp \
                    ../../../Classes/Entities/Tower.cpp \
+                   ../../../Classes/Entities/Turret.cpp \
                    ../../../Classes/Utilities/SteeringDirector.cpp \
                    ../../../Classes/Utilities/Path.cpp \
                    ../../../Classes/Utilities/Grid.cpp \

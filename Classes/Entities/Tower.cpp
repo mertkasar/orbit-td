@@ -8,24 +8,20 @@
 
 USING_NS_CC;
 
-Tower::Tower() {
-}
-
-Tower::~Tower() {
-}
-
-bool Tower::init() {
+bool Tower::init(std::string pBaseTexturePath, std::string pGunTexturePath, float pRangeRadius, float pCooldown) {
     if (!Node::init())
         return false;
 
-    mBase = Sprite::create("textures/tower_base.png");
+    mCooldown = pCooldown;
 
-    mGun = Sprite::create("textures/tower_gun.png");
+    mBase = Sprite::create(pBaseTexturePath);
+
+    mGun = Sprite::create(pGunTexturePath);
     mGun->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
 
     mBase->setScale(0.5f);
 
-    mBody = PhysicsBody::createCircle(150.f);
+    mBody = PhysicsBody::createCircle(pRangeRadius);
     mBody->setCategoryBitmask(TOWER_RANGE_MASK);
     mBody->setContactTestBitmask(ENEMY_MASK);
     mBody->setCollisionBitmask(NULL_MASK);
@@ -44,23 +40,6 @@ bool Tower::init() {
     return true;
 }
 
-void Tower::update(float pDelta) {
-    if (mTarget) {
-        if (isTargetValid()) {
-            adaptRotation();
-
-            if (!this->isScheduled(CC_SCHEDULE_SELECTOR(Tower::shoot))) {
-                shoot(0.f);
-                this->schedule(CC_SCHEDULE_SELECTOR(Tower::shoot), TOWER_CD);
-            }
-        } else {
-            mTarget = nullptr;
-            this->unschedule(CC_SCHEDULE_SELECTOR(Tower::shoot));
-        }
-    } else
-        findTarget();
-}
-
 void Tower::addTarget(Enemy *pTarget) {
     mRange.pushBack(pTarget);
 }
@@ -70,6 +49,23 @@ void Tower::removeTarget(Enemy *pTarget) {
 
     if (found != mRange.end())
         mRange.erase(found);
+}
+
+void Tower::update(float pDelta) {
+    if (mTarget) {
+        if (isTargetValid()) {
+            adaptRotation();
+
+            if (!this->isScheduled(CC_SCHEDULE_SELECTOR(Tower::shoot))) {
+                shoot(0.f);
+                this->schedule(CC_SCHEDULE_SELECTOR(Tower::shoot), mCooldown);
+            }
+        } else {
+            mTarget = nullptr;
+            this->unschedule(CC_SCHEDULE_SELECTOR(Tower::shoot));
+        }
+    } else
+        findTarget();
 }
 
 bool Tower::isTargetValid() {
@@ -90,8 +86,4 @@ void Tower::adaptRotation() {
     auto angle = CC_RADIANS_TO_DEGREES(diff.getAngle());
 
     mGun->setRotation(-1 * angle);
-}
-
-void Tower::shoot(float pDelta) {
-    mTarget->deal(TOWER_DMG);
 }

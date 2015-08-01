@@ -127,6 +127,7 @@ set(GAME_SRC
   Classes/Scenes/GameScene.cpp
   Classes/Entities/Enemy.cpp
   Classes/Entities/Tower.cpp
+  Classes/Entities/Turret.cpp
   Classes/Utilities/SteeringDirector.cpp
   Classes/Utilities/Path.cpp
   Classes/Utilities/Grid.cpp
@@ -140,6 +141,7 @@ set(GAME_HEADERS
   Classes/Scenes/GameScene.h
   Classes/Entities/Enemy.h
   Classes/Entities/Tower.h
+  Classes/Entities/Turret.h
   Classes/Utilities/SteeringDirector.h
   Classes/Utilities/Path.h
   Classes/Utilities/Grid.h

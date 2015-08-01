@@ -12,7 +12,7 @@ namespace cocos2d {
 class Enemy;
 
 class Tower : public cocos2d::Node {
-private:
+protected:
     cocos2d::Sprite *mBase;
     cocos2d::Sprite *mGun;
     cocos2d::PhysicsBody *mBody;
@@ -20,33 +20,29 @@ private:
     Enemy *mTarget;
     cocos2d::Vector<Enemy *> mRange;
 
+    float mCooldown;
+
 public:
-    Tower();
-
-    virtual ~Tower();
-
-    virtual bool init();
-
-    virtual void update(float pDelta);
-
-    CREATE_FUNC(Tower);
+    bool init(std::string pBaseTexturePath, std::string pGunTexturePath, float pRangeRadius, float pCooldown);
 
     void addTarget(Enemy *pTarget);
 
     void removeTarget(Enemy *pTarget);
 
+    bool isTargetValid();
+
     unsigned int getTargetCount() const {
         return (unsigned int) mRange.size();
     }
 
-    bool isTargetValid();
+    virtual void update(float pDelta);
 
 private:
     void findTarget();
 
     void adaptRotation();
 
-    virtual void shoot(float pDelta);
+    virtual void shoot(float pDelta) = 0;
 };
 
 
