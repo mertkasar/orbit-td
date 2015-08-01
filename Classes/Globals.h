@@ -9,6 +9,9 @@
 #define ENEMY_MAX_VEL 80.f
 #define ENEMY_HP 100.f
 
+#define HBAR_WIDTH 20.f
+#define HBAR_HEIGHT 80.f
+
 #define GRID_RADIUS 600.f
 #define GRID_START_ANGLE 20.f
 #define GRID_SHIFT_ANGLE 10.f

@@ -2,9 +2,10 @@
 
 #include <Globals.h>
 #include <2d/CCSprite.h>
+#include <2d/CCAction.h>
+#include <2d/CCDrawNode.h>
 #include <physics/CCPhysicsBody.h>
 #include <Utilities/SteeringDirector.h>
-#include <2d/CCAction.h>
 
 USING_NS_CC;
 
@@ -18,7 +19,8 @@ bool Enemy::init() {
     if (!Node::init())
         return false;
 
-    mHitPoints = ENEMY_HP;
+    mMaxHP = ENEMY_HP;
+    mCurrentHP = mMaxHP;
 
     mSprite = Sprite::create("textures/enemy.png");
 
@@ -30,10 +32,15 @@ bool Enemy::init() {
     mBody->setVelocityLimit(ENEMY_MAX_VEL);
     this->setPhysicsBody(mBody);
 
+    mHPBar = DrawNode::create();
+    mHPBar->setPosition(Vec2(-40.f, -70.f));
+    updateHPBar();
+
     this->setScale(0.5f);
     this->setRotation(SPRITE_ANGLE);
 
     this->addChild(mSprite);
+    this->addChild(mHPBar);
 
     this->scheduleUpdate();
 
@@ -60,9 +67,21 @@ void Enemy::update(float pDelta) {
     auto angle = CC_RADIANS_TO_DEGREES(mBody->getVelocity().getAngle());
     mSprite->setRotation(-angle);
 
-    if (mHitPoints <= 0.f)
+    if (mCurrentHP <= 0.f)
         dead = true;
 
     if (dead)
         removeFromParentAndCleanup(true);
+}
+
+void Enemy::deal(float pDamage) {
+    mCurrentHP = mCurrentHP - pDamage;
+    updateHPBar();
+}
+
+void Enemy::updateHPBar() {
+    mHPBar->clear();
+
+    mHPBar->drawSolidRect(Vec2::ZERO, Vec2(HBAR_HEIGHT, HBAR_WIDTH), Color4F::RED);
+    mHPBar->drawSolidRect(Vec2::ZERO, Vec2(mCurrentHP * HBAR_HEIGHT / mMaxHP, HBAR_WIDTH), Color4F::GREEN);
 }

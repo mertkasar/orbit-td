@@ -8,6 +8,8 @@ namespace cocos2d {
     class Sprite;
 
     class PhysicsBody;
+
+    class DrawNode;
 }
 
 class Enemy : public cocos2d::Node {
@@ -17,7 +19,9 @@ private:
 
     Path mPath;
 
-    float mHitPoints;
+    float mMaxHP;
+    float mCurrentHP;
+    cocos2d::DrawNode *mHPBar;
 
 public:
     Enemy();
@@ -30,17 +34,18 @@ public:
 
     CREATE_FUNC(Enemy);
 
+    void deal(float pDamage);
+
     Path &getPath() {
         return mPath;
     }
 
-    void deal(float pDamage) {
-        mHitPoints = mHitPoints - pDamage;
+    float getHP() const {
+        return mMaxHP;
     }
 
-    float getHP() const {
-        return mHitPoints;
-    }
+private:
+    void updateHPBar();
 };
 
 

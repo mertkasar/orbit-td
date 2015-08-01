@@ -94,5 +94,4 @@ void Tower::adaptRotation() {
 
 void Tower::shoot(float pDelta) {
     mTarget->deal(TOWER_DMG);
-    CCLOG("Dealed: %.3f dmg", TOWER_DMG);
 }
