@@ -17,6 +17,8 @@ private:
 
     Path mPath;
 
+    float mHitPoints;
+
 public:
     Enemy();
 
@@ -30,6 +32,14 @@ public:
 
     Path &getPath() {
         return mPath;
+    }
+
+    void deal(float pDamage) {
+        mHitPoints = mHitPoints - pDamage;
+    }
+
+    float getHP() const {
+        return mHitPoints;
     }
 };
 

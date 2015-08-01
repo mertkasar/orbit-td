@@ -51,7 +51,7 @@ void Tower::update(float pDelta) {
 
             if (!this->isScheduled(CC_SCHEDULE_SELECTOR(Tower::shoot))) {
                 shoot(0.f);
-                this->schedule(CC_SCHEDULE_SELECTOR(Tower::shoot), 0.3f);
+                this->schedule(CC_SCHEDULE_SELECTOR(Tower::shoot), TOWER_CD);
             }
         } else {
             mTarget = nullptr;
@@ -93,5 +93,6 @@ void Tower::adaptRotation() {
 }
 
 void Tower::shoot(float pDelta) {
-    CCLOG("Shooting!");
+    mTarget->deal(TOWER_DMG);
+    CCLOG("Dealed: %.3f dmg", TOWER_DMG);
 }

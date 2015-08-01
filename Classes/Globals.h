@@ -3,7 +3,11 @@
 
 #define SPRITE_ANGLE -90.f
 
+#define TOWER_CD 0.3f
+#define TOWER_DMG 10.f
+
 #define ENEMY_MAX_VEL 80.f
+#define ENEMY_HP 100.f
 
 #define GRID_RADIUS 600.f
 #define GRID_START_ANGLE 20.f

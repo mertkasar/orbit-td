@@ -18,6 +18,8 @@ bool Enemy::init() {
     if (!Node::init())
         return false;
 
+    mHitPoints = ENEMY_HP;
+
     mSprite = Sprite::create("textures/enemy.png");
 
     mBody = PhysicsBody::createCircle(mSprite->getContentSize().width / 2.f);
@@ -57,6 +59,9 @@ void Enemy::update(float pDelta) {
     // Adapt rotation
     auto angle = CC_RADIANS_TO_DEGREES(mBody->getVelocity().getAngle());
     mSprite->setRotation(-angle);
+
+    if (mHitPoints <= 0.f)
+        dead = true;
 
     if (dead)
         removeFromParentAndCleanup(true);
