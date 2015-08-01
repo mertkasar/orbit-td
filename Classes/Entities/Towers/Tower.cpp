@@ -1,4 +1,4 @@
-#include <Entities/Tower.h>
+#include <Entities/Towers/Tower.h>
 
 #include <2d/CCSprite.h>
 #include <physics/CCPhysicsBody.h>

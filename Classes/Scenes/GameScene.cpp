@@ -10,7 +10,8 @@
 #include <physics/CCPhysicsContact.h>
 
 #include <Entities/Enemy.h>
-#include <Entities/Turret.h>
+#include <Entities/Towers/Turret.h>
+#include <Entities/Towers/Laser.h>
 
 USING_NS_CC;
 
@@ -231,7 +232,7 @@ bool GameScene::isAvailable(const TraverseData &pTraversed, cocos2d::Vec2 pTile)
 }
 
 void GameScene::placeTower(Vec2 pTile) {
-    auto tower = Turret::create();
+    auto tower = Laser::create();
 
     auto position = algorithm::toCircularGrid(pTile);
     tower->setPosition(position);

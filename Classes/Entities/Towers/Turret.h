@@ -1,7 +1,7 @@
 #ifndef TURRET_H
 #define TURRET_H
 
-#include <Entities/Tower.h>
+#include <Entities/Towers/Tower.h>
 
 class Turret : public Tower {
 public:

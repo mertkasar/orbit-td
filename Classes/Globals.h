@@ -6,6 +6,9 @@
 #define TURRET_CD 0.3f
 #define TURRET_DMG 10.f
 
+#define LASER_CD 0.f
+#define LASER_DMG 0.3f
+
 #define ENEMY_MAX_VEL 80.f
 #define ENEMY_HP 100.f
 

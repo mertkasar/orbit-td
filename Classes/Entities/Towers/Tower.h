@@ -37,10 +37,10 @@ public:
 
     virtual void update(float pDelta);
 
-private:
+protected:
     void findTarget();
 
-    void adaptRotation();
+    virtual void adaptRotation();
 
     virtual void shoot(float pDelta) = 0;
 };
