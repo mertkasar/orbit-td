@@ -126,6 +126,7 @@ set(GAME_SRC
   Classes/AppDelegate.cpp
   Classes/Scenes/GameScene.cpp
   Classes/Entities/Enemy.cpp
+  Classes/Entities/Missile.cpp
   Classes/Entities/Towers/Tower.cpp
   Classes/Entities/Towers/Turret.cpp
   Classes/Entities/Towers/Laser.cpp
@@ -142,6 +143,7 @@ set(GAME_HEADERS
   Classes/AppDelegate.h
   Classes/Scenes/GameScene.h
   Classes/Entities/Enemy.h
+  Classes/Entities/Missile.h
   Classes/Entities/Towers/Tower.h
   Classes/Entities/Towers/Turret.h
   Classes/Entities/Towers/Laser.h

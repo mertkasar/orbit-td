@@ -4,6 +4,9 @@
 
 #include <Globals.h>
 #include <Entities/Enemy.h>
+#include <Entities/Missile.h>
+
+USING_NS_CC;
 
 bool RLauncher::init() {
     if (!Tower::init("textures/tower_base.png", "textures/r_launcher.png", 150.f, R_LAUNCHER_CD))
@@ -15,5 +18,12 @@ bool RLauncher::init() {
 }
 
 void RLauncher::shoot(float pDelta) {
-    mTarget->deal(R_LAUNCHER_DMG);
+    auto projectile = Missile::create();
+    projectile->setPosition(this->getPosition());
+    projectile->setDamage(R_LAUNCHER_DMG);
+    projectile->setTarget(mTarget);
+
+    this->getParent()->addChild(projectile);
+
+    CCLOG("Missile launched!");
 }

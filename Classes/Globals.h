@@ -12,6 +12,9 @@
 #define R_LAUNCHER_CD 1.f
 #define R_LAUNCHER_DMG 30.f
 
+#define MISSILE_MAX_VEL 160.f
+#define MISSILE_EXPIRE_TIME 4.f //as seconds
+
 #define ENEMY_MAX_VEL 80.f
 #define ENEMY_HP 100.f
 
@@ -28,6 +31,7 @@
 #define NULL_MASK 0x00
 #define TOWER_RANGE_MASK 0x01
 #define ENEMY_MASK 0x02
+#define MISSILE_MASK 0x03
 
 //Type definitions
 typedef std::map<cocos2d::Vec2, cocos2d::Vec2> TraverseData;
