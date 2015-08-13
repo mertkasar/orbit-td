@@ -9,6 +9,9 @@
 #define LASER_CD 0.f
 #define LASER_DMG 0.3f
 
+#define R_LAUNCHER_CD 1.f
+#define R_LAUNCHER_DMG 30.f
+
 #define ENEMY_MAX_VEL 80.f
 #define ENEMY_HP 100.f
 

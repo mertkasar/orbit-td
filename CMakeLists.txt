@@ -129,6 +129,7 @@ set(GAME_SRC
   Classes/Entities/Towers/Tower.cpp
   Classes/Entities/Towers/Turret.cpp
   Classes/Entities/Towers/Laser.cpp
+  Classes/Entities/Towers/RLauncher.cpp
   Classes/Utilities/SteeringDirector.cpp
   Classes/Utilities/Path.cpp
   Classes/Utilities/Grid.cpp
@@ -144,6 +145,7 @@ set(GAME_HEADERS
   Classes/Entities/Towers/Tower.h
   Classes/Entities/Towers/Turret.h
   Classes/Entities/Towers/Laser.h
+  Classes/Entities/Towers/RLauncher.h
   Classes/Utilities/SteeringDirector.h
   Classes/Utilities/Path.h
   Classes/Utilities/Grid.h
