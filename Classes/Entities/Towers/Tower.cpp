@@ -53,7 +53,7 @@ void Tower::removeTarget(Enemy *pTarget) {
 
 void Tower::update(float pDelta) {
     if (mTarget) {
-        if (isTargetValid()) {
+        if (!mTarget->isDead()) {
             adaptRotation();
 
             if (!this->isScheduled(CC_SCHEDULE_SELECTOR(Tower::shoot))) {
@@ -61,17 +61,14 @@ void Tower::update(float pDelta) {
                 this->schedule(CC_SCHEDULE_SELECTOR(Tower::shoot), mCooldown);
             }
         } else {
+            mRange.eraseObject(mTarget);
             mTarget = nullptr;
             this->unschedule(CC_SCHEDULE_SELECTOR(Tower::shoot));
         }
     } else
         findTarget();
-}
 
-bool Tower::isTargetValid() {
-    auto found = mRange.find(mTarget);
-
-    return found != mRange.end();
+    CCLOG("Tower has %i targets in range", mRange.size());
 }
 
 void Tower::findTarget() {

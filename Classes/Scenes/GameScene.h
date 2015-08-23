@@ -7,9 +7,12 @@
 #include <Utilities/Grid.h>
 
 #include <Globals.h>
+#include <Utilities/Pool.h>
 
 namespace cocos2d {
     class DrawNode;
+
+    class Label;
 };
 
 class Enemy;
@@ -25,10 +28,13 @@ private:
 
     cocos2d::DrawNode *mPathCanvas;
 
+    Pool<Enemy> mEnemyPool;
     cocos2d::Vector<Enemy *> mEnemies;
 
     Grid mGrid;
     Path mPath;
+
+    cocos2d::Label *mLogLabel;
 
 public:
     GameScene();
@@ -38,6 +44,8 @@ public:
     static cocos2d::Scene *createScene();
 
     virtual bool init();
+
+    virtual void update(float pDelta);
 
     CREATE_FUNC(GameScene);
 

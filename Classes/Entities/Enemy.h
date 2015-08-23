@@ -23,6 +23,8 @@ private:
     float mCurrentHP;
     cocos2d::DrawNode *mHPBar;
 
+    bool mDead;
+
 public:
     Enemy();
 
@@ -34,6 +36,8 @@ public:
 
     CREATE_FUNC(Enemy);
 
+    void ignite(cocos2d::Vec2 pPosition, const Path& pPath);
+
     void deal(float pDamage);
 
     Path &getPath() {
@@ -42,6 +46,10 @@ public:
 
     float getHP() const {
         return mMaxHP;
+    }
+
+    bool isDead() const {
+        return mDead;
     }
 
 private:

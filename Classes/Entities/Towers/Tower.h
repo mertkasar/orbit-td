@@ -29,8 +29,6 @@ public:
 
     void removeTarget(Enemy *pTarget);
 
-    bool isTargetValid();
-
     unsigned int getTargetCount() const {
         return (unsigned int) mRange.size();
     }

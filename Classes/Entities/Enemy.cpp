@@ -10,9 +10,11 @@
 USING_NS_CC;
 
 Enemy::Enemy() {
+    CCLOG("Enemy created");
 }
 
 Enemy::~Enemy() {
+    CCLOG("Enemy deleted");
 }
 
 bool Enemy::init() {
@@ -20,7 +22,6 @@ bool Enemy::init() {
         return false;
 
     mMaxHP = ENEMY_HP;
-    mCurrentHP = mMaxHP;
 
     mSprite = Sprite::create("textures/enemy.png");
 
@@ -34,27 +35,19 @@ bool Enemy::init() {
 
     mHPBar = DrawNode::create();
     mHPBar->setPosition(Vec2(-40.f, -70.f));
-    updateHPBar();
-
-    this->setScale(0.5f);
-    this->setRotation(SPRITE_ANGLE);
 
     this->addChild(mSprite);
     this->addChild(mHPBar);
-
-    this->scheduleUpdate();
 
     return true;
 }
 
 void Enemy::update(float pDelta) {
-    bool dead = false;
-
     WayPoint target = mPath.getNextWaypoint();
     float reachRadius = target.reachRadius + mSprite->getContentSize().width / 2.f;
     if (this->getPosition().distance(target.location) <= reachRadius) {
         if (mPath.eop())
-            dead = true;
+            mDead = true;
         else {
             mPath.forward();
             target = mPath.getNextWaypoint();
@@ -68,10 +61,23 @@ void Enemy::update(float pDelta) {
     mSprite->setRotation(-angle);
 
     if (mCurrentHP <= 0.f)
-        dead = true;
+        mDead = true;
+}
 
-    if (dead)
-        removeFromParentAndCleanup(true);
+void Enemy::ignite(cocos2d::Vec2 pPosition, const Path &pPath) {
+    mCurrentHP = mMaxHP;
+    mDead = false;
+
+    this->setPosition(pPosition);
+    this->setScale(0.5f);
+    this->setRotation(SPRITE_ANGLE);
+    mBody->setVelocity(Vec2::ZERO);
+
+    mPath.clone(pPath);
+
+    updateHPBar();
+
+    this->scheduleUpdate();
 }
 
 void Enemy::deal(float pDamage) {

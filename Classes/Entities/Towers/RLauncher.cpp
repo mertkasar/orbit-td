@@ -24,6 +24,4 @@ void RLauncher::shoot(float pDelta) {
     projectile->setTarget(mTarget);
 
     this->getParent()->addChild(projectile);
-
-    CCLOG("Missile launched!");
 }

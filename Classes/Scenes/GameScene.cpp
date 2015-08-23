@@ -6,6 +6,7 @@
 #include <2d/CCActionInterval.h>
 #include <2d/CCActionInstant.h>
 #include <2d/CCDrawNode.h>
+#include <2d/CCLabel.h>
 #include <physics/CCPhysicsWorld.h>
 #include <physics/CCPhysicsContact.h>
 
@@ -13,6 +14,8 @@
 #include <Entities/Towers/Turret.h>
 #include <Entities/Towers/Laser.h>
 #include <Entities/Towers/RLauncher.h>
+
+#include <sstream>
 
 USING_NS_CC;
 
@@ -52,6 +55,22 @@ bool GameScene::init() {
     connectListeners();
 
     return true;
+}
+
+void GameScene::update(float pDelta) {
+    //Clear dead enemy objects
+    for (auto enemy : mEnemies)
+        if (enemy->isDead()) {
+            enemy->removeFromParent();
+            mEnemies.eraseObject(enemy);
+        }
+
+    //Update log labels
+    std::stringstream ss;
+    ss << "Enemy pool has " << mEnemyPool.getSize() << " instances" << "\n" << "Enemy list has " << mEnemies.size() <<
+    " references";
+
+    mLogLabel->setString(ss.str());
 }
 
 void GameScene::buildScene() {
@@ -95,13 +114,19 @@ void GameScene::buildScene() {
         drawPath();
     }
 
+    mLogLabel = Label::createWithTTF("", "fonts/ubuntu.ttf", 32);
+    mLogLabel->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+    mLogLabel->setPosition(mCanvasCenter - Vec2(220.f, 0.f));
+
     mGameplayLayer->addChild(mPathCanvas);
+    mGameplayLayer->addChild(mLogLabel);
 
     this->addChild(mBackgroundLayer);
     this->addChild(mGameplayLayer);
 
     spawnEnemy(0.f);
-    //this->schedule(CC_SCHEDULE_SELECTOR(GameScene::spawnEnemy), 2.f);
+    this->schedule(CC_SCHEDULE_SELECTOR(GameScene::spawnEnemy), 2.f);
+    this->scheduleUpdate();
 }
 
 void GameScene::connectListeners() {
@@ -205,10 +230,9 @@ void GameScene::connectListeners() {
 }
 
 void GameScene::spawnEnemy(float pDelta) {
-    auto enemy = Enemy::create();
-    Vec2 spawnPosition = Vec2(mVisibleSize.width - 50.f, mVisibleSize.height / 2.f);
-    enemy->setPosition(mGameplayLayer->convertToNodeSpace(spawnPosition));
-    enemy->getPath().clone(mPath);
+    auto enemy = mEnemyPool.fetch();
+    Vec2 spawnPosition = mGameplayLayer->convertToNodeSpace(Vec2(mVisibleSize.width - 50.f, mVisibleSize.height / 2.f));
+    enemy->ignite(spawnPosition, mPath);
 
     mGameplayLayer->addChild(enemy);
     mEnemies.pushBack(enemy);

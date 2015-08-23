@@ -46,8 +46,12 @@ bool Missile::init() {
 }
 
 void Missile::update(float pDelta) {
-    if (mTarget != nullptr)
-        mTargetPosition = mTarget->getPosition();
+    if (mTarget != nullptr) {
+        if (!mTarget->isDead())
+            mTargetPosition = mTarget->getPosition();
+        else
+            mTarget = nullptr;
+    }
 
     float reachRadius = 10 + mSprite->getContentSize().width / 2.f;
     if (this->getPosition().distance(mTargetPosition) <= reachRadius) {
@@ -62,7 +66,6 @@ void Missile::update(float pDelta) {
     // Adapt rotation
     auto angle = CC_RADIANS_TO_DEGREES(mBody->getVelocity().getAngle());
     mSprite->setRotation(-angle);
-
 
     if (isDead())
         removeFromParentAndCleanup(true);

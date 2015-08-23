@@ -10,7 +10,7 @@
 #define LASER_DMG 0.3f
 
 #define R_LAUNCHER_CD 1.f
-#define R_LAUNCHER_DMG 30.f
+#define R_LAUNCHER_DMG 100.f
 
 #define MISSILE_MAX_VEL 160.f
 #define MISSILE_EXPIRE_TIME 4.f //as seconds
