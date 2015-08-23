@@ -152,6 +152,7 @@ set(GAME_HEADERS
   Classes/Utilities/Path.h
   Classes/Utilities/Grid.h
   Classes/Utilities/Algorithm.h
+  Classes/Utilities/Pool.h
   ${PLATFORM_SPECIFIC_HEADERS}
 )
 
