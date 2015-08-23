@@ -11,18 +11,16 @@
 USING_NS_CC;
 
 Missile::Missile() {
+    CCLOG("Missile created");
 }
 
 Missile::~Missile() {
+    CCLOG("Missile deleted");
 }
 
 bool Missile::init() {
     if (!Node::init())
         return false;
-
-    mDamage = 0.f;
-
-    mDead = false;
 
     mSprite = Sprite::create("textures/missile.png");
 
@@ -34,13 +32,7 @@ bool Missile::init() {
     mBody->setVelocityLimit(MISSILE_MAX_VEL);
     this->setPhysicsBody(mBody);
 
-    this->setScale(0.5f);
-    this->setRotation(SPRITE_ANGLE);
-
     this->addChild(mSprite);
-
-    this->scheduleUpdate();
-    this->scheduleOnce(CC_SCHEDULE_SELECTOR(Missile::die), MISSILE_EXPIRE_TIME);
 
     return true;
 }
@@ -68,7 +60,23 @@ void Missile::update(float pDelta) {
     mSprite->setRotation(-angle);
 
     if (isDead())
-        removeFromParentAndCleanup(true);
+        removeFromParent();
+}
+
+void Missile::ignite(cocos2d::Vec2 pPosition, float pDamage, Enemy *pTarget) {
+    mDamage = 0.f;
+    mDead = false;
+
+    this->setPosition(pPosition);
+    setDamage(pDamage);
+    setTarget(pTarget);
+    mBody->setVelocity(Vec2::ZERO);
+
+    this->setScale(0.5f);
+    this->setRotation(SPRITE_ANGLE);
+
+    this->scheduleUpdate();
+    this->scheduleOnce(CC_SCHEDULE_SELECTOR(Missile::die), MISSILE_EXPIRE_TIME);
 }
 
 void Missile::die(float pDelta) {

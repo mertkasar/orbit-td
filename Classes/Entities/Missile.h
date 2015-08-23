@@ -35,6 +35,8 @@ public:
 
     CREATE_FUNC(Missile);
 
+    void ignite(cocos2d::Vec2 pPosition, float pDamage, Enemy* pTarget);
+
     Enemy *getTarget() const {
         return mTarget;
     }

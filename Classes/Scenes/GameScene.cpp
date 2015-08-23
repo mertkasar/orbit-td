@@ -67,8 +67,9 @@ void GameScene::update(float pDelta) {
 
     //Update log labels
     std::stringstream ss;
-    ss << "Enemy pool has " << mEnemyPool.getSize() << " instances" << "\n" << "Enemy list has " << mEnemies.size() <<
-    " references";
+    ss << "Enemy pool has " << mEnemyPool.getSize() << " instances" << "\n"
+    << "Missile pool has " << RLauncher::getMissilePoolSize() << " instance" << "\n"
+    << "Enemy list has " << mEnemies.size() << " references";
 
     mLogLabel->setString(ss.str());
 }

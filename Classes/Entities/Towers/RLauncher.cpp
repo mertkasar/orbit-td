@@ -8,6 +8,8 @@
 
 USING_NS_CC;
 
+Pool<Missile> RLauncher::mMissilePool;
+
 bool RLauncher::init() {
     if (!Tower::init("textures/tower_base.png", "textures/r_launcher.png", 150.f, R_LAUNCHER_CD))
         return false;
@@ -18,10 +20,8 @@ bool RLauncher::init() {
 }
 
 void RLauncher::shoot(float pDelta) {
-    auto projectile = Missile::create();
-    projectile->setPosition(this->getPosition());
-    projectile->setDamage(R_LAUNCHER_DMG);
-    projectile->setTarget(mTarget);
+    auto projectile = mMissilePool.fetch();
+    projectile->ignite(this->getPosition(), R_LAUNCHER_DMG, mTarget);
 
     this->getParent()->addChild(projectile);
 }
