@@ -121,10 +121,17 @@ void GameScene::buildScene() {
     mGameplayLayer->addChild(mPathCanvas);
     mGameplayLayer->addChild(mLogLabel);
 
+    spawnEnemy(0.f);
+    placeTower(Vec2(1, 4));
+    placeTower(Vec2(1, 5));
+    placeTower(Vec2(1, 6));
+    placeTower(Vec2(3, 4));
+    placeTower(Vec2(3, 5));
+    placeTower(Vec2(3, 6));
+
     this->addChild(mBackgroundLayer);
     this->addChild(mGameplayLayer);
 
-    spawnEnemy(0.f);
     this->schedule(CC_SCHEDULE_SELECTOR(GameScene::spawnEnemy), 2.f);
     this->scheduleUpdate();
 }

@@ -67,8 +67,6 @@ void Tower::update(float pDelta) {
         }
     } else
         findTarget();
-
-    CCLOG("Tower has %i targets in range", mRange.size());
 }
 
 void Tower::findTarget() {

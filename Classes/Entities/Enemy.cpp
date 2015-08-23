@@ -88,6 +88,9 @@ void Enemy::deal(float pDamage) {
 void Enemy::updateHPBar() {
     mHPBar->clear();
 
+    if (mCurrentHP < 0.f)
+        mCurrentHP = 0.f;
+
     mHPBar->drawSolidRect(Vec2::ZERO, Vec2(HBAR_HEIGHT, HBAR_WIDTH), Color4F::RED);
     mHPBar->drawSolidRect(Vec2::ZERO, Vec2(mCurrentHP * HBAR_HEIGHT / mMaxHP, HBAR_WIDTH), Color4F::GREEN);
 }
