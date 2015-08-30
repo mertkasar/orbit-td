@@ -8,6 +8,7 @@
 
 #include <Globals.h>
 #include <Utilities/Pool.h>
+#include <UI/WheelMenu.h>
 
 namespace cocos2d {
     class DrawNode;
@@ -25,6 +26,7 @@ private:
 
     cocos2d::LayerColor *mBackgroundLayer;
     cocos2d::Layer *mGameplayLayer;
+    cocos2d::Layer *mUILayer;
 
     cocos2d::DrawNode *mPathCanvas;
 
@@ -35,6 +37,7 @@ private:
     Path mPath;
 
     cocos2d::Label *mLogLabel;
+    WheelMenu mWheelMenu;
 
 public:
     GameScene();

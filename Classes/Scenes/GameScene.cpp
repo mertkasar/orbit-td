@@ -121,18 +121,14 @@ void GameScene::buildScene() {
     mGameplayLayer->addChild(mPathCanvas);
     mGameplayLayer->addChild(mLogLabel);
 
-    spawnEnemy(0.f);
-    placeTower(Vec2(1, 4));
-    placeTower(Vec2(1, 5));
-    placeTower(Vec2(1, 6));
-    placeTower(Vec2(3, 4));
-    placeTower(Vec2(3, 5));
-    placeTower(Vec2(3, 6));
+    mUILayer = Layer::create();
+    mWheelMenu.init(mUILayer);
 
     this->addChild(mBackgroundLayer);
     this->addChild(mGameplayLayer);
+    this->addChild(mUILayer);
 
-    this->schedule(CC_SCHEDULE_SELECTOR(GameScene::spawnEnemy), 2.f);
+    //this->schedule(CC_SCHEDULE_SELECTOR(GameScene::spawnEnemy), 2.f);
     this->scheduleUpdate();
 }
 
@@ -209,7 +205,7 @@ void GameScene::connectListeners() {
         }
 
         if (touched.x > -1 && touched.y > -1) {
-            Grid testGrid = mGrid;
+            /*Grid testGrid = mGrid;
             testGrid.setNode(touched, 1);
 
             auto traversed = algorithm::traverse(testGrid, START, GOAL);
@@ -225,9 +221,11 @@ void GameScene::connectListeners() {
 
                     enemyPath.construct(traversed, from, GOAL);
                 }
-            }
+            }*/
+            mWheelMenu.openAt(touched);
         } else
-            CCLOG("You can't place a tower here!");
+            //CCLOG("You can't place a tower here!");
+            mWheelMenu.close();
 
         return true;
     };
