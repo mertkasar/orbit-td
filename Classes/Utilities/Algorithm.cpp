@@ -17,7 +17,7 @@ cocos2d::Vec2 algorithm::toCircularGrid(Vec2 pPriTile) {
 
     Vec2 shift = pPriTile.y * Vec2(100.f, 0);
 
-    return position + shift;
+    return position + shift + Vec2(-400.f, 360.f);
 }
 
 //Breadth-First Search

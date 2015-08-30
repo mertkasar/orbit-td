@@ -79,7 +79,6 @@ void GameScene::buildScene() {
 
     mGameplayLayer = Layer::create();
     mGameplayLayer->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
-    mGameplayLayer->setPosition(Vec2(-400.f, mVisibleSize.height / 2.f));
 
     // Prepare sample grid
     mGrid.create(Vec2(5, 10));
@@ -103,7 +102,7 @@ void GameScene::buildScene() {
         }
     }
 
-    grid->drawSolidCircle(Vec2(-80.f, 0.f), 600.f, 0.f, 50, Color4F::BLUE);
+    grid->drawSolidCircle(Vec2(-480.f, 360.f), 600.f, 0.f, 50, Color4F::BLUE);
 
     mGameplayLayer->addChild(grid);
 
@@ -115,9 +114,9 @@ void GameScene::buildScene() {
         drawPath();
     }
 
-    mLogLabel = Label::createWithTTF("", "fonts/ubuntu.ttf", 32);
-    mLogLabel->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
-    mLogLabel->setPosition(mCanvasCenter - Vec2(220.f, 0.f));
+    mLogLabel = Label::createWithTTF("", "fonts/ubuntu.ttf", 24);
+    mLogLabel->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    mLogLabel->setPosition(Vec2(200, 0));
 
     mGameplayLayer->addChild(mPathCanvas);
     mGameplayLayer->addChild(mLogLabel);
