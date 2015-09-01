@@ -2,27 +2,38 @@
 #define WHEELMENU_H
 
 #include <math/Vec2.h>
+#include <ui/UILayout.h>
+#include <ui/UIWidget.h>
 
 namespace cocos2d {
-    class Menu;
+    class Ref;
+
+    class Node;
 
     class Layer;
-
-    namespace ui {
-        class Layout;
-    }
 }
+
+class GameScene;
 
 class WheelMenu {
 private:
-    cocos2d::ui::Layout *mRoot;
+    GameScene *mGameScene;
+
+    cocos2d::Vec2 mCurrentTile;
+
+    cocos2d::Node *mRoot;
+
+    cocos2d::ui::Layout *mTowerMenu;
 
 public:
-    void init(cocos2d::Layer *pLayer);
+    void init(cocos2d::Layer *pLayer, GameScene *pGameScene);
 
     void openAt(cocos2d::Vec2 pPosition);
 
     void close();
+
+private:
+    void towerButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType);
 };
 
 #endif //WHEELMENU_H

@@ -19,9 +19,6 @@
 
 USING_NS_CC;
 
-const Vec2 START = Vec2(2, 9);
-const Vec2 GOAL = Vec2(2, 0);
-
 GameScene::GameScene() {
     CCLOG("GameScene created");
 }
@@ -86,6 +83,9 @@ void GameScene::buildScene() {
         mGrid.setNode(Vec2(i, 0), 1);
     mGrid.setNode(Vec2(2, 0), 0);
 
+    mStart = Vec2(2, 9);
+    mGoal = Vec2(2, 0);
+
     // Draw grid
     auto grid = DrawNode::create();
 
@@ -108,9 +108,9 @@ void GameScene::buildScene() {
 
     mPathCanvas = DrawNode::create();
 
-    auto traversed = algorithm::traverse(mGrid, START, GOAL);
-    if (mPath.isReached(traversed, START)) {
-        mPath.construct(traversed, START, GOAL);
+    auto traversed = algorithm::traverse(mGrid, mStart, mGoal);
+    if (mPath.isReached(traversed, mStart)) {
+        mPath.construct(traversed, mStart, mGoal);
         drawPath();
     }
 
@@ -122,13 +122,14 @@ void GameScene::buildScene() {
     mGameplayLayer->addChild(mLogLabel);
 
     mUILayer = Layer::create();
-    mWheelMenu.init(mUILayer);
+    mWheelMenu.init(mUILayer, this);
 
     this->addChild(mBackgroundLayer);
     this->addChild(mGameplayLayer);
     this->addChild(mUILayer);
 
-    //this->schedule(CC_SCHEDULE_SELECTOR(GameScene::spawnEnemy), 2.f);
+    spawnEnemy(0.f);
+    this->schedule(CC_SCHEDULE_SELECTOR(GameScene::spawnEnemy), 2.f);
     this->scheduleUpdate();
 }
 
@@ -205,27 +206,10 @@ void GameScene::connectListeners() {
         }
 
         if (touched.x > -1 && touched.y > -1) {
-            /*Grid testGrid = mGrid;
-            testGrid.setNode(touched, 1);
-
-            auto traversed = algorithm::traverse(testGrid, START, GOAL);
-
-            if (isAvailable(traversed, touched)) {
-                placeTower(touched);
-                mPath.construct(traversed, START, GOAL);
-                drawPath();
-
-                for (auto enemy : mEnemies) {
-                    auto &enemyPath = enemy->getPath();
-                    auto from = enemyPath.getCurrentWaypoint().tile;
-
-                    enemyPath.construct(traversed, from, GOAL);
-                }
-            }*/
             mWheelMenu.openAt(touched);
-        } else
-            //CCLOG("You can't place a tower here!");
+        } else {
             mWheelMenu.close();
+        }
 
         return true;
     };
@@ -244,7 +228,7 @@ void GameScene::spawnEnemy(float pDelta) {
 }
 
 bool GameScene::isAvailable(const TraverseData &pTraversed, cocos2d::Vec2 pTile) {
-    if (!mPath.isReached(pTraversed, START)) {
+    if (!mPath.isReached(pTraversed, mStart)) {
         CCLOG("You can't block the path!");
         return false;
     }
@@ -261,14 +245,51 @@ bool GameScene::isAvailable(const TraverseData &pTraversed, cocos2d::Vec2 pTile)
     return true;
 }
 
-void GameScene::placeTower(Vec2 pTile) {
-    auto tower = RLauncher::create();
+bool GameScene::placeTower(unsigned int pType, Vec2 pTile) {
+    Grid testGrid = mGrid;
+    testGrid.setNode(pTile, 1);
 
-    auto position = algorithm::toCircularGrid(pTile);
-    tower->setPosition(position);
+    auto traversed = algorithm::traverse(testGrid, mStart, mGoal);
 
-    mGameplayLayer->addChild(tower);
-    mGrid.setNode(pTile, 1);
+    if (isAvailable(traversed, pTile)) {
+        auto position = algorithm::toCircularGrid(pTile);
+        Tower *newTower;
+
+        switch (pType) {
+            case 1:
+                newTower = Turret::create();
+                break;
+            case 2:
+                newTower = Laser::create();
+                break;
+            case 3:
+                newTower = RLauncher::create();
+                break;
+            default:
+                break;
+        }
+
+        if (newTower) {
+            newTower->setPosition(position);
+
+            mGameplayLayer->addChild(newTower);
+            mGrid.setNode(pTile, 1);
+
+            mPath.construct(traversed, mStart, mGoal);
+            drawPath();
+
+            for (auto enemy : mEnemies) {
+                auto &enemyPath = enemy->getPath();
+                auto from = enemyPath.getCurrentWaypoint().tile;
+
+                enemyPath.construct(traversed, from, mGoal);
+            }
+
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void GameScene::drawPath() {

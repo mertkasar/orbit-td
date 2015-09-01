@@ -16,6 +16,8 @@ namespace cocos2d {
     class Label;
 };
 
+class Tower;
+
 class Enemy;
 
 class GameScene : public cocos2d::Layer {
@@ -35,6 +37,8 @@ private:
 
     Grid mGrid;
     Path mPath;
+    cocos2d::Vec2 mStart;
+    cocos2d::Vec2 mGoal;
 
     cocos2d::Label *mLogLabel;
     WheelMenu mWheelMenu;
@@ -52,6 +56,9 @@ public:
 
     CREATE_FUNC(GameScene);
 
+    bool placeTower(unsigned int pType, cocos2d::Vec2 pTile);
+
+
 private:
     void buildScene();
 
@@ -60,8 +67,6 @@ private:
     void spawnEnemy(float pDelta);
 
     bool isAvailable(const TraverseData &pTraversed, cocos2d::Vec2 pTile);
-
-    void placeTower(cocos2d::Vec2 pTile);
 
     void drawPath();
 };
