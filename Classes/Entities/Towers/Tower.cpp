@@ -52,7 +52,7 @@ void Tower::removeTarget(Enemy *pTarget) {
 }
 
 void Tower::update(float pDelta) {
-    if (mTarget) {
+    if (mTarget && mRange.find(mTarget) != mRange.end()) {
         if (!mTarget->isDead()) {
             adaptRotation();
 
