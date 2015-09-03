@@ -9,6 +9,7 @@
 #include <Globals.h>
 #include <Utilities/Pool.h>
 #include <UI/WheelMenu.h>
+#include <UI/HUD.h>
 
 namespace cocos2d {
     class DrawNode;
@@ -40,8 +41,8 @@ private:
     cocos2d::Vec2 mStart;
     cocos2d::Vec2 mGoal;
 
-    cocos2d::Label *mLogLabel;
     WheelMenu mWheelMenu;
+    HUD mHUD;
 
 public:
     GameScene();

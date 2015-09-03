@@ -61,14 +61,6 @@ void GameScene::update(float pDelta) {
             enemy->removeFromParent();
             mEnemies.eraseObject(enemy);
         }
-
-    //Update log labels
-    std::stringstream ss;
-    ss << "Enemy pool has " << mEnemyPool.getSize() << " instances" << "\n"
-    << "Missile pool has " << RLauncher::getMissilePoolSize() << " instance" << "\n"
-    << "Enemy list has " << mEnemies.size() << " references";
-
-    mLogLabel->setString(ss.str());
 }
 
 void GameScene::buildScene() {
@@ -114,14 +106,10 @@ void GameScene::buildScene() {
         drawPath();
     }
 
-    mLogLabel = Label::createWithTTF("", "fonts/ubuntu.ttf", 24);
-    mLogLabel->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
-    mLogLabel->setPosition(Vec2(200, 0));
-
     mGameplayLayer->addChild(mPathCanvas);
-    mGameplayLayer->addChild(mLogLabel);
 
     mUILayer = Layer::create();
+    mHUD.init(mUILayer, this);
     mWheelMenu.init(mUILayer, this);
 
     this->addChild(mBackgroundLayer);

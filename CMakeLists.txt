@@ -136,6 +136,7 @@ set(GAME_SRC
   Classes/Utilities/Grid.cpp
   Classes/Utilities/Algorithm.cpp
   Classes/UI/WheelMenu.cpp
+  Classes/UI/HUD.cpp
   ${PLATFORM_SPECIFIC_SRC}
 )
 
@@ -155,6 +156,7 @@ set(GAME_HEADERS
   Classes/Utilities/Algorithm.h
   Classes/Utilities/Pool.h
   Classes/UI/WheelMenu.h
+  Classes/UI/HUD.h
   ${PLATFORM_SPECIFIC_HEADERS}
 )
 
