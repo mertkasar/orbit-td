@@ -3,6 +3,7 @@
 
 #define SPRITE_ANGLE -90.f
 #define STARTING_COIN 40
+#define STARTING_LIFE 10
 
 #define TURRET_CD 0.3f
 #define TURRET_DMG 10.f

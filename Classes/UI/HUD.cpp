@@ -48,17 +48,18 @@ void HUD::init(Layer *pLayer, GameScene *pGameScene) {
     button->setPosition(Vec2(mBottomPanel->getContentSize().width - 200, mBottomPanel->getContentSize().height / 2.f));
     mBottomPanel->addChild(button);
 
-    auto text = ui::Text::create("Total Coin:", "fonts/ubuntu.ttf", 28);
-    text->setTextHorizontalAlignment(TextHAlignment::CENTER);
-    text->setPosition(
-            Vec2(mBottomPanel->getContentSize().width / 2.f - 100, mBottomPanel->getContentSize().height / 2.f));
-    mBottomPanel->addChild(text);
-
-    text = ui::Text::create("0", "fonts/ubuntu.ttf", 28);
+    auto text = ui::Text::create("Total Coin:\t0", "fonts/ubuntu.ttf", 28);
     text->setName("#coin_text");
     text->setTextHorizontalAlignment(TextHAlignment::CENTER);
     text->setPosition(
-            Vec2(mBottomPanel->getContentSize().width / 2.f + 20, mBottomPanel->getContentSize().height / 2.f));
+            Vec2(mBottomPanel->getContentSize().width / 2.f + 20, mBottomPanel->getContentSize().height / 2.f - 5));
+    mBottomPanel->addChild(text);
+
+    text = ui::Text::create("Total Life:\t10", "fonts/ubuntu.ttf", 28);
+    text->setName("#life_text");
+    text->setTextHorizontalAlignment(TextHAlignment::CENTER);
+    text->setPosition(
+            Vec2(mBottomPanel->getContentSize().width / 2.f + 20, mBottomPanel->getContentSize().height / 2.f - 30));
     mBottomPanel->addChild(text);
 
     pLayer->addChild(mTopPanel);
@@ -66,9 +67,15 @@ void HUD::init(Layer *pLayer, GameScene *pGameScene) {
 }
 
 void HUD::update(float pDelta) {
-    std::stringstream ss;
-    ss << mGameScene->getTotalCoin();
+    std::stringstream ss_c;
+    ss_c << "Total Coin:\t" << mGameScene->getTotalCoin();
 
-    auto coin_text = static_cast<ui::Text *>(mBottomPanel->getChildByName("#coin_text"));
-    coin_text->setString(ss.str());
+    auto text = static_cast<ui::Text *>(mBottomPanel->getChildByName("#coin_text"));
+    text->setString(ss_c.str());
+
+    std::stringstream ss_l;
+    ss_l << "Remaining Life:\t" << mGameScene->getRemainingLife();
+
+    text = static_cast<ui::Text *>(mBottomPanel->getChildByName("#life_text"));
+    text->setString(ss_l.str());
 }

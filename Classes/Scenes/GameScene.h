@@ -45,6 +45,7 @@ private:
     HUD mHUD;
 
     unsigned int mTotalCoin;
+    unsigned int mLife;
 
 public:
     GameScene();
@@ -63,6 +64,10 @@ public:
 
     unsigned int getTotalCoin() const {
         return mTotalCoin;
+    }
+
+    unsigned int getRemainingLife() const {
+        return mLife;
     }
 
 

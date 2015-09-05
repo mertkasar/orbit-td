@@ -49,6 +49,7 @@ bool GameScene::init() {
     mCanvasCenter = Vec2(mVisibleSize / 2.f) + mOrigin;
 
     mTotalCoin = STARTING_COIN;
+    mLife = STARTING_LIFE;
 
     buildScene();
     connectListeners();
@@ -65,10 +66,19 @@ void GameScene::update(float pDelta) {
 
             if (enemy->isKilled())
                 mTotalCoin = mTotalCoin + enemy->getReward();
+            else if (enemy->isReachedEnd())
+                mLife = mLife - 1;
         }
 
     mHUD.update(pDelta);
     mWheelMenu.update(pDelta);
+
+    if (mLife <= 0){
+        CCLOG("Game Over!");
+        CCLOG("Starting again!");
+        this->cleanup();
+        init();
+    }
 }
 
 void GameScene::buildScene() {
