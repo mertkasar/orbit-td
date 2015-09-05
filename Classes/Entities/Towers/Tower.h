@@ -43,6 +43,8 @@ public:
     virtual void update(float pDelta);
 
 protected:
+    bool isTargetValid();
+    
     void findTarget();
 
     virtual void adaptRotation();
