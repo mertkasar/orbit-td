@@ -74,8 +74,8 @@ void GameScene::update(float pDelta) {
     mWheelMenu.update(pDelta);
 
     if (mLife <= 0){
-        CCLOG("Game Over!");
-        CCLOG("Starting again!");
+        mHUD.notify('I', "Game Over!");
+        mHUD.notify('I', "Starting Again!");
         this->cleanup();
         init();
     }
@@ -129,6 +129,8 @@ void GameScene::buildScene() {
     mUILayer = Layer::create();
     mHUD.init(mUILayer, this);
     mWheelMenu.init(mUILayer, this);
+
+    mHUD.notify('I', "Game is starting!", 2.f);
 
     this->addChild(mBackgroundLayer);
     this->addChild(mGameplayLayer);
@@ -235,7 +237,7 @@ void GameScene::spawnEnemy(float pDelta) {
 
 bool GameScene::isAvailable(const TraverseData &pTraversed, cocos2d::Vec2 pTile) {
     if (!mPath.isReached(pTraversed, mStart)) {
-        CCLOG("You can't block the path!");
+        mHUD.notify('E', "You can't block the path!");
         return false;
     }
 
@@ -243,7 +245,7 @@ bool GameScene::isAvailable(const TraverseData &pTraversed, cocos2d::Vec2 pTile)
         auto current = enemy->getPath().getCurrentWaypoint().tile;
 
         if ((current == pTile) || !enemy->getPath().isReached(pTraversed, current)) {
-            CCLOG("You can't block enemies!");
+            mHUD.notify('E', "You can't block enemies!");
             return false;
         }
     }
