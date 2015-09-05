@@ -22,8 +22,10 @@ private:
     float mMaxHP;
     float mCurrentHP;
     cocos2d::DrawNode *mHPBar;
+    unsigned int mReward;
 
-    bool mDead;
+    bool mKilled;
+    bool mReachedEnd;
 
 public:
     Enemy();
@@ -36,7 +38,7 @@ public:
 
     CREATE_FUNC(Enemy);
 
-    void ignite(cocos2d::Vec2 pPosition, const Path& pPath);
+    void ignite(cocos2d::Vec2 pPosition, const Path &pPath);
 
     void deal(float pDamage);
 
@@ -48,8 +50,20 @@ public:
         return mMaxHP;
     }
 
+    unsigned int getReward() const {
+        return mReward;
+    }
+
+    bool isKilled() const {
+        return mKilled;
+    }
+
+    bool isReachedEnd() const {
+        return mReachedEnd;
+    }
+
     bool isDead() const {
-        return mDead;
+        return mKilled || mReachedEnd;
     }
 
 private:

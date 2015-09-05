@@ -22,6 +22,10 @@ bool Enemy::init() {
         return false;
 
     mMaxHP = ENEMY_HP;
+    mReward = ENEMY_REWARD;
+
+    mKilled = false;
+    mReachedEnd = false;
 
     mSprite = Sprite::create("textures/enemy.png");
 
@@ -47,7 +51,7 @@ void Enemy::update(float pDelta) {
     float reachRadius = target.reachRadius + mSprite->getContentSize().width / 2.f;
     if (this->getPosition().distance(target.location) <= reachRadius) {
         if (mPath.eop())
-            mDead = true;
+            mReachedEnd = true;
         else {
             mPath.forward();
             target = mPath.getNextWaypoint();
@@ -61,12 +65,14 @@ void Enemy::update(float pDelta) {
     mSprite->setRotation(-angle);
 
     if (mCurrentHP <= 0.f)
-        mDead = true;
+        mKilled = true;
 }
 
 void Enemy::ignite(cocos2d::Vec2 pPosition, const Path &pPath) {
     mCurrentHP = mMaxHP;
-    mDead = false;
+
+    mKilled = false;
+    mReachedEnd = false;
 
     this->setPosition(pPosition);
     this->setScale(0.5f);

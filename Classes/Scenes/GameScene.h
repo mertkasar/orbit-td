@@ -44,6 +44,8 @@ private:
     WheelMenu mWheelMenu;
     HUD mHUD;
 
+    unsigned int mTotalCoin;
+
 public:
     GameScene();
 
@@ -58,6 +60,10 @@ public:
     CREATE_FUNC(GameScene);
 
     bool placeTower(unsigned int pType, cocos2d::Vec2 pTile);
+
+    unsigned int getTotalCoin() const {
+        return mTotalCoin;
+    }
 
 
 private:

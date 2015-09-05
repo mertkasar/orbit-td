@@ -8,11 +8,13 @@
 
 USING_NS_CC;
 
-bool Tower::init(std::string pBaseTexturePath, std::string pGunTexturePath, float pRangeRadius, float pCooldown) {
+bool Tower::init(std::string pBaseTexturePath, std::string pGunTexturePath, float pRangeRadius, float pCooldown,
+                 unsigned int pCost) {
     if (!Node::init())
         return false;
 
     mCooldown = pCooldown;
+    mCost = pCost;
 
     mBase = Sprite::create(pBaseTexturePath);
 

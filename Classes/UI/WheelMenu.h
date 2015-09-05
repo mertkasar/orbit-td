@@ -21,6 +21,8 @@ private:
 
     cocos2d::Vec2 mCurrentTile;
 
+    bool mOpen;
+
     cocos2d::Node *mRoot;
 
     cocos2d::ui::Layout *mTowerMenu;
@@ -28,9 +30,15 @@ private:
 public:
     void init(cocos2d::Layer *pLayer, GameScene *pGameScene);
 
+    void update(float pDelta);
+
     void openAt(cocos2d::Vec2 pPosition);
 
     void close();
+
+    bool isOpen() const {
+        return mOpen;
+    }
 
 private:
     void towerButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType);

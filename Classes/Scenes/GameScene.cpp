@@ -48,6 +48,8 @@ bool GameScene::init() {
     mOrigin = Director::getInstance()->getVisibleOrigin();
     mCanvasCenter = Vec2(mVisibleSize / 2.f) + mOrigin;
 
+    mTotalCoin = STARTING_COIN;
+
     buildScene();
     connectListeners();
 
@@ -60,7 +62,13 @@ void GameScene::update(float pDelta) {
         if (enemy->isDead()) {
             enemy->removeFromParent();
             mEnemies.eraseObject(enemy);
+
+            if (enemy->isKilled())
+                mTotalCoin = mTotalCoin + enemy->getReward();
         }
+
+    mHUD.update(pDelta);
+    mWheelMenu.update(pDelta);
 }
 
 void GameScene::buildScene() {
@@ -193,7 +201,7 @@ void GameScene::connectListeners() {
             }
         }
 
-        if (touched.x > -1 && touched.y > -1) {
+        if (touched.x > -1 && touched.y > -1 && !mWheelMenu.isOpen()) {
             mWheelMenu.openAt(touched);
         } else {
             mWheelMenu.close();
@@ -272,6 +280,8 @@ bool GameScene::placeTower(unsigned int pType, Vec2 pTile) {
 
                 enemyPath.construct(traversed, from, mGoal);
             }
+
+            mTotalCoin = mTotalCoin - newTower->getCost();
 
             return true;
         }

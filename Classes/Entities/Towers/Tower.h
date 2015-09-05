@@ -22,8 +22,11 @@ protected:
 
     float mCooldown;
 
+    unsigned int mCost;
+
 public:
-    bool init(std::string pBaseTexturePath, std::string pGunTexturePath, float pRangeRadius, float pCooldown);
+    bool init(std::string pBaseTexturePath, std::string pGunTexturePath, float pRangeRadius, float pCooldown,
+              unsigned int pCost);
 
     void addTarget(Enemy *pTarget);
 
@@ -31,6 +34,10 @@ public:
 
     unsigned int getTargetCount() const {
         return (unsigned int) mRange.size();
+    }
+
+    unsigned int getCost() const {
+        return mCost;
     }
 
     virtual void update(float pDelta);

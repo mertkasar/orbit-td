@@ -24,6 +24,8 @@ private:
 
 public:
     void init(cocos2d::Layer *pLayer, GameScene *pGameScene);
+
+    void update(float pDelta);
 };
 
 #endif //HUD_H
