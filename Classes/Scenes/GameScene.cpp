@@ -10,7 +10,7 @@
 #include <physics/CCPhysicsWorld.h>
 #include <physics/CCPhysicsContact.h>
 
-#include <Entities/Enemy.h>
+#include <Entities/Creeps/Creep.h>
 #include <Entities/Towers/Turret.h>
 #include <Entities/Towers/Laser.h>
 #include <Entities/Towers/RLauncher.h>
@@ -54,15 +54,17 @@ bool GameScene::init() {
     buildScene();
     connectListeners();
 
+    mWaveDirector.init(this);
+
     return true;
 }
 
 void GameScene::update(float pDelta) {
     //Clear dead enemy objects
-    for (auto enemy : mEnemies)
+    for (auto enemy : mCreeps)
         if (enemy->isDead()) {
             enemy->removeFromParent();
-            mEnemies.eraseObject(enemy);
+            mCreeps.eraseObject(enemy);
 
             if (enemy->isKilled())
                 mTotalCoin = mTotalCoin + enemy->getReward();
@@ -73,12 +75,76 @@ void GameScene::update(float pDelta) {
     mHUD.update(pDelta);
     mWheelMenu.update(pDelta);
 
-    if (mLife <= 0){
+    mWaveDirector.update(pDelta);
+
+    if (mLife <= 0) {
         mHUD.notify('I', "Game Over!");
-        mHUD.notify('I', "Starting Again!");
-        this->cleanup();
-        init();
+        this->unscheduleUpdate();
     }
+
+    if (mWaveDirector.isCleared()) {
+        mHUD.notify('I', "All waves are cleared!");
+        this->unscheduleUpdate();
+    }
+}
+
+void GameScene::spawnEnemy(unsigned int pType, int pOrder) {
+    auto enemy = mCreepPool.fetch();
+    Vec2 spawnPosition = mGameplayLayer->convertToNodeSpace(Vec2(mVisibleSize.width - 50.f, mVisibleSize.height / 2.f));
+    spawnPosition = spawnPosition + Vec2(pOrder * 100, 0);
+    enemy->ignite(spawnPosition, mPath);
+
+    mGameplayLayer->addChild(enemy);
+    mCreeps.pushBack(enemy);
+}
+
+bool GameScene::placeTower(unsigned int pType, Vec2 pTile) {
+    Grid testGrid = mGrid;
+    testGrid.setNode(pTile, 1);
+
+    auto traversed = algorithm::traverse(testGrid, mStart, mGoal);
+
+    if (isAvailable(traversed, pTile)) {
+        auto position = algorithm::toCircularGrid(pTile);
+        Tower *newTower;
+
+        switch (pType) {
+            case 1:
+                newTower = Turret::create();
+                break;
+            case 2:
+                newTower = Laser::create();
+                break;
+            case 3:
+                newTower = RLauncher::create();
+                break;
+            default:
+                break;
+        }
+
+        if (newTower) {
+            newTower->setPosition(position);
+
+            mGameplayLayer->addChild(newTower);
+            mGrid.setNode(pTile, 1);
+
+            mPath.construct(traversed, mStart, mGoal);
+            drawPath();
+
+            for (auto enemy : mCreeps) {
+                auto &enemyPath = enemy->getPath();
+                auto from = enemyPath.getCurrentWaypoint().tile;
+
+                enemyPath.construct(traversed, from, mGoal);
+            }
+
+            mTotalCoin = mTotalCoin - newTower->getCost();
+
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void GameScene::buildScene() {
@@ -136,8 +202,6 @@ void GameScene::buildScene() {
     this->addChild(mGameplayLayer);
     this->addChild(mUILayer);
 
-    spawnEnemy(0.f);
-    this->schedule(CC_SCHEDULE_SELECTOR(GameScene::spawnEnemy), 2.f);
     this->scheduleUpdate();
 }
 
@@ -152,14 +216,14 @@ void GameScene::connectListeners() {
             (a->getCategoryBitmask() == ENEMY_MASK && b->getCategoryBitmask() == TOWER_RANGE_MASK)) {
 
             Tower *tower = nullptr;
-            Enemy *enemy = nullptr;
+            Creep *enemy = nullptr;
 
             if (a->getCategoryBitmask() == TOWER_RANGE_MASK) {
                 tower = static_cast<Tower *>(a->getNode());
-                enemy = static_cast<Enemy *>(b->getNode());
+                enemy = static_cast<Creep *>(b->getNode());
             } else {
                 tower = static_cast<Tower *>(b->getNode());
-                enemy = static_cast<Enemy *>(a->getNode());
+                enemy = static_cast<Creep *>(a->getNode());
             }
 
             tower->addTarget(enemy);
@@ -175,14 +239,14 @@ void GameScene::connectListeners() {
             (a->getCategoryBitmask() == ENEMY_MASK && b->getCategoryBitmask() == TOWER_RANGE_MASK)) {
 
             Tower *tower = nullptr;
-            Enemy *enemy = nullptr;
+            Creep *enemy = nullptr;
 
             if (a->getCategoryBitmask() == TOWER_RANGE_MASK) {
                 tower = static_cast<Tower *>(a->getNode());
-                enemy = static_cast<Enemy *>(b->getNode());
+                enemy = static_cast<Creep *>(b->getNode());
             } else {
                 tower = static_cast<Tower *>(b->getNode());
-                enemy = static_cast<Enemy *>(a->getNode());
+                enemy = static_cast<Creep *>(a->getNode());
             }
 
             tower->removeTarget(enemy);
@@ -226,22 +290,13 @@ void GameScene::connectListeners() {
     Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener, this);
 }
 
-void GameScene::spawnEnemy(float pDelta) {
-    auto enemy = mEnemyPool.fetch();
-    Vec2 spawnPosition = mGameplayLayer->convertToNodeSpace(Vec2(mVisibleSize.width - 50.f, mVisibleSize.height / 2.f));
-    enemy->ignite(spawnPosition, mPath);
-
-    mGameplayLayer->addChild(enemy);
-    mEnemies.pushBack(enemy);
-}
-
 bool GameScene::isAvailable(const TraverseData &pTraversed, cocos2d::Vec2 pTile) {
     if (!mPath.isReached(pTraversed, mStart)) {
         mHUD.notify('E', "You can't block the path!");
         return false;
     }
 
-    for (auto enemy : mEnemies) {
+    for (auto enemy : mCreeps) {
         auto current = enemy->getPath().getCurrentWaypoint().tile;
 
         if ((current == pTile) || !enemy->getPath().isReached(pTraversed, current)) {
@@ -251,55 +306,6 @@ bool GameScene::isAvailable(const TraverseData &pTraversed, cocos2d::Vec2 pTile)
     }
 
     return true;
-}
-
-bool GameScene::placeTower(unsigned int pType, Vec2 pTile) {
-    Grid testGrid = mGrid;
-    testGrid.setNode(pTile, 1);
-
-    auto traversed = algorithm::traverse(testGrid, mStart, mGoal);
-
-    if (isAvailable(traversed, pTile)) {
-        auto position = algorithm::toCircularGrid(pTile);
-        Tower *newTower;
-
-        switch (pType) {
-            case 1:
-                newTower = Turret::create();
-                break;
-            case 2:
-                newTower = Laser::create();
-                break;
-            case 3:
-                newTower = RLauncher::create();
-                break;
-            default:
-                break;
-        }
-
-        if (newTower) {
-            newTower->setPosition(position);
-
-            mGameplayLayer->addChild(newTower);
-            mGrid.setNode(pTile, 1);
-
-            mPath.construct(traversed, mStart, mGoal);
-            drawPath();
-
-            for (auto enemy : mEnemies) {
-                auto &enemyPath = enemy->getPath();
-                auto from = enemyPath.getCurrentWaypoint().tile;
-
-                enemyPath.construct(traversed, from, mGoal);
-            }
-
-            mTotalCoin = mTotalCoin - newTower->getCost();
-
-            return true;
-        }
-    }
-
-    return false;
 }
 
 void GameScene::drawPath() {

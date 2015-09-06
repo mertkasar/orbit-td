@@ -6,7 +6,7 @@
 #include <physics/CCPhysicsBody.h>
 
 #include <Utilities/SteeringDirector.h>
-#include <Entities/Enemy.h>
+#include <Entities/Creeps/Creep.h>
 
 USING_NS_CC;
 
@@ -63,7 +63,7 @@ void Missile::update(float pDelta) {
         removeFromParent();
 }
 
-void Missile::ignite(cocos2d::Vec2 pPosition, float pDamage, Enemy *pTarget) {
+void Missile::ignite(cocos2d::Vec2 pPosition, float pDamage, Creep *pTarget) {
     mDamage = 0.f;
     mDead = false;
 

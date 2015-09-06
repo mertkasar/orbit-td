@@ -10,14 +10,14 @@ namespace cocos2d {
     class PhysicsBody;
 }
 
-class Enemy;
+class Creep;
 
 class Missile : public cocos2d::Node {
 private:
     cocos2d::Sprite *mSprite;
     cocos2d::PhysicsBody *mBody;
 
-    Enemy *mTarget;
+    Creep *mTarget;
     cocos2d::Vec2 mTargetPosition;
 
     float mDamage;
@@ -35,13 +35,13 @@ public:
 
     CREATE_FUNC(Missile);
 
-    void ignite(cocos2d::Vec2 pPosition, float pDamage, Enemy* pTarget);
+    void ignite(cocos2d::Vec2 pPosition, float pDamage, Creep * pTarget);
 
-    Enemy *getTarget() const {
+    Creep *getTarget() const {
         return mTarget;
     }
 
-    void setTarget(Enemy *pTarget) {
+    void setTarget(Creep *pTarget) {
         mTarget = pTarget;
     }
 

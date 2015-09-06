@@ -6,10 +6,10 @@
 #include <Utilities/Path.h>
 #include <Utilities/Grid.h>
 
-#include <Globals.h>
 #include <Utilities/Pool.h>
 #include <UI/WheelMenu.h>
 #include <UI/HUD.h>
+#include <Scenes/WaveDirector.h>
 
 namespace cocos2d {
     class DrawNode;
@@ -19,7 +19,7 @@ namespace cocos2d {
 
 class Tower;
 
-class Enemy;
+class Creep;
 
 class GameScene : public cocos2d::Layer {
 private:
@@ -33,8 +33,9 @@ private:
 
     cocos2d::DrawNode *mPathCanvas;
 
-    Pool<Enemy> mEnemyPool;
-    cocos2d::Vector<Enemy *> mEnemies;
+    WaveDirector mWaveDirector;
+    Pool<Creep> mCreepPool;
+    cocos2d::Vector<Creep *> mCreeps;
 
     Grid mGrid;
     Path mPath;
@@ -60,6 +61,8 @@ public:
 
     CREATE_FUNC(GameScene);
 
+    void spawnEnemy(unsigned int pType, int pOrder);
+
     bool placeTower(unsigned int pType, cocos2d::Vec2 pTile);
 
     unsigned int getTotalCoin() const {
@@ -70,13 +73,18 @@ public:
         return mLife;
     }
 
+    int getCreepCount() const {
+        return (int) mCreeps.size();
+    }
+
+    WaveDirector &getWaveDirector() {
+        return mWaveDirector;
+    }
 
 private:
     void buildScene();
 
     void connectListeners();
-
-    void spawnEnemy(float pDelta);
 
     bool isAvailable(const TraverseData &pTraversed, cocos2d::Vec2 pTile);
 

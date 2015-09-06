@@ -12,7 +12,7 @@ namespace cocos2d {
     class DrawNode;
 }
 
-class Enemy : public cocos2d::Node {
+class Creep : public cocos2d::Node {
 private:
     cocos2d::Sprite *mSprite;
     cocos2d::PhysicsBody *mBody;
@@ -28,15 +28,15 @@ private:
     bool mReachedEnd;
 
 public:
-    Enemy();
+    Creep();
 
-    virtual ~Enemy();
+    virtual ~Creep();
 
     virtual bool init();
 
     virtual void update(float pDelta);
 
-    CREATE_FUNC(Enemy);
+    CREATE_FUNC(Creep);
 
     void ignite(cocos2d::Vec2 pPosition, const Path &pPath);
 

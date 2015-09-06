@@ -58,7 +58,13 @@ void HUD::init(Layer *pLayer, GameScene *pGameScene) {
     button->addTouchEventListener(CC_CALLBACK_2(HUD::ffButtonCallback, this));
     mBottomPanel->addChild(button);
 
-    auto text = ui::Text::create("Total Coin:\t0", "fonts/ubuntu.ttf", 28);
+    auto text = ui::Text::create("Waves:0/0", "fonts/ubuntu.ttf", 28);
+    text->setName("#wave_text");
+    text->setTextHorizontalAlignment(TextHAlignment::CENTER);
+    text->setPosition(Vec2(220.f, 80.f));
+    mTopPanel->addChild(text);
+
+    text = ui::Text::create("Total Coin:\t0", "fonts/ubuntu.ttf", 28);
     text->setName("#coin_text");
     text->setTextHorizontalAlignment(TextHAlignment::CENTER);
     text->setPosition(
@@ -89,6 +95,13 @@ void HUD::update(float pDelta) {
 
     text = static_cast<ui::Text *>(mBottomPanel->getChildByName("#life_text"));
     text->setString(ss_l.str());
+
+    std::stringstream ss_w;
+    auto &waveDirector = mGameScene->getWaveDirector();
+    ss_w << "Waves: " << waveDirector.getCurrentWave() << " / " << waveDirector.getTotalWaves();
+
+    text = static_cast<ui::Text *>(mTopPanel->getChildByName("#wave_text"));
+    text->setString(ss_w.str());
 }
 
 void HUD::notify(char pType, std::string pMessage, float pDuration) {
@@ -127,7 +140,10 @@ void HUD::menuButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEv
 
 void HUD::nextButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType) {
     if (pType == ui::Widget::TouchEventType::ENDED) {
-        notify('W', "Coming next wave!");
+        if (mGameScene->getWaveDirector().spawnNextWave())
+            notify('W', "Coming next wave!");
+        else
+            notify('E', "Out of waves!");
     }
 }
 

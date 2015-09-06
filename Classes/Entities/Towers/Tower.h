@@ -9,7 +9,7 @@ namespace cocos2d {
     class PhysicsBody;
 }
 
-class Enemy;
+class Creep;
 
 class Tower : public cocos2d::Node {
 protected:
@@ -17,8 +17,8 @@ protected:
     cocos2d::Sprite *mGun;
     cocos2d::PhysicsBody *mBody;
 
-    Enemy *mTarget;
-    cocos2d::Vector<Enemy *> mRange;
+    Creep *mTarget;
+    cocos2d::Vector<Creep *> mRange;
 
     float mCooldown;
 
@@ -28,9 +28,9 @@ public:
     bool init(std::string pBaseTexturePath, std::string pGunTexturePath, float pRangeRadius, float pCooldown,
               unsigned int pCost);
 
-    void addTarget(Enemy *pTarget);
+    void addTarget(Creep *pTarget);
 
-    void removeTarget(Enemy *pTarget);
+    void removeTarget(Creep *pTarget);
 
     unsigned int getTargetCount() const {
         return (unsigned int) mRange.size();

@@ -39,7 +39,11 @@
 #define ENEMY_MASK 0x02
 #define MISSILE_MASK 0x03
 
-//Type definitions
-typedef std::map<cocos2d::Vec2, cocos2d::Vec2> TraverseData;
+enum CreepTypes {
+    RAPTOR,
+    SPEEDY,
+    PANZER,
+    PULSAR,
+};
 
 #endif //GLOBALS_H

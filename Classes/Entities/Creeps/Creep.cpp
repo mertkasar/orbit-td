@@ -1,4 +1,4 @@
-#include <Entities/Enemy.h>
+#include <Entities/Creeps/Creep.h>
 
 #include <Globals.h>
 #include <2d/CCSprite.h>
@@ -9,15 +9,15 @@
 
 USING_NS_CC;
 
-Enemy::Enemy() {
-    CCLOG("Enemy created");
+Creep::Creep() {
+    CCLOG("Creep created");
 }
 
-Enemy::~Enemy() {
-    CCLOG("Enemy deleted");
+Creep::~Creep() {
+    CCLOG("Creep deleted");
 }
 
-bool Enemy::init() {
+bool Creep::init() {
     if (!Node::init())
         return false;
 
@@ -27,7 +27,7 @@ bool Enemy::init() {
     mKilled = false;
     mReachedEnd = false;
 
-    mSprite = Sprite::create("textures/enemy.png");
+    mSprite = Sprite::create("textures/creeps/creep.png");
 
     mBody = PhysicsBody::createCircle(mSprite->getContentSize().width / 2.f);
     mBody->setCategoryBitmask(ENEMY_MASK);
@@ -46,7 +46,7 @@ bool Enemy::init() {
     return true;
 }
 
-void Enemy::update(float pDelta) {
+void Creep::update(float pDelta) {
     WayPoint target = mPath.getNextWaypoint();
     float reachRadius = target.reachRadius + mSprite->getContentSize().width / 2.f;
     if (this->getPosition().distance(target.location) <= reachRadius) {
@@ -68,7 +68,7 @@ void Enemy::update(float pDelta) {
         mKilled = true;
 }
 
-void Enemy::ignite(cocos2d::Vec2 pPosition, const Path &pPath) {
+void Creep::ignite(cocos2d::Vec2 pPosition, const Path &pPath) {
     mCurrentHP = mMaxHP;
 
     mKilled = false;
@@ -86,12 +86,12 @@ void Enemy::ignite(cocos2d::Vec2 pPosition, const Path &pPath) {
     this->scheduleUpdate();
 }
 
-void Enemy::deal(float pDamage) {
+void Creep::deal(float pDamage) {
     mCurrentHP = mCurrentHP - pDamage;
     updateHPBar();
 }
 
-void Enemy::updateHPBar() {
+void Creep::updateHPBar() {
     mHPBar->clear();
 
     if (mCurrentHP < 0.f)

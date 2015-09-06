@@ -3,7 +3,7 @@
 #include <2d/CCSprite.h>
 
 #include <Globals.h>
-#include <Entities/Enemy.h>
+#include <Entities/Creeps/Creep.h>
 #include <Entities/Missile.h>
 
 USING_NS_CC;

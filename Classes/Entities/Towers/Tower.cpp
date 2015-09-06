@@ -4,7 +4,7 @@
 #include <physics/CCPhysicsBody.h>
 
 #include <Globals.h>
-#include <Entities/Enemy.h>
+#include <Entities/Creeps/Creep.h>
 
 USING_NS_CC;
 
@@ -42,11 +42,11 @@ bool Tower::init(std::string pBaseTexturePath, std::string pGunTexturePath, floa
     return true;
 }
 
-void Tower::addTarget(Enemy *pTarget) {
+void Tower::addTarget(Creep *pTarget) {
     mRange.pushBack(pTarget);
 }
 
-void Tower::removeTarget(Enemy *pTarget) {
+void Tower::removeTarget(Creep *pTarget) {
     auto found = mRange.find(pTarget);
 
     if (found != mRange.end())

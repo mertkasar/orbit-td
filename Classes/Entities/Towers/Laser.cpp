@@ -4,7 +4,7 @@
 #include <2d/CCDrawNode.h>
 
 #include <Globals.h>
-#include <Entities/Enemy.h>
+#include <Entities/Creeps/Creep.h>
 
 USING_NS_CC;
 

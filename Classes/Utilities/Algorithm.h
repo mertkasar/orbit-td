@@ -7,6 +7,8 @@
 
 #include <Globals.h>
 
+typedef std::map<cocos2d::Vec2, cocos2d::Vec2> TraverseData;
+
 class Grid;
 
 namespace algorithm {

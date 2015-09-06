@@ -125,7 +125,8 @@ endif( WIN32 )
 set(GAME_SRC
   Classes/AppDelegate.cpp
   Classes/Scenes/GameScene.cpp
-  Classes/Entities/Enemy.cpp
+  Classes/Scenes/WaveDirector.cpp
+  Classes/Entities/Creeps/Creep.cpp
   Classes/Entities/Missile.cpp
   Classes/Entities/Towers/Tower.cpp
   Classes/Entities/Towers/Turret.cpp
@@ -144,7 +145,8 @@ set(GAME_HEADERS
   Classes/Globals.h
   Classes/AppDelegate.h
   Classes/Scenes/GameScene.h
-  Classes/Entities/Enemy.h
+  Classes/Scenes/WaveDirector.h
+  Classes/Entities/Creeps/Creep.h
   Classes/Entities/Missile.h
   Classes/Entities/Towers/Tower.h
   Classes/Entities/Towers/Turret.h
