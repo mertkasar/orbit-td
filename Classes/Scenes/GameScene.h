@@ -61,7 +61,7 @@ public:
 
     CREATE_FUNC(GameScene);
 
-    void spawnEnemy(unsigned int pType, int pOrder);
+    void spawnEnemy(CreepTypes pType, int pOrder);
 
     bool placeTower(unsigned int pType, cocos2d::Vec2 pTile);
 

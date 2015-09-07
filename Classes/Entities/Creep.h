@@ -38,7 +38,7 @@ public:
 
     CREATE_FUNC(Creep);
 
-    void ignite(cocos2d::Vec2 pPosition, const Path &pPath);
+    void ignite(CreepTypes pType, cocos2d::Vec2 pPosition, const Path &pPath);
 
     void deal(float pDamage);
 
@@ -68,6 +68,8 @@ public:
 
 private:
     void updateHPBar();
+
+    void reShape(CreepTypes pType);
 };
 
 

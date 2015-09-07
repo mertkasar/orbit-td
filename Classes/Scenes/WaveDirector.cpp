@@ -8,9 +8,18 @@ void WaveDirector::init(GameScene *pGameScene) {
     mCleared = false;
 
     mWaves.clear();
-
-    for (int i = 0; i < 5; i++)
-        mWaves.push_back(std::vector<CreepTypes>(5, RAPTOR));
+    mWaves.push_back(std::vector<CreepTypes>{SPEEDY, RAPTOR, PULSAR, PANZER});
+    mWaves.push_back(std::vector<CreepTypes>{RAPTOR});
+    mWaves.push_back(std::vector<CreepTypes>{RAPTOR, RAPTOR, RAPTOR});
+    mWaves.push_back(std::vector<CreepTypes>{SPEEDY, SPEEDY, RAPTOR, RAPTOR, RAPTOR});
+    mWaves.push_back(std::vector<CreepTypes>{RAPTOR, RAPTOR, PULSAR, PULSAR});
+    mWaves.push_back(std::vector<CreepTypes>{RAPTOR, RAPTOR, RAPTOR, SPEEDY, SPEEDY, PULSAR, PANZER});
+    mWaves.push_back(std::vector<CreepTypes>(7, SPEEDY));
+    mWaves.push_back(std::vector<CreepTypes>{PULSAR, PULSAR, PULSAR, PULSAR, PULSAR, PULSAR, PANZER});
+    mWaves.push_back(std::vector<CreepTypes>{10, PULSAR});
+    mWaves.push_back(std::vector<CreepTypes>{SPEEDY, SPEEDY, SPEEDY, SPEEDY, RAPTOR, RAPTOR, RAPTOR, RAPTOR, PULSAR,
+                                             PULSAR, PANZER, PANZER});
+    mWaves.push_back(std::vector<CreepTypes>{15, PANZER});
 
     mCurrentWave = 0;
 }

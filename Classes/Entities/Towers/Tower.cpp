@@ -4,7 +4,7 @@
 #include <physics/CCPhysicsBody.h>
 
 #include <Globals.h>
-#include <Entities/Creeps/Creep.h>
+#include <Entities/Creep.h>
 
 USING_NS_CC;
 

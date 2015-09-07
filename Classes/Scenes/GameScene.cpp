@@ -10,7 +10,7 @@
 #include <physics/CCPhysicsWorld.h>
 #include <physics/CCPhysicsContact.h>
 
-#include <Entities/Creeps/Creep.h>
+#include <Entities/Creep.h>
 #include <Entities/Towers/Turret.h>
 #include <Entities/Towers/Laser.h>
 #include <Entities/Towers/RLauncher.h>
@@ -88,11 +88,11 @@ void GameScene::update(float pDelta) {
     }
 }
 
-void GameScene::spawnEnemy(unsigned int pType, int pOrder) {
+void GameScene::spawnEnemy(CreepTypes pType, int pOrder) {
     auto enemy = mCreepPool.fetch();
     Vec2 spawnPosition = mGameplayLayer->convertToNodeSpace(Vec2(mVisibleSize.width - 50.f, mVisibleSize.height / 2.f));
     spawnPosition = spawnPosition + Vec2(pOrder * 100, 0);
-    enemy->ignite(spawnPosition, mPath);
+    enemy->ignite(pType, spawnPosition, mPath);
 
     mGameplayLayer->addChild(enemy);
     mCreeps.pushBack(enemy);

@@ -6,7 +6,7 @@
 #define STARTING_LIFE 10
 
 #define TURRET_CD 0.3f
-#define TURRET_DMG 10.f
+#define TURRET_DMG 3.f
 #define TURRET_COST 10
 
 #define LASER_CD 0.f
@@ -19,10 +19,6 @@
 
 #define MISSILE_MAX_VEL 160.f
 #define MISSILE_EXPIRE_TIME 4.f //as seconds
-
-#define ENEMY_MAX_VEL 80.f
-#define ENEMY_HP 100.f
-#define ENEMY_REWARD 5
 
 #define HBAR_WIDTH 20.f
 #define HBAR_HEIGHT 80.f
