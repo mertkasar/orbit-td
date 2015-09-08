@@ -125,6 +125,7 @@ endif( WIN32 )
 set(GAME_SRC
   Classes/AppDelegate.cpp
   Classes/Scenes/GameScene.cpp
+  Classes/Scenes/MapLayer.cpp
   Classes/Scenes/WaveDirector.cpp
   Classes/Entities/Creep.cpp
   Classes/Entities/Missile.cpp
@@ -145,6 +146,7 @@ set(GAME_HEADERS
   Classes/Globals.h
   Classes/AppDelegate.h
   Classes/Scenes/GameScene.h
+  Classes/Scenes/MapLayer.h
   Classes/Scenes/WaveDirector.h
   Classes/Entities/Creep.h
   Classes/Entities/Missile.h

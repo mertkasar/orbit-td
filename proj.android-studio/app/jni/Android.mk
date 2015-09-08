@@ -13,6 +13,7 @@ LOCAL_MODULE_FILENAME := libcocos2dcpp
 LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../../Classes/AppDelegate.cpp \
                    ../../../Classes/Scenes/GameScene.cpp \
+                   ../../../Classes/Scenes/MapLayer.cpp \
                    ../../../Classes/Scenes/WaveDirector.cpp \
                    ../../../Classes/Entities/Creep.cpp \
                    ../../../Classes/Entities/Missile.cpp \

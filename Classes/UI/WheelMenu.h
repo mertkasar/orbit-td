@@ -40,6 +40,10 @@ public:
         return mOpen;
     }
 
+    cocos2d::Vec2 getCurrentTile() const {
+        return mCurrentTile;
+    }
+
 private:
     void towerButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType);
 };

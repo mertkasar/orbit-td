@@ -21,6 +21,8 @@ class Tower;
 
 class Creep;
 
+class MapLayer;
+
 class GameScene : public cocos2d::Layer {
 private:
     cocos2d::Size mVisibleSize;
@@ -28,6 +30,7 @@ private:
     cocos2d::Vec2 mCanvasCenter;
 
     cocos2d::LayerColor *mBackgroundLayer;
+    MapLayer *mMapLayer;
     cocos2d::Layer *mGameplayLayer;
     cocos2d::Layer *mUILayer;
 
@@ -46,6 +49,7 @@ private:
     HUD mHUD;
 
     unsigned int mTotalCoin;
+
     unsigned int mLife;
 
 public:
@@ -79,6 +83,10 @@ public:
 
     WaveDirector &getWaveDirector() {
         return mWaveDirector;
+    }
+
+    Grid &getGrid() {
+        return mGrid;
     }
 
 private:

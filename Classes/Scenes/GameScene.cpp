@@ -9,7 +9,9 @@
 #include <2d/CCLabel.h>
 #include <physics/CCPhysicsWorld.h>
 #include <physics/CCPhysicsContact.h>
+#include <ui/UIImageView.h>
 
+#include <Scenes/MapLayer.h>
 #include <Entities/Creep.h>
 #include <Entities/Towers/Turret.h>
 #include <Entities/Towers/Laser.h>
@@ -140,6 +142,8 @@ bool GameScene::placeTower(unsigned int pType, Vec2 pTile) {
 
             mTotalCoin = mTotalCoin - newTower->getCost();
 
+            mMapLayer->activateSlot(pTile);
+
             return true;
         }
     }
@@ -162,25 +166,7 @@ void GameScene::buildScene() {
     mStart = Vec2(2, 9);
     mGoal = Vec2(2, 0);
 
-    // Draw grid
-    auto grid = DrawNode::create();
-
-    Vec2 size = mGrid.getSize();
-    for (int i = 0; i < size.x; i++) {
-        for (int j = 0; j < size.y; j++) {
-            Color4F color;
-            if (mGrid.getNode(Vec2(i, j)) == 0)
-                color = Color4F::GREEN;
-            else
-                color = Color4F::RED;
-
-            grid->drawSolidCircle(algorithm::toCircularGrid(Vec2(i, j)), 5.f, 0.f, 50, color);
-        }
-    }
-
-    grid->drawSolidCircle(Vec2(-480.f, 360.f), 600.f, 0.f, 50, Color4F::BLUE);
-
-    mGameplayLayer->addChild(grid);
+    mMapLayer = MapLayer::create(this);
 
     mPathCanvas = DrawNode::create();
 
@@ -199,6 +185,7 @@ void GameScene::buildScene() {
     mHUD.notify('I', "Game is starting!", 2.f);
 
     this->addChild(mBackgroundLayer);
+    this->addChild(mMapLayer);
     this->addChild(mGameplayLayer);
     this->addChild(mUILayer);
 
@@ -206,7 +193,7 @@ void GameScene::buildScene() {
 }
 
 void GameScene::connectListeners() {
-    // Add contact event listener
+// Add contact event listener
     auto contactListener = EventListenerPhysicsContact::create();
     contactListener->onContactBegin = [](PhysicsContact &pContact) {
         auto a = pContact.getShapeA()->getBody();
@@ -277,10 +264,12 @@ void GameScene::connectListeners() {
             }
         }
 
-        if (touched.x > -1 && touched.y > -1 && !mWheelMenu.isOpen()) {
-            mWheelMenu.openAt(touched);
-        } else {
+        if (mWheelMenu.isOpen()) {
+            mMapLayer->deactivateSlot(mWheelMenu.getCurrentTile());
             mWheelMenu.close();
+        } else if (touched.x > -1 && touched.y > -1) {
+            mWheelMenu.openAt(touched);
+            mMapLayer->activateSlot(touched);
         }
 
         return true;
