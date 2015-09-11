@@ -35,6 +35,12 @@
 #define ENEMY_MASK 0x02
 #define MISSILE_MASK 0x03
 
+enum TowerTypes {
+    TURRET,
+    LASER,
+    R_LAUNCHER
+};
+
 enum CreepTypes {
     RAPTOR,
     SPEEDY,

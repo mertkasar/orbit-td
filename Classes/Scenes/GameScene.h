@@ -9,7 +9,6 @@
 #include <Utilities/Pool.h>
 #include <UI/WheelMenu.h>
 #include <UI/HUD.h>
-#include <Scenes/WaveDirector.h>
 
 namespace cocos2d {
     class DrawNode;
@@ -23,6 +22,8 @@ class Creep;
 
 class MapLayer;
 
+class GameplayLayer;
+
 class GameScene : public cocos2d::Layer {
 private:
     cocos2d::Size mVisibleSize;
@@ -31,14 +32,14 @@ private:
 
     cocos2d::LayerColor *mBackgroundLayer;
     MapLayer *mMapLayer;
-    cocos2d::Layer *mGameplayLayer;
+    GameplayLayer *mGameplayLayer;
     cocos2d::Layer *mUILayer;
 
     cocos2d::DrawNode *mPathCanvas;
 
-    WaveDirector mWaveDirector;
-    Pool<Creep> mCreepPool;
-    cocos2d::Vector<Creep *> mCreeps;
+    std::vector<std::vector<CreepTypes>> mWaves;
+    unsigned int mCurrentWave;
+    bool mCleared;
 
     Grid mGrid;
     Path mPath;
@@ -65,28 +66,40 @@ public:
 
     CREATE_FUNC(GameScene);
 
-    void spawnEnemy(CreepTypes pType, int pOrder);
+    bool placeTower(TowerTypes pType, cocos2d::Vec2 pTile);
 
-    bool placeTower(unsigned int pType, cocos2d::Vec2 pTile);
+    bool spawnNextWave();
+
+    void balanceTotalCoin(int pBalance) {
+        mTotalCoin = mTotalCoin + pBalance;
+    }
 
     unsigned int getTotalCoin() const {
         return mTotalCoin;
+    }
+
+    void balanceRemainingLife(int pBalance) {
+        mLife = mLife + pBalance;
     }
 
     unsigned int getRemainingLife() const {
         return mLife;
     }
 
-    int getCreepCount() const {
-        return (int) mCreeps.size();
+    bool isCleared() {
+        return mCleared;
     }
 
-    WaveDirector &getWaveDirector() {
-        return mWaveDirector;
+    GameplayLayer *getGameplayLayer() {
+        return mGameplayLayer;
     }
 
     Grid &getGrid() {
         return mGrid;
+    }
+
+    Path &getPath() {
+        return mPath;
     }
 
 private:

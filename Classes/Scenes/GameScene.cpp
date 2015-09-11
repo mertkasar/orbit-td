@@ -12,10 +12,8 @@
 #include <ui/UIImageView.h>
 
 #include <Scenes/MapLayer.h>
+#include <Scenes/GameplayLayer.h>
 #include <Entities/Creep.h>
-#include <Entities/Towers/Turret.h>
-#include <Entities/Towers/Laser.h>
-#include <Entities/Towers/RLauncher.h>
 
 #include <sstream>
 
@@ -56,96 +54,87 @@ bool GameScene::init() {
     buildScene();
     connectListeners();
 
-    mWaveDirector.init(this);
+    //Init waves
+    mWaves.clear();
+    mWaves.push_back(std::vector<CreepTypes>{SPEEDY, RAPTOR, PULSAR, PANZER});
+    mWaves.push_back(std::vector<CreepTypes>{RAPTOR});
+    mWaves.push_back(std::vector<CreepTypes>{RAPTOR, RAPTOR, RAPTOR});
+    mWaves.push_back(std::vector<CreepTypes>{SPEEDY, SPEEDY, RAPTOR, RAPTOR, RAPTOR});
+    mWaves.push_back(std::vector<CreepTypes>{RAPTOR, RAPTOR, PULSAR, PULSAR});
+    mWaves.push_back(std::vector<CreepTypes>{RAPTOR, RAPTOR, RAPTOR, SPEEDY, SPEEDY, PULSAR, PANZER});
+    mWaves.push_back(std::vector<CreepTypes>(7, SPEEDY));
+    mWaves.push_back(std::vector<CreepTypes>{PULSAR, PULSAR, PULSAR, PULSAR, PULSAR, PULSAR, PANZER});
+    mWaves.push_back(std::vector<CreepTypes>{10, PULSAR});
+    mWaves.push_back(std::vector<CreepTypes>{SPEEDY, SPEEDY, SPEEDY, SPEEDY, RAPTOR, RAPTOR, RAPTOR, RAPTOR, PULSAR,
+                                             PULSAR, PANZER, PANZER});
+    mWaves.push_back(std::vector<CreepTypes>{15, PANZER});
+
+    mCurrentWave = 0;
+    mCleared = false;
 
     return true;
 }
 
 void GameScene::update(float pDelta) {
-    //Clear dead enemy objects
-    for (auto enemy : mCreeps)
-        if (enemy->isDead()) {
-            enemy->removeFromParent();
-            mCreeps.eraseObject(enemy);
-
-            if (enemy->isKilled())
-                mTotalCoin = mTotalCoin + enemy->getReward();
-            else if (enemy->isReachedEnd())
-                mLife = mLife - 1;
-        }
-
     mHUD.update(pDelta);
     mWheelMenu.update(pDelta);
 
-    mWaveDirector.update(pDelta);
+    if (mGameplayLayer->getCreepList().size() <= 0) {
+        if (!spawnNextWave())
+            mCleared = true;
+    }
 
     if (mLife <= 0) {
         mHUD.notify('I', "Game Over!");
         this->unscheduleUpdate();
     }
 
-    if (mWaveDirector.isCleared()) {
+    if (isCleared()) {
         mHUD.notify('I', "All waves are cleared!");
         this->unscheduleUpdate();
     }
 }
 
-void GameScene::spawnEnemy(CreepTypes pType, int pOrder) {
-    auto enemy = mCreepPool.fetch();
-    Vec2 spawnPosition = mGameplayLayer->convertToNodeSpace(Vec2(mVisibleSize.width - 50.f, mVisibleSize.height / 2.f));
-    spawnPosition = spawnPosition + Vec2(pOrder * 100, 0);
-    enemy->ignite(pType, spawnPosition, mPath);
-
-    mGameplayLayer->addChild(enemy);
-    mCreeps.pushBack(enemy);
-}
-
-bool GameScene::placeTower(unsigned int pType, Vec2 pTile) {
+bool GameScene::placeTower(TowerTypes pType, Vec2 pTile) {
     Grid testGrid = mGrid;
     testGrid.setNode(pTile, 1);
 
     auto traversed = algorithm::traverse(testGrid, mStart, mGoal);
 
     if (isAvailable(traversed, pTile)) {
-        auto position = algorithm::toCircularGrid(pTile);
-        Tower *newTower;
+        mGameplayLayer->addTower(pType, pTile);
 
-        switch (pType) {
-            case 1:
-                newTower = Turret::create();
-                break;
-            case 2:
-                newTower = Laser::create();
-                break;
-            case 3:
-                newTower = RLauncher::create();
-                break;
-            default:
-                break;
+        mMapLayer->activateSlot(pTile);
+
+        mPath.construct(traversed, mStart, mGoal);
+        drawPath();
+
+        for (auto enemy : mGameplayLayer->getCreepList()) {
+            auto &enemyPath = enemy->getPath();
+            auto from = enemyPath.getCurrentWaypoint().tile;
+
+            enemyPath.construct(traversed, from, mGoal);
         }
 
-        if (newTower) {
-            newTower->setPosition(position);
+        mGrid.setNode(pTile, 1);
 
-            mGameplayLayer->addChild(newTower);
-            mGrid.setNode(pTile, 1);
+        return true;
+    }
 
-            mPath.construct(traversed, mStart, mGoal);
-            drawPath();
+    return false;
+}
 
-            for (auto enemy : mCreeps) {
-                auto &enemyPath = enemy->getPath();
-                auto from = enemyPath.getCurrentWaypoint().tile;
+bool GameScene::spawnNextWave() {
+    if (mCurrentWave < mWaves.size()) {
+        auto wave = mWaves.at(mCurrentWave);
 
-                enemyPath.construct(traversed, from, mGoal);
-            }
-
-            mTotalCoin = mTotalCoin - newTower->getCost();
-
-            mMapLayer->activateSlot(pTile);
-
-            return true;
+        for (int i = 0; i < wave.size(); i++) {
+            mGameplayLayer->addEnemy(wave.at(i), i, mPath);
         }
+
+        mCurrentWave++;
+
+        return true;
     }
 
     return false;
@@ -153,9 +142,6 @@ bool GameScene::placeTower(unsigned int pType, Vec2 pTile) {
 
 void GameScene::buildScene() {
     mBackgroundLayer = LayerColor::create(Color4B(42, 45, 51, 255));
-
-    mGameplayLayer = Layer::create();
-    mGameplayLayer->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
     // Prepare sample grid
     mGrid.create(Vec2(5, 10));
@@ -176,6 +162,7 @@ void GameScene::buildScene() {
         drawPath();
     }
 
+    mGameplayLayer = GameplayLayer::create(this);
     mGameplayLayer->addChild(mPathCanvas);
 
     mUILayer = Layer::create();
@@ -193,58 +180,9 @@ void GameScene::buildScene() {
 }
 
 void GameScene::connectListeners() {
-// Add contact event listener
-    auto contactListener = EventListenerPhysicsContact::create();
-    contactListener->onContactBegin = [](PhysicsContact &pContact) {
-        auto a = pContact.getShapeA()->getBody();
-        auto b = pContact.getShapeB()->getBody();
-
-        if ((a->getCategoryBitmask() == TOWER_RANGE_MASK && b->getCategoryBitmask() == ENEMY_MASK) ||
-            (a->getCategoryBitmask() == ENEMY_MASK && b->getCategoryBitmask() == TOWER_RANGE_MASK)) {
-
-            Tower *tower = nullptr;
-            Creep *enemy = nullptr;
-
-            if (a->getCategoryBitmask() == TOWER_RANGE_MASK) {
-                tower = static_cast<Tower *>(a->getNode());
-                enemy = static_cast<Creep *>(b->getNode());
-            } else {
-                tower = static_cast<Tower *>(b->getNode());
-                enemy = static_cast<Creep *>(a->getNode());
-            }
-
-            tower->addTarget(enemy);
-        }
-
-        return true;
-    };
-    contactListener->onContactSeparate = [](PhysicsContact &pContact) {
-        auto a = pContact.getShapeA()->getBody();
-        auto b = pContact.getShapeB()->getBody();
-
-        if ((a->getCategoryBitmask() == TOWER_RANGE_MASK && b->getCategoryBitmask() == ENEMY_MASK) ||
-            (a->getCategoryBitmask() == ENEMY_MASK && b->getCategoryBitmask() == TOWER_RANGE_MASK)) {
-
-            Tower *tower = nullptr;
-            Creep *enemy = nullptr;
-
-            if (a->getCategoryBitmask() == TOWER_RANGE_MASK) {
-                tower = static_cast<Tower *>(a->getNode());
-                enemy = static_cast<Creep *>(b->getNode());
-            } else {
-                tower = static_cast<Tower *>(b->getNode());
-                enemy = static_cast<Creep *>(a->getNode());
-            }
-
-            tower->removeTarget(enemy);
-        }
-    };
-
     auto touchListener = EventListenerTouchOneByOne::create();
     touchListener->setSwallowTouches(true);
     touchListener->onTouchBegan = [&](Touch *pTouch, Event *pEvent) {
-        auto touchLocation = mGameplayLayer->convertTouchToNodeSpace(pTouch);
-
         Vec2 touched = Vec2(-1, -1);
         Vec2 size = mGrid.getSize();
         for (int i = 0; i < size.x; i++) {
@@ -256,7 +194,7 @@ void GameScene::connectListeners() {
                                             location.y - NODE_TOUCH_SIZE / 2.f,
                                             NODE_TOUCH_SIZE, NODE_TOUCH_SIZE);
 
-                    if (boundingBox.containsPoint(touchLocation)) {
+                    if (boundingBox.containsPoint(pTouch->getLocation())) {
                         touched = current;
                         break;
                     }
@@ -275,7 +213,6 @@ void GameScene::connectListeners() {
         return true;
     };
 
-    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
     Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener, this);
 }
 
@@ -285,7 +222,7 @@ bool GameScene::isAvailable(const TraverseData &pTraversed, cocos2d::Vec2 pTile)
         return false;
     }
 
-    for (auto enemy : mCreeps) {
+    for (auto enemy : mGameplayLayer->getCreepList()) {
         auto current = enemy->getPath().getCurrentWaypoint().tile;
 
         if ((current == pTile) || !enemy->getPath().isReached(pTraversed, current)) {

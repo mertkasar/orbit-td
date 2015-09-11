@@ -1,14 +1,14 @@
 #include <UI/HUD.h>
 
 #include <2d/CCMenu.h>
+#include <2d/CCActionInterval.h>
+#include <2d/CCActionInstant.h>
 #include <ui/UIImageView.h>
 #include <ui/UIButton.h>
 #include <ui/UIText.h>
 
 #include <Scenes/GameScene.h>
 #include <sstream>
-#include <2d/CCActionInterval.h>
-#include <2d/CCActionInstant.h>
 
 USING_NS_CC;
 
@@ -97,8 +97,7 @@ void HUD::update(float pDelta) {
     text->setString(ss_l.str());
 
     std::stringstream ss_w;
-    auto &waveDirector = mGameScene->getWaveDirector();
-    ss_w << "Waves: " << waveDirector.getCurrentWave() << " / " << waveDirector.getTotalWaves();
+    ss_w << "Waves: " << 0 << " / " << 0;
 
     text = static_cast<ui::Text *>(mTopPanel->getChildByName("#wave_text"));
     text->setString(ss_w.str());
@@ -140,7 +139,7 @@ void HUD::menuButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEv
 
 void HUD::nextButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType) {
     if (pType == ui::Widget::TouchEventType::ENDED) {
-        if (mGameScene->getWaveDirector().spawnNextWave())
+        if (mGameScene->spawnNextWave())
             notify('W', "Coming next wave!");
         else
             notify('E', "Out of waves!");

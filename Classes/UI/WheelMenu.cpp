@@ -83,17 +83,17 @@ void WheelMenu::close() {
 void WheelMenu::towerButtonCallback(cocos2d::Ref *pSender, ui::Widget::TouchEventType pType) {
     if (pType == ui::Widget::TouchEventType::ENDED) {
         auto btn_name = static_cast<ui::Button *>(pSender)->getName();
-        unsigned int towerType = 0;
+        TowerTypes type;
 
         if (btn_name == "#turret_button") {
-            towerType = 1;
+            type = TURRET;
         } else if (btn_name == "#laser_button") {
-            towerType = 2;
+            type = LASER;
         } else if (btn_name == "#rocketL_button") {
-            towerType = 3;
+            type = R_LAUNCHER;
         }
 
-        if (mGameScene->placeTower(towerType, mCurrentTile))
+        if (mGameScene->placeTower(type, mCurrentTile))
             close();
     }
 }
