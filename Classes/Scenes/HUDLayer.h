@@ -1,9 +1,10 @@
-#ifndef HUD_H
-#define HUD_H
+#ifndef HUD_LAYER_H
+#define HUD_LAYER_H
 
 #include <math/Vec2.h>
 #include <ui/UILayout.h>
 #include <ui/UIWidget.h>
+#include <2d/CCLayer.h>
 
 namespace cocos2d {
     class Ref;
@@ -15,7 +16,7 @@ namespace cocos2d {
 
 class GameScene;
 
-class HUD {
+class HUDLayer : public cocos2d::Layer {
 private:
     GameScene *mGameScene;
 
@@ -23,10 +24,15 @@ private:
     cocos2d::ui::Layout *mNotificationPanel;
     cocos2d::ui::Layout *mBottomPanel;
 
-public:
-    void init(cocos2d::Layer *pLayer, GameScene *pGameScene);
+private:
+    HUDLayer(GameScene *pGameScene);
 
-    void update(float pDelta);
+public:
+    static HUDLayer *create(GameScene *pGameScene);
+
+    virtual bool init();
+
+    virtual void update(float pDelta);
 
     void notify(char pType, std::string pMessage, float pDuration = 1.f);
 
@@ -40,4 +46,4 @@ private:
     void ffButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType);
 };
 
-#endif //HUD_H
+#endif //HUD_LAYER_H

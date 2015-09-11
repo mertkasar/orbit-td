@@ -127,6 +127,7 @@ set(GAME_SRC
   Classes/Scenes/GameScene.cpp
   Classes/Scenes/GameplayLayer.cpp
   Classes/Scenes/MapLayer.cpp
+  Classes/Scenes/HUDLayer.cpp
   Classes/Entities/Creep.cpp
   Classes/Entities/Missile.cpp
   Classes/Entities/Towers/Tower.cpp
@@ -138,7 +139,6 @@ set(GAME_SRC
   Classes/Utilities/Grid.cpp
   Classes/Utilities/Algorithm.cpp
   Classes/UI/WheelMenu.cpp
-  Classes/UI/HUD.cpp
   ${PLATFORM_SPECIFIC_SRC}
 )
 
@@ -148,6 +148,7 @@ set(GAME_HEADERS
   Classes/Scenes/GameScene.h
   Classes/Scenes/GameplayLayer.h
   Classes/Scenes/MapLayer.h
+  Classes/Scenes/HUDLayer.h
   Classes/Entities/Creep.h
   Classes/Entities/Missile.h
   Classes/Entities/Towers/Tower.h
@@ -160,7 +161,6 @@ set(GAME_HEADERS
   Classes/Utilities/Algorithm.h
   Classes/Utilities/Pool.h
   Classes/UI/WheelMenu.h
-  Classes/UI/HUD.h
   ${PLATFORM_SPECIFIC_HEADERS}
 )
 

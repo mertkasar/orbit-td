@@ -8,7 +8,6 @@
 
 #include <Utilities/Pool.h>
 #include <UI/WheelMenu.h>
-#include <UI/HUD.h>
 
 namespace cocos2d {
     class DrawNode;
@@ -24,6 +23,8 @@ class MapLayer;
 
 class GameplayLayer;
 
+class HUDLayer;
+
 class GameScene : public cocos2d::Layer {
 private:
     cocos2d::Size mVisibleSize;
@@ -33,7 +34,7 @@ private:
     cocos2d::LayerColor *mBackgroundLayer;
     MapLayer *mMapLayer;
     GameplayLayer *mGameplayLayer;
-    cocos2d::Layer *mUILayer;
+    HUDLayer *mHUDLayer;
 
     cocos2d::DrawNode *mPathCanvas;
 
@@ -47,7 +48,6 @@ private:
     cocos2d::Vec2 mGoal;
 
     WheelMenu mWheelMenu;
-    HUD mHUD;
 
     unsigned int mTotalCoin;
 

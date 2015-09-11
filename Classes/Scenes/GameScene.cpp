@@ -13,6 +13,7 @@
 
 #include <Scenes/MapLayer.h>
 #include <Scenes/GameplayLayer.h>
+#include <Scenes/HUDLayer.h>
 #include <Entities/Creep.h>
 
 #include <sstream>
@@ -76,7 +77,6 @@ bool GameScene::init() {
 }
 
 void GameScene::update(float pDelta) {
-    mHUD.update(pDelta);
     mWheelMenu.update(pDelta);
 
     if (mGameplayLayer->getCreepList().size() <= 0) {
@@ -85,12 +85,12 @@ void GameScene::update(float pDelta) {
     }
 
     if (mLife <= 0) {
-        mHUD.notify('I', "Game Over!");
+        mHUDLayer->notify('I', "Game Over!");
         this->unscheduleUpdate();
     }
 
     if (isCleared()) {
-        mHUD.notify('I', "All waves are cleared!");
+        mHUDLayer->notify('I', "All waves are cleared!");
         this->unscheduleUpdate();
     }
 }
@@ -165,16 +165,15 @@ void GameScene::buildScene() {
     mGameplayLayer = GameplayLayer::create(this);
     mGameplayLayer->addChild(mPathCanvas);
 
-    mUILayer = Layer::create();
-    mHUD.init(mUILayer, this);
-    mWheelMenu.init(mUILayer, this);
+    mHUDLayer = HUDLayer::create(this);
+    mWheelMenu.init(mHUDLayer, this);
 
-    mHUD.notify('I', "Game is starting!", 2.f);
+    mHUDLayer->notify('I', "Game is starting!", 2.f);
 
     this->addChild(mBackgroundLayer);
     this->addChild(mMapLayer);
     this->addChild(mGameplayLayer);
-    this->addChild(mUILayer);
+    this->addChild(mHUDLayer);
 
     this->scheduleUpdate();
 }
@@ -218,7 +217,7 @@ void GameScene::connectListeners() {
 
 bool GameScene::isAvailable(const TraverseData &pTraversed, cocos2d::Vec2 pTile) {
     if (!mPath.isReached(pTraversed, mStart)) {
-        mHUD.notify('E', "You can't block the path!");
+        mHUDLayer->notify('E', "You can't block the path!");
         return false;
     }
 
@@ -226,7 +225,7 @@ bool GameScene::isAvailable(const TraverseData &pTraversed, cocos2d::Vec2 pTile)
         auto current = enemy->getPath().getCurrentWaypoint().tile;
 
         if ((current == pTile) || !enemy->getPath().isReached(pTraversed, current)) {
-            mHUD.notify('E', "You can't block enemies!");
+            mHUDLayer->notify('E', "You can't block enemies!");
             return false;
         }
     }

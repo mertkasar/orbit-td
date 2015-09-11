@@ -1,4 +1,4 @@
-#include <UI/HUD.h>
+#include <Scenes/HUDLayer.h>
 
 #include <2d/CCMenu.h>
 #include <2d/CCActionInterval.h>
@@ -8,12 +8,31 @@
 #include <ui/UIText.h>
 
 #include <Scenes/GameScene.h>
+
 #include <sstream>
 
 USING_NS_CC;
 
-void HUD::init(Layer *pLayer, GameScene *pGameScene) {
+HUDLayer::HUDLayer(GameScene *pGameScene) {
     mGameScene = pGameScene;
+}
+
+HUDLayer *HUDLayer::create(GameScene *pGameScene) {
+    HUDLayer *layer = new(std::nothrow) HUDLayer(pGameScene);
+
+    if (layer && layer->init()) {
+        layer->autorelease();
+        return layer;
+    } else {
+        delete layer;
+        layer = NULL;
+        return NULL;
+    }
+}
+
+bool HUDLayer::init() {
+    if (!Layer::init())
+        return false;
 
     mTopPanel = ui::Layout::create();
     mTopPanel->setBackGroundImage("textures/ui/top_panel.png");
@@ -25,14 +44,14 @@ void HUD::init(Layer *pLayer, GameScene *pGameScene) {
     button->setName("next_button");
     button->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     button->setPosition(Vec2(100, mTopPanel->getContentSize().height / 2.f));
-    button->addTouchEventListener(CC_CALLBACK_2(HUD::nextButtonCallback, this));
+    button->addTouchEventListener(CC_CALLBACK_2(HUDLayer::nextButtonCallback, this));
     mTopPanel->addChild(button);
 
     button = ui::Button::create("textures/ui/btn_menu.png", "");
     button->setName("menu_button");
     button->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     button->setPosition(Vec2(mTopPanel->getContentSize().width - 100, mTopPanel->getContentSize().height / 2.f));
-    button->addTouchEventListener(CC_CALLBACK_2(HUD::menuButtonCallback, this));
+    button->addTouchEventListener(CC_CALLBACK_2(HUDLayer::menuButtonCallback, this));
     mTopPanel->addChild(button);
 
     mNotificationPanel = ui::Layout::create();
@@ -48,14 +67,14 @@ void HUD::init(Layer *pLayer, GameScene *pGameScene) {
     button->setName("next_button");
     button->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     button->setPosition(Vec2(200, mBottomPanel->getContentSize().height / 2.f));
-    button->addTouchEventListener(CC_CALLBACK_2(HUD::pauseButtonCallback, this));
+    button->addTouchEventListener(CC_CALLBACK_2(HUDLayer::pauseButtonCallback, this));
     mBottomPanel->addChild(button);
 
     button = ui::Button::create("textures/ui/btn_ff.png", "");
     button->setName("menu_button");
     button->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     button->setPosition(Vec2(mBottomPanel->getContentSize().width - 200, mBottomPanel->getContentSize().height / 2.f));
-    button->addTouchEventListener(CC_CALLBACK_2(HUD::ffButtonCallback, this));
+    button->addTouchEventListener(CC_CALLBACK_2(HUDLayer::ffButtonCallback, this));
     mBottomPanel->addChild(button);
 
     auto text = ui::Text::create("Waves:0/0", "fonts/ubuntu.ttf", 28);
@@ -78,12 +97,16 @@ void HUD::init(Layer *pLayer, GameScene *pGameScene) {
             Vec2(mBottomPanel->getContentSize().width / 2.f + 20, mBottomPanel->getContentSize().height / 2.f - 30));
     mBottomPanel->addChild(text);
 
-    pLayer->addChild(mTopPanel);
-    pLayer->addChild(mNotificationPanel);
-    pLayer->addChild(mBottomPanel);
+    this->addChild(mTopPanel);
+    this->addChild(mNotificationPanel);
+    this->addChild(mBottomPanel);
+
+    this->scheduleUpdate();
+
+    return true;
 }
 
-void HUD::update(float pDelta) {
+void HUDLayer::update(float pDelta) {
     std::stringstream ss_c;
     ss_c << "Total Coin:\t" << mGameScene->getTotalCoin();
 
@@ -103,7 +126,7 @@ void HUD::update(float pDelta) {
     text->setString(ss_w.str());
 }
 
-void HUD::notify(char pType, std::string pMessage, float pDuration) {
+void HUDLayer::notify(char pType, std::string pMessage, float pDuration) {
     //Shift all existing notifications by one line
     for (auto notification : mNotificationPanel->getChildren()) {
         notification->setPosition(notification->getPosition() - Vec2(0.f, 24.f));
@@ -131,13 +154,13 @@ void HUD::notify(char pType, std::string pMessage, float pDuration) {
     mNotificationPanel->addChild(notification);
 }
 
-void HUD::menuButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType) {
+void HUDLayer::menuButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType) {
     if (pType == ui::Widget::TouchEventType::ENDED) {
         notify('W', "Opening menu!");
     }
 }
 
-void HUD::nextButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType) {
+void HUDLayer::nextButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType) {
     if (pType == ui::Widget::TouchEventType::ENDED) {
         if (mGameScene->spawnNextWave())
             notify('W', "Coming next wave!");
@@ -146,13 +169,13 @@ void HUD::nextButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEv
     }
 }
 
-void HUD::pauseButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType) {
+void HUDLayer::pauseButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType) {
     if (pType == ui::Widget::TouchEventType::ENDED) {
         notify('W', "Game paused!");
     }
 }
 
-void HUD::ffButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType) {
+void HUDLayer::ffButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType) {
     if (pType == ui::Widget::TouchEventType::ENDED) {
         notify('W', "Double time!");
     }

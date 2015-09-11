@@ -13,8 +13,9 @@ LOCAL_MODULE_FILENAME := libcocos2dcpp
 LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../../Classes/AppDelegate.cpp \
                    ../../../Classes/Scenes/GameScene.cpp \
-                   ../../../Classes/Scenes/MapLayer.cpp \
                    ../../../Classes/Scenes/GameplayLayer.cpp \
+                   ../../../Classes/Scenes/MapLayer.cpp \
+                   ../../../Classes/Scenes/HUDLayer.cpp \
                    ../../../Classes/Entities/Creep.cpp \
                    ../../../Classes/Entities/Missile.cpp \
                    ../../../Classes/Entities/Towers/Tower.cpp \
@@ -26,7 +27,6 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../../Classes/Utilities/Grid.cpp \
                    ../../../Classes/Utilities/Algorithm.cpp \
                    ../../../Classes/UI/WheelMenu.cpp \
-                   ../../../Classes/UI/HUD.cpp \
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../Classes
 
