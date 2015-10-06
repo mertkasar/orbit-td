@@ -34,6 +34,8 @@ bool HUDLayer::init() {
     if (!Layer::init())
         return false;
 
+    this->setName("hud_layer");
+
     mTopPanel = ui::Layout::create();
     mTopPanel->setBackGroundImage("textures/ui/top_panel.png");
     mTopPanel->setContentSize(mTopPanel->getBackGroundImageTextureSize());

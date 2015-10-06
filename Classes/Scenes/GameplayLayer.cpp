@@ -36,6 +36,8 @@ bool GameplayLayer::init() {
     if (!Layer::init())
         return false;
 
+    this->setName("gameplay_layer");
+
     this->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
     auto contactListener = EventListenerPhysicsContact::create();

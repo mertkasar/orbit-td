@@ -202,11 +202,9 @@ void GameScene::connectListeners() {
         }
 
         if (mWheelMenu.isOpen()) {
-            mMapLayer->deactivateSlot(mWheelMenu.getCurrentTile());
             mWheelMenu.close();
         } else if (touched.x > -1 && touched.y > -1) {
             mWheelMenu.openAt(touched);
-            mMapLayer->activateSlot(touched);
         }
 
         return true;

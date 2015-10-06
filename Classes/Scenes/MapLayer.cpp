@@ -34,6 +34,8 @@ bool MapLayer::init() {
     if (!Layer::init())
         return false;
 
+    this->setName("map_layer");
+
     //Draw Planet
     auto planet = DrawNode::create();
     planet->drawSolidCircle(Vec2(-480.f, 360.f), 600.f, 0.f, 50, Color4F::BLUE);

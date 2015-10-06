@@ -5,95 +5,161 @@
 #include <ui/UIButton.h>
 
 #include <Scenes/GameScene.h>
+#include <Scenes/MapLayer.h>
+#include <2d/CCActionInterval.h>
 
 USING_NS_CC;
 
 void WheelMenu::init(Layer *pLayer, GameScene *pGameScene) {
     mGameScene = pGameScene;
 
-    mOpen = false;
+    mCurrentTile = Vec2(-1, -1);
+    mLastCoin = 0;
 
     mRoot = Node::create();
-    mRoot->setVisible(false);
     mRoot->setContentSize(Size(250.f, 250.f));
-    mRoot->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 
-    mTowerMenu = ui::Layout::create();
+    mPurchaseMenu = ui::Layout::create();
 
-    auto item = ui::Button::create("textures/ui/btn_tower_trt.png", "");
-    item->setName("#turret_button");
-    item->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
-    item->setRotation(90.f);
-    item->setPosition(Vec2(mRoot->getContentSize().width / 2.f, mRoot->getContentSize().height / 2.f));
+    const float SHIFT = 90.f;
+
+    auto item = ui::Button::create("textures/ui/btn_trt.png", "");
+    item->setTag(TURRET);
+    item->setPosition(Vec2(-SHIFT, 0.f));
     item->addTouchEventListener(CC_CALLBACK_2(WheelMenu::towerButtonCallback, this));
-    mTowerMenu->addChild(item);
+    mPurchaseMenu->addChild(item);
 
-    item = ui::Button::create("textures/ui/btn_tower_lsr.png", "");
-    item->setName("#laser_button");
-    item->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
-    item->setRotation(180.f);
-    item->setPosition(Vec2(mRoot->getContentSize().width / 2.f, mRoot->getContentSize().height / 2.f));
+    item = ui::Button::create("textures/ui/btn_lsr.png", "");
+    item->setTag(LASER);
+    item->setPosition(Vec2(0, SHIFT));
     item->addTouchEventListener(CC_CALLBACK_2(WheelMenu::towerButtonCallback, this));
-    mTowerMenu->addChild(item);
+    mPurchaseMenu->addChild(item);
 
-    item = ui::Button::create("textures/ui/btn_tower_rl.png", "");
-    item->setName("#rocketL_button");
-    item->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
-    item->setRotation(270.f);
-    item->setPosition(Vec2(mRoot->getContentSize().width / 2.f, mRoot->getContentSize().height / 2.f));
+    item = ui::Button::create("textures/ui/btn_rl.png", "");
+    item->setTag(R_LAUNCHER);
+    item->setPosition(Vec2(SHIFT, 0.f));
     item->addTouchEventListener(CC_CALLBACK_2(WheelMenu::towerButtonCallback, this));
-    mTowerMenu->addChild(item);
+    mPurchaseMenu->addChild(item);
 
-    mRoot->addChild(mTowerMenu);
+    mValidationMenu = ui::Layout::create();
+
+    item = ui::Button::create("textures/ui/btn_accept.png", "");
+    item->setTag(ACCEPT);
+    item->setPosition(Vec2(SHIFT, 0.f));
+    mValidationMenu->addChild(item);
+
+    item = ui::Button::create("textures/ui/btn_decline.png", "");
+    item->setTag(DECLINE);
+    item->setPosition(Vec2(-SHIFT, 0.f));
+    item->addTouchEventListener(CC_CALLBACK_2(WheelMenu::declineButtonCallback, this));
+    mValidationMenu->addChild(item);
+
+    mRoot->addChild(mPurchaseMenu);
+    mRoot->addChild(mValidationMenu);
 
     pLayer->addChild(mRoot);
+
+    setState(IDLE);
 }
 
 void WheelMenu::update(float pDelta) {
-    auto totalCoin = mGameScene->getTotalCoin();
+    if (mState == PURCHASE) {
+        auto totalCoin = mGameScene->getTotalCoin();
 
-    auto btn = static_cast<ui::Button *>(mTowerMenu->getChildByName("#turret_button"));
-    bool enabled = totalCoin >= TURRET_COST;
-    btn->setEnabled(enabled);
-    btn->setBright(enabled);
+        if (totalCoin != mLastCoin) {
+            auto btn = static_cast<ui::Button *>(mPurchaseMenu->getChildByTag(TURRET));
+            bool enabled = totalCoin >= TURRET_COST;
+            btn->setEnabled(enabled);
+            btn->setBright(enabled);
 
-    btn = static_cast<ui::Button *>(mTowerMenu->getChildByName("#laser_button"));
-    enabled = totalCoin >= LASER_COST;
-    btn->setEnabled(enabled);
-    btn->setBright(enabled);
+            btn = static_cast<ui::Button *>(mPurchaseMenu->getChildByTag(LASER));
+            enabled = totalCoin >= LASER_COST;
+            btn->setEnabled(enabled);
+            btn->setBright(enabled);
 
-    btn = static_cast<ui::Button *>(mTowerMenu->getChildByName("#rocketL_button"));
-    enabled = totalCoin >= R_LAUNCHER_COST;
-    btn->setEnabled(enabled);
-    btn->setBright(enabled);
+            btn = static_cast<ui::Button *>(mPurchaseMenu->getChildByTag(R_LAUNCHER));
+            enabled = totalCoin >= R_LAUNCHER_COST;
+            btn->setEnabled(enabled);
+            btn->setBright(enabled);
+
+            mLastCoin = totalCoin;
+        }
+    }
+}
+
+void WheelMenu::setState(WheelMenu::State pState) {
+    for (auto menu :  mRoot->getChildren())
+        menu->setVisible(false);
+
+    Node *menu = nullptr;
+
+    switch (pState) {
+        case IDLE:
+            break;
+        case PURCHASE:
+            mPurchaseMenu->setVisible(true);
+            menu = mPurchaseMenu;
+            break;
+        case VALIDATION:
+            mValidationMenu->setVisible(true);
+            menu = mValidationMenu;
+            break;
+        default:
+            break;
+    }
+
+    if (menu)
+        for (auto btn : menu->getChildren()) {
+            btn->setScale(0.f);
+            btn->runAction(ScaleTo::create(0.15f, 1.f));
+        }
+
+    mState = pState;
 }
 
 void WheelMenu::openAt(cocos2d::Vec2 pPosition) {
     mCurrentTile = pPosition;
     mRoot->setPosition(algorithm::toCircularGrid(pPosition));
-    mRoot->setVisible(true);
-    mOpen = true;
+
+    setState(PURCHASE);
+
+    if (mGameScene->getGrid().getNode(mCurrentTile) == 0) {
+        auto mapLayer = static_cast<MapLayer *> (mGameScene->getChildByName("map_layer"));
+        mapLayer->activateSlot(mCurrentTile);
+    }
 }
 
 void WheelMenu::close() {
-    mRoot->setVisible(false);
-    mOpen = false;
+    setState(IDLE);
+
+    if (mGameScene->getGrid().getNode(mCurrentTile) == 0) {
+        auto mapLayer = static_cast<MapLayer *> (mGameScene->getChildByName("map_layer"));
+        mapLayer->deactivateSlot(mCurrentTile);
+    }
 }
 
 void WheelMenu::towerButtonCallback(cocos2d::Ref *pSender, ui::Widget::TouchEventType pType) {
     if (pType == ui::Widget::TouchEventType::ENDED) {
-        auto btn_name = static_cast<ui::Button *>(pSender)->getName();
-        TowerTypes type;
+        auto btn = static_cast<ui::Button *>(pSender);
+        mSelectedType = static_cast<TowerTypes>(btn->getTag());
 
-        if (btn_name == "#turret_button") {
-            type = TURRET;
-        } else if (btn_name == "#laser_button") {
-            type = LASER;
-        } else if (btn_name == "#rocketL_button") {
-            type = R_LAUNCHER;
-        }
+        setState(VALIDATION);
 
-        if (mGameScene->placeTower(type, mCurrentTile))
+        btn = static_cast<ui::Button *>(mValidationMenu->getChildByTag(ACCEPT));
+        btn->addTouchEventListener(CC_CALLBACK_2(WheelMenu::acceptButtonCallback, this));
+    }
+}
+
+void WheelMenu::declineButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType) {
+    if (pType == ui::Widget::TouchEventType::ENDED) {
+        close();
+    }
+}
+
+void WheelMenu::acceptButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType) {
+    if (pType == ui::Widget::TouchEventType::ENDED) {
+        if (mGameScene->placeTower(mSelectedType, mCurrentTile)) {
             close();
+        }
     }
 }
