@@ -124,6 +124,23 @@ bool GameScene::placeTower(TowerTypes pType, Vec2 pTile) {
     return false;
 }
 
+void GameScene::destroyTower(Vec2 pTile) {
+    mGameplayLayer->deleteTower(pTile);
+    mGrid.setNode(pTile, 0);
+
+    auto traversed = algorithm::traverse(mGrid, mStart, mGoal);
+
+    mPath.construct(traversed, mStart, mGoal);
+    drawPath();
+
+    for (auto enemy : mGameplayLayer->getCreepList()) {
+        auto &enemyPath = enemy->getPath();
+        auto from = enemyPath.getCurrentWaypoint().tile;
+
+        enemyPath.construct(traversed, from, mGoal);
+    }
+}
+
 bool GameScene::spawnNextWave() {
     if (mCurrentWave < mWaves.size()) {
         auto wave = mWaves.at(mCurrentWave);
@@ -146,7 +163,7 @@ void GameScene::buildScene() {
     // Prepare sample grid
     mGrid.create(Vec2(5, 10));
     for (int i = 0; i < mGrid.getSize().x; i++)
-        mGrid.setNode(Vec2(i, 0), 1);
+        mGrid.setNode(Vec2(i, 0), 2);
     mGrid.setNode(Vec2(2, 0), 0);
 
     mStart = Vec2(2, 9);
@@ -187,16 +204,14 @@ void GameScene::connectListeners() {
         for (int i = 0; i < size.x; i++) {
             for (int j = 0; j < size.y; j++) {
                 Vec2 current = Vec2(i, j);
-                if (mGrid.getNode(current) == 0) {
-                    Vec2 location = algorithm::toCircularGrid(current);
-                    Rect boundingBox = Rect(location.x - NODE_TOUCH_SIZE / 2.f,
-                                            location.y - NODE_TOUCH_SIZE / 2.f,
-                                            NODE_TOUCH_SIZE, NODE_TOUCH_SIZE);
+                Vec2 location = algorithm::toCircularGrid(current);
+                Rect boundingBox = Rect(location.x - NODE_TOUCH_SIZE / 2.f,
+                                        location.y - NODE_TOUCH_SIZE / 2.f,
+                                        NODE_TOUCH_SIZE, NODE_TOUCH_SIZE);
 
-                    if (boundingBox.containsPoint(pTouch->getLocation())) {
-                        touched = current;
-                        break;
-                    }
+                if (boundingBox.containsPoint(pTouch->getLocation())) {
+                    touched = current;
+                    break;
                 }
             }
         }

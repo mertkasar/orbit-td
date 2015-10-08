@@ -37,6 +37,10 @@ public:
 
     void addTower(TowerTypes pType, cocos2d::Vec2 pTile);
 
+    Tower *getTower(cocos2d::Vec2 pTile);
+
+    void deleteTower(cocos2d::Vec2 pTile);
+
     cocos2d::Vector<Creep *> &getCreepList() {
         return mCreeps;
     }

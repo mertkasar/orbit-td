@@ -117,7 +117,7 @@ void GameplayLayer::addEnemy(CreepTypes pType, int pOrder, Path &pPath) {
     mCreeps.pushBack(enemy);
 }
 
-void GameplayLayer::addTower(TowerTypes pType, cocos2d::Vec2 pTile) {
+void GameplayLayer::addTower(TowerTypes pType, Vec2 pTile) {
     Tower *newTower = nullptr;
 
     switch (pType) {
@@ -143,4 +143,23 @@ void GameplayLayer::addTower(TowerTypes pType, cocos2d::Vec2 pTile) {
         mTowerMap.insert(std::make_pair(pTile, newTower));
         this->addChild(newTower);
     }
+}
+
+Tower *GameplayLayer::getTower(Vec2 pTile) {
+    auto found = mTowerMap.find(pTile);
+
+    assert(found != mTowerMap.end());
+
+    return found->second;
+}
+
+void GameplayLayer::deleteTower(Vec2 pTile) {
+    auto found = mTowerMap.find(pTile);
+
+    assert(found != mTowerMap.end());
+
+    auto tower = found->second;
+    mGameScene->balanceTotalCoin(tower->getCost());
+    tower->removeFromParentAndCleanup(true);
+    mTowerMap.erase(found);
 }

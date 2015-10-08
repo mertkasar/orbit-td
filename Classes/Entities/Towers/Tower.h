@@ -28,6 +28,8 @@ protected:
     bool mVerbose;
 
 public:
+    ~Tower();
+
     bool init(std::string pBaseTexturePath, std::string pGunTexturePath, float pRangeRadius, float pCooldown,
               unsigned int pCost);
 

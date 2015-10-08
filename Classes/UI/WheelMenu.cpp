@@ -1,12 +1,14 @@
 #include <UI/WheelMenu.h>
 
 #include <2d/CCMenu.h>
+#include <2d/CCActionInterval.h>
 #include <ui/UIImageView.h>
 #include <ui/UIButton.h>
 
 #include <Scenes/GameScene.h>
 #include <Scenes/MapLayer.h>
-#include <2d/CCActionInterval.h>
+#include <Scenes/GameplayLayer.h>
+#include <Entities/Towers/Tower.h>
 
 USING_NS_CC;
 
@@ -41,6 +43,19 @@ void WheelMenu::init(Layer *pLayer, GameScene *pGameScene) {
     item->addTouchEventListener(CC_CALLBACK_2(WheelMenu::towerButtonCallback, this));
     mPurchaseMenu->addChild(item);
 
+    mVerboseMenu = ui::Layout::create();
+
+    item = ui::Button::create("textures/ui/btn_upgrade.png", "");
+    item->setTag(UPGRADE);
+    item->setPosition(Vec2(-SHIFT, 0.f));
+    mVerboseMenu->addChild(item);
+
+    item = ui::Button::create("textures/ui/btn_sell.png", "");
+    item->setTag(SELL);
+    item->setPosition(Vec2(SHIFT, 0.f));
+    item->addTouchEventListener(CC_CALLBACK_2(WheelMenu::sellButtonCallback, this));
+    mVerboseMenu->addChild(item);
+
     mValidationMenu = ui::Layout::create();
 
     item = ui::Button::create("textures/ui/btn_accept.png", "");
@@ -55,6 +70,7 @@ void WheelMenu::init(Layer *pLayer, GameScene *pGameScene) {
     mValidationMenu->addChild(item);
 
     mRoot->addChild(mPurchaseMenu);
+    mRoot->addChild(mVerboseMenu);
     mRoot->addChild(mValidationMenu);
 
     pLayer->addChild(mRoot);
@@ -100,6 +116,10 @@ void WheelMenu::setState(WheelMenu::State pState) {
             mPurchaseMenu->setVisible(true);
             menu = mPurchaseMenu;
             break;
+        case VERBOSE:
+            mVerboseMenu->setVisible(true);
+            menu = mVerboseMenu;
+            break;
         case VALIDATION:
             mValidationMenu->setVisible(true);
             menu = mValidationMenu;
@@ -118,27 +138,42 @@ void WheelMenu::setState(WheelMenu::State pState) {
 }
 
 void WheelMenu::openAt(cocos2d::Vec2 pPosition) {
-    mCurrentTile = pPosition;
-    mRoot->setPosition(algorithm::toCircularGrid(pPosition));
+    auto nodeValue = mGameScene->getGrid().getNode(pPosition);
 
-    setState(PURCHASE);
+    if (nodeValue == 0) {
+        mCurrentTile = pPosition;
+        mRoot->setPosition(algorithm::toCircularGrid(pPosition));
 
-    if (mGameScene->getGrid().getNode(mCurrentTile) == 0) {
         auto mapLayer = static_cast<MapLayer *> (mGameScene->getChildByName("map_layer"));
         mapLayer->activateSlot(mCurrentTile);
+
+        setState(PURCHASE);
+    } else if (nodeValue == 1) {
+        mCurrentTile = pPosition;
+        mRoot->setPosition(algorithm::toCircularGrid(pPosition));
+
+        auto gameplayLayer = static_cast<GameplayLayer *> (mGameScene->getChildByName("gameplay_layer"));
+        gameplayLayer->getTower(mCurrentTile)->setVerbose(true);
+
+        setState(VERBOSE);
     }
 }
 
 void WheelMenu::close() {
-    setState(IDLE);
+    auto nodeValue = mGameScene->getGrid().getNode(mCurrentTile);
 
-    if (mGameScene->getGrid().getNode(mCurrentTile) == 0) {
+    if (nodeValue == 0) {
         auto mapLayer = static_cast<MapLayer *> (mGameScene->getChildByName("map_layer"));
         mapLayer->deactivateSlot(mCurrentTile);
+    } else if (nodeValue == 1) {
+        auto gameplayLayer = static_cast<GameplayLayer *> (mGameScene->getChildByName("gameplay_layer"));
+        gameplayLayer->getTower(mCurrentTile)->setVerbose(false);
     }
+
+    setState(IDLE);
 }
 
-void WheelMenu::towerButtonCallback(cocos2d::Ref *pSender, ui::Widget::TouchEventType pType) {
+void WheelMenu::towerButtonCallback(Ref *pSender, ui::Widget::TouchEventType pType) {
     if (pType == ui::Widget::TouchEventType::ENDED) {
         auto btn = static_cast<ui::Button *>(pSender);
         mSelectedType = static_cast<TowerTypes>(btn->getTag());
@@ -146,20 +181,36 @@ void WheelMenu::towerButtonCallback(cocos2d::Ref *pSender, ui::Widget::TouchEven
         setState(VALIDATION);
 
         btn = static_cast<ui::Button *>(mValidationMenu->getChildByTag(ACCEPT));
-        btn->addTouchEventListener(CC_CALLBACK_2(WheelMenu::acceptButtonCallback, this));
+
+        //Bind tower placement function as accept button callback
+        btn->addTouchEventListener([&](Ref *pSender, ui::Widget::TouchEventType pType) {
+            if (pType == ui::Widget::TouchEventType::ENDED) {
+                if (mGameScene->placeTower(mSelectedType, mCurrentTile)) {
+                    close();
+                }
+            }
+        });
     }
 }
 
-void WheelMenu::declineButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType) {
+void WheelMenu::sellButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType) {
+    if (pType == ui::Widget::TouchEventType::ENDED) {
+        setState(VALIDATION);
+
+        auto btn = static_cast<ui::Button *>(mValidationMenu->getChildByTag(ACCEPT));
+
+        //Bind tower placement function as accept button callback
+        btn->addTouchEventListener([&](Ref *pSender, ui::Widget::TouchEventType pType) {
+            if (pType == ui::Widget::TouchEventType::ENDED) {
+                mGameScene->destroyTower(mCurrentTile);
+                close();
+            }
+        });
+    }
+}
+
+void WheelMenu::declineButtonCallback(cocos2d::Ref *pSender, ui::Widget::TouchEventType pType) {
     if (pType == ui::Widget::TouchEventType::ENDED) {
         close();
-    }
-}
-
-void WheelMenu::acceptButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType) {
-    if (pType == ui::Widget::TouchEventType::ENDED) {
-        if (mGameScene->placeTower(mSelectedType, mCurrentTile)) {
-            close();
-        }
     }
 }

@@ -20,13 +20,15 @@ class WheelMenu {
 public:
     enum ButtonTag {
         ACCEPT,
-        DECLINE
+        DECLINE,
+        UPGRADE,
+        SELL
     };
 
-private:
     enum State {
         IDLE,
         PURCHASE,
+        VERBOSE,
         VALIDATION
     };
 
@@ -44,6 +46,8 @@ private:
     cocos2d::Node *mRoot;
 
     cocos2d::ui::Layout *mPurchaseMenu;
+
+    cocos2d::ui::Layout *mVerboseMenu;
 
     cocos2d::ui::Layout *mValidationMenu;
 
@@ -69,9 +73,9 @@ public:
 private:
     void towerButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType);
 
-    void declineButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType);
+    void sellButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType);
 
-    void acceptButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType);
+    void declineButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType);
 };
 
 #endif //WHEELMENU_H

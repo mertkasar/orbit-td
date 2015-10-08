@@ -1,11 +1,11 @@
 #include <Entities/Towers/Tower.h>
 
 #include <2d/CCSprite.h>
+#include <2d/CCActionInterval.h>
 #include <physics/CCPhysicsBody.h>
 
 #include <Globals.h>
 #include <Entities/Creep.h>
-#include <2d/CCActionInterval.h>
 
 USING_NS_CC;
 
@@ -26,6 +26,7 @@ bool Tower::init(std::string pBaseTexturePath, std::string pGunTexturePath, floa
     mBase->setScale(0.5f);
 
     mRange = Sprite::create("textures/range.png");
+    mRange->setVisible(false);
     mRange->setColor(Color3B(113, 201, 55));
     mRange->setScale(2 * pRangeRadius / mRange->getContentSize().width);
     mRange->runAction(RepeatForever::create(RotateBy::create(2.f, 30.f)));
@@ -105,6 +106,17 @@ void Tower::adaptRotation() {
 }
 
 void Tower::setVerbose(bool pVerbose) {
-    mRange->setVisible(pVerbose);
+    if (pVerbose) {
+        mRange->setVisible(true);
+        mRange->setScale(0.f);
+        mRange->runAction(ScaleTo::create(0.15f, 1.f));
+    } else {
+        mRange->setVisible(false);
+    }
+
     mVerbose = pVerbose;
+}
+
+Tower::~Tower() {
+    CCLOG("Tower deleted");
 }

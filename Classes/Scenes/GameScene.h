@@ -68,6 +68,8 @@ public:
 
     bool placeTower(TowerTypes pType, cocos2d::Vec2 pTile);
 
+    void destroyTower(cocos2d::Vec2 pTile);
+
     bool spawnNextWave();
 
     void balanceTotalCoin(int pBalance) {
