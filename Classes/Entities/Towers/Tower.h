@@ -19,7 +19,7 @@ protected:
     cocos2d::PhysicsBody *mBody;
 
     Creep *mTarget;
-    cocos2d::Vector<Creep *> mTargeList;
+    cocos2d::Vector<Creep *> mTargetList;
 
     float mCooldown;
 
@@ -40,7 +40,7 @@ public:
     void removeTarget(Creep *pTarget);
 
     unsigned int getTargetCount() const {
-        return (unsigned int) mTargeList.size();
+        return (unsigned int) mTargetList.size();
     }
 
     unsigned int getCost() const {

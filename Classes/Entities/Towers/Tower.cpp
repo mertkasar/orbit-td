@@ -52,14 +52,14 @@ bool Tower::init(std::string pBaseTexturePath, std::string pGunTexturePath, floa
 }
 
 void Tower::addTarget(Creep *pTarget) {
-    mTargeList.pushBack(pTarget);
+    mTargetList.pushBack(pTarget);
 }
 
 void Tower::removeTarget(Creep *pTarget) {
-    auto found = mTargeList.find(pTarget);
+    auto found = mTargetList.find(pTarget);
 
-    if (found != mTargeList.end())
-        mTargeList.erase(found);
+    if (found != mTargetList.end())
+        mTargetList.erase(found);
 }
 
 void Tower::update(float pDelta) {
@@ -72,7 +72,7 @@ void Tower::update(float pDelta) {
         }
     } else {
         if (mTarget != nullptr) {
-            mTargeList.eraseObject(mTarget);
+            mTargetList.eraseObject(mTarget);
             mTarget = nullptr;
             this->unschedule(CC_SCHEDULE_SELECTOR(Tower::shoot));
         }
@@ -83,17 +83,17 @@ void Tower::update(float pDelta) {
 
 bool Tower::isTargetValid() {
     if (mTarget != nullptr) {
-        auto found = mTargeList.find(mTarget);
+        auto found = mTargetList.find(mTarget);
 
-        return found != mTargeList.end() && !mTarget->isDead();
+        return found != mTargetList.end() && !mTarget->isDead();
     }
 
     return false;
 }
 
 void Tower::findTarget() {
-    if (!mTargeList.empty())
-        mTarget = mTargeList.at(0);
+    if (!mTargetList.empty())
+        mTarget = mTargetList.at(0);
 }
 
 void Tower::adaptRotation() {
