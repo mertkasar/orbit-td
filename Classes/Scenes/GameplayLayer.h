@@ -5,7 +5,7 @@
 #include <Utilities/Pool.h>
 #include <Globals.h>
 
-class GameScene;
+class World;
 
 class Tower;
 
@@ -15,7 +15,7 @@ class Path;
 
 class GameplayLayer : public cocos2d::Layer {
 private:
-    GameScene *mGameScene;
+    World *mWorld;
 
     Pool<Creep> mCreepPool;
 
@@ -26,10 +26,10 @@ private:
     Tower *mMock;
 
 private:
-    GameplayLayer(GameScene *pGameScene);
+    GameplayLayer(World *pWorld);
 
 public:
-    static GameplayLayer *create(GameScene *pGameScene);
+    static GameplayLayer *create(World *pWorld);
 
     virtual bool init();
 

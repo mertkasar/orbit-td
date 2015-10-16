@@ -25,7 +25,7 @@ class GameplayLayer;
 
 class HUDLayer;
 
-class GameScene : public cocos2d::Layer {
+class World : public cocos2d::Layer {
 private:
     cocos2d::Size mVisibleSize;
     cocos2d::Vec2 mOrigin;
@@ -56,9 +56,9 @@ public:
     Path mPath;
 
 public:
-    GameScene();
+    World();
 
-    ~GameScene();
+    ~World();
 
     static cocos2d::Scene *createScene();
 
@@ -66,7 +66,7 @@ public:
 
     virtual void update(float pDelta);
 
-    CREATE_FUNC(GameScene);
+    CREATE_FUNC(World);
 
     bool placeTower(TowerTypes pType, cocos2d::Vec2 pTile);
 

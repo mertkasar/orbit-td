@@ -4,6 +4,7 @@
 #include <math/Vec2.h>
 #include <ui/UILayout.h>
 #include <ui/UIWidget.h>
+
 #include <Globals.h>
 
 namespace cocos2d {
@@ -14,7 +15,7 @@ namespace cocos2d {
     class Layer;
 }
 
-class GameScene;
+class World;
 
 class WheelMenu {
 public:
@@ -33,7 +34,7 @@ public:
     };
 
 private:
-    GameScene *mGameScene;
+    World *mWorld;
 
     cocos2d::Vec2 mCurrentTile;
 
@@ -52,7 +53,7 @@ private:
     cocos2d::ui::Layout *mValidationMenu;
 
 public:
-    void init(cocos2d::Layer *pLayer, GameScene *pGameScene);
+    void init(cocos2d::Layer *pLayer, World *pGameScene);
 
     void update(float pDelta);
 

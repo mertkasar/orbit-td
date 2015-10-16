@@ -5,15 +5,15 @@
 #include <ui/UIImageView.h>
 #include <ui/UIButton.h>
 
-#include <Scenes/GameScene.h>
+#include <Scenes/World.h>
 #include <Scenes/MapLayer.h>
 #include <Scenes/GameplayLayer.h>
 #include <Entities/Towers/Tower.h>
 
 USING_NS_CC;
 
-void WheelMenu::init(Layer *pLayer, GameScene *pGameScene) {
-    mGameScene = pGameScene;
+void WheelMenu::init(Layer *pLayer, World *pGameScene) {
+    mWorld = pGameScene;
 
     mCurrentTile = Vec2(-1, -1);
     mLastCoin = 0;
@@ -79,7 +79,7 @@ void WheelMenu::init(Layer *pLayer, GameScene *pGameScene) {
 
 void WheelMenu::update(float pDelta) {
     if (mState == PURCHASE) {
-        auto totalCoin = mGameScene->getTotalCoin();
+        auto totalCoin = mWorld->getTotalCoin();
 
         if (totalCoin != mLastCoin) {
             auto btn = static_cast<ui::Button *>(mPurchaseMenu->getChildByTag(TURRET));
@@ -137,32 +137,32 @@ void WheelMenu::setState(WheelMenu::State pState) {
 }
 
 void WheelMenu::openAt(cocos2d::Vec2 pPosition) {
-    auto nodeValue = mGameScene->mGrid.getNode(pPosition);
+    auto nodeValue = mWorld->mGrid.getNode(pPosition);
 
     if (nodeValue == 0) {
         mCurrentTile = pPosition;
         mRoot->setPosition(algorithm::toCircularGrid(pPosition));
 
-        mGameScene->mapLayer->activateSlot(mCurrentTile);
+        mWorld->mapLayer->activateSlot(mCurrentTile);
 
         setState(PURCHASE);
     } else if (nodeValue == 1) {
         mCurrentTile = pPosition;
         mRoot->setPosition(algorithm::toCircularGrid(pPosition));
 
-        mGameScene->gameplayLayer->getTower(mCurrentTile)->setVerbose(true);
+        mWorld->gameplayLayer->getTower(mCurrentTile)->setVerbose(true);
 
         setState(VERBOSE);
     }
 }
 
 void WheelMenu::close() {
-    auto nodeValue = mGameScene->mGrid.getNode(mCurrentTile);
+    auto nodeValue = mWorld->mGrid.getNode(mCurrentTile);
 
     if (nodeValue == 0) {
-        mGameScene->mapLayer->deactivateSlot(mCurrentTile);
+        mWorld->mapLayer->deactivateSlot(mCurrentTile);
     } else if (nodeValue == 1) {
-        mGameScene->gameplayLayer->getTower(mCurrentTile)->setVerbose(false);
+        mWorld->gameplayLayer->getTower(mCurrentTile)->setVerbose(false);
     }
 
     setState(IDLE);
@@ -173,7 +173,7 @@ void WheelMenu::towerButtonCallback(Ref *pSender, ui::Widget::TouchEventType pTy
         auto btn = static_cast<ui::Button *>(pSender);
         mSelectedType = static_cast<TowerTypes>(btn->getTag());
 
-        mGameScene->gameplayLayer->createMock(mSelectedType, mCurrentTile);
+        mWorld->gameplayLayer->createMock(mSelectedType, mCurrentTile);
 
         setState(VALIDATION);
 
@@ -182,7 +182,7 @@ void WheelMenu::towerButtonCallback(Ref *pSender, ui::Widget::TouchEventType pTy
         //Bind tower placement function as accept button callback
         btn->addTouchEventListener([&](Ref *p_Sender, ui::Widget::TouchEventType p_Type) {
             if (p_Type == ui::Widget::TouchEventType::ENDED) {
-                if (mGameScene->placeTower(mSelectedType, mCurrentTile)) {
+                if (mWorld->placeTower(mSelectedType, mCurrentTile)) {
                     close();
                 }
             }
@@ -193,7 +193,7 @@ void WheelMenu::towerButtonCallback(Ref *pSender, ui::Widget::TouchEventType pTy
         btn->addTouchEventListener([&](Ref *p_Sender, ui::Widget::TouchEventType p_Type) {
             if (p_Type == ui::Widget::TouchEventType::ENDED) {
                 close();
-                mGameScene->gameplayLayer->removeMock();
+                mWorld->gameplayLayer->removeMock();
             }
         });
     }
@@ -208,7 +208,7 @@ void WheelMenu::sellButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::T
         //Bind tower placement function as accept button callback
         btn->addTouchEventListener([&](Ref *p_Sender, ui::Widget::TouchEventType p_Type) {
             if (p_Type == ui::Widget::TouchEventType::ENDED) {
-                mGameScene->destroyTower(mCurrentTile);
+                mWorld->destroyTower(mCurrentTile);
                 close();
             }
         });

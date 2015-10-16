@@ -6,7 +6,7 @@
 #include <physics/CCPhysicsWorld.h>
 #include <physics/CCPhysicsContact.h>
 
-#include <Scenes/GameScene.h>
+#include "World.h"
 #include <Utilities/Algorithm.h>
 #include <Entities/Creep.h>
 #include <Entities/Towers/Turret.h>
@@ -15,12 +15,12 @@
 
 USING_NS_CC;
 
-GameplayLayer::GameplayLayer(GameScene *pGameScene) {
-    mGameScene = pGameScene;
+GameplayLayer::GameplayLayer(World *pWorld) {
+    mWorld = pWorld;
 }
 
-GameplayLayer *GameplayLayer::create(GameScene *pGameScene) {
-    GameplayLayer *layer = new(std::nothrow) GameplayLayer(pGameScene);
+GameplayLayer *GameplayLayer::create(World *pWorld) {
+    GameplayLayer *layer = new(std::nothrow) GameplayLayer(pWorld);
 
     if (layer && layer->init()) {
         layer->autorelease();
@@ -101,9 +101,9 @@ void GameplayLayer::update(float pDelta) {
             mCreeps.eraseObject(enemy);
 
             if (enemy->isKilled())
-                mGameScene->balanceTotalCoin(enemy->getReward());
+                mWorld->balanceTotalCoin(enemy->getReward());
             else if (enemy->isReachedEnd())
-                mGameScene->balanceRemainingLife(-1);
+                mWorld->balanceRemainingLife(-1);
         }
 }
 
@@ -145,7 +145,7 @@ void GameplayLayer::createMock(TowerTypes pType, cocos2d::Vec2 pTile) {
 }
 
 void GameplayLayer::buildMock(Vec2 pTile) {
-    mGameScene->balanceTotalCoin(-mMock->getCost());
+    mWorld->balanceTotalCoin(-mMock->getCost());
 
     mMock->build();
     mTowerMap.insert(std::make_pair(pTile, mMock));
@@ -172,7 +172,7 @@ void GameplayLayer::deleteTower(Vec2 pTile) {
     assert(found != mTowerMap.end());
 
     auto tower = found->second;
-    mGameScene->balanceTotalCoin(tower->getCost());
+    mWorld->balanceTotalCoin(tower->getCost());
     tower->removeFromParentAndCleanup(true);
     mTowerMap.erase(found);
 }

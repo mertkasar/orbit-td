@@ -3,7 +3,7 @@
 
 #include <2d/CCLayer.h>
 
-class GameScene;
+class World;
 
 namespace cocos2d {
     namespace ui {
@@ -13,15 +13,15 @@ namespace cocos2d {
 
 class MapLayer : public cocos2d::Layer {
 private:
-    GameScene *mGameScene;
+    World *mWorld;
 
     std::map<cocos2d::Vec2, cocos2d::ui::ImageView *> mSlotMap;
 
 private:
-    MapLayer(GameScene *pGameScene);
+    MapLayer(World *pWorld);
 
 public:
-    static MapLayer *create(GameScene *pGameScene);
+    static MapLayer *create(World *pWorld);
 
     virtual bool init();
 

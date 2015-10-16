@@ -14,21 +14,21 @@ namespace cocos2d {
     class Layer;
 }
 
-class GameScene;
+class World;
 
 class HUDLayer : public cocos2d::Layer {
 private:
-    GameScene *mGameScene;
+    World *mWorld;
 
     cocos2d::ui::Layout *mTopPanel;
     cocos2d::ui::Layout *mNotificationPanel;
     cocos2d::ui::Layout *mBottomPanel;
 
 private:
-    HUDLayer(GameScene *pGameScene);
+    HUDLayer(World *pWorld);
 
 public:
-    static HUDLayer *create(GameScene *pGameScene);
+    static HUDLayer *create(World *pWorld);
 
     virtual bool init();
 

@@ -4,7 +4,7 @@
 #include <2d/CCActionInterval.h>
 #include <ui/UIImageView.h>
 
-#include <Scenes/GameScene.h>
+#include "World.h"
 #include <Utilities/Algorithm.h>
 
 USING_NS_CC;
@@ -13,12 +13,12 @@ const Color3B COLOR_ACTIVE(Color3B(113, 201, 55));
 const Color3B COLOR_EMPTY(Color3B(108, 115, 131));
 const Color3B COLOR_LOCKED(Color3B(54, 58, 66));
 
-MapLayer::MapLayer(GameScene *pGameScene) {
-    mGameScene = pGameScene;
+MapLayer::MapLayer(World *pWorld) {
+    mWorld = pWorld;
 }
 
-MapLayer *MapLayer::create(GameScene *pGameScene) {
-    MapLayer *layer = new(std::nothrow) MapLayer(pGameScene);
+MapLayer *MapLayer::create(World *pWorld) {
+    MapLayer *layer = new(std::nothrow) MapLayer(pWorld);
 
     if (layer && layer->init()) {
         layer->autorelease();
@@ -41,7 +41,7 @@ bool MapLayer::init() {
     planet->drawSolidCircle(Vec2(-480.f, 360.f), 600.f, 0.f, 50, Color4F::BLUE);
     this->addChild(planet);
 
-    auto &grid = mGameScene->mGrid;
+    auto &grid = mWorld->mGrid;
 
     Vec2 size = grid.getSize();
     for (int j = 0; j < size.y; j++) {

@@ -7,18 +7,18 @@
 #include <ui/UIButton.h>
 #include <ui/UIText.h>
 
-#include <Scenes/GameScene.h>
+#include "World.h"
 
 #include <sstream>
 
 USING_NS_CC;
 
-HUDLayer::HUDLayer(GameScene *pGameScene) {
-    mGameScene = pGameScene;
+HUDLayer::HUDLayer(World *pWorld) {
+    mWorld = pWorld;
 }
 
-HUDLayer *HUDLayer::create(GameScene *pGameScene) {
-    HUDLayer *layer = new(std::nothrow) HUDLayer(pGameScene);
+HUDLayer *HUDLayer::create(World *pWorld) {
+    HUDLayer *layer = new(std::nothrow) HUDLayer(pWorld);
 
     if (layer && layer->init()) {
         layer->autorelease();
@@ -110,13 +110,13 @@ bool HUDLayer::init() {
 
 void HUDLayer::update(float pDelta) {
     std::stringstream ss_c;
-    ss_c << "Total Coin:\t" << mGameScene->getTotalCoin();
+    ss_c << "Total Coin:\t" << mWorld->getTotalCoin();
 
     auto text = static_cast<ui::Text *>(mBottomPanel->getChildByName("#coin_text"));
     text->setString(ss_c.str());
 
     std::stringstream ss_l;
-    ss_l << "Remaining Life:\t" << mGameScene->getRemainingLife();
+    ss_l << "Remaining Life:\t" << mWorld->getRemainingLife();
 
     text = static_cast<ui::Text *>(mBottomPanel->getChildByName("#life_text"));
     text->setString(ss_l.str());
@@ -164,7 +164,7 @@ void HUDLayer::menuButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::To
 
 void HUDLayer::nextButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType) {
     if (pType == ui::Widget::TouchEventType::ENDED) {
-        if (mGameScene->spawnNextWave())
+        if (mWorld->spawnNextWave())
             notify('W', "Coming next wave!");
         else
             notify('E', "Out of waves!");

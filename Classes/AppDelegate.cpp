@@ -1,7 +1,7 @@
 #include <AppDelegate.h>
 
-#include <Scenes/GameScene.h>
 #include <audio/include/SimpleAudioEngine.h>
+#include <Scenes/World.h>
 
 USING_NS_CC;
 
@@ -41,7 +41,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     register_all_packages();
 
-    auto scene = GameScene::createScene();
+    auto scene = World::createScene();
     director->runWithScene(scene);
 
     return true;

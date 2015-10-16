@@ -1,4 +1,4 @@
-#include <Scenes/GameScene.h>
+#include "World.h"
 
 #include <base/CCDirector.h>
 #include <base/CCEventDispatcher.h>
@@ -20,27 +20,27 @@
 
 USING_NS_CC;
 
-GameScene::GameScene() {
-    CCLOG("GameScene created");
+World::World() {
+    CCLOG("World created");
 }
 
-GameScene::~GameScene() {
-    CCLOG("GameScene deleted");
+World::~World() {
+    CCLOG("World deleted");
 }
 
-Scene *GameScene::createScene() {
+Scene *World::createScene() {
     auto scene = Scene::createWithPhysics();
     //scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
     scene->getPhysicsWorld()->setGravity(Vect(0, 0));
 
-    auto layer = GameScene::create();
+    auto layer = World::create();
 
     scene->addChild(layer);
 
     return scene;
 }
 
-bool GameScene::init() {
+bool World::init() {
     if (!Layer::init()) {
         return false;
     }
@@ -76,7 +76,7 @@ bool GameScene::init() {
     return true;
 }
 
-void GameScene::update(float pDelta) {
+void World::update(float pDelta) {
     mWheelMenu.update(pDelta);
 
     if (gameplayLayer->getCreepList().size() <= 0) {
@@ -95,7 +95,7 @@ void GameScene::update(float pDelta) {
     }
 }
 
-bool GameScene::placeTower(TowerTypes pType, Vec2 pTile) {
+bool World::placeTower(TowerTypes pType, Vec2 pTile) {
     Grid testGrid = mGrid;
     testGrid.setNode(pTile, 1);
 
@@ -124,7 +124,7 @@ bool GameScene::placeTower(TowerTypes pType, Vec2 pTile) {
     return false;
 }
 
-void GameScene::destroyTower(Vec2 pTile) {
+void World::destroyTower(Vec2 pTile) {
     gameplayLayer->deleteTower(pTile);
     mGrid.setNode(pTile, 0);
 
@@ -141,7 +141,7 @@ void GameScene::destroyTower(Vec2 pTile) {
     }
 }
 
-bool GameScene::spawnNextWave() {
+bool World::spawnNextWave() {
     if (mCurrentWave < mWaves.size()) {
         auto wave = mWaves.at(mCurrentWave);
 
@@ -157,7 +157,7 @@ bool GameScene::spawnNextWave() {
     return false;
 }
 
-void GameScene::buildScene() {
+void World::buildScene() {
     backgroundLayer = LayerColor::create(Color4B(42, 45, 51, 255));
 
     // Prepare sample grid
@@ -195,7 +195,7 @@ void GameScene::buildScene() {
     this->scheduleUpdate();
 }
 
-void GameScene::connectListeners() {
+void World::connectListeners() {
     auto touchListener = EventListenerTouchOneByOne::create();
     touchListener->setSwallowTouches(true);
     touchListener->onTouchBegan = [&](Touch *pTouch, Event *pEvent) {
@@ -228,7 +228,7 @@ void GameScene::connectListeners() {
     Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener, this);
 }
 
-bool GameScene::isAvailable(const TraverseData &pTraversed, cocos2d::Vec2 pTile) {
+bool World::isAvailable(const TraverseData &pTraversed, cocos2d::Vec2 pTile) {
     if (!mPath.isReached(pTraversed, mStart)) {
         hudLayer->notify('E', "You can't block the path!");
         return false;
@@ -246,7 +246,7 @@ bool GameScene::isAvailable(const TraverseData &pTraversed, cocos2d::Vec2 pTile)
     return true;
 }
 
-void GameScene::drawPath() {
+void World::drawPath() {
     mPathCanvas->clear();
     auto waypoints = mPath.getWayPoints();
 

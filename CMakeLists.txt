@@ -124,7 +124,7 @@ endif( WIN32 )
 
 set(GAME_SRC
   Classes/AppDelegate.cpp
-  Classes/Scenes/GameScene.cpp
+  Classes/Scenes/World.cpp
   Classes/Scenes/GameplayLayer.cpp
   Classes/Scenes/MapLayer.cpp
   Classes/Scenes/HUDLayer.cpp
@@ -145,7 +145,7 @@ set(GAME_SRC
 set(GAME_HEADERS
   Classes/Globals.h
   Classes/AppDelegate.h
-  Classes/Scenes/GameScene.h
+  Classes/Scenes/World.h
   Classes/Scenes/GameplayLayer.h
   Classes/Scenes/MapLayer.h
   Classes/Scenes/HUDLayer.h
