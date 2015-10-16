@@ -66,7 +66,6 @@ void WheelMenu::init(Layer *pLayer, GameScene *pGameScene) {
     item = ui::Button::create("textures/ui/btn_decline.png", "");
     item->setTag(DECLINE);
     item->setPosition(Vec2(-SHIFT, 0.f));
-    item->addTouchEventListener(CC_CALLBACK_2(WheelMenu::declineButtonCallback, this));
     mValidationMenu->addChild(item);
 
     mRoot->addChild(mPurchaseMenu);
@@ -138,36 +137,32 @@ void WheelMenu::setState(WheelMenu::State pState) {
 }
 
 void WheelMenu::openAt(cocos2d::Vec2 pPosition) {
-    auto nodeValue = mGameScene->getGrid().getNode(pPosition);
+    auto nodeValue = mGameScene->mGrid.getNode(pPosition);
 
     if (nodeValue == 0) {
         mCurrentTile = pPosition;
         mRoot->setPosition(algorithm::toCircularGrid(pPosition));
 
-        auto mapLayer = static_cast<MapLayer *> (mGameScene->getChildByName("map_layer"));
-        mapLayer->activateSlot(mCurrentTile);
+        mGameScene->mapLayer->activateSlot(mCurrentTile);
 
         setState(PURCHASE);
     } else if (nodeValue == 1) {
         mCurrentTile = pPosition;
         mRoot->setPosition(algorithm::toCircularGrid(pPosition));
 
-        auto gameplayLayer = static_cast<GameplayLayer *> (mGameScene->getChildByName("gameplay_layer"));
-        gameplayLayer->getTower(mCurrentTile)->setVerbose(true);
+        mGameScene->gameplayLayer->getTower(mCurrentTile)->setVerbose(true);
 
         setState(VERBOSE);
     }
 }
 
 void WheelMenu::close() {
-    auto nodeValue = mGameScene->getGrid().getNode(mCurrentTile);
+    auto nodeValue = mGameScene->mGrid.getNode(mCurrentTile);
 
     if (nodeValue == 0) {
-        auto mapLayer = static_cast<MapLayer *> (mGameScene->getChildByName("map_layer"));
-        mapLayer->deactivateSlot(mCurrentTile);
+        mGameScene->mapLayer->deactivateSlot(mCurrentTile);
     } else if (nodeValue == 1) {
-        auto gameplayLayer = static_cast<GameplayLayer *> (mGameScene->getChildByName("gameplay_layer"));
-        gameplayLayer->getTower(mCurrentTile)->setVerbose(false);
+        mGameScene->gameplayLayer->getTower(mCurrentTile)->setVerbose(false);
     }
 
     setState(IDLE);
@@ -178,16 +173,27 @@ void WheelMenu::towerButtonCallback(Ref *pSender, ui::Widget::TouchEventType pTy
         auto btn = static_cast<ui::Button *>(pSender);
         mSelectedType = static_cast<TowerTypes>(btn->getTag());
 
+        mGameScene->gameplayLayer->createMock(mSelectedType, mCurrentTile);
+
         setState(VALIDATION);
 
         btn = static_cast<ui::Button *>(mValidationMenu->getChildByTag(ACCEPT));
 
         //Bind tower placement function as accept button callback
-        btn->addTouchEventListener([&](Ref *pSender, ui::Widget::TouchEventType pType) {
-            if (pType == ui::Widget::TouchEventType::ENDED) {
+        btn->addTouchEventListener([&](Ref *p_Sender, ui::Widget::TouchEventType p_Type) {
+            if (p_Type == ui::Widget::TouchEventType::ENDED) {
                 if (mGameScene->placeTower(mSelectedType, mCurrentTile)) {
                     close();
                 }
+            }
+        });
+
+        btn = static_cast<ui::Button *>(mValidationMenu->getChildByTag(DECLINE));
+
+        btn->addTouchEventListener([&](Ref *p_Sender, ui::Widget::TouchEventType p_Type) {
+            if (p_Type == ui::Widget::TouchEventType::ENDED) {
+                close();
+                mGameScene->gameplayLayer->removeMock();
             }
         });
     }
@@ -200,17 +206,19 @@ void WheelMenu::sellButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::T
         auto btn = static_cast<ui::Button *>(mValidationMenu->getChildByTag(ACCEPT));
 
         //Bind tower placement function as accept button callback
-        btn->addTouchEventListener([&](Ref *pSender, ui::Widget::TouchEventType pType) {
-            if (pType == ui::Widget::TouchEventType::ENDED) {
+        btn->addTouchEventListener([&](Ref *p_Sender, ui::Widget::TouchEventType p_Type) {
+            if (p_Type == ui::Widget::TouchEventType::ENDED) {
                 mGameScene->destroyTower(mCurrentTile);
                 close();
             }
         });
-    }
-}
 
-void WheelMenu::declineButtonCallback(cocos2d::Ref *pSender, ui::Widget::TouchEventType pType) {
-    if (pType == ui::Widget::TouchEventType::ENDED) {
-        close();
+        btn = static_cast<ui::Button *>(mValidationMenu->getChildByTag(DECLINE));
+
+        btn->addTouchEventListener([&](Ref *p_Sender, ui::Widget::TouchEventType p_Type) {
+            if (p_Type == ui::Widget::TouchEventType::ENDED) {
+                close();
+            }
+        });
     }
 }

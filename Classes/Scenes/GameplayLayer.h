@@ -23,6 +23,8 @@ private:
 
     std::map<cocos2d::Vec2, Tower *> mTowerMap;
 
+    Tower *mMock;
+
 private:
     GameplayLayer(GameScene *pGameScene);
 
@@ -33,9 +35,13 @@ public:
 
     virtual void update(float pDelta);
 
-    void addEnemy(CreepTypes pType, int pOrder, Path& pPath);
+    void addEnemy(CreepTypes pType, int pOrder, Path &pPath);
 
-    void addTower(TowerTypes pType, cocos2d::Vec2 pTile);
+    void createMock(TowerTypes pType, cocos2d::Vec2 pTile);
+
+    void removeMock();
+
+    void buildMock(cocos2d::Vec2 pTile);
 
     Tower *getTower(cocos2d::Vec2 pTile);
 

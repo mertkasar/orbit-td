@@ -41,7 +41,7 @@ bool MapLayer::init() {
     planet->drawSolidCircle(Vec2(-480.f, 360.f), 600.f, 0.f, 50, Color4F::BLUE);
     this->addChild(planet);
 
-    Grid &grid = mGameScene->getGrid();
+    auto &grid = mGameScene->mGrid;
 
     Vec2 size = grid.getSize();
     for (int j = 0; j < size.y; j++) {

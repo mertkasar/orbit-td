@@ -31,19 +31,12 @@ private:
     cocos2d::Vec2 mOrigin;
     cocos2d::Vec2 mCanvasCenter;
 
-    cocos2d::LayerColor *mBackgroundLayer;
-    MapLayer *mMapLayer;
-    GameplayLayer *mGameplayLayer;
-    HUDLayer *mHUDLayer;
-
     cocos2d::DrawNode *mPathCanvas;
 
     std::vector<std::vector<CreepTypes>> mWaves;
     unsigned int mCurrentWave;
     bool mCleared;
 
-    Grid mGrid;
-    Path mPath;
     cocos2d::Vec2 mStart;
     cocos2d::Vec2 mGoal;
 
@@ -52,6 +45,15 @@ private:
     unsigned int mTotalCoin;
 
     unsigned int mLife;
+
+public:
+    cocos2d::LayerColor *backgroundLayer;
+    MapLayer *mapLayer;
+    GameplayLayer *gameplayLayer;
+    HUDLayer *hudLayer;
+
+    Grid mGrid;
+    Path mPath;
 
 public:
     GameScene();
@@ -90,18 +92,6 @@ public:
 
     bool isCleared() {
         return mCleared;
-    }
-
-    GameplayLayer *getGameplayLayer() {
-        return mGameplayLayer;
-    }
-
-    Grid &getGrid() {
-        return mGrid;
-    }
-
-    Path &getPath() {
-        return mPath;
     }
 
 private:

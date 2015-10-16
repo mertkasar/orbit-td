@@ -33,6 +33,8 @@ public:
     bool init(std::string pBaseTexturePath, std::string pGunTexturePath, float pRangeRadius, float pCooldown,
               unsigned int pCost);
 
+    void build();
+
     virtual void update(float pDelta);
 
     void addTarget(Creep *pTarget);

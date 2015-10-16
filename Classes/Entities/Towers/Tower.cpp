@@ -16,7 +16,7 @@ bool Tower::init(std::string pBaseTexturePath, std::string pGunTexturePath, floa
 
     mCooldown = pCooldown;
     mCost = pCost;
-    mVerbose = false;
+    mVerbose = true;
 
     mBase = Sprite::create(pBaseTexturePath);
 
@@ -32,23 +32,37 @@ bool Tower::init(std::string pBaseTexturePath, std::string pGunTexturePath, floa
     mRange->runAction(RepeatForever::create(RotateBy::create(2.f, 30.f)));
 
     mBody = PhysicsBody::createCircle(pRangeRadius);
+    mBody->setEnable(false);
     mBody->setCategoryBitmask(TOWER_RANGE_MASK);
     mBody->setContactTestBitmask(ENEMY_MASK);
     mBody->setCollisionBitmask(NULL_MASK);
 
     mTarget = nullptr;
 
-    this->setPhysicsBody(mBody);
-
-    this->setRotation(SPRITE_ANGLE);
-
     this->addChild(mRange);
     this->addChild(mBase);
     this->addChild(mGun);
 
-    this->scheduleUpdate();
+    this->setPhysicsBody(mBody);
+
+    mRange->setOpacity(150);
+    mBase->setOpacity(150);
+    mGun->setOpacity(150);
+
+    this->setRotation(SPRITE_ANGLE);
 
     return true;
+}
+
+void Tower::build() {
+    mBody->setEnable(true);
+    mRange->setOpacity(255);
+    mBase->setOpacity(255);
+    mGun->setOpacity(255);
+
+    setVerbose(false);
+
+    this->scheduleUpdate();
 }
 
 void Tower::addTarget(Creep *pTarget) {

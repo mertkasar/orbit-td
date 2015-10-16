@@ -79,18 +79,18 @@ bool GameScene::init() {
 void GameScene::update(float pDelta) {
     mWheelMenu.update(pDelta);
 
-    if (mGameplayLayer->getCreepList().size() <= 0) {
+    if (gameplayLayer->getCreepList().size() <= 0) {
         if (!spawnNextWave())
             mCleared = true;
     }
 
     if (mLife <= 0) {
-        mHUDLayer->notify('I', "Game Over!");
+        hudLayer->notify('I', "Game Over!");
         this->unscheduleUpdate();
     }
 
     if (isCleared()) {
-        mHUDLayer->notify('I', "All waves are cleared!");
+        hudLayer->notify('I', "All waves are cleared!");
         this->unscheduleUpdate();
     }
 }
@@ -102,14 +102,14 @@ bool GameScene::placeTower(TowerTypes pType, Vec2 pTile) {
     auto traversed = algorithm::traverse(testGrid, mStart, mGoal);
 
     if (isAvailable(traversed, pTile)) {
-        mGameplayLayer->addTower(pType, pTile);
+        gameplayLayer->buildMock(pTile);
 
-        mMapLayer->activateSlot(pTile);
+        mapLayer->activateSlot(pTile);
 
         mPath.construct(traversed, mStart, mGoal);
         drawPath();
 
-        for (auto enemy : mGameplayLayer->getCreepList()) {
+        for (auto enemy : gameplayLayer->getCreepList()) {
             auto &enemyPath = enemy->getPath();
             auto from = enemyPath.getCurrentWaypoint().tile;
 
@@ -125,7 +125,7 @@ bool GameScene::placeTower(TowerTypes pType, Vec2 pTile) {
 }
 
 void GameScene::destroyTower(Vec2 pTile) {
-    mGameplayLayer->deleteTower(pTile);
+    gameplayLayer->deleteTower(pTile);
     mGrid.setNode(pTile, 0);
 
     auto traversed = algorithm::traverse(mGrid, mStart, mGoal);
@@ -133,7 +133,7 @@ void GameScene::destroyTower(Vec2 pTile) {
     mPath.construct(traversed, mStart, mGoal);
     drawPath();
 
-    for (auto enemy : mGameplayLayer->getCreepList()) {
+    for (auto enemy : gameplayLayer->getCreepList()) {
         auto &enemyPath = enemy->getPath();
         auto from = enemyPath.getCurrentWaypoint().tile;
 
@@ -146,7 +146,7 @@ bool GameScene::spawnNextWave() {
         auto wave = mWaves.at(mCurrentWave);
 
         for (int i = 0; i < wave.size(); i++) {
-            mGameplayLayer->addEnemy(wave.at(i), i, mPath);
+            gameplayLayer->addEnemy(wave.at(i), i, mPath);
         }
 
         mCurrentWave++;
@@ -158,7 +158,7 @@ bool GameScene::spawnNextWave() {
 }
 
 void GameScene::buildScene() {
-    mBackgroundLayer = LayerColor::create(Color4B(42, 45, 51, 255));
+    backgroundLayer = LayerColor::create(Color4B(42, 45, 51, 255));
 
     // Prepare sample grid
     mGrid.create(Vec2(5, 10));
@@ -169,7 +169,7 @@ void GameScene::buildScene() {
     mStart = Vec2(2, 9);
     mGoal = Vec2(2, 0);
 
-    mMapLayer = MapLayer::create(this);
+    mapLayer = MapLayer::create(this);
 
     mPathCanvas = DrawNode::create();
 
@@ -179,18 +179,18 @@ void GameScene::buildScene() {
         drawPath();
     }
 
-    mGameplayLayer = GameplayLayer::create(this);
-    mGameplayLayer->addChild(mPathCanvas);
+    gameplayLayer = GameplayLayer::create(this);
+    gameplayLayer->addChild(mPathCanvas);
 
-    mHUDLayer = HUDLayer::create(this);
-    mWheelMenu.init(mHUDLayer, this);
+    hudLayer = HUDLayer::create(this);
+    mWheelMenu.init(hudLayer, this);
 
-    mHUDLayer->notify('I', "Game is starting!", 2.f);
+    hudLayer->notify('I', "Game is starting!", 2.f);
 
-    this->addChild(mBackgroundLayer);
-    this->addChild(mMapLayer);
-    this->addChild(mGameplayLayer);
-    this->addChild(mHUDLayer);
+    this->addChild(backgroundLayer);
+    this->addChild(mapLayer);
+    this->addChild(gameplayLayer);
+    this->addChild(hudLayer);
 
     this->scheduleUpdate();
 }
@@ -230,15 +230,15 @@ void GameScene::connectListeners() {
 
 bool GameScene::isAvailable(const TraverseData &pTraversed, cocos2d::Vec2 pTile) {
     if (!mPath.isReached(pTraversed, mStart)) {
-        mHUDLayer->notify('E', "You can't block the path!");
+        hudLayer->notify('E', "You can't block the path!");
         return false;
     }
 
-    for (auto enemy : mGameplayLayer->getCreepList()) {
+    for (auto enemy : gameplayLayer->getCreepList()) {
         auto current = enemy->getPath().getCurrentWaypoint().tile;
 
         if ((current == pTile) || !enemy->getPath().isReached(pTraversed, current)) {
-            mHUDLayer->notify('E', "You can't block enemies!");
+            hudLayer->notify('E', "You can't block enemies!");
             return false;
         }
     }

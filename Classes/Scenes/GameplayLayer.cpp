@@ -117,31 +117,44 @@ void GameplayLayer::addEnemy(CreepTypes pType, int pOrder, Path &pPath) {
     mCreeps.pushBack(enemy);
 }
 
-void GameplayLayer::addTower(TowerTypes pType, Vec2 pTile) {
-    Tower *newTower = nullptr;
+
+void GameplayLayer::createMock(TowerTypes pType, cocos2d::Vec2 pTile) {
+    mMock = nullptr;
 
     switch (pType) {
         case TURRET:
-            newTower = Turret::create();
+            mMock = Turret::create();
             break;
         case LASER:
-            newTower = Laser::create();
+            mMock = Laser::create();
             break;
         case R_LAUNCHER:
-            newTower = RLauncher::create();
+            mMock = RLauncher::create();
             break;
         default:
             break;
     }
 
-    if (newTower) {
+    if (mMock) {
         auto position = algorithm::toCircularGrid(pTile);
-        newTower->setPosition(position);
+        mMock->setPosition(position);
+        mMock->setVerbose(true);
 
-        mGameScene->balanceTotalCoin(-newTower->getCost());
+        this->addChild(mMock);
+    }
+}
 
-        mTowerMap.insert(std::make_pair(pTile, newTower));
-        this->addChild(newTower);
+void GameplayLayer::buildMock(Vec2 pTile) {
+    mGameScene->balanceTotalCoin(-mMock->getCost());
+
+    mMock->build();
+    mTowerMap.insert(std::make_pair(pTile, mMock));
+}
+
+void GameplayLayer::removeMock() {
+    if (mMock) {
+        mMock->removeFromParentAndCleanup(true);
+        mMock = nullptr;
     }
 }
 
