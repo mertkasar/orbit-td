@@ -2,7 +2,7 @@
 #define GLOBALS_H
 
 #define SPRITE_ANGLE -90.f
-#define STARTING_COIN 40
+#define STARTING_COIN 500
 #define STARTING_LIFE 10
 
 #define TURRET_CD 0.3f

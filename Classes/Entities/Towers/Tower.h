@@ -21,6 +21,7 @@ protected:
     Creep *mTarget;
     cocos2d::Vector<Creep *> mTargetList;
 
+    float mNextShooting;
     float mCooldown;
 
     unsigned int mCost;

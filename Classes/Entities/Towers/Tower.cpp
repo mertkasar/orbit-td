@@ -15,6 +15,7 @@ bool Tower::init(std::string pBaseTexturePath, std::string pGunTexturePath, floa
         return false;
 
     mCooldown = pCooldown;
+    mNextShooting = 0.f;
     mCost = pCost;
     mVerbose = true;
 
@@ -80,15 +81,17 @@ void Tower::update(float pDelta) {
     if (isTargetValid()) {
         adaptRotation();
 
-        if (!this->isScheduled(CC_SCHEDULE_SELECTOR(Tower::shoot))) {
-            shoot(0.f);
-            this->schedule(CC_SCHEDULE_SELECTOR(Tower::shoot), mCooldown);
+        mNextShooting = mNextShooting - pDelta;
+
+        if (mNextShooting <= 0.f) {
+            shoot(pDelta);
+            mNextShooting = mCooldown;
         }
     } else {
         if (mTarget != nullptr) {
             mTargetList.eraseObject(mTarget);
             mTarget = nullptr;
-            this->unschedule(CC_SCHEDULE_SELECTOR(Tower::shoot));
+            mNextShooting = 0.f;
         }
 
         findTarget();
