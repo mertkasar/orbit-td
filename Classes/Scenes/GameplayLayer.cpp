@@ -36,6 +36,8 @@ bool GameplayLayer::init() {
     if (!Layer::init())
         return false;
 
+    mPaused = false;
+
     this->setName("gameplay_layer");
 
     this->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
@@ -175,4 +177,26 @@ void GameplayLayer::deleteTower(Vec2 pTile) {
     mWorld->balanceTotalCoin(tower->getCost());
     tower->removeFromParentAndCleanup(true);
     mTowerMap.erase(found);
+}
+
+void GameplayLayer::pauseScene() {
+    this->pause();
+
+    for (auto child : this->getChildren())
+        child->pause();
+
+    mWorld->getPhysicsWorld()->setSpeed(0.f);
+
+    mPaused = true;
+}
+
+void GameplayLayer::resumeScene() {
+    this->resume();
+
+    for (auto child : this->getChildren())
+        child->resume();
+
+    mWorld->getPhysicsWorld()->setSpeed(1.f);
+
+    mPaused = false;
 }

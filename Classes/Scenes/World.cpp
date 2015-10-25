@@ -30,10 +30,13 @@ World::~World() {
 
 Scene *World::createScene() {
     auto scene = Scene::createWithPhysics();
-    //scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
-    scene->getPhysicsWorld()->setGravity(Vect(0, 0));
+
+    auto physicsWorld = scene->getPhysicsWorld();
+    physicsWorld->setGravity(Vect(0, 0));
+    //physicsWorld->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 
     auto layer = World::create();
+    layer->setPhysicsWorld(physicsWorld);
 
     scene->addChild(layer);
 

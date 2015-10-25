@@ -7,7 +7,8 @@
 #include <ui/UIButton.h>
 #include <ui/UIText.h>
 
-#include "World.h"
+#include <Scenes/World.h>
+#include <Scenes/GameplayLayer.h>
 
 #include <sstream>
 
@@ -173,6 +174,13 @@ void HUDLayer::nextButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::To
 
 void HUDLayer::pauseButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType) {
     if (pType == ui::Widget::TouchEventType::ENDED) {
+        auto layer = mWorld->gameplayLayer;
+
+        if (layer->isPaused())
+            layer->resumeScene();
+        else
+            layer->pauseScene();
+
         notify('W', "Game paused!");
     }
 }

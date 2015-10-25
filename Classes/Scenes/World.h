@@ -8,6 +8,7 @@
 
 #include <Utilities/Pool.h>
 #include <UI/WheelMenu.h>
+#include <physics/CCPhysicsWorld.h>
 
 namespace cocos2d {
     class DrawNode;
@@ -30,6 +31,8 @@ private:
     cocos2d::Size mVisibleSize;
     cocos2d::Vec2 mOrigin;
     cocos2d::Vec2 mCanvasCenter;
+
+    cocos2d::PhysicsWorld *mPhysicsWorld;
 
     cocos2d::DrawNode *mPathCanvas;
 
@@ -88,6 +91,14 @@ public:
 
     unsigned int getRemainingLife() const {
         return mLife;
+    }
+
+    cocos2d::PhysicsWorld *getPhysicsWorld() const {
+        return mPhysicsWorld;
+    }
+
+    void setPhysicsWorld(cocos2d::PhysicsWorld *pPhysicsWorld) {
+        mPhysicsWorld = pPhysicsWorld;
     }
 
     bool isCleared() {

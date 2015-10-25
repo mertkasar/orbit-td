@@ -17,6 +17,8 @@ class GameplayLayer : public cocos2d::Layer {
 private:
     World *mWorld;
 
+    bool mPaused;
+
     Pool<Creep> mCreepPool;
 
     cocos2d::Vector<Creep *> mCreeps;
@@ -46,6 +48,14 @@ public:
     Tower *getTower(cocos2d::Vec2 pTile);
 
     void deleteTower(cocos2d::Vec2 pTile);
+
+    void pauseScene();
+
+    void resumeScene();
+
+    bool isPaused() const {
+        return mPaused;
+    }
 
     cocos2d::Vector<Creep *> &getCreepList() {
         return mCreeps;
