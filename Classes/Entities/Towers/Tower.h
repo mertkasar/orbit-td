@@ -7,6 +7,8 @@ namespace cocos2d {
     class Sprite;
 
     class PhysicsBody;
+
+    class Color;
 }
 
 class Creep;
@@ -53,6 +55,8 @@ public:
     unsigned int getCost() const {
         return mCost;
     }
+
+    const cocos2d::Color3B& getBaseColor();
 
     bool isVerbose() const {
         return mVerbose;

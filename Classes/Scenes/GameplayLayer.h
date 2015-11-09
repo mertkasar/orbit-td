@@ -49,8 +49,6 @@ public:
 
     void deleteTower(cocos2d::Vec2 pTile);
 
-    void upgradeTower(cocos2d::Vec2 pTile);
-
     void pauseScene();
 
     void resumeScene();

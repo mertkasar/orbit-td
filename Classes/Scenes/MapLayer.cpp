@@ -4,14 +4,11 @@
 #include <2d/CCActionInterval.h>
 #include <ui/UIImageView.h>
 
-#include "World.h"
+#include <Scenes/World.h>
+#include <Globals.h>
 #include <Utilities/Algorithm.h>
 
 USING_NS_CC;
-
-const Color3B COLOR_ACTIVE(Color3B(113, 201, 55));
-const Color3B COLOR_EMPTY(Color3B(108, 115, 131));
-const Color3B COLOR_LOCKED(Color3B(54, 58, 66));
 
 MapLayer::MapLayer(World *pWorld) {
     mWorld = pWorld;
@@ -46,7 +43,7 @@ bool MapLayer::init() {
     Vec2 size = grid.getSize();
     for (int j = 0; j < size.y; j++) {
         ui::ImageView *orbit = ui::ImageView::create("textures/ui/orbit.png");
-        orbit->setColor(COLOR_EMPTY);
+        orbit->setColor(Color::GREY);
         orbit->setPosition(algorithm::toCircularGrid(Vec2(2, j)));
         this->addChild(orbit);
     }
@@ -61,7 +58,7 @@ bool MapLayer::init() {
                 this->addChild(shadow);
 
                 ui::ImageView *touchArea = ui::ImageView::create("textures/ui/touch.png");
-                touchArea->setColor(COLOR_EMPTY);
+                touchArea->setColor(Color::GREY);
                 touchArea->setPosition(position);
 
                 mSlotMap.insert(std::make_pair(Vec2(i, j), touchArea));
@@ -79,7 +76,7 @@ void MapLayer::activateSlot(cocos2d::Vec2 pTile) {
     assert(found != mSlotMap.end());
 
     ui::ImageView *slot = found->second;
-    slot->setColor(COLOR_ACTIVE);
+    slot->setColor(Color::GREEN);
     slot->runAction(RepeatForever::create(RotateBy::create(2.f, 30.f)));
 }
 
@@ -89,7 +86,16 @@ void MapLayer::deactivateSlot(cocos2d::Vec2 pTile) {
     assert(found != mSlotMap.end());
 
     ui::ImageView *slot = found->second;
-    slot->setColor(COLOR_EMPTY);
+    slot->setColor(Color::GREY);
     slot->stopAllActions();
     slot->setRotation(0.f);
+}
+
+void MapLayer::setSlotColor(cocos2d::Vec2 pTile, cocos2d::Color3B pColor) {
+    auto found = mSlotMap.find(pTile);
+
+    assert(found != mSlotMap.end());
+
+    ui::ImageView *slot = found->second;
+    slot->setColor(pColor);
 }

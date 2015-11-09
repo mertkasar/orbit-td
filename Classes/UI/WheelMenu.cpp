@@ -233,7 +233,7 @@ void WheelMenu::upgradeButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget
         //Bind tower upgrade function as accept button callback
         btn->addTouchEventListener([&](Ref *p_Sender, ui::Widget::TouchEventType p_Type) {
             if (p_Type == ui::Widget::TouchEventType::ENDED) {
-                mWorld->gameplayLayer->upgradeTower(mCurrentTile);
+                mWorld->upgradeTower(mCurrentTile);
                 close();
             }
         });

@@ -14,6 +14,7 @@
 #include <Scenes/MapLayer.h>
 #include <Scenes/GameplayLayer.h>
 #include <Scenes/HUDLayer.h>
+#include <Entities/Towers/Tower.h>
 #include <Entities/Creep.h>
 
 #include <sstream>
@@ -142,6 +143,12 @@ void World::destroyTower(Vec2 pTile) {
 
         enemyPath.construct(traversed, from, mGoal);
     }
+}
+
+void World::upgradeTower(cocos2d::Vec2 pTile) {
+    auto tower = gameplayLayer->getTower(pTile);
+    tower->upgrade();
+    mapLayer->setSlotColor(pTile, tower->getBaseColor());
 }
 
 bool World::spawnNextWave() {

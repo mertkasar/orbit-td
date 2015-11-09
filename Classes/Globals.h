@@ -1,6 +1,8 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
+#include <base/ccTypes.h>
+
 #define SPRITE_ANGLE -90.f
 #define STARTING_COIN 500
 #define STARTING_LIFE 10
@@ -47,5 +49,14 @@ enum CreepTypes {
     PANZER,
     PULSAR,
 };
+
+//Colors
+namespace Color {
+    const cocos2d::Color3B GREEN = {113, 201, 55};
+    const cocos2d::Color3B YELLOW = {255, 204, 0};
+    const cocos2d::Color3B BLUE = {54, 187, 245};
+    const cocos2d::Color3B GREY = {108, 115, 131};
+}
+
 
 #endif //GLOBALS_H

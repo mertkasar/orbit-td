@@ -27,10 +27,11 @@ bool Tower::init(std::string pBaseTexturePath, std::string pGunTexturePath, floa
     mGun->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
 
     mBase->setScale(0.5f);
+    mBase.setSpr
 
     mRange = Sprite::create("textures/range.png");
     mRange->setVisible(false);
-    mRange->setColor(Color3B(113, 201, 55));
+    mRange->setColor(Color::GREEN);
     mRange->setScale(2 * pRangeRadius / mRange->getContentSize().width);
     mRange->runAction(RepeatForever::create(RotateBy::create(2.f, 30.f)));
 
@@ -105,6 +106,17 @@ void Tower::upgrade() {
     auto scaleFactor = (float) (1 + mLevel * 0.1);
     //mBody->setScale(scaleFactor, scaleFactor);
     mRange->setScale(scaleFactor);
+
+    switch (mLevel) {
+        case 2:
+            mRange->setColor(Color::YELLOW);
+            break;
+        case 3:
+            mRange->setColor(Color::BLUE);
+            break;
+        default:
+            break;
+    }
 }
 
 bool Tower::isTargetValid() {
@@ -146,4 +158,8 @@ void Tower::setVerbose(bool pVerbose) {
 
 Tower::~Tower() {
     CCLOG("Tower deleted");
+}
+
+const Color3B &Tower::getBaseColor() {
+    return mRange->getColor();
 }

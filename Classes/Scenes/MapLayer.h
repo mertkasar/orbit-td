@@ -28,6 +28,8 @@ public:
     void activateSlot(cocos2d::Vec2 pTile);
 
     void deactivateSlot(cocos2d::Vec2 pTile);
+
+    void setSlotColor(cocos2d::Vec2 pTile, cocos2d::Color3B pColor);
 };
 
 #endif //MAP_LAYER_H
