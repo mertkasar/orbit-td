@@ -9,7 +9,7 @@
 
 USING_NS_CC;
 
-bool Tower::init(std::string pBaseTexturePath, std::string pGunTexturePath, float pRangeRadius, float pCooldown,
+bool Tower::init(std::string pGunTexturePath, float pRangeRadius, float pCooldown,
                  unsigned int pCost) {
     if (!Node::init())
         return false;
@@ -21,13 +21,12 @@ bool Tower::init(std::string pBaseTexturePath, std::string pGunTexturePath, floa
     mCost = pCost;
     mVerbose = true;
 
-    mBase = Sprite::create(pBaseTexturePath);
-
     mGun = Sprite::create(pGunTexturePath);
     mGun->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
 
+    mBase = Sprite::create("textures/tower_base.png");
     mBase->setScale(0.5f);
-    mBase.setSpr
+    mBase->setSpriteFrame(SpriteFrame::create("textures/tower_base.png", Rect(0, 0, 90, 90)));
 
     mRange = Sprite::create("textures/range.png");
     mRange->setVisible(false);
@@ -110,9 +109,11 @@ void Tower::upgrade() {
     switch (mLevel) {
         case 2:
             mRange->setColor(Color::YELLOW);
+            mBase->setSpriteFrame(SpriteFrame::create("textures/tower_base.png", Rect(90, 0, 90, 90)));
             break;
         case 3:
             mRange->setColor(Color::BLUE);
+            mBase->setSpriteFrame(SpriteFrame::create("textures/tower_base.png", Rect(180, 0, 90, 90)));
             break;
         default:
             break;
