@@ -14,6 +14,8 @@ bool Tower::init(std::string pBaseTexturePath, std::string pGunTexturePath, floa
     if (!Node::init())
         return false;
 
+    mLevel = 1;
+
     mCooldown = pCooldown;
     mNextShooting = 0.f;
     mCost = pCost;
@@ -98,6 +100,13 @@ void Tower::update(float pDelta) {
     }
 }
 
+void Tower::upgrade() {
+    mLevel++;
+    auto scaleFactor = (float) (1 + mLevel * 0.1);
+    //mBody->setScale(scaleFactor, scaleFactor);
+    mRange->setScale(scaleFactor);
+}
+
 bool Tower::isTargetValid() {
     if (mTarget != nullptr) {
         auto found = mTargetList.find(mTarget);
@@ -125,8 +134,9 @@ void Tower::adaptRotation() {
 void Tower::setVerbose(bool pVerbose) {
     if (pVerbose) {
         mRange->setVisible(true);
+        auto currentScale = mRange->getScale();
         mRange->setScale(0.f);
-        mRange->runAction(ScaleTo::create(0.15f, 1.f));
+        mRange->runAction(ScaleTo::create(0.15f, currentScale));
     } else {
         mRange->setVisible(false);
     }

@@ -21,6 +21,8 @@ protected:
     Creep *mTarget;
     cocos2d::Vector<Creep *> mTargetList;
 
+    unsigned int mLevel;
+
     float mNextShooting;
     float mCooldown;
 
@@ -42,6 +44,8 @@ public:
 
     void removeTarget(Creep *pTarget);
 
+    void upgrade();
+
     unsigned int getTargetCount() const {
         return (unsigned int) mTargetList.size();
     }
@@ -52,6 +56,10 @@ public:
 
     bool isVerbose() const {
         return mVerbose;
+    }
+
+    bool isUpgradeable() const {
+        return mLevel < 4;
     }
 
     void setVerbose(bool pVerbose);

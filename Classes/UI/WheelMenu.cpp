@@ -48,6 +48,7 @@ void WheelMenu::init(Layer *pLayer, World *pGameScene) {
     item = ui::Button::create("textures/ui/btn_upgrade.png", "");
     item->setTag(UPGRADE);
     item->setPosition(Vec2(-SHIFT, 0.f));
+    item->addTouchEventListener(CC_CALLBACK_2(WheelMenu::upgradeButtonCallback, this));
     mVerboseMenu->addChild(item);
 
     item = ui::Button::create("textures/ui/btn_sell.png", "");
@@ -209,6 +210,30 @@ void WheelMenu::sellButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::T
         btn->addTouchEventListener([&](Ref *p_Sender, ui::Widget::TouchEventType p_Type) {
             if (p_Type == ui::Widget::TouchEventType::ENDED) {
                 mWorld->destroyTower(mCurrentTile);
+                close();
+            }
+        });
+
+        btn = static_cast<ui::Button *>(mValidationMenu->getChildByTag(DECLINE));
+
+        btn->addTouchEventListener([&](Ref *p_Sender, ui::Widget::TouchEventType p_Type) {
+            if (p_Type == ui::Widget::TouchEventType::ENDED) {
+                close();
+            }
+        });
+    }
+}
+
+void WheelMenu::upgradeButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType) {
+    if (pType == ui::Widget::TouchEventType::ENDED) {
+        setState(VALIDATION);
+
+        auto btn = static_cast<ui::Button *>(mValidationMenu->getChildByTag(ACCEPT));
+
+        //Bind tower upgrade function as accept button callback
+        btn->addTouchEventListener([&](Ref *p_Sender, ui::Widget::TouchEventType p_Type) {
+            if (p_Type == ui::Widget::TouchEventType::ENDED) {
+                mWorld->gameplayLayer->upgradeTower(mCurrentTile);
                 close();
             }
         });

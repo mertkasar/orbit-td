@@ -85,6 +85,7 @@ void Creep::ignite(CreepTypes pType, cocos2d::Vec2 pPosition, const Path &pPath)
 void Creep::deal(float pDamage) {
     mCurrentHP = mCurrentHP - pDamage;
     updateHPBar();
+    CCLOG("Ship got %.2f damage", pDamage);
 }
 
 void Creep::updateHPBar() {

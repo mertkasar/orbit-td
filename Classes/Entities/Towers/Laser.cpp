@@ -19,5 +19,5 @@ bool Laser::init() {
 }
 
 void Laser::shoot(float pDelta) {
-    mTarget->deal(LASER_DMG);
+    mTarget->deal((float) (LASER_DMG + mLevel * 10 * 0.1));
 }

@@ -10,5 +10,5 @@ bool Turret::init() {
 }
 
 void Turret::shoot(float pDelta) {
-    mTarget->deal(TURRET_DMG);
+    mTarget->deal((float) (TURRET_DMG + mLevel * 10 * 0.1));
 }

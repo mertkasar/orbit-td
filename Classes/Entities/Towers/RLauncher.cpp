@@ -21,7 +21,8 @@ bool RLauncher::init() {
 
 void RLauncher::shoot(float pDelta) {
     auto projectile = mMissilePool.fetch();
-    projectile->ignite(this->getPosition(), R_LAUNCHER_DMG, mTarget);
+    auto damage = R_LAUNCHER_DMG + mLevel * 10 * 0.1;
+    projectile->ignite(this->getPosition(), (float) damage, mTarget);
 
     this->getParent()->addChild(projectile);
 }

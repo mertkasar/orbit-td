@@ -179,6 +179,16 @@ void GameplayLayer::deleteTower(Vec2 pTile) {
     mTowerMap.erase(found);
 }
 
+void GameplayLayer::upgradeTower(cocos2d::Vec2 pTile) {
+    auto found = mTowerMap.find(pTile);
+
+    assert(found != mTowerMap.end());
+
+    auto tower = found->second;
+    mWorld->balanceTotalCoin(tower->getCost());
+    tower->upgrade();
+}
+
 void GameplayLayer::pauseScene() {
     this->pause();
 
