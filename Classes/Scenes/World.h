@@ -59,6 +59,8 @@ public:
     Grid mGrid;
     Path mPath;
 
+    std::vector<cocos2d::Color3B> colors;
+
 public:
     World();
 

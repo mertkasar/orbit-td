@@ -6,6 +6,7 @@
 
 #include <Globals.h>
 #include <Entities/Creep.h>
+#include <math/CCGeometry.h>
 
 USING_NS_CC;
 
@@ -15,7 +16,7 @@ bool Tower::init(std::string pGunTexturePath, float pCooldown, unsigned int pCos
     if (!Node::init())
         return false;
 
-    mLevel = 1;
+    mLevel = 0;
 
     mCooldown = pCooldown;
     mNextShooting = 0.f;
@@ -97,37 +98,18 @@ void Tower::update(float pDelta) {
     }
 }
 
-void Tower::upgrade() {
+void Tower::upgrade(cocos2d::Color3B &pColor) {
     mLevel++;
 
     auto scaleFactor = (float) (1 + mLevel * 0.1);
     mRange->setScale(scaleFactor);
+    mRange->setColor(pColor);
 
-    switch (mLevel) {
-        case 2:
-            mRange->setColor(Color::YELLOW);
-            mBase->setSpriteFrame(SpriteFrame::create("textures/tower_base.png", Rect(90, 0, 90, 90)));
+    mBase->setSpriteFrame(SpriteFrame::create("textures/tower_base.png", Rect(mLevel * 90, 0, 90, 90)));
 
-            updateBody(scaleFactor);
-
-            break;
-        case 3:
-            mRange->setColor(Color::BLUE);
-            mBase->setSpriteFrame(SpriteFrame::create("textures/tower_base.png", Rect(180, 0, 90, 90)));
-
-            updateBody(scaleFactor);
-
-            break;
-        default:
-            break;
-    }
-}
-
-void Tower::updateBody(float pScaleFactor) {
     mBody->removeFromWorld();
-    mBody = createBody(BASE_RANGE * pScaleFactor);
-
-    setPhysicsBody(mBody);
+    mBody = createBody(BASE_RANGE * scaleFactor);
+    this->setPhysicsBody(mBody);
 }
 
 bool Tower::isTargetValid() {

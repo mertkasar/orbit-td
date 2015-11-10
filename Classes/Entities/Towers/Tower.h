@@ -45,7 +45,7 @@ public:
 
     void removeTarget(Creep *pTarget);
 
-    void upgrade();
+    void upgrade(cocos2d::Color3B &pColor);
 
     unsigned int getTargetCount() const {
         return (unsigned int) mTargetList.size();
@@ -53,6 +53,10 @@ public:
 
     unsigned int getCost() const {
         return mCost;
+    }
+
+    unsigned int getLevel() const {
+        return mLevel;
     }
 
     const cocos2d::Color3B &getBaseColor();
@@ -69,8 +73,6 @@ public:
 
 protected:
     cocos2d::PhysicsBody *createBody(float pRangeRadius);
-
-    void updateBody(float pScaleFactor);
 
     bool isTargetValid();
 

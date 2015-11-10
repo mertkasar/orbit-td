@@ -34,7 +34,7 @@ Scene *World::createScene() {
 
     auto physicsWorld = scene->getPhysicsWorld();
     physicsWorld->setGravity(Vect(0, 0));
-    physicsWorld->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+    //physicsWorld->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 
     auto layer = World::create();
     layer->setPhysicsWorld(physicsWorld);
@@ -55,6 +55,10 @@ bool World::init() {
 
     mTotalCoin = STARTING_COIN;
     mLife = STARTING_LIFE;
+
+    colors.push_back(Color::GREEN);
+    colors.push_back(Color::YELLOW);
+    colors.push_back(Color::BLUE);
 
     buildScene();
     connectListeners();
@@ -147,15 +151,17 @@ void World::destroyTower(Vec2 pTile) {
 
 void World::upgradeTower(cocos2d::Vec2 pTile) {
     auto tower = gameplayLayer->getTower(pTile);
-    tower->upgrade();
-    mapLayer->setSlotColor(pTile, tower->getBaseColor());
+    auto color = colors.at(tower->getLevel() + 1);
+
+    tower->upgrade(color);
+    mapLayer->setSlotColor(pTile, color);
 }
 
 bool World::spawnNextWave() {
     if (mCurrentWave < mWaves.size()) {
         auto wave = mWaves.at(mCurrentWave);
 
-        for (int i = 0; i < wave.size(); i++) {
+        for (unsigned int i = 0; i < wave.size(); i++) {
             gameplayLayer->addEnemy(wave.at(i), i, mPath);
         }
 
