@@ -8,12 +8,13 @@
 
 #include <Utilities/Pool.h>
 #include <UI/WheelMenu.h>
-#include <physics/CCPhysicsWorld.h>
 
 namespace cocos2d {
     class DrawNode;
 
     class Label;
+
+    class PhysicsWorld;
 };
 
 class Tower;

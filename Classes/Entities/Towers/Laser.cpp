@@ -9,7 +9,7 @@
 USING_NS_CC;
 
 bool Laser::init() {
-    if (!Tower::init("textures/laser_gun.png", 150.f, LASER_CD, LASER_COST))
+    if (!Tower::init("textures/laser_gun.png", LASER_CD, LASER_COST))
         return false;
 
     mTrace = DrawNode::create();

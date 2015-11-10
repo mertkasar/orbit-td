@@ -9,8 +9,9 @@
 
 USING_NS_CC;
 
-bool Tower::init(std::string pGunTexturePath, float pRangeRadius, float pCooldown,
-                 unsigned int pCost) {
+const float BASE_RANGE = 150.f;
+
+bool Tower::init(std::string pGunTexturePath, float pCooldown, unsigned int pCost) {
     if (!Node::init())
         return false;
 
@@ -31,22 +32,18 @@ bool Tower::init(std::string pGunTexturePath, float pRangeRadius, float pCooldow
     mRange = Sprite::create("textures/range.png");
     mRange->setVisible(false);
     mRange->setColor(Color::GREEN);
-    mRange->setScale(2 * pRangeRadius / mRange->getContentSize().width);
+    mRange->setScale(2 * BASE_RANGE / mRange->getContentSize().width);
     mRange->runAction(RepeatForever::create(RotateBy::create(2.f, 30.f)));
 
-    mBody = PhysicsBody::createCircle(pRangeRadius);
+    mBody = createBody(BASE_RANGE);
     mBody->setEnable(false);
-    mBody->setCategoryBitmask(TOWER_RANGE_MASK);
-    mBody->setContactTestBitmask(ENEMY_MASK);
-    mBody->setCollisionBitmask(NULL_MASK);
+    this->setPhysicsBody(mBody);
 
     mTarget = nullptr;
 
     this->addChild(mRange);
     this->addChild(mBase);
     this->addChild(mGun);
-
-    this->setPhysicsBody(mBody);
 
     mRange->setOpacity(150);
     mBase->setOpacity(150);
@@ -102,22 +99,35 @@ void Tower::update(float pDelta) {
 
 void Tower::upgrade() {
     mLevel++;
+
     auto scaleFactor = (float) (1 + mLevel * 0.1);
-    //mBody->setScale(scaleFactor, scaleFactor);
     mRange->setScale(scaleFactor);
 
     switch (mLevel) {
         case 2:
             mRange->setColor(Color::YELLOW);
             mBase->setSpriteFrame(SpriteFrame::create("textures/tower_base.png", Rect(90, 0, 90, 90)));
+
+            updateBody(scaleFactor);
+
             break;
         case 3:
             mRange->setColor(Color::BLUE);
             mBase->setSpriteFrame(SpriteFrame::create("textures/tower_base.png", Rect(180, 0, 90, 90)));
+
+            updateBody(scaleFactor);
+
             break;
         default:
             break;
     }
+}
+
+void Tower::updateBody(float pScaleFactor) {
+    mBody->removeFromWorld();
+    mBody = createBody(BASE_RANGE * pScaleFactor);
+
+    setPhysicsBody(mBody);
 }
 
 bool Tower::isTargetValid() {
@@ -128,6 +138,16 @@ bool Tower::isTargetValid() {
     }
 
     return false;
+}
+
+PhysicsBody *Tower::createBody(float pRangeRadius) {
+    auto body = PhysicsBody::createCircle(pRangeRadius);
+
+    body->setCategoryBitmask(TOWER_RANGE_MASK);
+    body->setContactTestBitmask(ENEMY_MASK);
+    body->setCollisionBitmask(NULL_MASK);
+
+    return body;
 }
 
 void Tower::findTarget() {

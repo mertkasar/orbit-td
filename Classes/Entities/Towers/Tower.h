@@ -35,8 +35,7 @@ protected:
 public:
     ~Tower();
 
-    bool init(std::string pGunTexturePath, float pRangeRadius, float pCooldown,
-              unsigned int pCost);
+    bool init(std::string pGunTexturePath, float pCooldown, unsigned int pCost);
 
     void build();
 
@@ -56,7 +55,7 @@ public:
         return mCost;
     }
 
-    const cocos2d::Color3B& getBaseColor();
+    const cocos2d::Color3B &getBaseColor();
 
     bool isVerbose() const {
         return mVerbose;
@@ -69,6 +68,10 @@ public:
     void setVerbose(bool pVerbose);
 
 protected:
+    cocos2d::PhysicsBody *createBody(float pRangeRadius);
+
+    void updateBody(float pScaleFactor);
+
     bool isTargetValid();
 
     void findTarget();
