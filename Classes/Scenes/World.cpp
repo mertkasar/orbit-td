@@ -155,6 +155,8 @@ void World::upgradeTower(cocos2d::Vec2 pTile) {
 
     tower->upgrade(color);
     mapLayer->setSlotColor(pTile, color);
+
+    this->balanceTotalCoin(-tower->getCost());
 }
 
 bool World::spawnNextWave() {

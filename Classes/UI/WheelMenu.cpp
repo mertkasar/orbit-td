@@ -79,27 +79,12 @@ void WheelMenu::init(Layer *pLayer, World *pGameScene) {
 }
 
 void WheelMenu::update(float pDelta) {
-    if (mState == PURCHASE) {
-        auto totalCoin = mWorld->getTotalCoin();
+    auto totalCoin = mWorld->getTotalCoin();
 
-        if (totalCoin != mLastCoin) {
-            auto btn = static_cast<ui::Button *>(mPurchaseMenu->getChildByTag(TURRET));
-            bool enabled = totalCoin >= TURRET_COST;
-            btn->setEnabled(enabled);
-            btn->setBright(enabled);
+    if (totalCoin != mLastCoin) {
+        mLastCoin = totalCoin;
 
-            btn = static_cast<ui::Button *>(mPurchaseMenu->getChildByTag(LASER));
-            enabled = totalCoin >= LASER_COST;
-            btn->setEnabled(enabled);
-            btn->setBright(enabled);
-
-            btn = static_cast<ui::Button *>(mPurchaseMenu->getChildByTag(R_LAUNCHER));
-            enabled = totalCoin >= R_LAUNCHER_COST;
-            btn->setEnabled(enabled);
-            btn->setBright(enabled);
-
-            mLastCoin = totalCoin;
-        }
+        updateButtonStates();
     }
 }
 
@@ -116,10 +101,18 @@ void WheelMenu::setState(WheelMenu::State pState) {
             mPurchaseMenu->setVisible(true);
             menu = mPurchaseMenu;
             break;
-        case VERBOSE:
+        case VERBOSE: {
+            auto tower = mWorld->gameplayLayer->getTower(mCurrentTile);
+            auto enabled = tower->getLevel() < 2 && mLastCoin >= tower->getCost();
+
+            auto btn = static_cast<ui::Button *>(mVerboseMenu->getChildByTag(UPGRADE));
+            btn->setEnabled(enabled);
+            btn->setBright(enabled);
+
             mVerboseMenu->setVisible(true);
             menu = mVerboseMenu;
             break;
+        }
         case VALIDATION:
             mValidationMenu->setVisible(true);
             menu = mValidationMenu;
@@ -155,6 +148,8 @@ void WheelMenu::openAt(cocos2d::Vec2 pPosition) {
 
         setState(VERBOSE);
     }
+
+    updateButtonStates();
 }
 
 void WheelMenu::close() {
@@ -167,6 +162,34 @@ void WheelMenu::close() {
     }
 
     setState(IDLE);
+}
+
+void WheelMenu::updateButtonStates() {
+    if (mState == PURCHASE) {
+        auto btn = static_cast<ui::Button *>(mPurchaseMenu->getChildByTag(TURRET));
+        bool enabled = mLastCoin >= TURRET_COST;
+        btn->setEnabled(enabled);
+        btn->setBright(enabled);
+
+        btn = static_cast<ui::Button *>(mPurchaseMenu->getChildByTag(LASER));
+        enabled = mLastCoin >= LASER_COST;
+        btn->setEnabled(enabled);
+        btn->setBright(enabled);
+
+        btn = static_cast<ui::Button *>(mPurchaseMenu->getChildByTag(R_LAUNCHER));
+        enabled = mLastCoin >= R_LAUNCHER_COST;
+        btn->setEnabled(enabled);
+        btn->setBright(enabled);
+    } else if (mState == VERBOSE) {
+        auto tower = mWorld->gameplayLayer->getTower(mCurrentTile);
+
+        auto towerCost = tower->getCost();
+        auto enabled = tower->getLevel() < 2 && mLastCoin >= towerCost;
+
+        auto btn = static_cast<ui::Button *>(mVerboseMenu->getChildByTag(UPGRADE));
+        btn->setEnabled(enabled);
+        btn->setBright(enabled);
+    }
 }
 
 void WheelMenu::towerButtonCallback(Ref *pSender, ui::Widget::TouchEventType pType) {

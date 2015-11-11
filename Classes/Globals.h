@@ -4,7 +4,7 @@
 #include <base/ccTypes.h>
 
 #define SPRITE_ANGLE -90.f
-#define STARTING_COIN 500
+#define STARTING_COIN 50
 #define STARTING_LIFE 10
 
 #define TURRET_CD 0.3f

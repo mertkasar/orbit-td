@@ -72,6 +72,8 @@ public:
     }
 
 private:
+    void updateButtonStates();
+
     void towerButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType);
 
     void sellButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType);
