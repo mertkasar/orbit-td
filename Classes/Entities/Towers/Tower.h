@@ -13,7 +13,18 @@ namespace cocos2d {
 
 class Creep;
 
+
 class Tower : public cocos2d::Node {
+public:
+    struct Model {
+        unsigned int tag;
+        std::string gunSpritePath;
+        unsigned int baseCost;
+        float baseRange;
+        float baseDamage;
+        float baseCD;
+    };
+
 protected:
     cocos2d::Sprite *mBaseSprite;
     cocos2d::Sprite *mGunSprite;
@@ -23,9 +34,11 @@ protected:
     Creep *mTarget;
     cocos2d::Vector<Creep *> mTargetList;
 
+    std::map<unsigned int, Model> mModels;
+    Model mModel;
+
     unsigned int mLevel;
     unsigned int mCost;
-    float mBaseRange;
     float mRange;
     float mDamage;
     float mCooldown;
@@ -36,7 +49,7 @@ protected:
 public:
     ~Tower();
 
-    bool init(std::string pGunTexturePath, unsigned int pBaseCost, float pBaseRange, float pBaseDamage, float pBaseCD);
+    bool init(Model pModel);
 
     void build();
 

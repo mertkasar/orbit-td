@@ -11,7 +11,7 @@ USING_NS_CC;
 Pool<Missile> RLauncher::mMissilePool;
 
 bool RLauncher::init() {
-    if (!Tower::init("textures/r_launcher.png", 50, 150.f, 30.f, 1.f))
+    if (!Tower::init(Model{TowerTypes::R_LAUNCHER, "textures/r_launcher.png", 50, 150.f, 30.f, 1.f}))
         return false;
 
     mGunSprite->setScale(0.7f);
