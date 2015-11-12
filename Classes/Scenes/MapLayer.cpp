@@ -5,8 +5,6 @@
 #include <ui/UIImageView.h>
 
 #include <Scenes/World.h>
-#include <Globals.h>
-#include <Utilities/Algorithm.h>
 
 USING_NS_CC;
 

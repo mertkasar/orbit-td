@@ -4,9 +4,7 @@
 #include <2d/CCActionInterval.h>
 #include <physics/CCPhysicsBody.h>
 
-#include <Globals.h>
 #include <Entities/Creep.h>
-#include <math/CCGeometry.h>
 
 USING_NS_CC;
 
@@ -15,17 +13,17 @@ USING_NS_CC;
 #define DAMAGE_RATIO 0.1f
 #define CD_RATIO -0.2f
 
-bool Tower::init(Model pModel) {
+bool Tower::init(TowerModel pModel) {
     if (!Node::init())
         return false;
 
     mModel = pModel;
-
-    mLevel = 0;
     mCost = pModel.baseCost;
     mRange = pModel.baseRange;
     mDamage = pModel.baseDamage;
     mCooldown = pModel.baseCD;
+
+    mLevel = 0;
     mNextShooting = 0.f;
     mVerbose = true;
 
@@ -108,8 +106,8 @@ void Tower::upgrade(cocos2d::Color3B &pColor) {
     mLevel++;
 
     mCost = (unsigned int) (mCost + mCost * COST_RATIO);
-    mRange = mRange + mRange * RANGE_RATIO ;
-    mDamage = mDamage + mDamage * DAMAGE_RATIO ;
+    mRange = mRange + mRange * RANGE_RATIO;
+    mDamage = mDamage + mDamage * DAMAGE_RATIO;
     mCooldown = mCooldown + mCooldown * CD_RATIO;
 
     mRangeSprite->setScale(mRange / mModel.baseRange);

@@ -1,15 +1,13 @@
 #include <Entities/Towers/Laser.h>
 
 #include <2d/CCSprite.h>
-#include <2d/CCDrawNode.h>
 
-#include <Globals.h>
 #include <Entities/Creep.h>
 
 USING_NS_CC;
 
 bool Laser::init() {
-    if (!Tower::init(Model{TowerTypes::LASER, "textures/laser_gun.png", 30, 150.f, 0.3f, 0.f}))
+    if (!Tower::init(models.at(TowerTypes::LASER)))
         return false;
 
     mTrace = DrawNode::create();

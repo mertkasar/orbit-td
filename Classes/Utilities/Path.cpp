@@ -2,6 +2,8 @@
 
 USING_NS_CC;
 
+#define DEFAULT_WAYPOINT_DENSITY 15.f
+
 Path::Path() : mWaypoints(), mIndex(0), mNextWaypoint(), mCurrentWaypoint() {
 }
 

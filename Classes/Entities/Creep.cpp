@@ -1,13 +1,14 @@
 #include <Entities/Creep.h>
 
-#include <Globals.h>
 #include <2d/CCSprite.h>
 #include <2d/CCAction.h>
-#include <2d/CCDrawNode.h>
 #include <physics/CCPhysicsBody.h>
 #include <Utilities/SteeringDirector.h>
 
 USING_NS_CC;
+
+#define HBAR_WIDTH 20.f
+#define HBAR_HEIGHT 80.f
 
 Creep::Creep() {
     CCLOG("Creep created");

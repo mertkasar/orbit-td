@@ -2,6 +2,7 @@
 #define TOWER_H
 
 #include <2d/CCNode.h>
+#include <Globals.h>
 
 namespace cocos2d {
     class Sprite;
@@ -15,16 +16,6 @@ class Creep;
 
 
 class Tower : public cocos2d::Node {
-public:
-    struct Model {
-        unsigned int tag;
-        std::string gunSpritePath;
-        unsigned int baseCost;
-        float baseRange;
-        float baseDamage;
-        float baseCD;
-    };
-
 protected:
     cocos2d::Sprite *mBaseSprite;
     cocos2d::Sprite *mGunSprite;
@@ -34,22 +25,21 @@ protected:
     Creep *mTarget;
     cocos2d::Vector<Creep *> mTargetList;
 
-    std::map<unsigned int, Model> mModels;
-    Model mModel;
+    TowerModel mModel;
 
-    unsigned int mLevel;
     unsigned int mCost;
     float mRange;
     float mDamage;
     float mCooldown;
-    float mNextShooting;
 
+    unsigned int mLevel;
+    float mNextShooting;
     bool mVerbose;
 
 public:
     ~Tower();
 
-    bool init(Model pModel);
+    bool init(TowerModel pModel);
 
     void build();
 
@@ -61,7 +51,7 @@ public:
 
     void upgrade(cocos2d::Color3B &pColor);
 
-    unsigned int getTargetCount() const {
+    unsigned int getTargetCount() const{
         return (unsigned int) mTargetList.size();
     }
 
