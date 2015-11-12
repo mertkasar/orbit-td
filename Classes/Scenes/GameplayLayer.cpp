@@ -4,10 +4,8 @@
 #include <physics/CCPhysicsContact.h>
 #include <base/CCEventDispatcher.h>
 #include <physics/CCPhysicsWorld.h>
-#include <physics/CCPhysicsContact.h>
 
-#include "World.h"
-#include <Utilities/Algorithm.h>
+#include <Scenes/World.h>
 #include <Entities/Creep.h>
 #include <Entities/Towers/Turret.h>
 #include <Entities/Towers/Laser.h>

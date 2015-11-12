@@ -1,4 +1,4 @@
-#include "World.h"
+#include <Scenes/World.h>
 
 #include <base/CCDirector.h>
 #include <base/CCEventDispatcher.h>
@@ -20,6 +20,13 @@
 #include <sstream>
 
 USING_NS_CC;
+
+#define STARTING_COIN 500
+#define STARTING_LIFE 10
+
+#define NODE_TOUCH_SIZE 50.f
+
+std::map<unsigned int, TowerModel> models;
 
 World::World() {
     CCLOG("World created");
@@ -55,6 +62,14 @@ bool World::init() {
 
     mTotalCoin = STARTING_COIN;
     mLife = STARTING_LIFE;
+
+    // Load tower models
+    models.insert(std::make_pair(TowerTypes::TURRET,
+                                 TowerModel{TowerTypes::TURRET, "textures/turret_gun.png", 10, 150.f, 3.f, 0.3f}));
+    models.insert(std::make_pair(TowerTypes::LASER,
+                                 TowerModel{TowerTypes::LASER, "textures/laser_gun.png", 30, 150.f, 0.3f, 0.f}));
+    models.insert(std::make_pair(TowerTypes::R_LAUNCHER,
+                                 TowerModel{TowerTypes::R_LAUNCHER, "textures/r_launcher.png", 50, 150.f, 30.f, 1.f}));
 
     colors.push_back(Color::GREEN);
     colors.push_back(Color::YELLOW);

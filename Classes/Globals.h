@@ -4,24 +4,6 @@
 #include <base/ccTypes.h>
 
 #define SPRITE_ANGLE -90.f
-#define STARTING_COIN 500
-#define STARTING_LIFE 10
-
-#define TURRET_COST 10
-#define LASER_COST 30
-#define R_LAUNCHER_COST 50
-
-#define MISSILE_MAX_VEL 160.f
-#define MISSILE_EXPIRE_TIME 4.f //as seconds
-
-#define HBAR_WIDTH 20.f
-#define HBAR_HEIGHT 80.f
-
-#define GRID_RADIUS 600.f
-#define GRID_START_ANGLE 20.f
-#define GRID_SHIFT_ANGLE 10.f
-#define DEFAULT_WAYPOINT_DENSITY 15.f
-#define NODE_TOUCH_SIZE 50.f
 
 //Collision bitmasks
 #define NULL_MASK 0x00
@@ -34,6 +16,17 @@ enum TowerTypes {
     LASER,
     R_LAUNCHER
 };
+
+struct TowerModel {
+    TowerTypes type;
+    std::string gunSpritePath;
+    unsigned int baseCost;
+    float baseRange;
+    float baseDamage;
+    float baseCD;
+};
+
+extern std::map<unsigned int, TowerModel> models;
 
 enum CreepTypes {
     RAPTOR,

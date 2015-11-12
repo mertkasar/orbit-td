@@ -1,6 +1,5 @@
 #include <Entities/Missile.h>
 
-#include <Globals.h>
 #include <2d/CCSprite.h>
 #include <2d/CCAction.h>
 #include <physics/CCPhysicsBody.h>
@@ -9,6 +8,9 @@
 #include <Entities/Creep.h>
 
 USING_NS_CC;
+
+#define MISSILE_MAX_VEL 160.f
+#define MISSILE_EXPIRE_TIME 4.f //as seconds
 
 Missile::Missile() {
     CCLOG("Missile created");
