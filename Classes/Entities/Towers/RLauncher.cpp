@@ -11,18 +11,17 @@ USING_NS_CC;
 Pool<Missile> RLauncher::mMissilePool;
 
 bool RLauncher::init() {
-    if (!Tower::init("textures/r_launcher.png", R_LAUNCHER_CD, R_LAUNCHER_COST))
+    if (!Tower::init("textures/r_launcher.png", 50, 150.f, 30.f, 1.f))
         return false;
 
-    mGun->setScale(0.7f);
+    mGunSprite->setScale(0.7f);
 
     return true;
 }
 
 void RLauncher::shoot(float pDelta) {
     auto projectile = mMissilePool.fetch();
-    auto damage = R_LAUNCHER_DMG + mLevel * 10 * 0.1;
-    projectile->ignite(this->getPosition(), (float) damage, mTarget);
+    projectile->ignite(this->getPosition(), mDamage, mTarget);
 
     this->getParent()->addChild(projectile);
 }

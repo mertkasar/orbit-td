@@ -6,9 +6,9 @@
 #include <Entities/Creep.h>
 
 bool Turret::init() {
-    return Tower::init("textures/turret_gun.png", TURRET_CD, TURRET_COST);
+    return Tower::init("textures/turret_gun.png", 10, 150.f, 3.f, 0.3f);
 }
 
 void Turret::shoot(float pDelta) {
-    mTarget->deal((float) (TURRET_DMG + mLevel * 10 * 0.1));
+    mTarget->deal(mDamage);
 }

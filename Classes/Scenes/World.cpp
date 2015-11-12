@@ -34,7 +34,7 @@ Scene *World::createScene() {
 
     auto physicsWorld = scene->getPhysicsWorld();
     physicsWorld->setGravity(Vect(0, 0));
-    //physicsWorld->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+//    physicsWorld->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 
     auto layer = World::create();
     layer->setPhysicsWorld(physicsWorld);

@@ -10,45 +10,51 @@
 
 USING_NS_CC;
 
-const float BASE_RANGE = 150.f;
+#define COST_RATIO 0.1f
+#define RANGE_RATIO 0.15f
+#define DAMAGE_RATIO 0.1f
+#define CD_RATIO -0.2f
 
-bool Tower::init(std::string pGunTexturePath, float pCooldown, unsigned int pCost) {
+bool Tower::init(std::string pGunTexturePath, unsigned int pBaseCost, float pBaseRange, float pBaseDamage,
+                 float pBaseCD) {
     if (!Node::init())
         return false;
 
     mLevel = 0;
-
-    mCooldown = pCooldown;
+    mCost = pBaseCost;
+    mBaseRange = pBaseRange;
+    mRange = pBaseRange;
+    mDamage = pBaseDamage;
+    mCooldown = pBaseCD;
     mNextShooting = 0.f;
-    mCost = pCost;
     mVerbose = true;
 
-    mGun = Sprite::create(pGunTexturePath);
-    mGun->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
+    mGunSprite = Sprite::create(pGunTexturePath);
+    mGunSprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
 
-    mBase = Sprite::create("textures/tower_base.png");
-    mBase->setScale(0.5f);
-    mBase->setSpriteFrame(SpriteFrame::create("textures/tower_base.png", Rect(0, 0, 90, 90)));
+    mBaseSprite = Sprite::create("textures/tower_base.png");
+    mBaseSprite->setScale(0.5f);
+    mBaseSprite->setSpriteFrame(SpriteFrame::create("textures/tower_base.png", Rect(0, 0, 90, 90)));
 
-    mRange = Sprite::create("textures/range.png");
-    mRange->setVisible(false);
-    mRange->setColor(Color::GREEN);
-    mRange->setScale(2 * BASE_RANGE / mRange->getContentSize().width);
-    mRange->runAction(RepeatForever::create(RotateBy::create(2.f, 30.f)));
+    mRangeSprite = Sprite::create("textures/range.png");
+    mRangeSprite->setVisible(false);
+    mRangeSprite->setColor(Color::GREEN);
+    mRangeSprite->setScale(2 * mRange / mRangeSprite->getContentSize().width);
+    mRangeSprite->runAction(RepeatForever::create(RotateBy::create(2.f, 30.f)));
 
-    mBody = createBody(BASE_RANGE);
+    mBody = createBody(mRange);
     mBody->setEnable(false);
     this->setPhysicsBody(mBody);
 
     mTarget = nullptr;
 
-    this->addChild(mRange);
-    this->addChild(mBase);
-    this->addChild(mGun);
+    this->addChild(mRangeSprite);
+    this->addChild(mBaseSprite);
+    this->addChild(mGunSprite);
 
-    mRange->setOpacity(150);
-    mBase->setOpacity(150);
-    mGun->setOpacity(150);
+    mRangeSprite->setOpacity(150);
+    mBaseSprite->setOpacity(150);
+    mGunSprite->setOpacity(150);
 
     this->setRotation(SPRITE_ANGLE);
 
@@ -57,9 +63,9 @@ bool Tower::init(std::string pGunTexturePath, float pCooldown, unsigned int pCos
 
 void Tower::build() {
     mBody->setEnable(true);
-    mRange->setOpacity(255);
-    mBase->setOpacity(255);
-    mGun->setOpacity(255);
+    mRangeSprite->setOpacity(255);
+    mBaseSprite->setOpacity(255);
+    mGunSprite->setOpacity(255);
 
     setVerbose(false);
 
@@ -101,14 +107,18 @@ void Tower::update(float pDelta) {
 void Tower::upgrade(cocos2d::Color3B &pColor) {
     mLevel++;
 
-    auto scaleFactor = (float) (1 + mLevel * 0.1);
-    mRange->setScale(scaleFactor);
-    mRange->setColor(pColor);
+    mCost = (unsigned int) (mCost + mCost * COST_RATIO);
+    mRange = mRange + mRange * RANGE_RATIO ;
+    mDamage = mDamage + mDamage * DAMAGE_RATIO ;
+    mCooldown = mCooldown + mCooldown * CD_RATIO;
 
-    mBase->setSpriteFrame(SpriteFrame::create("textures/tower_base.png", Rect(mLevel * 90, 0, 90, 90)));
+    mRangeSprite->setScale(mRange / mBaseRange);
+    mRangeSprite->setColor(pColor);
+
+    mBaseSprite->setSpriteFrame(SpriteFrame::create("textures/tower_base.png", Rect(mLevel * 90, 0, 90, 90)));
 
     mBody->removeFromWorld();
-    mBody = createBody(BASE_RANGE * scaleFactor);
+    mBody = createBody(mRange);
     this->setPhysicsBody(mBody);
 }
 
@@ -143,17 +153,17 @@ void Tower::adaptRotation() {
 
     auto angle = CC_RADIANS_TO_DEGREES(diff.getAngle());
 
-    mGun->setRotation(-1 * angle);
+    mGunSprite->setRotation(-1 * angle);
 }
 
 void Tower::setVerbose(bool pVerbose) {
     if (pVerbose) {
-        mRange->setVisible(true);
-        auto currentScale = mRange->getScale();
-        mRange->setScale(0.f);
-        mRange->runAction(ScaleTo::create(0.15f, currentScale));
+        mRangeSprite->setVisible(true);
+        auto currentScale = mRangeSprite->getScale();
+        mRangeSprite->setScale(0.f);
+        mRangeSprite->runAction(ScaleTo::create(0.15f, currentScale));
     } else {
-        mRange->setVisible(false);
+        mRangeSprite->setVisible(false);
     }
 
     mVerbose = pVerbose;
@@ -164,5 +174,5 @@ Tower::~Tower() {
 }
 
 const Color3B &Tower::getBaseColor() {
-    return mRange->getColor();
+    return mRangeSprite->getColor();
 }

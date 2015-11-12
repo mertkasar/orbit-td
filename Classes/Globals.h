@@ -4,19 +4,11 @@
 #include <base/ccTypes.h>
 
 #define SPRITE_ANGLE -90.f
-#define STARTING_COIN 50
+#define STARTING_COIN 500
 #define STARTING_LIFE 10
 
-#define TURRET_CD 0.3f
-#define TURRET_DMG 3.f
 #define TURRET_COST 10
-
-#define LASER_CD 0.f
-#define LASER_DMG 0.3f
 #define LASER_COST 30
-
-#define R_LAUNCHER_CD 1.f
-#define R_LAUNCHER_DMG 30.f
 #define R_LAUNCHER_COST 50
 
 #define MISSILE_MAX_VEL 160.f

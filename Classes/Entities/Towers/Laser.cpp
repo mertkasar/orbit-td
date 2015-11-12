@@ -9,7 +9,7 @@
 USING_NS_CC;
 
 bool Laser::init() {
-    if (!Tower::init("textures/laser_gun.png", LASER_CD, LASER_COST))
+    if (!Tower::init("textures/laser_gun.png", 30, 150.f, 0.3f, 0.f))
         return false;
 
     mTrace = DrawNode::create();
@@ -19,5 +19,5 @@ bool Laser::init() {
 }
 
 void Laser::shoot(float pDelta) {
-    mTarget->deal((float) (LASER_DMG + mLevel * 10 * 0.1));
+    mTarget->deal(mDamage);
 }

@@ -15,27 +15,28 @@ class Creep;
 
 class Tower : public cocos2d::Node {
 protected:
-    cocos2d::Sprite *mBase;
-    cocos2d::Sprite *mGun;
-    cocos2d::Sprite *mRange;
+    cocos2d::Sprite *mBaseSprite;
+    cocos2d::Sprite *mGunSprite;
+    cocos2d::Sprite *mRangeSprite;
     cocos2d::PhysicsBody *mBody;
 
     Creep *mTarget;
     cocos2d::Vector<Creep *> mTargetList;
 
     unsigned int mLevel;
-
-    float mNextShooting;
-    float mCooldown;
-
     unsigned int mCost;
+    float mBaseRange;
+    float mRange;
+    float mDamage;
+    float mCooldown;
+    float mNextShooting;
 
     bool mVerbose;
 
 public:
     ~Tower();
 
-    bool init(std::string pGunTexturePath, float pCooldown, unsigned int pCost);
+    bool init(std::string pGunTexturePath, unsigned int pBaseCost, float pBaseRange, float pBaseDamage, float pBaseCD);
 
     void build();
 
