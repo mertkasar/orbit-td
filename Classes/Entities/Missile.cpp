@@ -6,6 +6,8 @@
 
 #include <Utilities/SteeringDirector.h>
 #include <Entities/Creep.h>
+#include <2d/CCParticleSystem.h>
+#include <2d/CCParticleExamples.h>
 
 USING_NS_CC;
 
@@ -34,7 +36,11 @@ bool Missile::init() {
     mBody->setVelocityLimit(MISSILE_MAX_VEL);
     this->setPhysicsBody(mBody);
 
+    mFireEmitter = ParticleSystemQuad::create("missile_fire.plist");
+    mFireEmitter->setScale(0.7f);
+
     this->addChild(mSprite);
+    this->addChild(mFireEmitter);
 
     return true;
 }

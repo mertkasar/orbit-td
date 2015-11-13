@@ -8,6 +8,8 @@ namespace cocos2d {
     class Sprite;
 
     class PhysicsBody;
+
+    class ParticleSystemQuad;
 }
 
 class Creep;
@@ -16,6 +18,7 @@ class Missile : public cocos2d::Node {
 private:
     cocos2d::Sprite *mSprite;
     cocos2d::PhysicsBody *mBody;
+    cocos2d::ParticleSystemQuad *mFireEmitter;
 
     Creep *mTarget;
     cocos2d::Vec2 mTargetPosition;
