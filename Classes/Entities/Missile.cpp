@@ -71,7 +71,7 @@ void Missile::update(float pDelta) {
         removeFromParent();
 }
 
-void Missile::ignite(cocos2d::Vec2 pPosition, float pDamage, Creep *pTarget) {
+void Missile::ignite(cocos2d::Vec2 pPosition, const cocos2d::Color3B &pBaseColor, float pDamage, Creep *pTarget) {
     mDamage = 0.f;
     mDead = false;
 
@@ -82,6 +82,8 @@ void Missile::ignite(cocos2d::Vec2 pPosition, float pDamage, Creep *pTarget) {
 
     this->setScale(0.5f);
     this->setRotation(SPRITE_ANGLE);
+
+    mFireEmitter->setStartColor(Color4F(pBaseColor));
 
     this->scheduleUpdate();
     this->scheduleOnce(CC_SCHEDULE_SELECTOR(Missile::die), MISSILE_EXPIRE_TIME);

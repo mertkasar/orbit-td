@@ -20,7 +20,7 @@ bool RLauncher::init() {
 
 void RLauncher::shoot(float pDelta) {
     auto projectile = mMissilePool.fetch();
-    projectile->ignite(this->getPosition(), mDamage, mTarget);
+    projectile->ignite(this->getPosition(), getBaseColor(), mDamage, mTarget);
 
     this->getParent()->addChild(projectile);
 }

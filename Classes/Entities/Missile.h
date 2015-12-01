@@ -38,7 +38,7 @@ public:
 
     CREATE_FUNC(Missile);
 
-    void ignite(cocos2d::Vec2 pPosition, float pDamage, Creep * pTarget);
+    void ignite(cocos2d::Vec2 pPosition, const cocos2d::Color3B &pBaseColor, float pDamage, Creep *pTarget);
 
     Creep *getTarget() const {
         return mTarget;
