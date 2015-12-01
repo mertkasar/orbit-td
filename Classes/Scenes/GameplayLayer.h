@@ -4,6 +4,7 @@
 #include <2d/CCLayer.h>
 #include <Utilities/Pool.h>
 #include <Globals.h>
+#include <Entities/Missile.h>
 
 class World;
 
@@ -20,8 +21,10 @@ private:
     bool mPaused;
 
     Pool<Creep> mCreepPool;
+    Pool<Missile> mMissilePool;
 
     cocos2d::Vector<Creep *> mCreeps;
+    cocos2d::Vector<Missile *> mMissiles;
 
     std::map<cocos2d::Vec2, Tower *> mTowerMap;
 
@@ -38,6 +41,8 @@ public:
     virtual void update(float pDelta);
 
     void addEnemy(CreepTypes pType, int pOrder, Path &pPath);
+
+    void addMissile(cocos2d::Vec2 pPosition, const cocos2d::Color3B &pBaseColor, float pDamage, Creep *pTarget);
 
     void createMock(TowerTypes pType, cocos2d::Vec2 pTile);
 

@@ -117,6 +117,15 @@ void GameplayLayer::addEnemy(CreepTypes pType, int pOrder, Path &pPath) {
     mCreeps.pushBack(enemy);
 }
 
+void GameplayLayer::addMissile(cocos2d::Vec2 pPosition, const cocos2d::Color3B &pBaseColor, float pDamage,
+                               Creep *pTarget) {
+    auto missile = mMissilePool.fetch();
+
+    missile->ignite(pPosition, pBaseColor, pDamage, pTarget);
+
+    this->addChild(missile);
+    mMissiles.pushBack(missile);
+}
 
 void GameplayLayer::createMock(TowerTypes pType, cocos2d::Vec2 pTile) {
     mMock = nullptr;
