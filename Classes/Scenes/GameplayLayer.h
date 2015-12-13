@@ -14,6 +14,8 @@ class Creep;
 
 class Path;
 
+class Explosion;
+
 class GameplayLayer : public cocos2d::Layer {
 private:
     World *mWorld;
@@ -22,6 +24,7 @@ private:
 
     Pool<Creep> mCreepPool;
     Pool<Missile> mMissilePool;
+    Pool<Explosion> mExplosion;
 
     cocos2d::Vector<Creep *> mCreeps;
     cocos2d::Vector<Missile *> mMissiles;
@@ -43,6 +46,8 @@ public:
     void addEnemy(CreepTypes pType, int pOrder, Path &pPath);
 
     void addMissile(cocos2d::Vec2 pPosition, const cocos2d::Color3B &pBaseColor, float pDamage, Creep *pTarget);
+
+    void addExplosion(cocos2d::Vec2 pPosition);
 
     void createMock(TowerTypes pType, cocos2d::Vec2 pTile);
 

@@ -130,6 +130,7 @@ set(GAME_SRC
   Classes/Scenes/HUDLayer.cpp
   Classes/Entities/Creep.cpp
   Classes/Entities/Missile.cpp
+  Classes/Entities/Explosion.cpp
   Classes/Entities/Towers/Tower.cpp
   Classes/Entities/Towers/Turret.cpp
   Classes/Entities/Towers/Laser.cpp
@@ -151,6 +152,7 @@ set(GAME_HEADERS
   Classes/Scenes/HUDLayer.h
   Classes/Entities/Creep.h
   Classes/Entities/Missile.h
+  Classes/Entities/Explosion.h
   Classes/Entities/Towers/Tower.h
   Classes/Entities/Towers/Turret.h
   Classes/Entities/Towers/Laser.h

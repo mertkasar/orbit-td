@@ -2,7 +2,7 @@
 #define MISSILE_H
 
 #include <2d/CCNode.h>
-#include <Utilities/Path.h>
+//#include <Utilities/Path.h>
 
 namespace cocos2d {
     class Sprite;

@@ -7,6 +7,7 @@
 
 #include <Scenes/World.h>
 #include <Entities/Creep.h>
+#include <Entities/Explosion.h>
 #include <Entities/Towers/Turret.h>
 #include <Entities/Towers/Laser.h>
 #include <Entities/Towers/RLauncher.h>
@@ -90,6 +91,8 @@ bool GameplayLayer::init() {
 
     this->scheduleUpdate();
 
+    addExplosion(Vec2(500, 500));
+
     return true;
 }
 
@@ -125,6 +128,14 @@ void GameplayLayer::addMissile(cocos2d::Vec2 pPosition, const cocos2d::Color3B &
 
     this->addChild(missile);
     mMissiles.pushBack(missile);
+}
+
+void GameplayLayer::addExplosion(cocos2d::Vec2 pPosition) {
+    auto explosion = mExplosion.fetch();
+
+    explosion->ignite(pPosition);
+
+    this->addChild(explosion);
 }
 
 void GameplayLayer::createMock(TowerTypes pType, cocos2d::Vec2 pTile) {
