@@ -27,6 +27,8 @@ public:
     void ignite(cocos2d::Vec2 pPosition);
 
 private:
+    void end();
+
     cocos2d::Animate *createAnimation(std::string pPath, int pRow, int pDimension, float pInterval);
 };
 

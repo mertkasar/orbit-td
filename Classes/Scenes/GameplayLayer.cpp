@@ -91,8 +91,6 @@ bool GameplayLayer::init() {
 
     this->scheduleUpdate();
 
-    addExplosion(Vec2(500, 500));
-
     return true;
 }
 
@@ -103,9 +101,10 @@ void GameplayLayer::update(float pDelta) {
             enemy->removeFromParent();
             mCreeps.eraseObject(enemy);
 
-            if (enemy->isKilled())
+            if (enemy->isKilled()) {
+                addExplosion(enemy->getPosition());
                 mWorld->balanceTotalCoin(enemy->getReward());
-            else if (enemy->isReachedEnd())
+            } else if (enemy->isReachedEnd())
                 mWorld->balanceRemainingLife(-1);
         }
 }

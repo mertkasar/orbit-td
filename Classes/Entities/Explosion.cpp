@@ -4,6 +4,7 @@
 #include <2d/CCSpriteFrame.h>
 #include <2d/CCAnimation.h>
 #include <2d/CCActionInterval.h>
+#include <2d/CCActionInstant.h>
 
 USING_NS_CC;
 
@@ -29,17 +30,27 @@ bool Explosion::init() {
 void Explosion::ignite(cocos2d::Vec2 pPosition) {
     this->setPosition(pPosition);
 
+    //Create an explosion animation among 3 different styles
     int row = random(0, 2);
     auto animation = createAnimation("textures/explosion.png", row, 128, 0.05f);
 
-    mSprite->runAction(RepeatForever::create(animation));
+    //Find the current frame the created animation and set mSprite's spriteFrame
+    int index = animation->getCurrentFrameIndex();
+    auto currentFrame = animation->getAnimation()->getFrames().at(index)->getSpriteFrame();
+    mSprite->setSpriteFrame(currentFrame);
+
+    auto endCallback = CallFunc::create(CC_CALLBACK_0(Explosion::end, this));
+    mSprite->runAction(Sequence::create(animation, endCallback, NULL));
+}
+
+void Explosion::end() {
+    removeFromParent();
 }
 
 cocos2d::Animate *Explosion::createAnimation(std::string pPath, int pRow, int pDimension, float pInterval) {
     //Adding animation frames
     Vector<SpriteFrame *> explosionFrames;
-    Size contentSize = mSprite->getContentSize();
-    auto N = contentSize.width / pDimension;
+    auto N = 12;
 
     explosionFrames.reserve(N);
     for (int i = 0; i < N; i++)
