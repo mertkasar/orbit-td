@@ -202,8 +202,12 @@ void World::buildScene() {
     mStart = Vec2(2, 9);
     mGoal = Vec2(2, 0);
 
-    mapLayer = MapLayer::create(this);
+    auto gameCanvas = Node::create();
 
+    mapLayer = MapLayer::create(this);
+    gameCanvas->addChild(mapLayer);
+
+    gameplayLayer = GameplayLayer::create(this);
     mPathCanvas = DrawNode::create();
 
     auto traversed = algorithm::traverse(mGrid, mStart, mGoal);
@@ -212,8 +216,8 @@ void World::buildScene() {
         drawPath();
     }
 
-    gameplayLayer = GameplayLayer::create(this);
     gameplayLayer->addChild(mPathCanvas);
+    gameCanvas->addChild(gameplayLayer);
 
     hudLayer = HUDLayer::create(this);
     mWheelMenu.init(hudLayer, this);
@@ -221,8 +225,7 @@ void World::buildScene() {
     hudLayer->notify('I', "Game is starting!", 2.f);
 
     this->addChild(backgroundLayer);
-    this->addChild(mapLayer);
-    this->addChild(gameplayLayer);
+    this->addChild(gameCanvas);
     this->addChild(hudLayer);
 
     this->scheduleUpdate();
