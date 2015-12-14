@@ -223,15 +223,5 @@ void GameplayLayer::resumeScene() {
 
 void GameplayLayer::shake(float pDuration, float pStrength) {
     // TODO: Repedeatly creating shake action may cause performance issues try to pool it
-    auto gameCanvas = this->getParent(); // Get gameCanvas, basically the node that binds MapLayer and GameplayLayer
-
-    unsigned int SHAKE = 1;
-    auto action = gameCanvas->getActionByTag(SHAKE);
-
-    if (action == nullptr || action->isDone()) {
-        auto shakeAction = Shake::actionWithDuration(pDuration, pStrength);
-        shakeAction->setTag(SHAKE);
-
-        gameCanvas->runAction(shakeAction);
-    }
+    this->getParent()->runAction(Shake::actionWithDuration(pDuration, pStrength));
 }

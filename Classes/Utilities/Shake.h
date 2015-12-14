@@ -21,8 +21,6 @@ public:
 
     bool initWithDuration(float d, float strength_x, float strength_y);
 
-    virtual void startWithTarget(cocos2d::Node *pTarget);
-
     virtual void update(float time);
 
     virtual void stop(void);
@@ -31,8 +29,8 @@ public:
 
 
 protected:
-    // Initial position of the shaked node
-    float _initial_x, _initial_y;
+    // Last displacement of the shaked node
+    float _displacement_x, _displacement_y;
     // Strength of the action
     float _strength_x, _strength_y;
 };
