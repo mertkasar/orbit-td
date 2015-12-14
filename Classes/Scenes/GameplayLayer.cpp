@@ -6,11 +6,13 @@
 #include <physics/CCPhysicsWorld.h>
 
 #include <Scenes/World.h>
+#include <Scenes/MapLayer.h>
 #include <Entities/Creep.h>
 #include <Entities/Explosion.h>
 #include <Entities/Towers/Turret.h>
 #include <Entities/Towers/Laser.h>
 #include <Entities/Towers/RLauncher.h>
+#include <Utilities/Shake.h>
 
 USING_NS_CC;
 
@@ -103,6 +105,7 @@ void GameplayLayer::update(float pDelta) {
 
             if (enemy->isKilled()) {
                 addExplosion(enemy->getPosition());
+                shake(0.5f, 3.f);
                 mWorld->balanceTotalCoin(enemy->getReward());
             } else if (enemy->isReachedEnd())
                 mWorld->balanceRemainingLife(-1);
@@ -216,4 +219,11 @@ void GameplayLayer::resumeScene() {
     mWorld->getPhysicsWorld()->setSpeed(1.f);
 
     mPaused = false;
+}
+
+void GameplayLayer::shake(float pDuration, float pStrength) {
+    // TODO: Repedeatly creating shake action may cause performance issues try to pool it
+
+    this->runAction(Shake::actionWithDuration(pDuration, pStrength));
+    mWorld->mapLayer->runAction(Shake::actionWithDuration(pDuration, pStrength));
 }

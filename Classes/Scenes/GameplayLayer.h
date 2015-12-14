@@ -70,6 +70,9 @@ public:
     cocos2d::Vector<Creep *> &getCreepList() {
         return mCreeps;
     }
+
+private:
+    void shake(float pDuration, float pStrength);
 };
 
 #endif //GAMEPLAY_LAYER_H
