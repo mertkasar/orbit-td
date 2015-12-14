@@ -224,6 +224,23 @@ void GameplayLayer::resumeScene() {
 void GameplayLayer::shake(float pDuration, float pStrength) {
     // TODO: Repedeatly creating shake action may cause performance issues try to pool it
 
-    this->runAction(Shake::actionWithDuration(pDuration, pStrength));
-    mWorld->mapLayer->runAction(Shake::actionWithDuration(pDuration, pStrength));
+    unsigned int SHAKE = 1;
+    auto action = this->getActionByTag(SHAKE);
+
+    if (action == nullptr || action->isDone()) {
+        auto shakeAction = Shake::actionWithDuration(pDuration, pStrength);
+        shakeAction->setTag(SHAKE);
+
+        this->runAction(shakeAction);
+
+    }
+
+    action = mWorld->mapLayer->getActionByTag(SHAKE);
+    if (action == nullptr || action->isDone()) {
+        auto shakeAction = Shake::actionWithDuration(pDuration, pStrength);
+        shakeAction->setTag(SHAKE);
+
+        mWorld->mapLayer->runAction(shakeAction);
+
+    }
 }
