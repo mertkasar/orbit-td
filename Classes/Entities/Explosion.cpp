@@ -61,3 +61,15 @@ cocos2d::Animate *Explosion::createAnimation(std::string pPath, int pRow, int pD
 
     return Animate::create(animation);
 }
+
+void Explosion::pause() {
+    Node::pause();
+
+    mSprite->pause();
+}
+
+void Explosion::resume() {
+    Node::resume();
+
+    mSprite->resume();
+}

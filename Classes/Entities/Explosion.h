@@ -22,6 +22,10 @@ public:
 
     virtual bool init();
 
+    virtual void pause();
+
+    virtual void resume();
+
     CREATE_FUNC(Explosion);
 
     void ignite(cocos2d::Vec2 pPosition);
