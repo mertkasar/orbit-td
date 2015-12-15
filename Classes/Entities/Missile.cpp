@@ -8,6 +8,7 @@
 #include <Entities/Creep.h>
 #include <2d/CCParticleSystem.h>
 #include <2d/CCParticleExamples.h>
+#include <Utilities/Shake.h>
 
 USING_NS_CC;
 
@@ -57,8 +58,10 @@ void Missile::update(float pDelta) {
     if (this->getPosition().distance(mTargetPosition) <= reachRadius) {
         die(pDelta);
 
-        if (mTarget != nullptr)
+        if (mTarget != nullptr) {
             mTarget->deal(mDamage);
+            mTarget->runAction(Shake::actionWithDuration(0.4f, 1.3f));
+        }
     }
 
     SteeringDirector::getInstance()->seek(this, mTargetPosition);
