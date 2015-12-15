@@ -2,6 +2,7 @@
 #define MISSILE_H
 
 #include <2d/CCNode.h>
+#include <2d/CCParticleSystemQuad.h>
 //#include <Utilities/Path.h>
 
 namespace cocos2d {
@@ -59,6 +60,8 @@ public:
     bool isDead() const {
         return mDead;
     }
+
+    cocos2d::ParticleSystemQuad *getEmitter() { return mFireEmitter; }
 
 private:
     void die(float pDelta);

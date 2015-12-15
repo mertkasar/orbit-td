@@ -13,6 +13,7 @@
 #include <Entities/Towers/Laser.h>
 #include <Entities/Towers/RLauncher.h>
 #include <Utilities/Shake.h>
+#include <2d/CCParticleBatchNode.h>
 
 USING_NS_CC;
 
@@ -91,6 +92,10 @@ bool GameplayLayer::init() {
 
     Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
 
+    //mParticleBatch = ParticleBatchNode::createWithTexture(nullptr, 3000);
+    mParticleBatch = ParticleBatchNode::create("textures/particles/missile_fire.png", 3000);
+    this->addChild(mParticleBatch);
+
     this->scheduleUpdate();
 
     return true;
@@ -127,6 +132,11 @@ void GameplayLayer::addMissile(cocos2d::Vec2 pPosition, const cocos2d::Color3B &
     auto missile = mMissilePool.fetch();
 
     missile->ignite(pPosition, pBaseColor, pDamage, pTarget);
+
+    auto emitter = missile->getEmitter();
+    if (emitter->getParent() == nullptr) {
+        mParticleBatch->addChild(emitter);
+    }
 
     this->addChild(missile);
     mMissiles.pushBack(missile);

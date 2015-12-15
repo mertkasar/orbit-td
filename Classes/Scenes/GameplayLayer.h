@@ -16,6 +16,10 @@ class Path;
 
 class Explosion;
 
+namespace cocos2d{
+    class ParticleBatchNode;
+}
+
 class GameplayLayer : public cocos2d::Layer {
 private:
     World *mWorld;
@@ -32,6 +36,8 @@ private:
     std::map<cocos2d::Vec2, Tower *> mTowerMap;
 
     Tower *mMock;
+
+    cocos2d::ParticleBatchNode *mParticleBatch;
 
 private:
     GameplayLayer(World *pWorld);

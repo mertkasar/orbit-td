@@ -38,15 +38,16 @@ bool Missile::init() {
     this->setPhysicsBody(mBody);
 
     mFireEmitter = ParticleSystemQuad::create("missile_fire.plist");
-    mFireEmitter->setScale(0.7f);
+    mFireEmitter->setPosition(this->getPosition());
 
     this->addChild(mSprite);
-    this->addChild(mFireEmitter);
 
     return true;
 }
 
 void Missile::update(float pDelta) {
+    mFireEmitter->setPosition(this->getPosition());
+
     if (mTarget != nullptr) {
         if (!mTarget->isDead())
             mTargetPosition = mTarget->getPosition();
@@ -70,8 +71,10 @@ void Missile::update(float pDelta) {
     auto angle = CC_RADIANS_TO_DEGREES(mBody->getVelocity().getAngle());
     mSprite->setRotation(-angle);
 
-    if (isDead())
+    if (isDead()) {
+        mFireEmitter->stopSystem();
         removeFromParent();
+    }
 }
 
 void Missile::ignite(cocos2d::Vec2 pPosition, const cocos2d::Color3B &pBaseColor, float pDamage, Creep *pTarget) {
@@ -87,6 +90,9 @@ void Missile::ignite(cocos2d::Vec2 pPosition, const cocos2d::Color3B &pBaseColor
     this->setRotation(SPRITE_ANGLE);
 
     mFireEmitter->setStartColor(Color4F(pBaseColor));
+
+    //TODO: This doesn't work as I expected, I need a resume operation not a reset!
+    mFireEmitter->resetSystem();
 
     this->scheduleUpdate();
     this->scheduleOnce(CC_SCHEDULE_SELECTOR(Missile::die), MISSILE_EXPIRE_TIME);
