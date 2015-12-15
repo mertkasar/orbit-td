@@ -217,6 +217,9 @@ void GameplayLayer::pauseScene() {
 
     mWorld->getPhysicsWorld()->setSpeed(0.f);
 
+    for (auto emitter : mParticleBatch->getChildren())
+        emitter->pause();
+
     mPaused = true;
 }
 
@@ -227,6 +230,9 @@ void GameplayLayer::resumeScene() {
         child->resume();
 
     mWorld->getPhysicsWorld()->setSpeed(1.f);
+
+    for (auto emitter : mParticleBatch->getChildren())
+        emitter->resume();
 
     mPaused = false;
 }
