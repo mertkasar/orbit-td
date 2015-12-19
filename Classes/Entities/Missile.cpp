@@ -87,7 +87,6 @@ void Missile::ignite(cocos2d::Vec2 pPosition, const cocos2d::Color3B &pBaseColor
     mBody->setVelocity(Vec2::ZERO);
 
     this->setScale(0.5f);
-    this->setRotation(SPRITE_ANGLE);
 
     mFireEmitter->setStartColor(Color4F(pBaseColor));
 

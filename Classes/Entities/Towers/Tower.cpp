@@ -28,7 +28,7 @@ bool Tower::init(TowerModel pModel) {
     mVerbose = true;
 
     mGunSprite = Sprite::create(pModel.gunSpritePath);
-    mGunSprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
+    mGunSprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
 
     mBaseSprite = Sprite::create("textures/tower_base.png");
     mBaseSprite->setScale(0.5f);
@@ -53,8 +53,6 @@ bool Tower::init(TowerModel pModel) {
     mRangeSprite->setOpacity(150);
     mBaseSprite->setOpacity(150);
     mGunSprite->setOpacity(150);
-
-    this->setRotation(SPRITE_ANGLE);
 
     return true;
 }

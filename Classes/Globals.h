@@ -3,8 +3,6 @@
 
 #include <base/ccTypes.h>
 
-#define SPRITE_ANGLE -90.f
-
 //Collision bitmasks
 #define NULL_MASK 0x00
 #define TOWER_RANGE_MASK 0x01
