@@ -49,7 +49,7 @@ public:
 
     void removeTarget(Creep *pTarget);
 
-    void upgrade(cocos2d::Color3B &pColor);
+    virtual void upgrade(cocos2d::Color3B &pColor);
 
     unsigned int getTargetCount() const{
         return (unsigned int) mTargetList.size();

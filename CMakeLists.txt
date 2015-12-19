@@ -128,9 +128,11 @@ set(GAME_SRC
   Classes/Scenes/GameplayLayer.cpp
   Classes/Scenes/MapLayer.cpp
   Classes/Scenes/HUDLayer.cpp
+  Classes/Scenes/LaserScene.cpp
   Classes/Entities/Creep.cpp
   Classes/Entities/Missile.cpp
   Classes/Entities/Explosion.cpp
+  Classes/Entities/Beam.cpp
   Classes/Entities/Towers/Tower.cpp
   Classes/Entities/Towers/Turret.cpp
   Classes/Entities/Towers/Laser.cpp
@@ -151,9 +153,11 @@ set(GAME_HEADERS
   Classes/Scenes/GameplayLayer.h
   Classes/Scenes/MapLayer.h
   Classes/Scenes/HUDLayer.h
+  Classes/Scenes/LaserScene.h
   Classes/Entities/Creep.h
   Classes/Entities/Missile.h
   Classes/Entities/Explosion.h
+  Classes/Entities/Beam.h
   Classes/Entities/Towers/Tower.h
   Classes/Entities/Towers/Turret.h
   Classes/Entities/Towers/Laser.h

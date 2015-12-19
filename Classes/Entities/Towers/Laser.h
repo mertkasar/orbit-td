@@ -3,16 +3,18 @@
 
 #include <Entities/Towers/Tower.h>
 
-namespace cocos2d {
-    class DrawNode;
-}
+class Beam;
 
 class Laser : public Tower {
 private:
-    cocos2d::DrawNode *mTrace;
+    Beam *mBeam;
 
 public:
     virtual bool init();
+
+    virtual void update(float pDelta);
+
+    virtual void upgrade(cocos2d::Color3B &pColor);
 
     CREATE_FUNC(Laser);
 
