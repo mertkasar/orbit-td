@@ -50,19 +50,15 @@ bool Tower::init(TowerModel pModel) {
     this->addChild(mBaseSprite);
     this->addChild(mGunSprite);
 
-    mRangeSprite->setOpacity(150);
-    mBaseSprite->setOpacity(150);
-    mGunSprite->setOpacity(150);
+    this->setCascadeOpacityEnabled(true);
+    this->setOpacity(150);
 
     return true;
 }
 
 void Tower::build() {
     mBody->setEnable(true);
-    mRangeSprite->setOpacity(255);
-    mBaseSprite->setOpacity(255);
-    mGunSprite->setOpacity(255);
-
+    this->setOpacity(255);
     setVerbose(false);
 
     this->scheduleUpdate();
