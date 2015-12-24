@@ -16,6 +16,8 @@ class Path;
 
 class Explosion;
 
+class Bullet;
+
 namespace cocos2d{
     class ParticleBatchNode;
 }
@@ -28,7 +30,8 @@ private:
 
     Pool<Creep> mCreepPool;
     Pool<Missile> mMissilePool;
-    Pool<Explosion> mExplosion;
+    Pool<Bullet> mBulletPool;
+    Pool<Explosion> mExplosionPool;
 
     cocos2d::Vector<Creep *> mCreeps;
     cocos2d::Vector<Missile *> mMissiles;
@@ -52,6 +55,8 @@ public:
     void addEnemy(CreepTypes pType, int pOrder, Path &pPath);
 
     void addMissile(cocos2d::Vec2 pPosition, const cocos2d::Color3B &pBaseColor, float pDamage, Creep *pTarget);
+
+    void addBullet(cocos2d::Vec2 pPosition, const cocos2d::Color3B &pBaseColor, float pDamage, Creep *pTarget);
 
     void addExplosion(cocos2d::Vec2 pPosition);
 

@@ -78,7 +78,6 @@ void Missile::update(float pDelta) {
 }
 
 void Missile::ignite(cocos2d::Vec2 pPosition, const cocos2d::Color3B &pBaseColor, float pDamage, Creep *pTarget) {
-    mDamage = 0.f;
     mDead = false;
 
     this->setPosition(pPosition);

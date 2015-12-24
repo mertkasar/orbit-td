@@ -1,5 +1,7 @@
 #include <Scenes/GameplayLayer.h>
 
+#include <2d/CCParticleBatchNode.h>
+#include <2d/CCParticleSystemQuad.h>
 #include <base/CCDirector.h>
 #include <physics/CCPhysicsContact.h>
 #include <base/CCEventDispatcher.h>
@@ -9,11 +11,11 @@
 #include <Scenes/MapLayer.h>
 #include <Entities/Creep.h>
 #include <Entities/Explosion.h>
+#include <Entities/Bullet.h>
 #include <Entities/Towers/Turret.h>
 #include <Entities/Towers/Laser.h>
 #include <Entities/Towers/RLauncher.h>
 #include <Utilities/Shake.h>
-#include <2d/CCParticleBatchNode.h>
 
 USING_NS_CC;
 
@@ -142,8 +144,17 @@ void GameplayLayer::addMissile(cocos2d::Vec2 pPosition, const cocos2d::Color3B &
     mMissiles.pushBack(missile);
 }
 
+void GameplayLayer::addBullet(cocos2d::Vec2 pPosition, const cocos2d::Color3B &pBaseColor, float pDamage,
+                              Creep *pTarget) {
+    auto bullet = mBulletPool.fetch();
+
+    bullet->ignite(pPosition, pBaseColor, pDamage, pTarget);
+
+    this->addChild(bullet);
+}
+
 void GameplayLayer::addExplosion(cocos2d::Vec2 pPosition) {
-    auto explosion = mExplosion.fetch();
+    auto explosion = mExplosionPool.fetch();
 
     explosion->ignite(pPosition);
 
