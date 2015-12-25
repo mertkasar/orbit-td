@@ -36,6 +36,7 @@ bool Creep::init() {
 
     mHPBar = DrawNode::create();
     mHPBar->setPosition(Vec2(-40.f, -70.f));
+    mHPBar->setVisible(false); // TODO: Find a way to batching hp bars
 
     this->addChild(mSprite);
     this->addChild(mHPBar);
@@ -101,7 +102,7 @@ void Creep::updateHPBar() {
 void Creep::reShape(CreepTypes pType) {
     switch (pType) {
         case RAPTOR:
-            mSprite->setTexture("textures/creeps/raptor.png");
+            mSprite->initWithSpriteFrameName("raptor.png");
             mMaxHP = 100.f;
             mReward = 10;
             mBody->setMass(5.5f);
@@ -109,7 +110,7 @@ void Creep::reShape(CreepTypes pType) {
             break;
 
         case SPEEDY:
-            mSprite->setTexture("textures/creeps/speedy.png");
+            mSprite->initWithSpriteFrameName("speedy.png");
             mMaxHP = 50.f;
             mReward = 5;
             mBody->setMass(3.5f);
@@ -117,7 +118,7 @@ void Creep::reShape(CreepTypes pType) {
             break;
 
         case PULSAR:
-            mSprite->setTexture("textures/creeps/pulsar.png");
+            mSprite->initWithSpriteFrameName("pulsar.png");
             mMaxHP = 130.f;
             mReward = 25;
             mBody->setMass(5.5f);
@@ -125,7 +126,7 @@ void Creep::reShape(CreepTypes pType) {
             break;
 
         case PANZER:
-            mSprite->setTexture("textures/creeps/panzer.png");
+            mSprite->initWithSpriteFrameName("panzer.png");
             mMaxHP = 300.f;
             mReward = 20;
             mBody->setMass(6.5f);

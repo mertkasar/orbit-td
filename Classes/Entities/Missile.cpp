@@ -27,7 +27,7 @@ bool Missile::init() {
     if (!Node::init())
         return false;
 
-    mSprite = Sprite::create("textures/missile.png");
+    mSprite = Sprite::createWithSpriteFrameName("missile.png");
 
     mBody = PhysicsBody::createCircle(mSprite->getContentSize().width / 2.f);
     mBody->setCategoryBitmask(MISSILE_MASK);

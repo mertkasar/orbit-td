@@ -26,7 +26,7 @@ bool Bullet::init() {
     if (!Node::init())
         return false;
 
-    mSprite = Sprite::create("textures/bullet.png");
+    mSprite = Sprite::createWithSpriteFrameName("bullet.png");
     mSprite->setScale(0.5f);
     this->addChild(mSprite);
 

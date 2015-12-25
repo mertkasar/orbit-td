@@ -65,11 +65,11 @@ bool World::init() {
 
     // Load tower models
     models.insert(std::make_pair(TowerTypes::TURRET,
-                                 TowerModel{TowerTypes::TURRET, "textures/turret_gun.png", 10, 150.f, 3.f, 0.3f}));
+                                 TowerModel{TowerTypes::TURRET, "turret_gun.png", 10, 150.f, 3.f, 0.3f}));
     models.insert(std::make_pair(TowerTypes::LASER,
-                                 TowerModel{TowerTypes::LASER, "textures/laser_gun.png", 30, 150.f, 0.3f, 0.f}));
+                                 TowerModel{TowerTypes::LASER, "laser_gun.png", 30, 150.f, 0.3f, 0.f}));
     models.insert(std::make_pair(TowerTypes::R_LAUNCHER,
-                                 TowerModel{TowerTypes::R_LAUNCHER, "textures/r_launcher.png", 50, 150.f, 30.f, 1.f}));
+                                 TowerModel{TowerTypes::R_LAUNCHER, "r_launcher.png", 50, 150.f, 30.f, 1.f}));
 
     colors.push_back(Color::GREEN);
     colors.push_back(Color::YELLOW);

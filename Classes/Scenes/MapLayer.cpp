@@ -33,7 +33,7 @@ bool MapLayer::init() {
     this->setName("map_layer");
 
     auto spriteCache = SpriteFrameCache::getInstance();
-    spriteCache->addSpriteFramesWithFile("textures/spritesheets/map_layer.plist");
+    spriteCache->addSpriteFramesWithFile("textures/map_layer.plist");
 
     //Draw Planet
     auto planet = DrawNode::create();
