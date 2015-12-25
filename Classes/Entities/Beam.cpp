@@ -49,7 +49,7 @@ bool Beam::init() {
 
 void Beam::update(cocos2d::Vec2 pEnd) {
     auto diff = pEnd - this->convertToWorldSpace(this->getPosition());
-    auto ratio = diff.length() / DIM + 1.f;
+    auto ratio = diff.length() / DIM - 0.5f;
 
     mMidB->setScaleX(ratio);
     mMidO->setScaleX(ratio);

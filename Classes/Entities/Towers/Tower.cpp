@@ -30,6 +30,10 @@ bool Tower::init(TowerModel pModel) {
     mGunSprite = Sprite::create(pModel.gunSpritePath);
     mGunSprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
 
+    mMuzzlePoint = Node::create();
+    auto size = mGunSprite->getContentSize();
+    mMuzzlePoint->setPosition(size.width, size.height / 2.f);
+
     mBaseSprite = Sprite::create("textures/tower_base.png");
     mBaseSprite->setScale(0.5f);
     mBaseSprite->setSpriteFrame(SpriteFrame::create("textures/tower_base.png", Rect(0, 0, 90, 90)));
@@ -48,6 +52,8 @@ bool Tower::init(TowerModel pModel) {
 
     this->addChild(mRangeSprite);
     this->addChild(mBaseSprite);
+
+    mGunSprite->addChild(mMuzzlePoint);
     this->addChild(mGunSprite);
 
     this->setCascadeOpacityEnabled(true);

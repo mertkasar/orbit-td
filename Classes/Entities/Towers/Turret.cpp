@@ -10,5 +10,8 @@ bool Turret::init() {
 }
 
 void Turret::shoot(float pDelta) {
-    static_cast<GameplayLayer *>(this->getParent())->addBullet(this->getPosition(), getBaseColor(), mDamage, mTarget);
+    GameplayLayer *gameplayLayer = static_cast<GameplayLayer *>(this->getParent());
+    const cocos2d::Vec2 &origin = mGunSprite->convertToWorldSpace(mMuzzlePoint->getPosition());
+
+    gameplayLayer->addBullet(origin, getBaseColor(), mDamage, mTarget);
 }

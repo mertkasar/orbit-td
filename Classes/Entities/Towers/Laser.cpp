@@ -12,12 +12,10 @@ bool Laser::init() {
         return false;
 
     mBeam = Beam::create();
+    mBeam->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
     mBeam->setColor(getBaseColor());
-
-    auto size = mGunSprite->getContentSize();
-    mBeam->setPosition(size.width, size.height / 2.f);
     mBeam->setVisible(false);
-    mGunSprite->addChild(mBeam);
+    mMuzzlePoint->addChild(mBeam);
 
     return true;
 }
