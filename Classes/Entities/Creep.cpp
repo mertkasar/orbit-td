@@ -73,7 +73,6 @@ void Creep::ignite(CreepTypes pType, cocos2d::Vec2 pPosition, const Path &pPath)
 
     this->setPosition(pPosition);
     this->setScale(0.5f);
-    this->setRotation(SPRITE_ANGLE);
     mBody->setVelocity(Vec2::ZERO);
 
     mPath.clone(pPath);

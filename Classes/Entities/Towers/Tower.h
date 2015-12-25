@@ -21,6 +21,7 @@ protected:
     cocos2d::Sprite *mGunSprite;
     cocos2d::Sprite *mRangeSprite;
     cocos2d::PhysicsBody *mBody;
+    cocos2d::Node *mMuzzlePoint;
 
     Creep *mTarget;
     cocos2d::Vector<Creep *> mTargetList;
@@ -49,9 +50,9 @@ public:
 
     void removeTarget(Creep *pTarget);
 
-    void upgrade(cocos2d::Color3B &pColor);
+    virtual void upgrade(cocos2d::Color3B &pColor);
 
-    unsigned int getTargetCount() const{
+    unsigned int getTargetCount() const {
         return (unsigned int) mTargetList.size();
     }
 

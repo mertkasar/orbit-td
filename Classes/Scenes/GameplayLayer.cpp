@@ -1,15 +1,21 @@
 #include <Scenes/GameplayLayer.h>
 
+#include <2d/CCParticleBatchNode.h>
+#include <2d/CCParticleSystemQuad.h>
 #include <base/CCDirector.h>
 #include <physics/CCPhysicsContact.h>
 #include <base/CCEventDispatcher.h>
 #include <physics/CCPhysicsWorld.h>
 
 #include <Scenes/World.h>
+#include <Scenes/MapLayer.h>
 #include <Entities/Creep.h>
+#include <Entities/Explosion.h>
+#include <Entities/Bullet.h>
 #include <Entities/Towers/Turret.h>
 #include <Entities/Towers/Laser.h>
 #include <Entities/Towers/RLauncher.h>
+#include <Utilities/Shake.h>
 
 USING_NS_CC;
 
@@ -88,6 +94,10 @@ bool GameplayLayer::init() {
 
     Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
 
+    //mParticleBatch = ParticleBatchNode::createWithTexture(nullptr, 3000);
+    mParticleBatch = ParticleBatchNode::create("textures/particles/missile_fire.png", 3000);
+    this->addChild(mParticleBatch);
+
     this->scheduleUpdate();
 
     return true;
@@ -100,9 +110,11 @@ void GameplayLayer::update(float pDelta) {
             enemy->removeFromParent();
             mCreeps.eraseObject(enemy);
 
-            if (enemy->isKilled())
+            if (enemy->isKilled()) {
+                addExplosion(enemy->getPosition());
+                shake(0.5f, 3.f);
                 mWorld->balanceTotalCoin(enemy->getReward());
-            else if (enemy->isReachedEnd())
+            } else if (enemy->isReachedEnd())
                 mWorld->balanceRemainingLife(-1);
         }
 }
@@ -117,6 +129,37 @@ void GameplayLayer::addEnemy(CreepTypes pType, int pOrder, Path &pPath) {
     mCreeps.pushBack(enemy);
 }
 
+void GameplayLayer::addMissile(cocos2d::Vec2 pPosition, const cocos2d::Color3B &pBaseColor, float pDamage,
+                               Creep *pTarget) {
+    auto missile = mMissilePool.fetch();
+
+    missile->ignite(pPosition, pBaseColor, pDamage, pTarget);
+
+    auto emitter = missile->getEmitter();
+    if (emitter->getParent() == nullptr) {
+        mParticleBatch->addChild(emitter);
+    }
+
+    this->addChild(missile);
+    mMissiles.pushBack(missile);
+}
+
+void GameplayLayer::addBullet(cocos2d::Vec2 pPosition, const cocos2d::Color3B &pBaseColor, float pDamage,
+                              Creep *pTarget) {
+    auto bullet = mBulletPool.fetch();
+
+    bullet->ignite(pPosition, pBaseColor, pDamage, pTarget);
+
+    this->addChild(bullet);
+}
+
+void GameplayLayer::addExplosion(cocos2d::Vec2 pPosition) {
+    auto explosion = mExplosionPool.fetch();
+
+    explosion->ignite(pPosition);
+
+    this->addChild(explosion);
+}
 
 void GameplayLayer::createMock(TowerTypes pType, cocos2d::Vec2 pTile) {
     mMock = nullptr;
@@ -185,6 +228,9 @@ void GameplayLayer::pauseScene() {
 
     mWorld->getPhysicsWorld()->setSpeed(0.f);
 
+    for (auto emitter : mParticleBatch->getChildren())
+        emitter->pause();
+
     mPaused = true;
 }
 
@@ -196,5 +242,13 @@ void GameplayLayer::resumeScene() {
 
     mWorld->getPhysicsWorld()->setSpeed(1.f);
 
+    for (auto emitter : mParticleBatch->getChildren())
+        emitter->resume();
+
     mPaused = false;
+}
+
+void GameplayLayer::shake(float pDuration, float pStrength) {
+    // TODO: Repedeatly creating shake action may cause performance issues try to pool it
+    this->getParent()->runAction(Shake::actionWithDuration(pDuration, pStrength));
 }

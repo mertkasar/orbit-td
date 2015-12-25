@@ -3,8 +3,6 @@
 
 #include <base/ccTypes.h>
 
-#define SPRITE_ANGLE -90.f
-
 //Collision bitmasks
 #define NULL_MASK 0x00
 #define TOWER_RANGE_MASK 0x01
@@ -41,6 +39,7 @@ namespace Color {
     const cocos2d::Color3B YELLOW = {255, 204, 0};
     const cocos2d::Color3B BLUE = {54, 187, 245};
     const cocos2d::Color3B GREY = {108, 115, 131};
+    const cocos2d::Color3B RED = {172, 57, 57};
 }
 
 

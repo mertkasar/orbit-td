@@ -28,7 +28,11 @@ bool Tower::init(TowerModel pModel) {
     mVerbose = true;
 
     mGunSprite = Sprite::create(pModel.gunSpritePath);
-    mGunSprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
+    mGunSprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+
+    mMuzzlePoint = Node::create();
+    auto size = mGunSprite->getContentSize();
+    mMuzzlePoint->setPosition(size.width, size.height / 2.f);
 
     mBaseSprite = Sprite::create("textures/tower_base.png");
     mBaseSprite->setScale(0.5f);
@@ -48,23 +52,19 @@ bool Tower::init(TowerModel pModel) {
 
     this->addChild(mRangeSprite);
     this->addChild(mBaseSprite);
+
+    mGunSprite->addChild(mMuzzlePoint);
     this->addChild(mGunSprite);
 
-    mRangeSprite->setOpacity(150);
-    mBaseSprite->setOpacity(150);
-    mGunSprite->setOpacity(150);
-
-    this->setRotation(SPRITE_ANGLE);
+    this->setCascadeOpacityEnabled(true);
+    this->setOpacity(150);
 
     return true;
 }
 
 void Tower::build() {
     mBody->setEnable(true);
-    mRangeSprite->setOpacity(255);
-    mBaseSprite->setOpacity(255);
-    mGunSprite->setOpacity(255);
-
+    this->setOpacity(255);
     setVerbose(false);
 
     this->scheduleUpdate();

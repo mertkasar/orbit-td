@@ -6,6 +6,9 @@
 
 #include <Utilities/SteeringDirector.h>
 #include <Entities/Creep.h>
+#include <2d/CCParticleSystem.h>
+#include <2d/CCParticleExamples.h>
+#include <Utilities/Shake.h>
 
 USING_NS_CC;
 
@@ -34,12 +37,17 @@ bool Missile::init() {
     mBody->setVelocityLimit(MISSILE_MAX_VEL);
     this->setPhysicsBody(mBody);
 
+    mFireEmitter = ParticleSystemQuad::create("missile_fire.plist");
+    mFireEmitter->setPosition(this->getPosition());
+
     this->addChild(mSprite);
 
     return true;
 }
 
 void Missile::update(float pDelta) {
+    mFireEmitter->setPosition(this->getPosition());
+
     if (mTarget != nullptr) {
         if (!mTarget->isDead())
             mTargetPosition = mTarget->getPosition();
@@ -51,8 +59,10 @@ void Missile::update(float pDelta) {
     if (this->getPosition().distance(mTargetPosition) <= reachRadius) {
         die(pDelta);
 
-        if (mTarget != nullptr)
+        if (mTarget != nullptr) {
             mTarget->deal(mDamage);
+            mTarget->runAction(Shake::actionWithDuration(0.4f, 1.3f));
+        }
     }
 
     SteeringDirector::getInstance()->seek(this, mTargetPosition);
@@ -61,12 +71,13 @@ void Missile::update(float pDelta) {
     auto angle = CC_RADIANS_TO_DEGREES(mBody->getVelocity().getAngle());
     mSprite->setRotation(-angle);
 
-    if (isDead())
+    if (isDead()) {
+        mFireEmitter->stopSystem();
         removeFromParent();
+    }
 }
 
-void Missile::ignite(cocos2d::Vec2 pPosition, float pDamage, Creep *pTarget) {
-    mDamage = 0.f;
+void Missile::ignite(cocos2d::Vec2 pPosition, const cocos2d::Color3B &pBaseColor, float pDamage, Creep *pTarget) {
     mDead = false;
 
     this->setPosition(pPosition);
@@ -75,7 +86,11 @@ void Missile::ignite(cocos2d::Vec2 pPosition, float pDamage, Creep *pTarget) {
     mBody->setVelocity(Vec2::ZERO);
 
     this->setScale(0.5f);
-    this->setRotation(SPRITE_ANGLE);
+
+    mFireEmitter->setStartColor(Color4F(pBaseColor));
+
+    //TODO: This doesn't work as I expected, I need a resume operation not a reset!
+    mFireEmitter->resetSystem();
 
     this->scheduleUpdate();
     this->scheduleOnce(CC_SCHEDULE_SELECTOR(Missile::die), MISSILE_EXPIRE_TIME);
