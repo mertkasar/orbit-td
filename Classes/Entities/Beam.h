@@ -12,9 +12,9 @@ class Creep;
 class Beam : public cocos2d::Node {
 private:
     cocos2d::Sprite *mStartB;
-    cocos2d::Sprite *mStartO;
+    cocos2d::Sprite *mStartF;
     cocos2d::Sprite *mMidB;
-    cocos2d::Sprite *mMidO;
+    cocos2d::Sprite *mMidF;
 
 public:
     Beam();

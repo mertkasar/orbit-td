@@ -6,7 +6,7 @@
 
 USING_NS_CC;
 
-#define DIM 32.f
+#define DIM 64.f
 
 Beam::Beam() {
     CCLOG("Beam created");
@@ -20,25 +20,21 @@ bool Beam::init() {
     if (!Node::init())
         return false;
 
-    mStartB = Sprite::create("textures/laser.png");
-    mStartB->setSpriteFrame(SpriteFrame::create("textures/laser.png", Rect(0, DIM, DIM, DIM)));
+    mStartB = Sprite::createWithSpriteFrameName("start_b.png");
     this->addChild(mStartB);
 
-    mStartO = Sprite::create("textures/laser.png");
-    mStartO->setSpriteFrame(SpriteFrame::create("textures/laser.png", Rect(DIM, DIM, DIM, DIM)));
-    this->addChild(mStartO);
+    mStartF = Sprite::createWithSpriteFrameName("start_f.png");
+    this->addChild(mStartF);
 
-    mMidB = Sprite::create("textures/laser.png");
-    mMidB->setSpriteFrame(SpriteFrame::create("textures/laser.png", Rect(0, 0, DIM, DIM)));
+    mMidB = Sprite::createWithSpriteFrameName("mid_b.png");
     mMidB->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
     mMidB->setPosition(DIM / 2, 0);
     this->addChild(mMidB);
 
-    mMidO = Sprite::create("textures/laser.png");
-    mMidO->setSpriteFrame(SpriteFrame::create("textures/laser.png", Rect(DIM, 0, DIM, DIM)));
-    mMidO->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
-    mMidO->setPosition(DIM / 2, 0);
-    this->addChild(mMidO);
+    mMidF = Sprite::createWithSpriteFrameName("mid_f.png");
+    mMidF->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+    mMidF->setPosition(DIM / 2, 0);
+    this->addChild(mMidF);
 
     this->setCascadeOpacityEnabled(true);
 
@@ -52,9 +48,7 @@ void Beam::update(cocos2d::Vec2 pEnd) {
     auto ratio = diff.length() / DIM - 0.5f;
 
     mMidB->setScaleX(ratio);
-    mMidO->setScaleX(ratio);
-
-    //this->setRotation(-CC_RADIANS_TO_DEGREES(diff.getAngle()));
+    mMidF->setScaleX(ratio);
 }
 
 void Beam::setColor(const Color3B &pBaseColor) {
