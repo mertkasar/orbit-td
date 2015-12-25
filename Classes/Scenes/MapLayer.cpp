@@ -2,9 +2,10 @@
 
 #include <2d/CCDrawNode.h>
 #include <2d/CCActionInterval.h>
-#include <ui/UIImageView.h>
+#include <2d/CCSprite.h>
 
 #include <Scenes/World.h>
+#include <2d/CCSpriteFrameCache.h>
 
 USING_NS_CC;
 
@@ -31,6 +32,9 @@ bool MapLayer::init() {
 
     this->setName("map_layer");
 
+    auto spriteCache = SpriteFrameCache::getInstance();
+    spriteCache->addSpriteFramesWithFile("textures/spritesheets/map_layer.plist");
+
     //Draw Planet
     auto planet = DrawNode::create();
     planet->drawSolidCircle(Vec2(-480.f, 360.f), 600.f, 0.f, 50, Color4F::BLUE);
@@ -40,7 +44,7 @@ bool MapLayer::init() {
 
     Vec2 size = grid.getSize();
     for (int j = 0; j < size.y; j++) {
-        ui::ImageView *orbit = ui::ImageView::create("textures/ui/orbit.png");
+        Sprite *orbit = Sprite::createWithSpriteFrameName("orbit.png");
         orbit->setColor(Color::GREY);
         orbit->setPosition(algorithm::toCircularGrid(Vec2(2, j)));
         this->addChild(orbit);
@@ -51,11 +55,12 @@ bool MapLayer::init() {
             if (grid.getNode(Vec2(i, j)) == 0) {
                 Vec2 position = algorithm::toCircularGrid(Vec2(i, j));
 
-                ui::ImageView *shadow = ui::ImageView::create("textures/ui/touch_shadow.png");
+                Sprite *shadow = Sprite::createWithSpriteFrameName("touch_shadow.png");
+                shadow->setColor(Color::BG);
                 shadow->setPosition(position);
                 this->addChild(shadow);
 
-                ui::ImageView *touchArea = ui::ImageView::create("textures/ui/touch.png");
+                Sprite *touchArea = Sprite::createWithSpriteFrameName("touch.png");
                 touchArea->setColor(Color::GREY);
                 touchArea->setPosition(position);
 
@@ -73,7 +78,7 @@ void MapLayer::activateSlot(cocos2d::Vec2 pTile) {
 
     assert(found != mSlotMap.end());
 
-    ui::ImageView *slot = found->second;
+    Sprite *slot = found->second;
     slot->setColor(Color::GREEN);
     slot->runAction(RepeatForever::create(RotateBy::create(2.f, 30.f)));
 }
@@ -83,7 +88,7 @@ void MapLayer::deactivateSlot(cocos2d::Vec2 pTile) {
 
     assert(found != mSlotMap.end());
 
-    ui::ImageView *slot = found->second;
+    Sprite *slot = found->second;
     slot->setColor(Color::GREY);
     slot->stopAllActions();
     slot->setRotation(0.f);
@@ -94,6 +99,6 @@ void MapLayer::setSlotColor(cocos2d::Vec2 pTile, cocos2d::Color3B pColor) {
 
     assert(found != mSlotMap.end());
 
-    ui::ImageView *slot = found->second;
+    Sprite *slot = found->second;
     slot->setColor(pColor);
 }

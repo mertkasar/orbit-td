@@ -191,7 +191,7 @@ bool World::spawnNextWave() {
 }
 
 void World::buildScene() {
-    backgroundLayer = LayerColor::create(Color4B(42, 45, 51, 255));
+    backgroundLayer = LayerColor::create(Color4B(Color::BG));
 
     // Prepare sample grid
     mGrid.create(Vec2(5, 10));
