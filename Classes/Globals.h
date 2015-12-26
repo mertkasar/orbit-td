@@ -40,7 +40,7 @@ namespace Color {
     const cocos2d::Color3B BLUE = {54, 187, 245};
     const cocos2d::Color3B GREY = {108, 115, 131};
     const cocos2d::Color3B RED = {172, 57, 57};
-    const cocos2d::Color3B BG = {42, 45, 51};
+    const cocos2d::Color3B BG = {45, 45, 45};
 }
 
 
