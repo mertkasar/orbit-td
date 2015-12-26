@@ -3,18 +3,11 @@
 
 #include <2d/CCNode.h>
 
-namespace cocos2d {
-    class Sprite;
-}
-
-class Creep;
-
 class Beam : public cocos2d::Node {
 private:
-    cocos2d::Sprite *mStartB;
-    cocos2d::Sprite *mStartF;
-    cocos2d::Sprite *mMidB;
-    cocos2d::Sprite *mMidF;
+    cocos2d::Node *mStart;
+    cocos2d::Node *mMid;
+    cocos2d::Node *mEnd;
 
 public:
     Beam();
