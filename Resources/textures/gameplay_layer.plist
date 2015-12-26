@@ -64,6 +64,21 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
+            <key>hp_bar.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{10,10}</string>
+                <key>spriteSourceSize</key>
+                <string>{10,10}</string>
+                <key>textureRect</key>
+                <string>{{297,122},{10,10}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
             <key>laser_gun.png</key>
             <dict>
                 <key>aliases</key>
@@ -105,7 +120,7 @@
                 <key>spriteSourceSize</key>
                 <string>{64,64}</string>
                 <key>textureRect</key>
-                <string>{{297,122},{64,8}}</string>
+                <string>{{309,127},{64,8}}</string>
                 <key>textureRotated</key>
                 <true/>
             </dict>
@@ -269,7 +284,7 @@
             <key>size</key>
             <string>{337,512}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:915d9373ddc9927aa7eb63466f24b9d0:fef174ca4edbd41cbb21d659279711a5:71e2c7b8b0052b370ab654277724ec3f$</string>
+            <string>$TexturePacker:SmartUpdate:9ff9d3f7f4b600f18e64942df4e9d738:85a0226454e5dc23128aba6d8d101941:71e2c7b8b0052b370ab654277724ec3f$</string>
             <key>textureFileName</key>
             <string>gameplay_layer.png</string>
         </dict>

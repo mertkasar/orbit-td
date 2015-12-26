@@ -8,20 +8,18 @@ namespace cocos2d {
     class Sprite;
 
     class PhysicsBody;
-
-    class DrawNode;
 }
 
 class Creep : public cocos2d::Node {
 private:
     cocos2d::Sprite *mSprite;
     cocos2d::PhysicsBody *mBody;
+    cocos2d::Node *mHPBar;
 
     Path mPath;
 
     float mMaxHP;
     float mCurrentHP;
-    cocos2d::DrawNode *mHPBar;
     unsigned int mReward;
 
     bool mKilled;

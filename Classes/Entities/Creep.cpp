@@ -7,8 +7,8 @@
 
 USING_NS_CC;
 
-#define HBAR_WIDTH 20.f
-#define HBAR_HEIGHT 80.f
+#define HBAR_WIDTH 2.f
+#define HBAR_HEIGHT 8.f
 
 Creep::Creep() {
     CCLOG("Creep created");
@@ -34,9 +34,22 @@ bool Creep::init() {
     mBody->setCollisionBitmask(NULL_MASK);
     this->setPhysicsBody(mBody);
 
-    mHPBar = DrawNode::create();
-    mHPBar->setPosition(Vec2(-40.f, -70.f));
-    mHPBar->setVisible(false); // TODO: Find a way to batching hp bars
+    mHPBar = Node::create();
+    mHPBar->setPosition(Vec2(80.f, -40.f));
+
+    auto hpBarB = Sprite::createWithSpriteFrameName("hp_bar.png");
+    hpBarB->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
+    hpBarB->setName("bg");
+    hpBarB->setColor(Color::RED);
+    hpBarB->setScale(HBAR_WIDTH, HBAR_HEIGHT);
+    mHPBar->addChild(hpBarB);
+
+    auto hpBarF = Sprite::createWithSpriteFrameName("hp_bar.png");
+    hpBarF->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
+    hpBarF->setName("fg");
+    hpBarF->setColor(Color::GREEN);
+    hpBarF->setScale(HBAR_WIDTH, HBAR_HEIGHT);
+    mHPBar->addChild(hpBarF);
 
     this->addChild(mSprite);
     this->addChild(mHPBar);
@@ -85,18 +98,17 @@ void Creep::ignite(CreepTypes pType, cocos2d::Vec2 pPosition, const Path &pPath)
 
 void Creep::deal(float pDamage) {
     mCurrentHP = mCurrentHP - pDamage;
-    updateHPBar();
-    //CCLOG("Ship got %.2f damage", pDamage);
-}
-
-void Creep::updateHPBar() {
-    mHPBar->clear();
 
     if (mCurrentHP < 0.f)
         mCurrentHP = 0.f;
 
-    mHPBar->drawSolidRect(Vec2::ZERO, Vec2(HBAR_HEIGHT, HBAR_WIDTH), Color4F::RED);
-    mHPBar->drawSolidRect(Vec2::ZERO, Vec2(mCurrentHP * HBAR_HEIGHT / mMaxHP, HBAR_WIDTH), Color4F::GREEN);
+    updateHPBar();
+}
+
+void Creep::updateHPBar() {
+    auto fg = mHPBar->getChildByName("fg");
+    auto ratio = mCurrentHP / mMaxHP;
+    fg->setScaleY(HBAR_HEIGHT * ratio);
 }
 
 void Creep::reShape(CreepTypes pType) {
