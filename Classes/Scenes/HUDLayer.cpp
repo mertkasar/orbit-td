@@ -11,6 +11,7 @@
 #include <Scenes/GameplayLayer.h>
 
 #include <sstream>
+#include <2d/CCSpriteFrameCache.h>
 
 USING_NS_CC;
 
@@ -37,20 +38,23 @@ bool HUDLayer::init() {
 
     this->setName("hud_layer");
 
+    auto spriteCache = SpriteFrameCache::getInstance();
+    spriteCache->addSpriteFramesWithFile("textures/ui_layer.plist");
+
     mTopPanel = ui::Layout::create();
-    mTopPanel->setBackGroundImage("textures/ui/top_panel.png");
+    mTopPanel->setBackGroundImage("top_panel.png", ui::Widget::TextureResType::PLIST);
     mTopPanel->setContentSize(mTopPanel->getBackGroundImageTextureSize());
     mTopPanel->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
     mTopPanel->setPosition(Vec2(0, 720));
 
-    auto button = ui::Button::create("textures/ui/btn_next.png", "");
+    auto button = ui::Button::create("btn_next.png", "", "", ui::Widget::TextureResType::PLIST);
     button->setName("next_button");
     button->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     button->setPosition(Vec2(100, mTopPanel->getContentSize().height / 2.f));
     button->addTouchEventListener(CC_CALLBACK_2(HUDLayer::nextButtonCallback, this));
     mTopPanel->addChild(button);
 
-    button = ui::Button::create("textures/ui/btn_menu.png", "");
+    button = ui::Button::create("btn_menu.png", "", "", ui::Widget::TextureResType::PLIST);
     button->setName("menu_button");
     button->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     button->setPosition(Vec2(mTopPanel->getContentSize().width - 100, mTopPanel->getContentSize().height / 2.f));
@@ -62,18 +66,18 @@ bool HUDLayer::init() {
     mNotificationPanel->setPosition(Vec2(640, 680));
 
     mBottomPanel = ui::Layout::create();
-    mBottomPanel->setBackGroundImage("textures/ui/bottom_panel.png");
+    mBottomPanel->setBackGroundImage("bottom_panel.png", ui::Widget::TextureResType::PLIST);
     mBottomPanel->setContentSize(mBottomPanel->getBackGroundImageTextureSize());
     mBottomPanel->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
-    button = ui::Button::create("textures/ui/btn_pause.png", "");
+    button = ui::Button::create("btn_pause.png", "", "", ui::Widget::TextureResType::PLIST);
     button->setName("next_button");
     button->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     button->setPosition(Vec2(200, mBottomPanel->getContentSize().height / 2.f));
     button->addTouchEventListener(CC_CALLBACK_2(HUDLayer::pauseButtonCallback, this));
     mBottomPanel->addChild(button);
 
-    button = ui::Button::create("textures/ui/btn_ff.png", "");
+    button = ui::Button::create("btn_ff.png", "", "", ui::Widget::TextureResType::PLIST);
     button->setName("menu_button");
     button->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     button->setPosition(Vec2(mBottomPanel->getContentSize().width - 200, mBottomPanel->getContentSize().height / 2.f));
