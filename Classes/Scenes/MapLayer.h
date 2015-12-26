@@ -6,16 +6,14 @@
 class World;
 
 namespace cocos2d {
-    namespace ui {
-        class ImageView;
-    }
+    class Sprite;
 }
 
 class MapLayer : public cocos2d::Layer {
 private:
     World *mWorld;
 
-    std::map<cocos2d::Vec2, cocos2d::ui::ImageView *> mSlotMap;
+    std::map<cocos2d::Vec2, cocos2d::Sprite *> mSlotMap;
 
 private:
     MapLayer(World *pWorld);

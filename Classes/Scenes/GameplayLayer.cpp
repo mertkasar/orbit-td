@@ -16,6 +16,7 @@
 #include <Entities/Towers/Laser.h>
 #include <Entities/Towers/RLauncher.h>
 #include <Utilities/Shake.h>
+#include <2d/CCSpriteFrameCache.h>
 
 USING_NS_CC;
 
@@ -43,6 +44,9 @@ bool GameplayLayer::init() {
     mPaused = false;
 
     this->setName("gameplay_layer");
+
+    auto spriteCache = SpriteFrameCache::getInstance();
+    spriteCache->addSpriteFramesWithFile("textures/gameplay_layer.plist");
 
     this->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 

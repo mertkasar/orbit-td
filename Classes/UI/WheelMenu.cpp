@@ -25,19 +25,19 @@ void WheelMenu::init(Layer *pLayer, World *pGameScene) {
 
     const float SHIFT = 90.f;
 
-    auto item = ui::Button::create("textures/ui/btn_trt.png", "");
+    auto item = ui::Button::create("btn_trt.png", "", "", ui::Widget::TextureResType::PLIST);
     item->setTag(TURRET);
     item->setPosition(Vec2(-SHIFT, 0.f));
     item->addTouchEventListener(CC_CALLBACK_2(WheelMenu::towerButtonCallback, this));
     mPurchaseMenu->addChild(item);
 
-    item = ui::Button::create("textures/ui/btn_lsr.png", "");
+    item = ui::Button::create("btn_lsr.png", "", "", ui::Widget::TextureResType::PLIST);
     item->setTag(LASER);
     item->setPosition(Vec2(0, SHIFT));
     item->addTouchEventListener(CC_CALLBACK_2(WheelMenu::towerButtonCallback, this));
     mPurchaseMenu->addChild(item);
 
-    item = ui::Button::create("textures/ui/btn_rl.png", "");
+    item = ui::Button::create("btn_rl.png", "", "", ui::Widget::TextureResType::PLIST);
     item->setTag(R_LAUNCHER);
     item->setPosition(Vec2(SHIFT, 0.f));
     item->addTouchEventListener(CC_CALLBACK_2(WheelMenu::towerButtonCallback, this));
@@ -45,13 +45,13 @@ void WheelMenu::init(Layer *pLayer, World *pGameScene) {
 
     mVerboseMenu = ui::Layout::create();
 
-    item = ui::Button::create("textures/ui/btn_upgrade.png", "");
+    item = ui::Button::create("btn_upgrade.png", "", "", ui::Widget::TextureResType::PLIST);
     item->setTag(UPGRADE);
     item->setPosition(Vec2(-SHIFT, 0.f));
     item->addTouchEventListener(CC_CALLBACK_2(WheelMenu::upgradeButtonCallback, this));
     mVerboseMenu->addChild(item);
 
-    item = ui::Button::create("textures/ui/btn_sell.png", "");
+    item = ui::Button::create("btn_sell.png", "", "", ui::Widget::TextureResType::PLIST);
     item->setTag(SELL);
     item->setPosition(Vec2(SHIFT, 0.f));
     item->addTouchEventListener(CC_CALLBACK_2(WheelMenu::sellButtonCallback, this));
@@ -59,12 +59,12 @@ void WheelMenu::init(Layer *pLayer, World *pGameScene) {
 
     mValidationMenu = ui::Layout::create();
 
-    item = ui::Button::create("textures/ui/btn_accept.png", "");
+    item = ui::Button::create("btn_accept.png", "", "", ui::Widget::TextureResType::PLIST);
     item->setTag(ACCEPT);
     item->setPosition(Vec2(SHIFT, 0.f));
     mValidationMenu->addChild(item);
 
-    item = ui::Button::create("textures/ui/btn_decline.png", "");
+    item = ui::Button::create("btn_decline.png", "", "", ui::Widget::TextureResType::PLIST);
     item->setTag(DECLINE);
     item->setPosition(Vec2(-SHIFT, 0.f));
     mValidationMenu->addChild(item);

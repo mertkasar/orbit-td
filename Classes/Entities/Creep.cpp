@@ -7,8 +7,8 @@
 
 USING_NS_CC;
 
-#define HBAR_WIDTH 20.f
-#define HBAR_HEIGHT 80.f
+#define HBAR_WIDTH 2.f
+#define HBAR_HEIGHT 8.f
 
 Creep::Creep() {
     CCLOG("Creep created");
@@ -34,8 +34,22 @@ bool Creep::init() {
     mBody->setCollisionBitmask(NULL_MASK);
     this->setPhysicsBody(mBody);
 
-    mHPBar = DrawNode::create();
-    mHPBar->setPosition(Vec2(-40.f, -70.f));
+    mHPBar = Node::create();
+    mHPBar->setPosition(Vec2(80.f, -40.f));
+
+    auto hpBarB = Sprite::createWithSpriteFrameName("hp_bar.png");
+    hpBarB->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
+    hpBarB->setName("bg");
+    hpBarB->setColor(Color::RED);
+    hpBarB->setScale(HBAR_WIDTH, HBAR_HEIGHT);
+    mHPBar->addChild(hpBarB);
+
+    auto hpBarF = Sprite::createWithSpriteFrameName("hp_bar.png");
+    hpBarF->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
+    hpBarF->setName("fg");
+    hpBarF->setColor(Color::GREEN);
+    hpBarF->setScale(HBAR_WIDTH, HBAR_HEIGHT);
+    mHPBar->addChild(hpBarF);
 
     this->addChild(mSprite);
     this->addChild(mHPBar);
@@ -84,24 +98,23 @@ void Creep::ignite(CreepTypes pType, cocos2d::Vec2 pPosition, const Path &pPath)
 
 void Creep::deal(float pDamage) {
     mCurrentHP = mCurrentHP - pDamage;
-    updateHPBar();
-    //CCLOG("Ship got %.2f damage", pDamage);
-}
-
-void Creep::updateHPBar() {
-    mHPBar->clear();
 
     if (mCurrentHP < 0.f)
         mCurrentHP = 0.f;
 
-    mHPBar->drawSolidRect(Vec2::ZERO, Vec2(HBAR_HEIGHT, HBAR_WIDTH), Color4F::RED);
-    mHPBar->drawSolidRect(Vec2::ZERO, Vec2(mCurrentHP * HBAR_HEIGHT / mMaxHP, HBAR_WIDTH), Color4F::GREEN);
+    updateHPBar();
+}
+
+void Creep::updateHPBar() {
+    auto fg = mHPBar->getChildByName("fg");
+    auto ratio = mCurrentHP / mMaxHP;
+    fg->setScaleY(HBAR_HEIGHT * ratio);
 }
 
 void Creep::reShape(CreepTypes pType) {
     switch (pType) {
         case RAPTOR:
-            mSprite->setTexture("textures/creeps/raptor.png");
+            mSprite->initWithSpriteFrameName("raptor.png");
             mMaxHP = 100.f;
             mReward = 10;
             mBody->setMass(5.5f);
@@ -109,7 +122,7 @@ void Creep::reShape(CreepTypes pType) {
             break;
 
         case SPEEDY:
-            mSprite->setTexture("textures/creeps/speedy.png");
+            mSprite->initWithSpriteFrameName("speedy.png");
             mMaxHP = 50.f;
             mReward = 5;
             mBody->setMass(3.5f);
@@ -117,7 +130,7 @@ void Creep::reShape(CreepTypes pType) {
             break;
 
         case PULSAR:
-            mSprite->setTexture("textures/creeps/pulsar.png");
+            mSprite->initWithSpriteFrameName("pulsar.png");
             mMaxHP = 130.f;
             mReward = 25;
             mBody->setMass(5.5f);
@@ -125,7 +138,7 @@ void Creep::reShape(CreepTypes pType) {
             break;
 
         case PANZER:
-            mSprite->setTexture("textures/creeps/panzer.png");
+            mSprite->initWithSpriteFrameName("panzer.png");
             mMaxHP = 300.f;
             mReward = 20;
             mBody->setMass(6.5f);

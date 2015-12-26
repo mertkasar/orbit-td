@@ -6,7 +6,7 @@
 
 USING_NS_CC;
 
-#define DIM 32.f
+#define DIM 64.f
 
 Beam::Beam() {
     CCLOG("Beam created");
@@ -20,28 +20,47 @@ bool Beam::init() {
     if (!Node::init())
         return false;
 
-    mStartB = Sprite::create("textures/laser.png");
-    mStartB->setSpriteFrame(SpriteFrame::create("textures/laser.png", Rect(0, DIM, DIM, DIM)));
-    this->addChild(mStartB);
+    mStart = Node::create();
 
-    mStartO = Sprite::create("textures/laser.png");
-    mStartO->setSpriteFrame(SpriteFrame::create("textures/laser.png", Rect(DIM, DIM, DIM, DIM)));
-    this->addChild(mStartO);
+    auto tile = Sprite::createWithSpriteFrameName("start_b.png");
+    tile->setTag(0);
+    mStart->addChild(tile);
 
-    mMidB = Sprite::create("textures/laser.png");
-    mMidB->setSpriteFrame(SpriteFrame::create("textures/laser.png", Rect(0, 0, DIM, DIM)));
-    mMidB->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
-    mMidB->setPosition(DIM / 2, 0);
-    this->addChild(mMidB);
+    tile = Sprite::createWithSpriteFrameName("start_f.png");
+    tile->setTag(1);
+    mStart->addChild(tile);
 
-    mMidO = Sprite::create("textures/laser.png");
-    mMidO->setSpriteFrame(SpriteFrame::create("textures/laser.png", Rect(DIM, 0, DIM, DIM)));
-    mMidO->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
-    mMidO->setPosition(DIM / 2, 0);
-    this->addChild(mMidO);
+    mMid = Node::create();
+
+    tile = Sprite::createWithSpriteFrameName("mid_b.png");
+    tile->setTag(0);
+    tile->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+    mMid->addChild(tile);
+
+    tile = Sprite::createWithSpriteFrameName("mid_f.png");
+    tile->setTag(1);
+    tile->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+    mMid->addChild(tile);
+
+    mMid->setPosition(DIM / 2, 0);
+
+    mEnd = Node::create();
+
+    tile = Sprite::createWithSpriteFrameName("end_b.png");
+    tile->setTag(0);
+    tile->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+    mEnd->addChild(tile);
+
+    tile = Sprite::createWithSpriteFrameName("end_f.png");
+    tile->setTag(1);
+    tile->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+    mEnd->addChild(tile);
+
+    this->addChild(mStart);
+    this->addChild(mMid);
+    this->addChild(mEnd);
 
     this->setCascadeOpacityEnabled(true);
-
     this->scheduleUpdate();
 
     return true;
@@ -49,15 +68,14 @@ bool Beam::init() {
 
 void Beam::update(cocos2d::Vec2 pEnd) {
     auto diff = pEnd - this->convertToWorldSpace(this->getPosition());
-    auto ratio = diff.length() / DIM - 0.5f;
+    auto ratio = (diff.length() - DIM) / DIM;
 
-    mMidB->setScaleX(ratio);
-    mMidO->setScaleX(ratio);
-
-    //this->setRotation(-CC_RADIANS_TO_DEGREES(diff.getAngle()));
+    mMid->setScaleX(ratio);
+    mEnd->setPosition(diff.length() - DIM / 2.f, 0.f);
 }
 
 void Beam::setColor(const Color3B &pBaseColor) {
-    mStartB->setColor(pBaseColor);
-    mMidB->setColor(pBaseColor);
+    mStart->getChildByTag(0)->setColor(pBaseColor);
+    mMid->getChildByTag(0)->setColor(pBaseColor);
+    mEnd->getChildByTag(0)->setColor(pBaseColor);
 }

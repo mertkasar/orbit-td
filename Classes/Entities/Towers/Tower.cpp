@@ -5,6 +5,7 @@
 #include <physics/CCPhysicsBody.h>
 
 #include <Entities/Creep.h>
+#include <sstream>
 
 USING_NS_CC;
 
@@ -27,18 +28,17 @@ bool Tower::init(TowerModel pModel) {
     mNextShooting = 0.f;
     mVerbose = true;
 
-    mGunSprite = Sprite::create(pModel.gunSpritePath);
+    mGunSprite = Sprite::createWithSpriteFrameName(pModel.gunSpritePath);
     mGunSprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
 
     mMuzzlePoint = Node::create();
     auto size = mGunSprite->getContentSize();
     mMuzzlePoint->setPosition(size.width, size.height / 2.f);
 
-    mBaseSprite = Sprite::create("textures/tower_base.png");
+    mBaseSprite = Sprite::createWithSpriteFrameName("base_0.png");
     mBaseSprite->setScale(0.5f);
-    mBaseSprite->setSpriteFrame(SpriteFrame::create("textures/tower_base.png", Rect(0, 0, 90, 90)));
 
-    mRangeSprite = Sprite::create("textures/range.png");
+    mRangeSprite = Sprite::createWithSpriteFrameName("range.png");
     mRangeSprite->setVisible(false);
     mRangeSprite->setColor(Color::GREEN);
     mRangeSprite->setScale(2 * mRange / mRangeSprite->getContentSize().width);
@@ -113,7 +113,10 @@ void Tower::upgrade(cocos2d::Color3B &pColor) {
     mRangeSprite->setScale(mRange / mModel.baseRange);
     mRangeSprite->setColor(pColor);
 
-    mBaseSprite->setSpriteFrame(SpriteFrame::create("textures/tower_base.png", Rect(mLevel * 90, 0, 90, 90)));
+    std::stringstream ss;
+    ss << "base_" << mLevel << ".png";
+
+    mBaseSprite->initWithSpriteFrameName(ss.str());
 
     mBody->removeFromWorld();
     mBody = createBody(mRange);
