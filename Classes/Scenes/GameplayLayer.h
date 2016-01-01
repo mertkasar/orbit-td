@@ -18,13 +18,18 @@ class Explosion;
 
 class Bullet;
 
-namespace cocos2d{
+namespace cocos2d {
     class ParticleBatchNode;
+}
+
+namespace CocosDenshion {
+    class SimpleAudioEngine;
 }
 
 class GameplayLayer : public cocos2d::Layer {
 private:
     World *mWorld;
+    CocosDenshion::SimpleAudioEngine *mAudioEngine;
 
     bool mPaused;
 
@@ -83,7 +88,9 @@ public:
     }
 
 private:
-    void shake(float pDuration, float pStrength);
+    void loadResources();
+
+    void createExplosion(cocos2d::Vec2 pPosition, float pDuration, float pStrength);
 };
 
 #endif //GAMEPLAY_LAYER_H

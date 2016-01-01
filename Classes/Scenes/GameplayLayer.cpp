@@ -18,6 +18,7 @@
 #include <Entities/Towers/RLauncher.h>
 #include <Utilities/Shake.h>
 #include <2d/CCSpriteFrameCache.h>
+#include <sstream>
 
 USING_NS_CC;
 
@@ -46,8 +47,8 @@ bool GameplayLayer::init() {
 
     this->setName("gameplay_layer");
 
-    auto spriteCache = SpriteFrameCache::getInstance();
-    spriteCache->addSpriteFramesWithFile("textures/gameplay_layer.plist");
+    mAudioEngine = CocosDenshion::SimpleAudioEngine::getInstance();
+    loadResources();
 
     this->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
@@ -102,10 +103,6 @@ bool GameplayLayer::init() {
     mParticleBatch = ParticleBatchNode::create("textures/particles/missile_fire.png", 3000);
     this->addChild(mParticleBatch);
 
-    auto audio = CocosDenshion::SimpleAudioEngine::getInstance();
-    audio->preloadBackgroundMusic("audio/ambience.mp3");
-    audio->playBackgroundMusic("audio/ambience.mp3", true);
-
     this->scheduleUpdate();
 
     return true;
@@ -119,8 +116,7 @@ void GameplayLayer::update(float pDelta) {
             mCreeps.eraseObject(enemy);
 
             if (enemy->isKilled()) {
-                addExplosion(enemy->getPosition());
-                shake(0.5f, 3.f);
+                createExplosion(enemy->getPosition(), 0.5f, 3.f);
                 mWorld->balanceTotalCoin(enemy->getReward());
             } else if (enemy->isReachedEnd())
                 mWorld->balanceRemainingLife(-1);
@@ -256,7 +252,24 @@ void GameplayLayer::resumeScene() {
     mPaused = false;
 }
 
-void GameplayLayer::shake(float pDuration, float pStrength) {
-    // TODO: Repedeatly creating shake action may cause performance issues try to pool it
+void GameplayLayer::loadResources() {
+    auto spriteCache = SpriteFrameCache::getInstance();
+    spriteCache->addSpriteFramesWithFile("textures/gameplay_layer.plist");
+
+    mAudioEngine->preloadBackgroundMusic("audio/ambience.mp3");
+    mAudioEngine->preloadEffect("audio/explosion_1.wav");
+    mAudioEngine->preloadEffect("audio/explosion_2.wav");
+    mAudioEngine->preloadEffect("audio/explosion_3.wav");
+    mAudioEngine->playBackgroundMusic("audio/ambience.mp3", true);
+}
+
+void GameplayLayer::createExplosion(Vec2 pPosition, float pDuration, float pStrength) {
+    addExplosion(pPosition);
     this->getParent()->runAction(Shake::actionWithDuration(pDuration, pStrength));
+
+    // Get a random explosion effect
+    int index = random(1, 3);
+    std::stringstream ss;
+    ss << "audio/explosion_" << index << ".wav";
+    mAudioEngine->playEffect(ss.str().c_str());
 }
