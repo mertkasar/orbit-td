@@ -116,7 +116,7 @@ void GameplayLayer::update(float pDelta) {
             mCreeps.eraseObject(enemy);
 
             if (enemy->isKilled()) {
-                createExplosion(enemy->getPosition(), 0.5f, 3.f);
+                addExplosion(enemy->getPosition(), 0.5f, 3.f);
                 mWorld->balanceTotalCoin(enemy->getReward());
             } else if (enemy->isReachedEnd())
                 mWorld->balanceRemainingLife(-1);
@@ -143,7 +143,7 @@ void GameplayLayer::addMissile(cocos2d::Vec2 pPosition, const cocos2d::Color3B &
     if (emitter->getParent() == nullptr) {
         mParticleBatch->addChild(emitter);
     }
-
+    
     this->addChild(missile);
     mMissiles.pushBack(missile);
 }
@@ -154,15 +154,25 @@ void GameplayLayer::addBullet(cocos2d::Vec2 pPosition, const cocos2d::Color3B &p
 
     bullet->ignite(pPosition, pBaseColor, pDamage, pTarget);
 
+    mAudioEngine->playEffect("audio/laser_gun.wav");
+
     this->addChild(bullet);
 }
 
-void GameplayLayer::addExplosion(cocos2d::Vec2 pPosition) {
+void GameplayLayer::addExplosion(cocos2d::Vec2 pPosition, float pDuration, float pStrength) {
+    // Create explosion animation
     auto explosion = mExplosionPool.fetch();
-
     explosion->ignite(pPosition);
-
     this->addChild(explosion);
+
+    // Create shake animation
+    this->getParent()->runAction(Shake::actionWithDuration(pDuration, pStrength));
+
+    // Play a random explosion sfx
+    int index = random(1, 3);
+    std::stringstream ss;
+    ss << "audio/explosion_" << index << ".wav";
+    mAudioEngine->playEffect(ss.str().c_str());
 }
 
 void GameplayLayer::createMock(TowerTypes pType, cocos2d::Vec2 pTile) {
@@ -256,20 +266,9 @@ void GameplayLayer::loadResources() {
     auto spriteCache = SpriteFrameCache::getInstance();
     spriteCache->addSpriteFramesWithFile("textures/gameplay_layer.plist");
 
-    mAudioEngine->preloadBackgroundMusic("audio/ambience.mp3");
+    mAudioEngine->preloadBackgroundMusic("audio/ambient.mp3");
     mAudioEngine->preloadEffect("audio/explosion_1.wav");
     mAudioEngine->preloadEffect("audio/explosion_2.wav");
     mAudioEngine->preloadEffect("audio/explosion_3.wav");
-    mAudioEngine->playBackgroundMusic("audio/ambience.mp3", true);
-}
-
-void GameplayLayer::createExplosion(Vec2 pPosition, float pDuration, float pStrength) {
-    addExplosion(pPosition);
-    this->getParent()->runAction(Shake::actionWithDuration(pDuration, pStrength));
-
-    // Get a random explosion effect
-    int index = random(1, 3);
-    std::stringstream ss;
-    ss << "audio/explosion_" << index << ".wav";
-    mAudioEngine->playEffect(ss.str().c_str());
+    mAudioEngine->playBackgroundMusic("audio/ambient.mp3", true);
 }

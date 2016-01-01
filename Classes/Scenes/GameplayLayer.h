@@ -63,7 +63,7 @@ public:
 
     void addBullet(cocos2d::Vec2 pPosition, const cocos2d::Color3B &pBaseColor, float pDamage, Creep *pTarget);
 
-    void addExplosion(cocos2d::Vec2 pPosition);
+    void addExplosion(cocos2d::Vec2 pPosition, float pDuration, float pStrength);
 
     void createMock(TowerTypes pType, cocos2d::Vec2 pTile);
 
@@ -89,8 +89,6 @@ public:
 
 private:
     void loadResources();
-
-    void createExplosion(cocos2d::Vec2 pPosition, float pDuration, float pStrength);
 };
 
 #endif //GAMEPLAY_LAYER_H
