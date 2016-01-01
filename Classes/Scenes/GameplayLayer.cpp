@@ -6,6 +6,7 @@
 #include <physics/CCPhysicsContact.h>
 #include <base/CCEventDispatcher.h>
 #include <physics/CCPhysicsWorld.h>
+#include <SimpleAudioEngine.h>
 
 #include <Scenes/World.h>
 #include <Scenes/MapLayer.h>
@@ -98,9 +99,12 @@ bool GameplayLayer::init() {
 
     Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
 
-    //mParticleBatch = ParticleBatchNode::createWithTexture(nullptr, 3000);
     mParticleBatch = ParticleBatchNode::create("textures/particles/missile_fire.png", 3000);
     this->addChild(mParticleBatch);
+
+    auto audio = CocosDenshion::SimpleAudioEngine::getInstance();
+    audio->preloadBackgroundMusic("audio/ambience.mp3");
+    audio->playBackgroundMusic("audio/ambience.mp3", true);
 
     this->scheduleUpdate();
 
