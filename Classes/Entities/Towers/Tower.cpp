@@ -6,6 +6,7 @@
 
 #include <Entities/Creep.h>
 #include <sstream>
+#include <audio/include/SimpleAudioEngine.h>
 
 USING_NS_CC;
 
@@ -121,6 +122,8 @@ void Tower::upgrade(cocos2d::Color3B &pColor) {
     mBody->removeFromWorld();
     mBody = createBody(mRange);
     this->setPhysicsBody(mBody);
+
+    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/upgrade.wav");
 }
 
 bool Tower::isTargetValid() {

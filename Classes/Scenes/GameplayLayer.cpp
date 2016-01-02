@@ -156,7 +156,7 @@ void GameplayLayer::addBullet(cocos2d::Vec2 pPosition, const cocos2d::Color3B &p
 
     bullet->ignite(pPosition, pBaseColor, pDamage, pTarget);
 
-    mWorld->audioEngine->playEffect("audio/laser_gun.wav");
+    mWorld->audioEngine->playEffect("audio/laser_gun.wav", false, 1.0f, 0.0f, 0.3f);
 
     this->addChild(bullet);
 }
@@ -208,6 +208,8 @@ void GameplayLayer::buildMock(Vec2 pTile) {
 
     mMock->build();
     mTowerMap.insert(std::make_pair(pTile, mMock));
+
+    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/deploy.wav");
 }
 
 void GameplayLayer::removeMock() {

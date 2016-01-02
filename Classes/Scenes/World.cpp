@@ -99,6 +99,7 @@ bool World::init() {
     mCurrentWave = 0;
     mCleared = false;
 
+    audioEngine->setBackgroundMusicVolume(0.6f);
     audioEngine->playBackgroundMusic("audio/ambient.mp3", true);
 
     return true;
@@ -313,4 +314,6 @@ void World::loadResources() {
     audioEngine->preloadEffect("audio/missile_launch.wav");
     audioEngine->preloadEffect("audio/click.wav");
     audioEngine->preloadEffect("audio/open.wav");
+    audioEngine->preloadEffect("audio/deploy.wav");
+    audioEngine->preloadEffect("audio/upgrade.wav");
 }
