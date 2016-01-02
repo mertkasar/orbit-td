@@ -10,6 +10,7 @@
 #include <physics/CCPhysicsWorld.h>
 #include <physics/CCPhysicsContact.h>
 #include <ui/UIImageView.h>
+#include <SimpleAudioEngine.h>
 
 #include <Scenes/MapLayer.h>
 #include <Scenes/GameplayLayer.h>
@@ -75,6 +76,8 @@ bool World::init() {
     colors.push_back(Color::YELLOW);
     colors.push_back(Color::BLUE);
 
+    audioEngine = CocosDenshion::SimpleAudioEngine::getInstance();
+    loadResources();
     buildScene();
     connectListeners();
 
@@ -95,6 +98,8 @@ bool World::init() {
 
     mCurrentWave = 0;
     mCleared = false;
+
+    audioEngine->playBackgroundMusic("audio/ambient.mp3", true);
 
     return true;
 }
@@ -297,4 +302,14 @@ void World::drawPath() {
             mPathCanvas->drawLine(waypoint.location, previousWaypoint.location, Color4F::RED);
         }
     }
+}
+
+void World::loadResources() {
+    audioEngine->preloadBackgroundMusic("audio/ambient.mp3");
+    audioEngine->preloadEffect("audio/explosion_1.wav");
+    audioEngine->preloadEffect("audio/explosion_2.wav");
+    audioEngine->preloadEffect("audio/explosion_3.wav");
+    audioEngine->preloadEffect("audio/laser_gun.wav");
+    audioEngine->preloadEffect("audio/missile_launch.wav");
+    audioEngine->preloadEffect("audio/click.wav");
 }

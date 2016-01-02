@@ -6,6 +6,7 @@
 #include <ui/UIImageView.h>
 #include <ui/UIButton.h>
 #include <ui/UIText.h>
+#include <SimpleAudioEngine.h>
 
 #include <Scenes/World.h>
 #include <Scenes/GameplayLayer.h>
@@ -163,12 +164,16 @@ void HUDLayer::notify(char pType, std::string pMessage, float pDuration) {
 
 void HUDLayer::menuButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType) {
     if (pType == ui::Widget::TouchEventType::ENDED) {
+        mWorld->audioEngine->playEffect("audio/click.wav");
         notify('W', "Opening menu!");
     }
 }
 
+
 void HUDLayer::nextButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType) {
     if (pType == ui::Widget::TouchEventType::ENDED) {
+        mWorld->audioEngine->playEffect("audio/click.wav");
+
         if (mWorld->spawnNextWave())
             notify('W', "Coming next wave!");
         else
@@ -185,12 +190,15 @@ void HUDLayer::pauseButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::T
         else
             layer->pauseScene();
 
+        mWorld->audioEngine->playEffect("audio/click.wav");
         notify('W', "Game paused!");
     }
 }
 
 void HUDLayer::ffButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType) {
     if (pType == ui::Widget::TouchEventType::ENDED) {
+
+        mWorld->audioEngine->playEffect("audio/click.wav");
         notify('W', "Double time!");
     }
 }

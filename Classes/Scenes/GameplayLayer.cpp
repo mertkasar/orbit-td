@@ -47,8 +47,8 @@ bool GameplayLayer::init() {
 
     this->setName("gameplay_layer");
 
-    mAudioEngine = CocosDenshion::SimpleAudioEngine::getInstance();
-    loadResources();
+    auto spriteCache = SpriteFrameCache::getInstance();
+    spriteCache->addSpriteFramesWithFile("textures/gameplay_layer.plist");
 
     this->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
@@ -144,7 +144,7 @@ void GameplayLayer::addMissile(cocos2d::Vec2 pPosition, const cocos2d::Color3B &
         mParticleBatch->addChild(emitter);
     }
 
-    mAudioEngine->playEffect("audio/missile_launch.wav");
+    mWorld->audioEngine->playEffect("audio/missile_launch.wav");
 
     this->addChild(missile);
     mMissiles.pushBack(missile);
@@ -156,7 +156,7 @@ void GameplayLayer::addBullet(cocos2d::Vec2 pPosition, const cocos2d::Color3B &p
 
     bullet->ignite(pPosition, pBaseColor, pDamage, pTarget);
 
-    mAudioEngine->playEffect("audio/laser_gun.wav");
+    mWorld->audioEngine->playEffect("audio/laser_gun.wav");
 
     this->addChild(bullet);
 }
@@ -174,7 +174,7 @@ void GameplayLayer::addExplosion(cocos2d::Vec2 pPosition, float pDuration, float
     int index = random(1, 3);
     std::stringstream ss;
     ss << "audio/explosion_" << index << ".wav";
-    mAudioEngine->playEffect(ss.str().c_str());
+    mWorld->audioEngine->playEffect(ss.str().c_str());
 }
 
 void GameplayLayer::createMock(TowerTypes pType, cocos2d::Vec2 pTile) {
@@ -262,17 +262,4 @@ void GameplayLayer::resumeScene() {
         emitter->resume();
 
     mPaused = false;
-}
-
-void GameplayLayer::loadResources() {
-    auto spriteCache = SpriteFrameCache::getInstance();
-    spriteCache->addSpriteFramesWithFile("textures/gameplay_layer.plist");
-
-    mAudioEngine->preloadBackgroundMusic("audio/ambient.mp3");
-    mAudioEngine->preloadEffect("audio/explosion_1.wav");
-    mAudioEngine->preloadEffect("audio/explosion_2.wav");
-    mAudioEngine->preloadEffect("audio/explosion_3.wav");
-    mAudioEngine->preloadEffect("audio/laser_gun.wav");
-    mAudioEngine->preloadEffect("audio/missile_launch.wav");
-    mAudioEngine->playBackgroundMusic("audio/ambient.mp3", true);
 }

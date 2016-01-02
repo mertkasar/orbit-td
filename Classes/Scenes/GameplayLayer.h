@@ -22,14 +22,9 @@ namespace cocos2d {
     class ParticleBatchNode;
 }
 
-namespace CocosDenshion {
-    class SimpleAudioEngine;
-}
-
 class GameplayLayer : public cocos2d::Layer {
 private:
     World *mWorld;
-    CocosDenshion::SimpleAudioEngine *mAudioEngine;
 
     bool mPaused;
 
@@ -86,9 +81,6 @@ public:
     cocos2d::Vector<Creep *> &getCreepList() {
         return mCreeps;
     }
-
-private:
-    void loadResources();
 };
 
 #endif //GAMEPLAY_LAYER_H

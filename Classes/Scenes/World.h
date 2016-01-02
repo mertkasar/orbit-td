@@ -17,6 +17,10 @@ namespace cocos2d {
     class PhysicsWorld;
 };
 
+namespace CocosDenshion {
+    class SimpleAudioEngine;
+}
+
 class Tower;
 
 class Creep;
@@ -51,6 +55,8 @@ private:
     unsigned int mLife;
 
 public:
+    CocosDenshion::SimpleAudioEngine *audioEngine;
+
     cocos2d::LayerColor *backgroundLayer;
     MapLayer *mapLayer;
     GameplayLayer *gameplayLayer;
@@ -111,6 +117,8 @@ public:
     }
 
 private:
+    void loadResources();
+
     void buildScene();
 
     void connectListeners();
