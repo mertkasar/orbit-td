@@ -312,4 +312,5 @@ void World::loadResources() {
     audioEngine->preloadEffect("audio/laser_gun.wav");
     audioEngine->preloadEffect("audio/missile_launch.wav");
     audioEngine->preloadEffect("audio/click.wav");
+    audioEngine->preloadEffect("audio/open.wav");
 }

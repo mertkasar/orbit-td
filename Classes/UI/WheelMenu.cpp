@@ -4,6 +4,7 @@
 #include <2d/CCActionInterval.h>
 #include <ui/UIImageView.h>
 #include <ui/UIButton.h>
+#include <SimpleAudioEngine.h>
 
 #include <Scenes/World.h>
 #include <Scenes/MapLayer.h>
@@ -150,6 +151,8 @@ void WheelMenu::openAt(cocos2d::Vec2 pPosition) {
     }
 
     updateButtonStates();
+
+    mWorld->audioEngine->playEffect("audio/open.wav");
 }
 
 void WheelMenu::close() {
@@ -202,6 +205,7 @@ void WheelMenu::towerButtonCallback(Ref *pSender, ui::Widget::TouchEventType pTy
             if (p_Type == ui::Widget::TouchEventType::ENDED) {
                 if (mWorld->placeTower(mSelectedType, mCurrentTile)) {
                     close();
+                    mWorld->audioEngine->playEffect("audio/click.wav");
                 }
             }
         });
@@ -212,8 +216,10 @@ void WheelMenu::towerButtonCallback(Ref *pSender, ui::Widget::TouchEventType pTy
             if (p_Type == ui::Widget::TouchEventType::ENDED) {
                 close();
                 mWorld->gameplayLayer->removeMock();
+                mWorld->audioEngine->playEffect("audio/click.wav");
             }
         });
+        mWorld->audioEngine->playEffect("audio/click.wav");
     }
 }
 
@@ -227,6 +233,7 @@ void WheelMenu::sellButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::T
         btn->addTouchEventListener([&](Ref *p_Sender, ui::Widget::TouchEventType p_Type) {
             if (p_Type == ui::Widget::TouchEventType::ENDED) {
                 mWorld->destroyTower(mCurrentTile);
+                mWorld->audioEngine->playEffect("audio/click.wav");
                 close();
             }
         });
@@ -235,9 +242,12 @@ void WheelMenu::sellButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::T
 
         btn->addTouchEventListener([&](Ref *p_Sender, ui::Widget::TouchEventType p_Type) {
             if (p_Type == ui::Widget::TouchEventType::ENDED) {
+                mWorld->audioEngine->playEffect("audio/click.wav");
                 close();
             }
         });
+
+        mWorld->audioEngine->playEffect("audio/click.wav");
     }
 }
 
@@ -251,6 +261,7 @@ void WheelMenu::upgradeButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget
         btn->addTouchEventListener([&](Ref *p_Sender, ui::Widget::TouchEventType p_Type) {
             if (p_Type == ui::Widget::TouchEventType::ENDED) {
                 mWorld->upgradeTower(mCurrentTile);
+                mWorld->audioEngine->playEffect("audio/click.wav");
                 close();
             }
         });
@@ -259,8 +270,11 @@ void WheelMenu::upgradeButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget
 
         btn->addTouchEventListener([&](Ref *p_Sender, ui::Widget::TouchEventType p_Type) {
             if (p_Type == ui::Widget::TouchEventType::ENDED) {
+                mWorld->audioEngine->playEffect("audio/click.wav");
                 close();
             }
         });
+
+        mWorld->audioEngine->playEffect("audio/click.wav");
     }
 }
