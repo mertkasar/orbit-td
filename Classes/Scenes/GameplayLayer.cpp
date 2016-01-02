@@ -143,7 +143,9 @@ void GameplayLayer::addMissile(cocos2d::Vec2 pPosition, const cocos2d::Color3B &
     if (emitter->getParent() == nullptr) {
         mParticleBatch->addChild(emitter);
     }
-    
+
+    mAudioEngine->playEffect("audio/missile_launch.wav");
+
     this->addChild(missile);
     mMissiles.pushBack(missile);
 }
@@ -270,5 +272,7 @@ void GameplayLayer::loadResources() {
     mAudioEngine->preloadEffect("audio/explosion_1.wav");
     mAudioEngine->preloadEffect("audio/explosion_2.wav");
     mAudioEngine->preloadEffect("audio/explosion_3.wav");
+    mAudioEngine->preloadEffect("audio/laser_gun.wav");
+    mAudioEngine->preloadEffect("audio/missile_launch.wav");
     mAudioEngine->playBackgroundMusic("audio/ambient.mp3", true);
 }
