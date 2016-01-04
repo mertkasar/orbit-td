@@ -6,6 +6,7 @@
 #include <physics/CCPhysicsContact.h>
 #include <base/CCEventDispatcher.h>
 #include <physics/CCPhysicsWorld.h>
+#include <SimpleAudioEngine.h>
 
 #include <Scenes/World.h>
 #include <Scenes/MapLayer.h>
@@ -17,6 +18,7 @@
 #include <Entities/Towers/RLauncher.h>
 #include <Utilities/Shake.h>
 #include <2d/CCSpriteFrameCache.h>
+#include <sstream>
 
 USING_NS_CC;
 
@@ -98,7 +100,6 @@ bool GameplayLayer::init() {
 
     Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
 
-    //mParticleBatch = ParticleBatchNode::createWithTexture(nullptr, 3000);
     mParticleBatch = ParticleBatchNode::create("textures/particles/missile_fire.png", 3000);
     this->addChild(mParticleBatch);
 
@@ -115,11 +116,12 @@ void GameplayLayer::update(float pDelta) {
             mCreeps.eraseObject(enemy);
 
             if (enemy->isKilled()) {
-                addExplosion(enemy->getPosition());
-                shake(0.5f, 3.f);
+                addExplosion(enemy->getPosition(), 0.5f, 3.f);
                 mWorld->balanceTotalCoin(enemy->getReward());
-            } else if (enemy->isReachedEnd())
+            } else if (enemy->isReachedEnd()) {
                 mWorld->balanceRemainingLife(-1);
+                mWorld->audioEngine->playEffect("audio/buzz.wav");
+            }
         }
 }
 
@@ -144,6 +146,8 @@ void GameplayLayer::addMissile(cocos2d::Vec2 pPosition, const cocos2d::Color3B &
         mParticleBatch->addChild(emitter);
     }
 
+    mWorld->audioEngine->playEffect("audio/missile_launch.wav");
+
     this->addChild(missile);
     mMissiles.pushBack(missile);
 }
@@ -154,15 +158,25 @@ void GameplayLayer::addBullet(cocos2d::Vec2 pPosition, const cocos2d::Color3B &p
 
     bullet->ignite(pPosition, pBaseColor, pDamage, pTarget);
 
+    mWorld->audioEngine->playEffect("audio/laser_gun.wav", false, 1.0f, 0.0f, 0.3f);
+
     this->addChild(bullet);
 }
 
-void GameplayLayer::addExplosion(cocos2d::Vec2 pPosition) {
+void GameplayLayer::addExplosion(cocos2d::Vec2 pPosition, float pDuration, float pStrength) {
+    // Create explosion animation
     auto explosion = mExplosionPool.fetch();
-
     explosion->ignite(pPosition);
-
     this->addChild(explosion);
+
+    // Create shake animation
+    this->getParent()->runAction(Shake::actionWithDuration(pDuration, pStrength));
+
+    // Play a random explosion sfx
+    int index = random(1, 3);
+    std::stringstream ss;
+    ss << "audio/explosion_" << index << ".wav";
+    mWorld->audioEngine->playEffect(ss.str().c_str());
 }
 
 void GameplayLayer::createMock(TowerTypes pType, cocos2d::Vec2 pTile) {
@@ -196,6 +210,8 @@ void GameplayLayer::buildMock(Vec2 pTile) {
 
     mMock->build();
     mTowerMap.insert(std::make_pair(pTile, mMock));
+
+    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/deploy.wav");
 }
 
 void GameplayLayer::removeMock() {
@@ -250,9 +266,4 @@ void GameplayLayer::resumeScene() {
         emitter->resume();
 
     mPaused = false;
-}
-
-void GameplayLayer::shake(float pDuration, float pStrength) {
-    // TODO: Repedeatly creating shake action may cause performance issues try to pool it
-    this->getParent()->runAction(Shake::actionWithDuration(pDuration, pStrength));
 }

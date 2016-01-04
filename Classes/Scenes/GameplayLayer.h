@@ -18,7 +18,7 @@ class Explosion;
 
 class Bullet;
 
-namespace cocos2d{
+namespace cocos2d {
     class ParticleBatchNode;
 }
 
@@ -58,7 +58,7 @@ public:
 
     void addBullet(cocos2d::Vec2 pPosition, const cocos2d::Color3B &pBaseColor, float pDamage, Creep *pTarget);
 
-    void addExplosion(cocos2d::Vec2 pPosition);
+    void addExplosion(cocos2d::Vec2 pPosition, float pDuration, float pStrength);
 
     void createMock(TowerTypes pType, cocos2d::Vec2 pTile);
 
@@ -81,9 +81,6 @@ public:
     cocos2d::Vector<Creep *> &getCreepList() {
         return mCreeps;
     }
-
-private:
-    void shake(float pDuration, float pStrength);
 };
 
 #endif //GAMEPLAY_LAYER_H
