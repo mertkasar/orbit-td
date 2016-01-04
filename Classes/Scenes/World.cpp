@@ -316,4 +316,5 @@ void World::loadResources() {
     audioEngine->preloadEffect("audio/open.wav");
     audioEngine->preloadEffect("audio/deploy.wav");
     audioEngine->preloadEffect("audio/upgrade.wav");
+    audioEngine->preloadEffect("audio/buzz.wav");
 }

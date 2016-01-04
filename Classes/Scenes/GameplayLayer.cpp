@@ -118,8 +118,10 @@ void GameplayLayer::update(float pDelta) {
             if (enemy->isKilled()) {
                 addExplosion(enemy->getPosition(), 0.5f, 3.f);
                 mWorld->balanceTotalCoin(enemy->getReward());
-            } else if (enemy->isReachedEnd())
+            } else if (enemy->isReachedEnd()) {
                 mWorld->balanceRemainingLife(-1);
+                mWorld->audioEngine->playEffect("audio/buzz.wav");
+            }
         }
 }
 
