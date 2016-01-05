@@ -2,8 +2,7 @@
 #define GAME_SCENE_H
 
 #include <2d/CCLayer.h>
-
-#include <UI/WheelMenu.h>
+#include <Globals.h>
 
 namespace cocos2d {
     class DrawNode;
@@ -27,6 +26,8 @@ class GameplayLayer;
 
 class HUDLayer;
 
+class WheelMenu;
+
 class World : public cocos2d::Layer {
 private:
     cocos2d::Size mVisibleSize;
@@ -39,7 +40,7 @@ private:
     unsigned int mCurrentWave;
     bool mCleared;
 
-    WheelMenu mWheelMenu;
+    WheelMenu *mWheelMenu;
 
     unsigned int mTotalCoin;
 

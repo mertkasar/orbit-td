@@ -1,4 +1,4 @@
-#include <UI/WheelMenu.h>
+#include <Entities/WheelMenu.h>
 
 #include <2d/CCMenu.h>
 #include <2d/CCActionInterval.h>
@@ -15,14 +15,29 @@
 
 USING_NS_CC;
 
-void WheelMenu::init(Layer *pLayer, World *pGameScene) {
-    mWorld = pGameScene;
+WheelMenu *WheelMenu::create(World *pWorld) {
+    WheelMenu *ret = new(std::nothrow) WheelMenu();
+
+    if (ret && ret->init(pWorld)) {
+        ret->autorelease();
+    } else {
+        CC_SAFE_DELETE(ret);
+    }
+
+    return ret;
+}
+
+bool WheelMenu::init(World *pWorld) {
+    if (!Node::init())
+        return false;
+
+    mWorld = pWorld;
 
     mCurrentTile = Vec2(-1, -1);
     mLastCoin = 0;
 
-    mRoot = Node::create();
-    mRoot->setContentSize(Size(250.f, 250.f));
+    mRootMenu = Node::create();
+    mRootMenu->setContentSize(Size(250.f, 250.f));
 
     mPurchaseMenu = ui::Layout::create();
 
@@ -70,18 +85,23 @@ void WheelMenu::init(Layer *pLayer, World *pGameScene) {
     item = ui::Button::create("btn_decline.png", "", "", ui::Widget::TextureResType::PLIST);
     item->setTag(DECLINE);
     item->setPosition(Vec2(-SHIFT, 0.f));
+    item->addTouchEventListener(CC_CALLBACK_2(WheelMenu::declineButtonCallback, this));
     mValidationMenu->addChild(item);
 
     mMock = TowerMock::create();
 
-    mRoot->addChild(mPurchaseMenu);
-    mRoot->addChild(mVerboseMenu);
-    mRoot->addChild(mValidationMenu);
-    
-    pLayer->addChild(mMock);
-    pLayer->addChild(mRoot);
+    mRootMenu->addChild(mPurchaseMenu);
+    mRootMenu->addChild(mVerboseMenu);
+    mRootMenu->addChild(mValidationMenu);
+
+    this->addChild(mMock);
+    this->addChild(mRootMenu);
 
     setState(IDLE);
+
+    this->scheduleUpdate();
+
+    return true;
 }
 
 void WheelMenu::update(float pDelta) {
@@ -95,7 +115,7 @@ void WheelMenu::update(float pDelta) {
 }
 
 void WheelMenu::setState(WheelMenu::State pState) {
-    for (auto menu :  mRoot->getChildren())
+    for (auto menu :  mRootMenu->getChildren())
         menu->setVisible(false);
 
     Node *menu = nullptr;
@@ -142,16 +162,14 @@ void WheelMenu::openAt(cocos2d::Vec2 pPosition) {
     if (nodeValue == 0) {
         mCurrentTile = pPosition;
 
-        const Vec2 &position = algorithm::toCircularGrid(pPosition);
-        mRoot->setPosition(position);
-        mMock->setPosition(position);
+        this->setPosition(algorithm::toCircularGrid(pPosition));
 
         mWorld->mapLayer->activateSlot(mCurrentTile);
 
         setState(PURCHASE);
     } else if (nodeValue == 1) {
         mCurrentTile = pPosition;
-        mRoot->setPosition(algorithm::toCircularGrid(pPosition));
+        this->setPosition(algorithm::toCircularGrid(pPosition));
 
         mWorld->gameplayLayer->getTower(mCurrentTile)->setVerbose(true);
 
@@ -222,14 +240,6 @@ void WheelMenu::towerButtonCallback(Ref *pSender, ui::Widget::TouchEventType pTy
             }
         });
 
-        btn = static_cast<ui::Button *>(mValidationMenu->getChildByTag(DECLINE));
-
-        btn->addTouchEventListener([&](Ref *p_Sender, ui::Widget::TouchEventType p_Type) {
-            if (p_Type == ui::Widget::TouchEventType::ENDED) {
-                close();
-                mWorld->audioEngine->playEffect("audio/click.wav");
-            }
-        });
         mWorld->audioEngine->playEffect("audio/click.wav");
     }
 }
@@ -244,15 +254,6 @@ void WheelMenu::sellButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::T
         btn->addTouchEventListener([&](Ref *p_Sender, ui::Widget::TouchEventType p_Type) {
             if (p_Type == ui::Widget::TouchEventType::ENDED) {
                 mWorld->destroyTower(mCurrentTile);
-                mWorld->audioEngine->playEffect("audio/click.wav");
-                close();
-            }
-        });
-
-        btn = static_cast<ui::Button *>(mValidationMenu->getChildByTag(DECLINE));
-
-        btn->addTouchEventListener([&](Ref *p_Sender, ui::Widget::TouchEventType p_Type) {
-            if (p_Type == ui::Widget::TouchEventType::ENDED) {
                 mWorld->audioEngine->playEffect("audio/click.wav");
                 close();
             }
@@ -277,15 +278,13 @@ void WheelMenu::upgradeButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget
             }
         });
 
-        btn = static_cast<ui::Button *>(mValidationMenu->getChildByTag(DECLINE));
-
-        btn->addTouchEventListener([&](Ref *p_Sender, ui::Widget::TouchEventType p_Type) {
-            if (p_Type == ui::Widget::TouchEventType::ENDED) {
-                mWorld->audioEngine->playEffect("audio/click.wav");
-                close();
-            }
-        });
-
         mWorld->audioEngine->playEffect("audio/click.wav");
+    }
+}
+
+void WheelMenu::declineButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType) {
+    if (pType == ui::Widget::TouchEventType::ENDED) {
+        mWorld->audioEngine->playEffect("audio/click.wav");
+        close();
     }
 }

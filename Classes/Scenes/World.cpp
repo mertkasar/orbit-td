@@ -17,6 +17,7 @@
 #include <Scenes/HUDLayer.h>
 #include <Entities/Towers/Tower.h>
 #include <Entities/Creep.h>
+#include <Entities/WheelMenu.h>
 
 #include <sstream>
 
@@ -107,8 +108,6 @@ bool World::init() {
 }
 
 void World::update(float pDelta) {
-    mWheelMenu.update(pDelta);
-
     if (gameplayLayer->getCreepList().size() <= 0) {
         if (!spawnNextWave())
             mCleared = true;
@@ -195,13 +194,14 @@ void World::buildScene() {
     gameCanvas->addChild(gameplayLayer);
 
     hudLayer = HUDLayer::create(this);
-    mWheelMenu.init(hudLayer, this);
+    mWheelMenu = WheelMenu::create(this);
 
     hudLayer->notify('I', "Game is starting!", 2.f);
 
     this->addChild(backgroundLayer);
     this->addChild(gameCanvas);
     this->addChild(hudLayer);
+    this->addChild(mWheelMenu);
 
     this->scheduleUpdate();
 }
@@ -212,10 +212,10 @@ void World::connectListeners() {
     touchListener->onTouchBegan = [&](Touch *pTouch, Event *pEvent) {
         Vec2 touched = mapLayer->getTouchedSlot(pTouch->getLocation());
 
-        if (mWheelMenu.isOpen()) {
-            mWheelMenu.close();
+        if (mWheelMenu->isOpen()) {
+            mWheelMenu->close();
         } else if (touched.x > -1 && touched.y > -1) {
-            mWheelMenu.openAt(touched);
+            mWheelMenu->openAt(touched);
         }
 
         return true;

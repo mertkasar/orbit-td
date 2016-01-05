@@ -134,6 +134,7 @@ set(GAME_SRC
   Classes/Entities/Beam.cpp
   Classes/Entities/Bullet.cpp
   Classes/Entities/TowerMock.cpp
+  Classes/Entities/WheelMenu.cpp
   Classes/Entities/Towers/Tower.cpp
   Classes/Entities/Towers/Turret.cpp
   Classes/Entities/Towers/Laser.cpp
@@ -143,7 +144,6 @@ set(GAME_SRC
   Classes/Utilities/Grid.cpp
   Classes/Utilities/Algorithm.cpp
   Classes/Utilities/Shake.cpp
-  Classes/UI/WheelMenu.cpp
   ${PLATFORM_SPECIFIC_SRC}
 )
 
@@ -160,6 +160,7 @@ set(GAME_HEADERS
   Classes/Entities/Beam.h
   Classes/Entities/Bullet.h
   Classes/Entities/TowerMock.h
+  Classes/Entities/WheelMenu.h
   Classes/Entities/Towers/Tower.h
   Classes/Entities/Towers/Turret.h
   Classes/Entities/Towers/Laser.h
@@ -170,7 +171,6 @@ set(GAME_HEADERS
   Classes/Utilities/Algorithm.h
   Classes/Utilities/Pool.h
   Classes/Utilities/Shake.h
-  Classes/UI/WheelMenu.h
   ${PLATFORM_SPECIFIC_HEADERS}
 )
 

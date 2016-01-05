@@ -24,13 +24,10 @@ private:
     cocos2d::ui::Layout *mNotificationPanel;
     cocos2d::ui::Layout *mBottomPanel;
 
-private:
-    HUDLayer(World *pWorld);
-
 public:
     static HUDLayer *create(World *pWorld);
 
-    virtual bool init();
+    bool init(World *pWorld);
 
     virtual void update(float pDelta);
 

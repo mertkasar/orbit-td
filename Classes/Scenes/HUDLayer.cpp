@@ -16,14 +16,10 @@
 
 USING_NS_CC;
 
-HUDLayer::HUDLayer(World *pWorld) {
-    mWorld = pWorld;
-}
-
 HUDLayer *HUDLayer::create(World *pWorld) {
-    HUDLayer *layer = new(std::nothrow) HUDLayer(pWorld);
+    HUDLayer *layer = new(std::nothrow) HUDLayer();
 
-    if (layer && layer->init()) {
+    if (layer && layer->init(pWorld)) {
         layer->autorelease();
         return layer;
     } else {
@@ -33,9 +29,11 @@ HUDLayer *HUDLayer::create(World *pWorld) {
     }
 }
 
-bool HUDLayer::init() {
+bool HUDLayer::init(World *pWorld) {
     if (!Layer::init())
         return false;
+
+    mWorld = pWorld;
 
     this->setName("hud_layer");
 

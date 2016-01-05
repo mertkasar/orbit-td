@@ -19,7 +19,7 @@ namespace cocos2d {
 
 class World;
 
-class WheelMenu {
+class WheelMenu : public cocos2d::Node {
 public:
     enum ButtonTag {
         ACCEPT,
@@ -46,7 +46,7 @@ private:
 
     unsigned int mLastCoin;
 
-    cocos2d::Node *mRoot;
+    cocos2d::Node *mRootMenu;
 
     cocos2d::ui::Layout *mPurchaseMenu;
 
@@ -57,9 +57,11 @@ private:
     TowerMock *mMock;
 
 public:
-    void init(cocos2d::Layer *pLayer, World *pGameScene);
+    static WheelMenu *create(World *pWorld);
 
-    void update(float pDelta);
+    bool init(World *pWorld);
+
+    virtual void update(float pDelta);
 
     void setState(State pState);
 
@@ -71,10 +73,6 @@ public:
         return mState != IDLE;
     }
 
-    cocos2d::Vec2 getCurrentTile() const {
-        return mCurrentTile;
-    }
-
 private:
     void updateButtonStates();
 
@@ -83,6 +81,8 @@ private:
     void sellButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType);
 
     void upgradeButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType);
+
+    void declineButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType);
 };
 
 #endif //WHEELMENU_H
