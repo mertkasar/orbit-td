@@ -254,3 +254,23 @@ void GameplayLayer::resumeScene() {
 
     mPaused = false;
 }
+
+bool GameplayLayer::isEnemyPathsClear(const TraverseData &pTraversed, Vec2 pTile) {
+    for (auto enemy : mCreeps) {
+        auto current = enemy->getPath().getCurrentWaypoint().tile;
+
+        if ((current == pTile) || !enemy->getPath().isReached(pTraversed, current))
+            return false;
+    }
+
+    return true;
+}
+
+void GameplayLayer::updateEnemyPaths(TraverseData pTraversed, Vec2 pGoal) {
+    for (auto enemy : mCreeps) {
+        auto &enemyPath = enemy->getPath();
+        auto from = enemyPath.getCurrentWaypoint().tile;
+
+        enemyPath.construct(pTraversed, from, pGoal);
+    }
+}

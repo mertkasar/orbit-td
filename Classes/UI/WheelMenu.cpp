@@ -137,7 +137,7 @@ void WheelMenu::setState(WheelMenu::State pState) {
 }
 
 void WheelMenu::openAt(cocos2d::Vec2 pPosition) {
-    auto nodeValue = mWorld->mGrid.getNode(pPosition);
+    auto nodeValue = mWorld->mapLayer->mGrid.getNode(pPosition);
 
     if (nodeValue == 0) {
         mCurrentTile = pPosition;
@@ -164,7 +164,7 @@ void WheelMenu::openAt(cocos2d::Vec2 pPosition) {
 }
 
 void WheelMenu::close() {
-    auto nodeValue = mWorld->mGrid.getNode(mCurrentTile);
+    auto nodeValue = mWorld->mapLayer->mGrid.getNode(mCurrentTile);
 
     if (nodeValue == 0) {
         mWorld->mapLayer->deactivateSlot(mCurrentTile);

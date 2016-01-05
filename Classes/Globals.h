@@ -43,5 +43,6 @@ namespace Color {
     const cocos2d::Color3B BG = {45, 45, 45};
 }
 
+typedef std::map<cocos2d::Vec2, cocos2d::Vec2> TraverseData;
 
 #endif //GLOBALS_H

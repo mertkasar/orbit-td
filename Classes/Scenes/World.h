@@ -3,10 +3,6 @@
 
 #include <2d/CCLayer.h>
 
-#include <Utilities/Path.h>
-#include <Utilities/Grid.h>
-
-#include <Utilities/Pool.h>
 #include <UI/WheelMenu.h>
 
 namespace cocos2d {
@@ -39,14 +35,9 @@ private:
 
     cocos2d::PhysicsWorld *mPhysicsWorld;
 
-    cocos2d::DrawNode *mPathCanvas;
-
     std::vector<std::vector<CreepTypes>> mWaves;
     unsigned int mCurrentWave;
     bool mCleared;
-
-    cocos2d::Vec2 mStart;
-    cocos2d::Vec2 mGoal;
 
     WheelMenu mWheelMenu;
 
@@ -61,9 +52,6 @@ public:
     MapLayer *mapLayer;
     GameplayLayer *gameplayLayer;
     HUDLayer *hudLayer;
-
-    Grid mGrid;
-    Path mPath;
 
     std::vector<cocos2d::Color3B> colors;
 
@@ -122,10 +110,6 @@ private:
     void buildScene();
 
     void connectListeners();
-
-    bool isAvailable(const TraverseData &pTraversed, cocos2d::Vec2 pTile);
-
-    void drawPath();
 };
 
 #endif // GAME_SCENE_H

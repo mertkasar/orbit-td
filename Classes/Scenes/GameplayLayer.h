@@ -68,6 +68,10 @@ public:
 
     void resumeScene();
 
+    void updateEnemyPaths(TraverseData map, cocos2d::Vec2 pGoal);
+
+    bool isEnemyPathsClear(const TraverseData &pTraversed, cocos2d::Vec2 pTile);
+
     bool isPaused() const {
         return mPaused;
     }
