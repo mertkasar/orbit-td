@@ -133,6 +133,7 @@ set(GAME_SRC
   Classes/Entities/Explosion.cpp
   Classes/Entities/Beam.cpp
   Classes/Entities/Bullet.cpp
+  Classes/Entities/TowerMock.cpp
   Classes/Entities/Towers/Tower.cpp
   Classes/Entities/Towers/Turret.cpp
   Classes/Entities/Towers/Laser.cpp
@@ -158,6 +159,7 @@ set(GAME_HEADERS
   Classes/Entities/Explosion.h
   Classes/Entities/Beam.h
   Classes/Entities/Bullet.h
+  Classes/Entities/TowerMock.h
   Classes/Entities/Towers/Tower.h
   Classes/Entities/Towers/Turret.h
   Classes/Entities/Towers/Laser.h

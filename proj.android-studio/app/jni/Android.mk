@@ -21,6 +21,7 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../../Classes/Entities/Explosion.cpp \
                    ../../../Classes/Entities/Beam.cpp \
                    ../../../Classes/Entities/Bullet.cpp \
+                   ../../../Classes/Entities/TowerMock.cpp \
                    ../../../Classes/Entities/Towers/Tower.cpp \
                    ../../../Classes/Entities/Towers/Turret.cpp \
                    ../../../Classes/Entities/Towers/Laser.cpp \

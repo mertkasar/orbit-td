@@ -38,8 +38,6 @@ private:
 
     std::map<cocos2d::Vec2, Tower *> mTowerMap;
 
-    Tower *mMock;
-
     cocos2d::ParticleBatchNode *mParticleBatch;
 
 private:
@@ -52,6 +50,8 @@ public:
 
     virtual void update(float pDelta);
 
+    void addTower(TowerTypes pType, cocos2d::Vec2 pTile);
+
     void addEnemy(CreepTypes pType, int pOrder, Path &pPath);
 
     void addMissile(cocos2d::Vec2 pPosition, const cocos2d::Color3B &pBaseColor, float pDamage, Creep *pTarget);
@@ -59,12 +59,6 @@ public:
     void addBullet(cocos2d::Vec2 pPosition, const cocos2d::Color3B &pBaseColor, float pDamage, Creep *pTarget);
 
     void addExplosion(cocos2d::Vec2 pPosition, float pDuration, float pStrength);
-
-    void createMock(TowerTypes pType, cocos2d::Vec2 pTile);
-
-    void removeMock();
-
-    void buildMock(cocos2d::Vec2 pTile);
 
     Tower *getTower(cocos2d::Vec2 pTile);
 

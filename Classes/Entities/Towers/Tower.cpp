@@ -46,7 +46,6 @@ bool Tower::init(TowerModel pModel) {
     mRangeSprite->runAction(RepeatForever::create(RotateBy::create(2.f, 30.f)));
 
     mBody = createBody(mRange);
-    mBody->setEnable(false);
     this->setPhysicsBody(mBody);
 
     mTarget = nullptr;
@@ -57,18 +56,9 @@ bool Tower::init(TowerModel pModel) {
     mGunSprite->addChild(mMuzzlePoint);
     this->addChild(mGunSprite);
 
-    this->setCascadeOpacityEnabled(true);
-    this->setOpacity(150);
+    this->scheduleUpdate();
 
     return true;
-}
-
-void Tower::build() {
-    mBody->setEnable(true);
-    this->setOpacity(255);
-    setVerbose(false);
-
-    this->scheduleUpdate();
 }
 
 void Tower::addTarget(Creep *pTarget) {

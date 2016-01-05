@@ -134,8 +134,7 @@ bool World::placeTower(TowerTypes pType, Vec2 pTile) {
     auto traversed = algorithm::traverse(testGrid, mStart, mGoal);
 
     if (isAvailable(traversed, pTile)) {
-        gameplayLayer->buildMock(pTile);
-
+        gameplayLayer->addTower(pType, pTile);
         mapLayer->activateSlot(pTile);
 
         mPath.construct(traversed, mStart, mGoal);

@@ -7,6 +7,8 @@
 
 #include <Globals.h>
 
+class TowerMock;
+
 namespace cocos2d {
     class Ref;
 
@@ -51,6 +53,8 @@ private:
     cocos2d::ui::Layout *mVerboseMenu;
 
     cocos2d::ui::Layout *mValidationMenu;
+
+    TowerMock *mMock;
 
 public:
     void init(cocos2d::Layer *pLayer, World *pGameScene);

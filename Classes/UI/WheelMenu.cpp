@@ -10,6 +10,8 @@
 #include <Scenes/MapLayer.h>
 #include <Scenes/GameplayLayer.h>
 #include <Entities/Towers/Tower.h>
+#include <2d/CCSprite.h>
+#include <Entities/TowerMock.h>
 
 USING_NS_CC;
 
@@ -70,10 +72,13 @@ void WheelMenu::init(Layer *pLayer, World *pGameScene) {
     item->setPosition(Vec2(-SHIFT, 0.f));
     mValidationMenu->addChild(item);
 
+    mMock = TowerMock::create();
+
     mRoot->addChild(mPurchaseMenu);
     mRoot->addChild(mVerboseMenu);
     mRoot->addChild(mValidationMenu);
-
+    
+    pLayer->addChild(mMock);
     pLayer->addChild(mRoot);
 
     setState(IDLE);
@@ -136,7 +141,10 @@ void WheelMenu::openAt(cocos2d::Vec2 pPosition) {
 
     if (nodeValue == 0) {
         mCurrentTile = pPosition;
-        mRoot->setPosition(algorithm::toCircularGrid(pPosition));
+
+        const Vec2 &position = algorithm::toCircularGrid(pPosition);
+        mRoot->setPosition(position);
+        mMock->setPosition(position);
 
         mWorld->mapLayer->activateSlot(mCurrentTile);
 
@@ -163,6 +171,8 @@ void WheelMenu::close() {
     } else if (nodeValue == 1) {
         mWorld->gameplayLayer->getTower(mCurrentTile)->setVerbose(false);
     }
+
+    mMock->setVisible(false);
 
     setState(IDLE);
 }
@@ -194,7 +204,9 @@ void WheelMenu::towerButtonCallback(Ref *pSender, ui::Widget::TouchEventType pTy
         auto btn = static_cast<ui::Button *>(pSender);
         mSelectedType = static_cast<TowerTypes>(btn->getTag());
 
-        mWorld->gameplayLayer->createMock(mSelectedType, mCurrentTile);
+        mMock->setVisible(true);
+        mMock->setScale(1.f);
+        mMock->setSkin(mSelectedType);
 
         setState(VALIDATION);
 
@@ -215,7 +227,6 @@ void WheelMenu::towerButtonCallback(Ref *pSender, ui::Widget::TouchEventType pTy
         btn->addTouchEventListener([&](Ref *p_Sender, ui::Widget::TouchEventType p_Type) {
             if (p_Type == ui::Widget::TouchEventType::ENDED) {
                 close();
-                mWorld->gameplayLayer->removeMock();
                 mWorld->audioEngine->playEffect("audio/click.wav");
             }
         });

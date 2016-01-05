@@ -179,45 +179,32 @@ void GameplayLayer::addExplosion(cocos2d::Vec2 pPosition, float pDuration, float
     mWorld->audioEngine->playEffect(ss.str().c_str());
 }
 
-void GameplayLayer::createMock(TowerTypes pType, cocos2d::Vec2 pTile) {
-    mMock = nullptr;
+void GameplayLayer::addTower(TowerTypes pType, cocos2d::Vec2 pTile) {
+    Tower *tower = nullptr;
 
     switch (pType) {
         case TURRET:
-            mMock = Turret::create();
+            tower = Turret::create();
             break;
         case LASER:
-            mMock = Laser::create();
+            tower = Laser::create();
             break;
         case R_LAUNCHER:
-            mMock = RLauncher::create();
+            tower = RLauncher::create();
             break;
         default:
             break;
     }
 
-    if (mMock) {
+    if (tower) {
         auto position = algorithm::toCircularGrid(pTile);
-        mMock->setPosition(position);
-        mMock->setVerbose(true);
+        tower->setPosition(position);
 
-        this->addChild(mMock);
-    }
-}
+        mWorld->balanceTotalCoin(-tower->getCost());
+        mTowerMap.insert(std::make_pair(pTile, tower));
 
-void GameplayLayer::buildMock(Vec2 pTile) {
-    mWorld->balanceTotalCoin(-mMock->getCost());
-
-    mMock->build();
-    mTowerMap.insert(std::make_pair(pTile, mMock));
-
-    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/deploy.wav");
-}
-
-void GameplayLayer::removeMock() {
-    if (mMock) {
-        mMock->removeFromParentAndCleanup(true);
-        mMock = nullptr;
+        this->addChild(tower);
+        CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/deploy.wav");
     }
 }
 

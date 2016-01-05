@@ -42,8 +42,6 @@ public:
 
     bool init(TowerModel pModel);
 
-    void build();
-
     virtual void update(float pDelta);
 
     void addTarget(Creep *pTarget);
