@@ -77,7 +77,7 @@ bool World::init() {
     colors.push_back(Color::BLUE);
 
     audioEngine = CocosDenshion::SimpleAudioEngine::getInstance();
-    loadResources();
+    //loadResources();
     buildScene();
     connectListeners();
 
@@ -99,8 +99,11 @@ bool World::init() {
     mCurrentWave = 0;
     mCleared = false;
 
-    audioEngine->setBackgroundMusicVolume(0.6f);
-    audioEngine->playBackgroundMusic("audio/ambient.mp3", true);
+    /*audioEngine->setBackgroundMusicVolume(0.6f);
+    audioEngine->playBackgroundMusic("audio/ambient.mp3", true);*/
+
+    audioEngine->setBackgroundMusicVolume(0.f);
+    audioEngine->setEffectsVolume(0.f);
 
     return true;
 }
