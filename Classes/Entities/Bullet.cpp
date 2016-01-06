@@ -26,27 +26,27 @@ bool Bullet::init() {
     if (!Node::init())
         return false;
 
-    mSprite = Sprite::createWithSpriteFrameName("bullet.png");
-    mSprite->setScale(0.5f);
-    this->addChild(mSprite);
+    _sprite = Sprite::createWithSpriteFrameName("bullet.png");
+    _sprite->setScale(0.5f);
+    this->addChild(_sprite);
 
     return true;
 }
 
-void Bullet::update(float pDelta) {
-    if (mTarget != nullptr) {
-        if (!mTarget->isDead())
-            mTargetPosition = mTarget->getPosition();
+void Bullet::update(float delta) {
+    if (_target != nullptr) {
+        if (!_target->isDead())
+            _targetPosition = _target->getPosition();
         else
-            mTarget = nullptr;
+            _target = nullptr;
     }
 
-    auto diff = mTargetPosition - this->getPosition();
-    float reachRadius = 10 + mSprite->getContentSize().width / 2.f;
+    auto diff = _targetPosition - this->getPosition();
+    float reachRadius = 10 + _sprite->getContentSize().width / 2.f;
 
     if (diff.length() <= reachRadius) {
-        if (mTarget != nullptr) {
-            mTarget->deal(mDamage);
+        if (_target != nullptr) {
+            _target->deal(_damage);
         }
 
         removeFromParent();
@@ -57,19 +57,19 @@ void Bullet::update(float pDelta) {
 
         // Adapt rotation
         auto angle = CC_RADIANS_TO_DEGREES(velocity.getAngle());
-        mSprite->setRotation(-angle);
+        _sprite->setRotation(-angle);
 
         // Move the bullet
-        this->setPosition(this->getPosition() + velocity * pDelta);
+        this->setPosition(this->getPosition() + velocity * delta);
     }
 }
 
-void Bullet::restart(cocos2d::Vec2 pPosition, const cocos2d::Color3B &pBaseColor, float pDamage, Creep *pTarget) {
-    setDamage(pDamage);
-    setTarget(pTarget);
+void Bullet::restart(cocos2d::Vec2 position, const cocos2d::Color3B &baseColor, float damage, Creep *target) {
+    setDamage(damage);
+    setTarget(target);
 
-    mSprite->setColor(pBaseColor);
+    _sprite->setColor(baseColor);
 
-    this->setPosition(pPosition);
+    this->setPosition(position);
     this->scheduleUpdate();
 }

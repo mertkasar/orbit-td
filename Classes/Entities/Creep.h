@@ -12,20 +12,6 @@ namespace cocos2d {
 }
 
 class Creep : public cocos2d::Node {
-private:
-    cocos2d::Sprite *mSprite;
-    cocos2d::PhysicsBody *mBody;
-    cocos2d::Node *mHPBar;
-
-    Path mPath;
-
-    float mMaxHP;
-    float mCurrentHP;
-    unsigned int mReward;
-
-    bool mKilled;
-    bool mReachedEnd;
-
 public:
     Creep();
 
@@ -33,40 +19,54 @@ public:
 
     virtual bool init();
 
-    virtual void update(float pDelta);
+    virtual void update(float delta);
 
     CREATE_FUNC(Creep);
 
-    void restart(const cocos2d::ValueMap &pModel, cocos2d::Vec2 pPosition, const Path &pPath);
+    void restart(const cocos2d::ValueMap &model, cocos2d::Vec2 position, const Path &path);
 
-    void deal(float pDamage);
+    void deal(float damage);
 
     Path &getPath() {
-        return mPath;
+        return _path;
     }
 
     float getHP() const {
-        return mMaxHP;
+        return _maxHP;
     }
 
     unsigned int getReward() const {
-        return mReward;
+        return _reward;
     }
 
     bool isKilled() const {
-        return mKilled;
+        return _killed;
     }
 
     bool isReachedEnd() const {
-        return mReachedEnd;
+        return _reachedEnd;
     }
 
     bool isDead() const {
-        return mKilled || mReachedEnd;
+        return _killed || _reachedEnd;
     }
 
 private:
     void updateHPBar();
+
+private:
+    cocos2d::Sprite *_sprite;
+    cocos2d::PhysicsBody *_body;
+    cocos2d::Node *_HPBar;
+
+    Path _path;
+
+    float _maxHP;
+    float _currentHP;
+    unsigned int _reward;
+
+    bool _killed;
+    bool _reachedEnd;
 };
 
 

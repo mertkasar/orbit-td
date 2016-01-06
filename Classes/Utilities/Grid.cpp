@@ -7,7 +7,7 @@ USING_NS_CC;
 const Vec2 DIRS[4] = {Vec2(0, 1), Vec2(1, 0), Vec2(0, -1), Vec2(-1, 0)};
 
 Grid::Grid() :
-        mGrid() {
+        _grid() {
 }
 
 Grid::Grid(Vec2 size) {
@@ -24,7 +24,7 @@ bool Grid::create(Vec2 size, int value) {
             for (int j = 0; j < size.y; j++)
                 row.push_back(value);
 
-            mGrid.push_back(row);
+            _grid.push_back(row);
         }
 
         created = true;
@@ -38,7 +38,7 @@ void Grid::fill(int value) {
 
     for (int i = 0; i < size.x; i++) {
         for (int j = 0; j < size.y; j++) {
-            mGrid[i][j] = value;
+            _grid[i][j] = value;
         }
     }
 }
@@ -61,8 +61,8 @@ Grid::Locations Grid::getNeighbours(Vec2 node) const {
 Vec2 Grid::getSize() const {
     Vec2 size;
 
-    size.x = mGrid.size();
-    size.y = mGrid.at(0).size();
+    size.x = _grid.size();
+    size.y = _grid.at(0).size();
 
     return size;
 }
@@ -84,7 +84,7 @@ void Grid::print() {
 
     for (int i = 0; i < size.x; i++) {
         for (int j = 0; j < size.y; j++) {
-            std::cout << mGrid[i][j] << ", ";
+            std::cout << _grid[i][j] << ", ";
         }
         std::cout << std::endl;
     }

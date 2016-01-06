@@ -10,7 +10,7 @@ public:
     CREATE_FUNC(Turret);
 
 private:
-    virtual void shoot(float pDelta) override;
+    virtual void shoot(float delta) override;
 };
 
 #endif //TURRET_H

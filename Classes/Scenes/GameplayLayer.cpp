@@ -22,12 +22,12 @@
 
 USING_NS_CC;
 
-GameplayLayer::GameplayLayer(World *pWorld) {
-    mWorld = pWorld;
+GameplayLayer::GameplayLayer(World *world) {
+    _world = world;
 }
 
-GameplayLayer *GameplayLayer::create(World *pWorld) {
-    GameplayLayer *layer = new(std::nothrow) GameplayLayer(pWorld);
+GameplayLayer *GameplayLayer::create(World *world) {
+    GameplayLayer *layer = new(std::nothrow) GameplayLayer(world);
 
     if (layer && layer->init()) {
         layer->autorelease();
@@ -43,7 +43,7 @@ bool GameplayLayer::init() {
     if (!Layer::init())
         return false;
 
-    mPaused = false;
+    _paused = false;
 
     this->setName("gameplay_layer");
 
@@ -100,89 +100,89 @@ bool GameplayLayer::init() {
 
     Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
 
-    mParticleBatch = ParticleBatchNode::create("textures/particles/missile_fire.png", 3000);
-    this->addChild(mParticleBatch);
+    _particleBatch = ParticleBatchNode::create("textures/particles/missile_fire.png", 3000);
+    this->addChild(_particleBatch);
 
     this->scheduleUpdate();
 
     return true;
 }
 
-void GameplayLayer::update(float pDelta) {
+void GameplayLayer::update(float delta) {
     //Clear dead enemy objects
-    for (auto enemy : mCreeps)
+    for (auto enemy : _creeps)
         if (enemy->isDead()) {
             enemy->removeFromParent();
-            mCreeps.eraseObject(enemy);
+            _creeps.eraseObject(enemy);
 
             if (enemy->isKilled()) {
                 addExplosion(enemy->getPosition(), 0.5f, 3.f);
-                mWorld->balanceTotalCoin(enemy->getReward());
+                _world->balanceTotalCoin(enemy->getReward());
             } else if (enemy->isReachedEnd()) {
-                mWorld->balanceRemainingLife(-1);
-                mWorld->audioEngine->playEffect("audio/buzz.wav");
+                _world->balanceRemainingLife(-1);
+                _world->_audioEngine->playEffect("audio/buzz.wav");
             }
         }
 }
 
-void GameplayLayer::addEnemy(const ValueMap &pModel, int pOrder, Path &pPath) {
-    auto enemy = mCreepPool.fetch();
+void GameplayLayer::addEnemy(const ValueMap &model, int order, Path &path) {
+    auto enemy = _creepPool.fetch();
 
-    Vec2 spawnPosition = Vec2(1230, 360.f) + Vec2(pOrder * 100, 0);
-    enemy->restart(pModel, spawnPosition, pPath);
+    Vec2 spawnPosition = Vec2(1230, 360.f) + Vec2(order * 100, 0);
+    enemy->restart(model, spawnPosition, path);
 
     this->addChild(enemy);
-    mCreeps.pushBack(enemy);
+    _creeps.pushBack(enemy);
 }
 
-void GameplayLayer::addMissile(cocos2d::Vec2 pPosition, const cocos2d::Color3B &pBaseColor, float pDamage,
-                               Creep *pTarget) {
-    auto missile = mMissilePool.fetch();
+void GameplayLayer::addMissile(cocos2d::Vec2 position, const cocos2d::Color3B &baseColor, float damage,
+                               Creep *target) {
+    auto missile = _missilePool.fetch();
 
-    missile->restart(pPosition, pBaseColor, pDamage, pTarget);
+    missile->restart(position, baseColor, damage, target);
 
     auto emitter = missile->getEmitter();
     if (emitter->getParent() == nullptr) {
-        mParticleBatch->addChild(emitter);
+        _particleBatch->addChild(emitter);
     }
 
-    mWorld->audioEngine->playEffect("audio/missile_launch.wav");
+    _world->_audioEngine->playEffect("audio/missile_launch.wav");
 
     this->addChild(missile);
-    mMissiles.pushBack(missile);
+    _missiles.pushBack(missile);
 }
 
-void GameplayLayer::addBullet(cocos2d::Vec2 pPosition, const cocos2d::Color3B &pBaseColor, float pDamage,
-                              Creep *pTarget) {
-    auto bullet = mBulletPool.fetch();
+void GameplayLayer::addBullet(cocos2d::Vec2 position, const cocos2d::Color3B &baseColor, float pDamage,
+                              Creep *target) {
+    auto bullet = _bulletPool.fetch();
 
-    bullet->restart(pPosition, pBaseColor, pDamage, pTarget);
+    bullet->restart(position, baseColor, pDamage, target);
 
-    mWorld->audioEngine->playEffect("audio/laser_gun.wav", false, 1.0f, 0.0f, 0.3f);
+    _world->_audioEngine->playEffect("audio/laser_gun.wav", false, 1.0f, 0.0f, 0.3f);
 
     this->addChild(bullet);
 }
 
-void GameplayLayer::addExplosion(cocos2d::Vec2 pPosition, float pDuration, float pStrength) {
+void GameplayLayer::addExplosion(cocos2d::Vec2 position, float duration, float strength) {
     // Create explosion animation
-    auto explosion = mExplosionPool.fetch();
-    explosion->restart(pPosition);
+    auto explosion = _explosionPool.fetch();
+    explosion->restart(position);
     this->addChild(explosion);
 
     // Create shake animation
-    this->getParent()->runAction(Shake::actionWithDuration(pDuration, pStrength));
+    this->getParent()->runAction(Shake::actionWithDuration(duration, strength));
 
     // Play a random explosion sfx
     int index = random(1, 3);
     std::stringstream ss;
     ss << "audio/explosion_" << index << ".wav";
-    mWorld->audioEngine->playEffect(ss.str().c_str());
+    _world->_audioEngine->playEffect(ss.str().c_str());
 }
 
-void GameplayLayer::addTower(ModelID pType, cocos2d::Vec2 pTile) {
+void GameplayLayer::addTower(ModelID type, cocos2d::Vec2 tile) {
     Tower *tower = nullptr;
 
-    switch (pType) {
+    switch (type) {
         case TURRET:
             tower = Turret::create();
             break;
@@ -197,34 +197,34 @@ void GameplayLayer::addTower(ModelID pType, cocos2d::Vec2 pTile) {
     }
 
     if (tower) {
-        auto position = algorithm::toCircularGrid(pTile);
+        auto position = algorithm::toCircularGrid(tile);
         tower->setPosition(position);
 
-        mWorld->balanceTotalCoin(-tower->getCost());
-        mTowerMap.insert(std::make_pair(pTile, tower));
+        _world->balanceTotalCoin(-tower->getCost());
+        _towerMap.insert(std::make_pair(tile, tower));
 
         this->addChild(tower);
         CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/deploy.wav");
     }
 }
 
-Tower *GameplayLayer::getTower(Vec2 pTile) {
-    auto found = mTowerMap.find(pTile);
+Tower *GameplayLayer::getTower(Vec2 tile) {
+    auto found = _towerMap.find(tile);
 
-    assert(found != mTowerMap.end());
+    assert(found != _towerMap.end());
 
     return found->second;
 }
 
-void GameplayLayer::deleteTower(Vec2 pTile) {
-    auto found = mTowerMap.find(pTile);
+void GameplayLayer::deleteTower(Vec2 tile) {
+    auto found = _towerMap.find(tile);
 
-    assert(found != mTowerMap.end());
+    assert(found != _towerMap.end());
 
     auto tower = found->second;
-    mWorld->balanceTotalCoin(tower->getCost());
+    _world->balanceTotalCoin(tower->getCost());
     tower->removeFromParentAndCleanup(true);
-    mTowerMap.erase(found);
+    _towerMap.erase(found);
 }
 
 void GameplayLayer::pauseScene() {
@@ -233,12 +233,12 @@ void GameplayLayer::pauseScene() {
     for (auto child : this->getChildren())
         child->pause();
 
-    mWorld->getPhysicsWorld()->setSpeed(0.f);
+    _world->getPhysicsWorld()->setSpeed(0.f);
 
-    for (auto emitter : mParticleBatch->getChildren())
+    for (auto emitter : _particleBatch->getChildren())
         emitter->pause();
 
-    mPaused = true;
+    _paused = true;
 }
 
 void GameplayLayer::resumeScene() {
@@ -247,30 +247,30 @@ void GameplayLayer::resumeScene() {
     for (auto child : this->getChildren())
         child->resume();
 
-    mWorld->getPhysicsWorld()->setSpeed(1.f);
+    _world->getPhysicsWorld()->setSpeed(1.f);
 
-    for (auto emitter : mParticleBatch->getChildren())
+    for (auto emitter : _particleBatch->getChildren())
         emitter->resume();
 
-    mPaused = false;
+    _paused = false;
 }
 
-bool GameplayLayer::isEnemyPathsClear(const TraverseData &pTraversed, Vec2 pTile) {
-    for (auto enemy : mCreeps) {
-        auto current = enemy->getPath().getCurrentWaypoint().tile;
+bool GameplayLayer::isEnemyPathsClear(const TraverseData &traversed, Vec2 node) {
+    for (auto enemy : _creeps) {
+        auto current = enemy->getPath().getCurrentWaypoint()._tile;
 
-        if ((current == pTile) || !enemy->getPath().isReached(pTraversed, current))
+        if ((current == node) || !enemy->getPath().isReached(traversed, current))
             return false;
     }
 
     return true;
 }
 
-void GameplayLayer::updateEnemyPaths(TraverseData pTraversed, Vec2 pGoal) {
-    for (auto enemy : mCreeps) {
+void GameplayLayer::updateEnemyPaths(const TraverseData &traversed, Vec2 goal) {
+    for (auto enemy : _creeps) {
         auto &enemyPath = enemy->getPath();
-        auto from = enemyPath.getCurrentWaypoint().tile;
+        auto from = enemyPath.getCurrentWaypoint()._tile;
 
-        enemyPath.construct(pTraversed, from, pGoal);
+        enemyPath.construct(traversed, from, goal);
     }
 }

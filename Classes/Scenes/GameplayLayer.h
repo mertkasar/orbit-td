@@ -25,61 +25,61 @@ namespace cocos2d {
 
 class GameplayLayer : public cocos2d::Layer {
 private:
-    World *mWorld;
-
-    bool mPaused;
-
-    Pool<Creep> mCreepPool;
-    Pool<Missile> mMissilePool;
-    Pool<Bullet> mBulletPool;
-    Pool<Explosion> mExplosionPool;
-
-    cocos2d::Vector<Creep *> mCreeps;
-    cocos2d::Vector<Missile *> mMissiles;
-
-    std::map<cocos2d::Vec2, Tower *> mTowerMap;
-
-    cocos2d::ParticleBatchNode *mParticleBatch;
-
-private:
-    GameplayLayer(World *pWorld);
+    GameplayLayer(World *world);
 
 public:
-    static GameplayLayer *create(World *pWorld);
+    static GameplayLayer *create(World *world);
 
     virtual bool init();
 
-    virtual void update(float pDelta);
+    virtual void update(float delta);
 
-    void addTower(ModelID pType, cocos2d::Vec2 pTile);
+    void addTower(ModelID type, cocos2d::Vec2 tile);
 
-    void addEnemy(const cocos2d::ValueMap &pModel, int pOrder, Path &pPath);
+    void addEnemy(const cocos2d::ValueMap &model, int order, Path &path);
 
-    void addMissile(cocos2d::Vec2 pPosition, const cocos2d::Color3B &pBaseColor, float pDamage, Creep *pTarget);
+    void addMissile(cocos2d::Vec2 position, const cocos2d::Color3B &baseColor, float damage, Creep *target);
 
-    void addBullet(cocos2d::Vec2 pPosition, const cocos2d::Color3B &pBaseColor, float pDamage, Creep *pTarget);
+    void addBullet(cocos2d::Vec2 position, const cocos2d::Color3B &baseColor, float pDamage, Creep *target);
 
-    void addExplosion(cocos2d::Vec2 pPosition, float pDuration, float pStrength);
+    void addExplosion(cocos2d::Vec2 position, float duration, float strength);
 
-    Tower *getTower(cocos2d::Vec2 pTile);
+    Tower *getTower(cocos2d::Vec2 tile);
 
-    void deleteTower(cocos2d::Vec2 pTile);
+    void deleteTower(cocos2d::Vec2 tile);
 
     void pauseScene();
 
     void resumeScene();
 
-    void updateEnemyPaths(TraverseData map, cocos2d::Vec2 pGoal);
+    void updateEnemyPaths(const TraverseData &traversed, cocos2d::Vec2 goal);
 
-    bool isEnemyPathsClear(const TraverseData &pTraversed, cocos2d::Vec2 pTile);
+    bool isEnemyPathsClear(const TraverseData &traversed, cocos2d::Vec2 node);
 
     bool isPaused() const {
-        return mPaused;
+        return _paused;
     }
 
     cocos2d::Vector<Creep *> &getCreepList() {
-        return mCreeps;
+        return _creeps;
     }
+
+private:
+    World *_world;
+
+    bool _paused;
+
+    Pool<Creep> _creepPool;
+    Pool<Missile> _missilePool;
+    Pool<Bullet> _bulletPool;
+    Pool<Explosion> _explosionPool;
+
+    cocos2d::Vector<Creep *> _creeps;
+    cocos2d::Vector<Missile *> _missiles;
+
+    std::map<cocos2d::Vec2, Tower *> _towerMap;
+
+    cocos2d::ParticleBatchNode *_particleBatch;
 };
 
 #endif //GAMEPLAY_LAYER_H

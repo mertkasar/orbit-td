@@ -17,30 +17,30 @@ namespace cocos2d {
 class World;
 
 class HUDLayer : public cocos2d::Layer {
-private:
-    World *mWorld;
-
-    cocos2d::ui::Layout *mTopPanel;
-    cocos2d::ui::Layout *mNotificationPanel;
-    cocos2d::ui::Layout *mBottomPanel;
-
 public:
-    static HUDLayer *create(World *pWorld);
+    static HUDLayer *create(World *world);
 
-    bool init(World *pWorld);
+    bool init(World *world);
 
-    virtual void update(float pDelta);
+    virtual void update(float delta);
 
-    void notify(char pType, std::string pMessage, float pDuration = 1.f);
+    void notify(char type, std::string message, float duration = 1.f);
 
 private:
-    void menuButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType);
+    void menuButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type);
 
-    void nextButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType);
+    void nextButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type);
 
-    void pauseButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType);
+    void pauseButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type);
 
-    void ffButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType);
+    void ffButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type);
+
+private:
+    World *_world;
+
+    cocos2d::ui::Layout *_topPanel;
+    cocos2d::ui::Layout *_notificationPanel;
+    cocos2d::ui::Layout *_bottomPanel;
 };
 
 #endif //HUD_LAYER_H

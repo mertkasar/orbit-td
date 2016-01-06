@@ -23,7 +23,7 @@ public:
 
     virtual void update(float time);
 
-    virtual void stop(void);
+    virtual void stop();
 
     virtual Shake *clone();
 

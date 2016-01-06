@@ -10,7 +10,7 @@ public:
 
     CREATE_FUNC(TowerMock);
 
-    void setSkin(ModelID pType);
+    void setSkin(ModelID type);
 };
 
 #endif //ORBIT_TD_MOCK_H

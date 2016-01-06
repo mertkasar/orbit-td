@@ -7,17 +7,14 @@
 
 template<typename T>
 class Pool {
-private:
-    cocos2d::Vector<T *> mObjects;
-
 public:
     T *fetch() {
-        auto found = std::find_if(mObjects.begin(), mObjects.end(),
+        auto found = std::find_if(_objects.begin(), _objects.end(),
                                   [&](T *p) { return p->getParent() == nullptr; });
 
-        if (found == mObjects.end()) {
+        if (found == _objects.end()) {
             T *newObject = T::create();
-            mObjects.pushBack(newObject);
+            _objects.pushBack(newObject);
 
             return newObject;
         } else {
@@ -25,18 +22,21 @@ public:
         }
     }
 
-    void reserve(unsigned int pAmount) {
-        for (int i = 0; i < pAmount; i++)
-            mObjects.pushBack(T::create());
+    void reserve(unsigned int amount) {
+        for (int i = 0; i < amount; i++)
+            _objects.pushBack(T::create());
     }
 
     void clear() {
-        mObjects.clear();
+        _objects.clear();
     }
 
     ssize_t getSize() const {
-        return mObjects.size();
+        return _objects.size();
     }
+
+private:
+    cocos2d::Vector<T *> _objects;
 };
 
 #endif

@@ -8,7 +8,7 @@
 #include <Globals.h>
 
 namespace algorithm {
-    cocos2d::Vec2 toCircularGrid(cocos2d::Vec2 pNode);
+    cocos2d::Vec2 toCircularGrid(cocos2d::Vec2 node);
 };
 
 

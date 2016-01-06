@@ -35,54 +35,54 @@ public:
         VALIDATION
     };
 
-private:
-    World *mWorld;
-
-    cocos2d::Vec2 mCurrentTile;
-
-    ModelID mSelectedType;
-
-    State mState;
-
-    unsigned int mLastCoin;
-
-    cocos2d::Node *mRootMenu;
-
-    cocos2d::ui::Layout *mPurchaseMenu;
-
-    cocos2d::ui::Layout *mVerboseMenu;
-
-    cocos2d::ui::Layout *mValidationMenu;
-
-    TowerMock *mMock;
-
 public:
-    static WheelMenu *create(World *pWorld);
+    static WheelMenu *create(World *world);
 
-    bool init(World *pWorld);
+    bool init(World *world);
 
-    virtual void update(float pDelta);
+    virtual void update(float delta);
 
-    void setState(State pState);
+    void setState(State state);
 
-    void openAt(cocos2d::Vec2 pPosition);
+    void openAt(cocos2d::Vec2 position);
 
     void close();
 
     bool isOpen() const {
-        return mState != IDLE;
+        return _state != IDLE;
     }
 
 private:
     void updateButtonStates();
 
-    void towerButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType);
+    void towerButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type);
 
-    void sellButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType);
+    void sellButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type);
 
-    void upgradeButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType);
+    void upgradeButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type);
 
-    void declineButtonCallback(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType pType);
+    void declineButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type);
+
+private:
+    World *_world;
+
+    cocos2d::Vec2 _currentTile;
+
+    ModelID _selectedType;
+
+    State _state;
+
+    unsigned int _lastCoin;
+
+    cocos2d::Node *_rootMenu;
+
+    cocos2d::ui::Layout *_purchaseMenu;
+
+    cocos2d::ui::Layout *_verboseMenu;
+
+    cocos2d::ui::Layout *_validationMenu;
+
+    TowerMock *_mock;
 };
 
 #endif //WHEELMENU_H

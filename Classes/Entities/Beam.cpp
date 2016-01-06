@@ -20,45 +20,45 @@ bool Beam::init() {
     if (!Node::init())
         return false;
 
-    mStart = Node::create();
+    _start = Node::create();
 
     auto tile = Sprite::createWithSpriteFrameName("start_b.png");
     tile->setTag(0);
-    mStart->addChild(tile);
+    _start->addChild(tile);
 
     tile = Sprite::createWithSpriteFrameName("start_f.png");
     tile->setTag(1);
-    mStart->addChild(tile);
+    _start->addChild(tile);
 
-    mMid = Node::create();
+    _mid = Node::create();
 
     tile = Sprite::createWithSpriteFrameName("mid_b.png");
     tile->setTag(0);
     tile->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
-    mMid->addChild(tile);
+    _mid->addChild(tile);
 
     tile = Sprite::createWithSpriteFrameName("mid_f.png");
     tile->setTag(1);
     tile->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
-    mMid->addChild(tile);
+    _mid->addChild(tile);
 
-    mMid->setPosition(DIM / 2, 0);
+    _mid->setPosition(DIM / 2, 0);
 
-    mEnd = Node::create();
+    _end = Node::create();
 
     tile = Sprite::createWithSpriteFrameName("end_b.png");
     tile->setTag(0);
     tile->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
-    mEnd->addChild(tile);
+    _end->addChild(tile);
 
     tile = Sprite::createWithSpriteFrameName("end_f.png");
     tile->setTag(1);
     tile->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
-    mEnd->addChild(tile);
+    _end->addChild(tile);
 
-    this->addChild(mStart);
-    this->addChild(mMid);
-    this->addChild(mEnd);
+    this->addChild(_start);
+    this->addChild(_mid);
+    this->addChild(_end);
 
     this->setCascadeOpacityEnabled(true);
     this->scheduleUpdate();
@@ -66,16 +66,16 @@ bool Beam::init() {
     return true;
 }
 
-void Beam::update(cocos2d::Vec2 pEnd) {
-    auto diff = pEnd - this->convertToWorldSpace(this->getPosition());
+void Beam::update(cocos2d::Vec2 end) {
+    auto diff = end - this->convertToWorldSpace(this->getPosition());
     auto ratio = (diff.length() - DIM) / DIM;
 
-    mMid->setScaleX(ratio);
-    mEnd->setPosition(diff.length() - DIM / 2.f, 0.f);
+    _mid->setScaleX(ratio);
+    _end->setPosition(diff.length() - DIM / 2.f, 0.f);
 }
 
-void Beam::setColor(const Color3B &pBaseColor) {
-    mStart->getChildByTag(0)->setColor(pBaseColor);
-    mMid->getChildByTag(0)->setColor(pBaseColor);
-    mEnd->getChildByTag(0)->setColor(pBaseColor);
+void Beam::setColor(const Color3B &baseColor) {
+    _start->getChildByTag(0)->setColor(baseColor);
+    _mid->getChildByTag(0)->setColor(baseColor);
+    _end->getChildByTag(0)->setColor(baseColor);
 }

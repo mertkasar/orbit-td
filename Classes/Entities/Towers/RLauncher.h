@@ -10,7 +10,7 @@ public:
     CREATE_FUNC(RLauncher);
 
 private:
-    virtual void shoot(float pDelta) override;
+    virtual void shoot(float delta) override;
 };
 
 #endif //R_LAUNCHER_H

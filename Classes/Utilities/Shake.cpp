@@ -54,7 +54,7 @@ void Shake::update(float time) {
     _displacement_y = rand_y;
 }
 
-void Shake::stop(void) {
+void Shake::stop() {
     auto target = this->getTarget();
     auto currentPosition = target->getPosition();
 

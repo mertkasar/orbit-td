@@ -11,14 +11,14 @@ bool RLauncher::init() {
     if (!Tower::init(towerModels.at(ModelID::R_LAUNCHER)))
         return false;
 
-    mGunSprite->setScale(0.7f);
+    _gunSprite->setScale(0.7f);
 
     return true;
 }
 
-void RLauncher::shoot(float pDelta) {
+void RLauncher::shoot(float delta) {
     GameplayLayer *gameplayLayer = static_cast<GameplayLayer *>(this->getParent());
-    const cocos2d::Vec2 &origin = mGunSprite->convertToWorldSpace(mMuzzlePoint->getPosition());
+    const cocos2d::Vec2 &origin = _gunSprite->convertToWorldSpace(_muzzlePoint->getPosition());
 
-    gameplayLayer->addMissile(origin, getBaseColor(), mDamage, mTarget);
+    gameplayLayer->addMissile(origin, getBaseColor(), _damage, _target);
 }

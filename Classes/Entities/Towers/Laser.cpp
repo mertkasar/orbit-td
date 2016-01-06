@@ -11,36 +11,36 @@ bool Laser::init() {
     if (!Tower::init(towerModels.at(ModelID::LASER)))
         return false;
 
-    mBeam = Beam::create();
-    mBeam->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
-    mBeam->setColor(getBaseColor());
-    mBeam->setVisible(false);
-    mMuzzlePoint->addChild(mBeam);
+    _beam = Beam::create();
+    _beam->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+    _beam->setColor(getBaseColor());
+    _beam->setVisible(false);
+    _muzzlePoint->addChild(_beam);
 
     return true;
 }
 
-void Laser::update(float pDelta) {
+void Laser::update(float delta) {
     if (isTargetValid()) {
-        if (!mBeam->isVisible()) {
-            mBeam->setVisible(true);
+        if (!_beam->isVisible()) {
+            _beam->setVisible(true);
         }
     } else {
-        if (mBeam->isVisible()) {
-            mBeam->setVisible(false);
+        if (_beam->isVisible()) {
+            _beam->setVisible(false);
         }
     }
 
-    Tower::update(pDelta);
+    Tower::update(delta);
 }
 
-void Laser::upgrade(cocos2d::Color3B &pColor) {
-    Tower::upgrade(pColor);
+void Laser::upgrade(cocos2d::Color3B &color) {
+    Tower::upgrade(color);
 
-    mBeam->setColor(pColor);
+    _beam->setColor(color);
 }
 
 void Laser::shoot(float pDelta) {
-    mTarget->deal(mDamage);
-    mBeam->update(mTarget->getPosition());
+    _target->deal(_damage);
+    _beam->update(_target->getPosition());
 }

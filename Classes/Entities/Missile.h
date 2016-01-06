@@ -14,18 +14,6 @@ namespace cocos2d {
 class Creep;
 
 class Missile : public cocos2d::Node {
-private:
-    cocos2d::Sprite *mSprite;
-    cocos2d::PhysicsBody *mBody;
-    cocos2d::ParticleSystemQuad *mFireEmitter;
-
-    Creep *mTarget;
-    cocos2d::Vec2 mTargetPosition;
-
-    float mDamage;
-
-    bool mDead;
-
 public:
     Missile();
 
@@ -33,36 +21,48 @@ public:
 
     virtual bool init();
 
-    virtual void update(float pDelta);
+    virtual void update(float delta);
 
     CREATE_FUNC(Missile);
 
-    void restart(cocos2d::Vec2 pPosition, const cocos2d::Color3B &pBaseColor, float pDamage, Creep *pTarget);
+    void restart(cocos2d::Vec2 position, const cocos2d::Color3B &baseColor, float damage, Creep *target);
 
     Creep *getTarget() const {
-        return mTarget;
+        return _target;
     }
 
-    void setTarget(Creep *pTarget) {
-        mTarget = pTarget;
+    void setTarget(Creep *target) {
+        _target = target;
     }
 
     float getDamage() const {
-        return mDamage;
+        return _damage;
     }
 
-    void setDamage(float pDamage) {
-        mDamage = pDamage;
+    void setDamage(float damage) {
+        _damage = damage;
     }
 
     bool isDead() const {
-        return mDead;
+        return _dead;
     }
 
-    cocos2d::ParticleSystemQuad *getEmitter() { return mFireEmitter; }
+    cocos2d::ParticleSystemQuad *getEmitter() { return _fireEmitter; }
 
 private:
     void die(float pDelta);
+
+private:
+    cocos2d::Sprite *_sprite;
+    cocos2d::PhysicsBody *_body;
+    cocos2d::ParticleSystemQuad *_fireEmitter;
+
+    Creep *_target;
+    cocos2d::Vec2 _targetPosition;
+
+    float _damage;
+
+    bool _dead;
 };
 
 

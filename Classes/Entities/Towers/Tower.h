@@ -16,66 +16,45 @@ class Creep;
 
 
 class Tower : public cocos2d::Node {
-protected:
-    cocos2d::Sprite *mBaseSprite;
-    cocos2d::Sprite *mGunSprite;
-    cocos2d::Sprite *mRangeSprite;
-    cocos2d::PhysicsBody *mBody;
-    cocos2d::Node *mMuzzlePoint;
-
-    Creep *mTarget;
-    cocos2d::Vector<Creep *> mTargetList;
-
-    TowerModel mModel;
-
-    unsigned int mCost;
-    float mRange;
-    float mDamage;
-    float mCooldown;
-
-    unsigned int mLevel;
-    float mNextShooting;
-    bool mVerbose;
-
 public:
     ~Tower();
 
-    bool init(TowerModel pModel);
+    bool init(const TowerModel &model);
 
-    virtual void update(float pDelta);
+    virtual void update(float delta);
 
-    void addTarget(Creep *pTarget);
+    void addTarget(Creep *target);
 
-    void removeTarget(Creep *pTarget);
+    void removeTarget(Creep *target);
 
-    virtual void upgrade(cocos2d::Color3B &pColor);
+    virtual void upgrade(cocos2d::Color3B &color);
 
     unsigned int getTargetCount() const {
-        return (unsigned int) mTargetList.size();
+        return (unsigned int) _targetList.size();
     }
 
     unsigned int getCost() const {
-        return mCost;
+        return _cost;
     }
 
     unsigned int getLevel() const {
-        return mLevel;
+        return _level;
     }
 
     const cocos2d::Color3B &getBaseColor();
 
     bool isVerbose() const {
-        return mVerbose;
+        return _verbose;
     }
 
     bool isUpgradeable() const {
-        return mLevel < 4;
+        return _level < 4;
     }
 
-    void setVerbose(bool pVerbose);
+    void setVerbose(bool verbose);
 
 protected:
-    cocos2d::PhysicsBody *createBody(float pRangeRadius);
+    cocos2d::PhysicsBody *createBody(float rangeRadius);
 
     bool isTargetValid();
 
@@ -83,7 +62,28 @@ protected:
 
     virtual void adaptRotation();
 
-    virtual void shoot(float pDelta) = 0;
+    virtual void shoot(float delta) = 0;
+
+protected:
+    cocos2d::Sprite *_baseSprite;
+    cocos2d::Sprite *_gunSprite;
+    cocos2d::Sprite *_rangeSprite;
+    cocos2d::PhysicsBody *_body;
+    cocos2d::Node *_muzzlePoint;
+
+    Creep *_target;
+    cocos2d::Vector<Creep *> _targetList;
+
+    TowerModel _model;
+
+    unsigned int _cost;
+    float _range;
+    float _damage;
+    float _cooldown;
+
+    unsigned int _level;
+    float _nextShooting;
+    bool _verbose;
 };
 
 

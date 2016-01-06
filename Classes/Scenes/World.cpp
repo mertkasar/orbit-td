@@ -57,12 +57,12 @@ bool World::init() {
         return false;
     }
 
-    mVisibleSize = Director::getInstance()->getVisibleSize();
-    mOrigin = Director::getInstance()->getVisibleOrigin();
-    mCanvasCenter = Vec2(mVisibleSize / 2.f) + mOrigin;
+    _visibleSize = Director::getInstance()->getVisibleSize();
+    _origin = Director::getInstance()->getVisibleOrigin();
+    _canvasCenter = Vec2(_visibleSize / 2.f) + _origin;
 
-    mTotalCoin = STARTING_COIN;
-    mLife = STARTING_LIFE;
+    _totalCoin = STARTING_COIN;
+    _life = STARTING_LIFE;
 
     // Load tower models
     towerModels.insert(std::make_pair(ModelID::TURRET,
@@ -72,11 +72,11 @@ bool World::init() {
     towerModels.insert(std::make_pair(ModelID::R_LAUNCHER,
                                       TowerModel{ModelID::R_LAUNCHER, "r_launcher.png", 50, 150.f, 30.f, 1.f}));
 
-    colors.push_back(Color::GREEN);
-    colors.push_back(Color::YELLOW);
-    colors.push_back(Color::BLUE);
+    _colors.push_back(Color::GREEN);
+    _colors.push_back(Color::YELLOW);
+    _colors.push_back(Color::BLUE);
 
-    audioEngine = CocosDenshion::SimpleAudioEngine::getInstance();
+    _audioEngine = CocosDenshion::SimpleAudioEngine::getInstance();
     //loadResources();
     loadModel("models/raptor.plist");
     loadModel("models/speedy.plist");
@@ -86,101 +86,101 @@ bool World::init() {
     connectListeners();
 
     //Init waves
-    mWaves.clear();
-    mWaves.push_back(std::vector<ModelID>{SPEEDY, RAPTOR, PULSAR, PANZER});
-    mWaves.push_back(std::vector<ModelID>{RAPTOR});
-    mWaves.push_back(std::vector<ModelID>{RAPTOR, RAPTOR, RAPTOR});
-    mWaves.push_back(std::vector<ModelID>{SPEEDY, SPEEDY, RAPTOR, RAPTOR, RAPTOR});
-    mWaves.push_back(std::vector<ModelID>{RAPTOR, RAPTOR, PULSAR, PULSAR});
-    mWaves.push_back(std::vector<ModelID>{RAPTOR, RAPTOR, RAPTOR, SPEEDY, SPEEDY, PULSAR, PANZER});
-    mWaves.push_back(std::vector<ModelID>(7, SPEEDY));
-    mWaves.push_back(std::vector<ModelID>{PULSAR, PULSAR, PULSAR, PULSAR, PULSAR, PULSAR, PANZER});
-    mWaves.push_back(std::vector<ModelID>{10, PULSAR});
-    mWaves.push_back(std::vector<ModelID>{SPEEDY, SPEEDY, SPEEDY, SPEEDY, RAPTOR, RAPTOR, RAPTOR, RAPTOR, PULSAR,
+    _waves.clear();
+    _waves.push_back(std::vector<ModelID>{SPEEDY, RAPTOR, PULSAR, PANZER});
+    _waves.push_back(std::vector<ModelID>{RAPTOR});
+    _waves.push_back(std::vector<ModelID>{RAPTOR, RAPTOR, RAPTOR});
+    _waves.push_back(std::vector<ModelID>{SPEEDY, SPEEDY, RAPTOR, RAPTOR, RAPTOR});
+    _waves.push_back(std::vector<ModelID>{RAPTOR, RAPTOR, PULSAR, PULSAR});
+    _waves.push_back(std::vector<ModelID>{RAPTOR, RAPTOR, RAPTOR, SPEEDY, SPEEDY, PULSAR, PANZER});
+    _waves.push_back(std::vector<ModelID>(7, SPEEDY));
+    _waves.push_back(std::vector<ModelID>{PULSAR, PULSAR, PULSAR, PULSAR, PULSAR, PULSAR, PANZER});
+    _waves.push_back(std::vector<ModelID>{10, PULSAR});
+    _waves.push_back(std::vector<ModelID>{SPEEDY, SPEEDY, SPEEDY, SPEEDY, RAPTOR, RAPTOR, RAPTOR, RAPTOR, PULSAR,
                                           PULSAR, PANZER, PANZER});
-    mWaves.push_back(std::vector<ModelID>{15, PANZER});
+    _waves.push_back(std::vector<ModelID>{15, PANZER});
 
-    mCurrentWave = 0;
-    mCleared = false;
+    _currentWave = 0;
+    _cleared = false;
 
     /*audioEngine->setBackgroundMusicVolume(0.6f);
     audioEngine->playBackgroundMusic("audio/ambient.mp3", true);*/
 
-    audioEngine->setBackgroundMusicVolume(0.f);
-    audioEngine->setEffectsVolume(0.f);
+    _audioEngine->setBackgroundMusicVolume(0.f);
+    _audioEngine->setEffectsVolume(0.f);
 
     return true;
 }
 
-void World::update(float pDelta) {
-    if (gameplayLayer->getCreepList().size() <= 0) {
+void World::update(float delta) {
+    if (_gameplayLayer->getCreepList().size() <= 0) {
         if (!spawnNextWave())
-            mCleared = true;
+            _cleared = true;
     }
 
-    if (mLife <= 0) {
-        hudLayer->notify('I', "Game Over!");
+    if (_life <= 0) {
+        _hudLayer->notify('I', "Game Over!");
         this->unscheduleUpdate();
     }
 
     if (isCleared()) {
-        hudLayer->notify('I', "All waves are cleared!");
+        _hudLayer->notify('I', "All waves are cleared!");
         this->unscheduleUpdate();
     }
 }
 
-bool World::placeTower(ModelID pType, Vec2 pTile) {
-    auto traversed = mapLayer->traverseAgainst(pTile, 1);
+bool World::placeTower(ModelID type, Vec2 tile) {
+    auto traversed = _mapLayer->traverseAgainst(tile, 1);
 
-    if (!mapLayer->isPathClear(traversed)) {
-        hudLayer->notify('E', "You can't block the path!");
+    if (!_mapLayer->isPathClear(traversed)) {
+        _hudLayer->notify('E', "You can't block the path!");
         return false;
     };
 
-    if (!gameplayLayer->isEnemyPathsClear(traversed, pTile)) {
-        hudLayer->notify('E', "You can't block enemies!");
+    if (!_gameplayLayer->isEnemyPathsClear(traversed, tile)) {
+        _hudLayer->notify('E', "You can't block enemies!");
         return false;
     };
 
-    gameplayLayer->addTower(pType, pTile);
-    mapLayer->activateSlot(pTile);
+    _gameplayLayer->addTower(type, tile);
+    _mapLayer->activateSlot(tile);
 
-    mapLayer->updateMap(traversed, pTile, 1);
-    gameplayLayer->updateEnemyPaths(traversed, mapLayer->mGoal);
+    _mapLayer->updateMap(traversed, tile, 1);
+    _gameplayLayer->updateEnemyPaths(traversed, _mapLayer->_goal);
 
     return true;
 }
 
-void World::destroyTower(Vec2 pTile) {
-    auto traversed = mapLayer->traverseAgainst(pTile, 0);
+void World::destroyTower(Vec2 tile) {
+    auto traversed = _mapLayer->traverseAgainst(tile, 0);
 
-    gameplayLayer->deleteTower(pTile);
-    mapLayer->deactivateSlot(pTile);
+    _gameplayLayer->deleteTower(tile);
+    _mapLayer->deactivateSlot(tile);
 
-    mapLayer->updateMap(traversed, pTile, 0);
-    gameplayLayer->updateEnemyPaths(traversed, mapLayer->mGoal);
+    _mapLayer->updateMap(traversed, tile, 0);
+    _gameplayLayer->updateEnemyPaths(traversed, _mapLayer->_goal);
 }
 
-void World::upgradeTower(cocos2d::Vec2 pTile) {
-    auto tower = gameplayLayer->getTower(pTile);
-    auto color = colors.at(tower->getLevel() + 1);
+void World::upgradeTower(cocos2d::Vec2 tile) {
+    auto tower = _gameplayLayer->getTower(tile);
+    auto color = _colors.at(tower->getLevel() + 1);
 
     tower->upgrade(color);
-    mapLayer->setSlotColor(pTile, color);
+    _mapLayer->setSlotColor(tile, color);
 
     this->balanceTotalCoin(-tower->getCost());
 }
 
 bool World::spawnNextWave() {
-    if (mCurrentWave < mWaves.size()) {
-        auto wave = mWaves.at(mCurrentWave);
+    if (_currentWave < _waves.size()) {
+        auto wave = _waves.at(_currentWave);
 
         for (unsigned int i = 0; i < wave.size(); i++) {
             const auto &model = getModel(wave.at(i));
-            gameplayLayer->addEnemy(model, i, mapLayer->mPath);
+            _gameplayLayer->addEnemy(model, i, _mapLayer->_path);
         }
 
-        mCurrentWave++;
+        _currentWave++;
 
         return true;
     }
@@ -189,25 +189,25 @@ bool World::spawnNextWave() {
 }
 
 void World::buildScene() {
-    backgroundLayer = LayerColor::create(Color4B(Color::BG));
+    _backgroundLayer = LayerColor::create(Color4B(Color::BG));
 
     auto gameCanvas = Node::create();
 
-    mapLayer = MapLayer::create(this);
-    gameCanvas->addChild(mapLayer);
+    _mapLayer = MapLayer::create(this);
+    gameCanvas->addChild(_mapLayer);
 
-    gameplayLayer = GameplayLayer::create(this);
-    gameCanvas->addChild(gameplayLayer);
+    _gameplayLayer = GameplayLayer::create(this);
+    gameCanvas->addChild(_gameplayLayer);
 
-    hudLayer = HUDLayer::create(this);
-    mWheelMenu = WheelMenu::create(this);
+    _hudLayer = HUDLayer::create(this);
+    _wheelMenu = WheelMenu::create(this);
 
-    hudLayer->notify('I', "Game is starting!", 2.f);
+    _hudLayer->notify('I', "Game is starting!", 2.f);
 
-    this->addChild(backgroundLayer);
+    this->addChild(_backgroundLayer);
     this->addChild(gameCanvas);
-    this->addChild(hudLayer);
-    this->addChild(mWheelMenu);
+    this->addChild(_hudLayer);
+    this->addChild(_wheelMenu);
 
     this->scheduleUpdate();
 }
@@ -215,13 +215,13 @@ void World::buildScene() {
 void World::connectListeners() {
     auto touchListener = EventListenerTouchOneByOne::create();
     touchListener->setSwallowTouches(true);
-    touchListener->onTouchBegan = [&](Touch *pTouch, Event *pEvent) {
-        Vec2 touched = mapLayer->getTouchedSlot(pTouch->getLocation());
+    touchListener->onTouchBegan = [&](Touch *touch, Event *pEvent) {
+        Vec2 touched = _mapLayer->getTouchedSlot(touch->getLocation());
 
-        if (mWheelMenu->isOpen()) {
-            mWheelMenu->close();
+        if (_wheelMenu->isOpen()) {
+            _wheelMenu->close();
         } else if (touched.x > -1 && touched.y > -1) {
-            mWheelMenu->openAt(touched);
+            _wheelMenu->openAt(touched);
         }
 
         return true;
@@ -231,22 +231,22 @@ void World::connectListeners() {
 }
 
 void World::loadResources() {
-    audioEngine->preloadBackgroundMusic("audio/ambient.mp3");
-    audioEngine->preloadEffect("audio/explosion_1.wav");
-    audioEngine->preloadEffect("audio/explosion_2.wav");
-    audioEngine->preloadEffect("audio/explosion_3.wav");
-    audioEngine->preloadEffect("audio/laser_gun.wav");
-    audioEngine->preloadEffect("audio/missile_launch.wav");
-    audioEngine->preloadEffect("audio/click.wav");
-    audioEngine->preloadEffect("audio/open.wav");
-    audioEngine->preloadEffect("audio/deploy.wav");
-    audioEngine->preloadEffect("audio/upgrade.wav");
-    audioEngine->preloadEffect("audio/buzz.wav");
+    _audioEngine->preloadBackgroundMusic("audio/ambient.mp3");
+    _audioEngine->preloadEffect("audio/explosion_1.wav");
+    _audioEngine->preloadEffect("audio/explosion_2.wav");
+    _audioEngine->preloadEffect("audio/explosion_3.wav");
+    _audioEngine->preloadEffect("audio/laser_gun.wav");
+    _audioEngine->preloadEffect("audio/missile_launch.wav");
+    _audioEngine->preloadEffect("audio/click.wav");
+    _audioEngine->preloadEffect("audio/open.wav");
+    _audioEngine->preloadEffect("audio/deploy.wav");
+    _audioEngine->preloadEffect("audio/upgrade.wav");
+    _audioEngine->preloadEffect("audio/buzz.wav");
 }
 
-void World::loadModel(std::string pPath) {
-    auto data = FileUtils::getInstance()->getValueMapFromFile(pPath);
+void World::loadModel(std::string path) {
+    auto data = FileUtils::getInstance()->getValueMapFromFile(path);
     auto key = (unsigned int) data.at("id").asInt();
 
-    mModels.insert(std::make_pair(key, data));
+    _models.insert(std::make_pair(key, data));
 }

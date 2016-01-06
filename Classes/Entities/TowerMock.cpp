@@ -31,9 +31,9 @@ bool TowerMock::init() {
     return true;
 }
 
-void TowerMock::setSkin(ModelID pType) {
+void TowerMock::setSkin(ModelID type) {
     auto gunSprite = static_cast<Sprite*>(getChildByName("gun"));
-    auto model = (*towerModels.find(pType)).second;
+    auto model = (*towerModels.find(type)).second;
 
     gunSprite->initWithSpriteFrameName(model.gunSpritePath);
     gunSprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);

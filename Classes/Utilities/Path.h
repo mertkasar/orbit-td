@@ -8,57 +8,57 @@
 #include <Utilities/Algorithm.h>
 
 struct WayPoint {
-    cocos2d::Vec2 tile;
-    cocos2d::Vec2 location;
-    float reachRadius;
+    cocos2d::Vec2 _tile;
+    cocos2d::Vec2 _location;
+    float _reachRadius;
 };
 
 class Path {
-private:
-    std::vector<WayPoint> mWaypoints;
-    std::vector<cocos2d::Vec2> mBuffer;
-
-    unsigned int mIndex;
-
-    WayPoint mNextWaypoint;
-    WayPoint mCurrentWaypoint;
-
 public:
     Path();
 
     ~Path();
 
-    void addWaypoint(WayPoint pWaypoint);
+    void addWaypoint(WayPoint waypoint);
 
-    bool isReached(const TraverseData &pTraversed, cocos2d::Vec2 pDestination);
+    bool isReached(const TraverseData &traversed, cocos2d::Vec2 destination);
 
-    void construct(const TraverseData &pTraversed, cocos2d::Vec2 pStart, cocos2d::Vec2 pGoal);
+    void construct(const TraverseData &traversed, cocos2d::Vec2 start, cocos2d::Vec2 goal);
 
     void forward();
 
-    void clone(const Path &pPath);
+    void clone(const Path &path);
 
     void clear();
 
     const WayPoint &getNextWaypoint() const {
-        return mNextWaypoint;
+        return _nextWaypoint;
     }
 
     const WayPoint &getCurrentWaypoint() const {
-        return mCurrentWaypoint;
+        return _currentWaypoint;
     }
 
     const std::vector<WayPoint> &getWayPoints() const {
-        return mWaypoints;
+        return _waypoints;
     }
 
     const unsigned int getIndex() const {
-        return mIndex;
+        return _index;
     };
 
     bool eop() const {
-        return mIndex >= mWaypoints.size() - 1;
+        return _index >= _waypoints.size() - 1;
     }
+
+private:
+    std::vector<WayPoint> _waypoints;
+    std::vector<cocos2d::Vec2> _buffer;
+
+    unsigned int _index;
+
+    WayPoint _nextWaypoint;
+    WayPoint _currentWaypoint;
 };
 
 #endif //PATH_H

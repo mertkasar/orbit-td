@@ -30,35 +30,6 @@ class HUDLayer;
 class WheelMenu;
 
 class World : public cocos2d::Layer {
-private:
-    cocos2d::Size mVisibleSize;
-    cocos2d::Vec2 mOrigin;
-    cocos2d::Vec2 mCanvasCenter;
-
-    cocos2d::PhysicsWorld *mPhysicsWorld;
-
-    std::unordered_map<unsigned int, cocos2d::ValueMap> mModels;
-
-    std::vector<std::vector<ModelID>> mWaves;
-    unsigned int mCurrentWave;
-    bool mCleared;
-
-    WheelMenu *mWheelMenu;
-
-    unsigned int mTotalCoin;
-
-    unsigned int mLife;
-
-public:
-    CocosDenshion::SimpleAudioEngine *audioEngine;
-
-    cocos2d::LayerColor *backgroundLayer;
-    MapLayer *mapLayer;
-    GameplayLayer *gameplayLayer;
-    HUDLayer *hudLayer;
-
-    std::vector<cocos2d::Color3B> colors;
-
 public:
     World();
 
@@ -68,48 +39,48 @@ public:
 
     virtual bool init();
 
-    virtual void update(float pDelta);
+    virtual void update(float delta);
 
     CREATE_FUNC(World);
 
-    bool placeTower(ModelID pType, cocos2d::Vec2 pTile);
+    bool placeTower(ModelID type, cocos2d::Vec2 tile);
 
-    void destroyTower(cocos2d::Vec2 pTile);
+    void destroyTower(cocos2d::Vec2 tile);
 
-    void upgradeTower(cocos2d::Vec2 pTile);
+    void upgradeTower(cocos2d::Vec2 tile);
 
     bool spawnNextWave();
 
-    void balanceTotalCoin(int pBalance) {
-        mTotalCoin = mTotalCoin + pBalance;
+    void balanceTotalCoin(int balance) {
+        _totalCoin = _totalCoin + balance;
     }
 
     unsigned int getTotalCoin() const {
-        return mTotalCoin;
+        return _totalCoin;
     }
 
-    void balanceRemainingLife(int pBalance) {
-        mLife = mLife + pBalance;
+    void balanceRemainingLife(int balance) {
+        _life = _life + balance;
     }
 
     unsigned int getRemainingLife() const {
-        return mLife;
+        return _life;
     }
 
     cocos2d::PhysicsWorld *getPhysicsWorld() const {
-        return mPhysicsWorld;
+        return __physicsWorld;
     }
 
-    const cocos2d::ValueMap &getModel(unsigned int pID) const {
-        return mModels.at(pID);
+    const cocos2d::ValueMap &getModel(unsigned int id) const {
+        return _models.at(id);
     }
 
-    void setPhysicsWorld(cocos2d::PhysicsWorld *pPhysicsWorld) {
-        mPhysicsWorld = pPhysicsWorld;
+    void setPhysicsWorld(cocos2d::PhysicsWorld *_physicsWorld) {
+        __physicsWorld = _physicsWorld;
     }
 
     bool isCleared() {
-        return mCleared;
+        return _cleared;
     }
 
 private:
@@ -119,7 +90,36 @@ private:
 
     void connectListeners();
 
-    void loadModel(std::string pPath);
+    void loadModel(std::string path);
+
+private:
+    cocos2d::Size _visibleSize;
+    cocos2d::Vec2 _origin;
+    cocos2d::Vec2 _canvasCenter;
+
+    cocos2d::PhysicsWorld *__physicsWorld;
+
+    std::unordered_map<unsigned int, cocos2d::ValueMap> _models;
+
+    std::vector<std::vector<ModelID>> _waves;
+    unsigned int _currentWave;
+    bool _cleared;
+
+    WheelMenu *_wheelMenu;
+
+    unsigned int _totalCoin;
+
+    unsigned int _life;
+
+public:
+    CocosDenshion::SimpleAudioEngine *_audioEngine;
+
+    cocos2d::LayerColor *_backgroundLayer;
+    MapLayer *_mapLayer;
+    GameplayLayer *_gameplayLayer;
+    HUDLayer *_hudLayer;
+
+    std::vector<cocos2d::Color3B> _colors;
 };
 
 #endif // GAME_SCENE_H

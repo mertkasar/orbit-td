@@ -15,119 +15,119 @@ USING_NS_CC;
 #define DAMAGE_RATIO 0.1f
 #define CD_RATIO -0.2f
 
-bool Tower::init(TowerModel pModel) {
+bool Tower::init(const TowerModel &model) {
     if (!Node::init())
         return false;
 
-    mModel = pModel;
-    mCost = pModel.baseCost;
-    mRange = pModel.baseRange;
-    mDamage = pModel.baseDamage;
-    mCooldown = pModel.baseCD;
+    _model = model;
+    _cost = model.baseCost;
+    _range = model.baseRange;
+    _damage = model.baseDamage;
+    _cooldown = model.baseCD;
 
-    mLevel = 0;
-    mNextShooting = 0.f;
-    mVerbose = true;
+    _level = 0;
+    _nextShooting = 0.f;
+    _verbose = true;
 
-    mGunSprite = Sprite::createWithSpriteFrameName(pModel.gunSpritePath);
-    mGunSprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+    _gunSprite = Sprite::createWithSpriteFrameName(model.gunSpritePath);
+    _gunSprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
 
-    mMuzzlePoint = Node::create();
-    auto size = mGunSprite->getContentSize();
-    mMuzzlePoint->setPosition(size.width, size.height / 2.f);
+    _muzzlePoint = Node::create();
+    auto size = _gunSprite->getContentSize();
+    _muzzlePoint->setPosition(size.width, size.height / 2.f);
 
-    mBaseSprite = Sprite::createWithSpriteFrameName("base_0.png");
-    mBaseSprite->setScale(0.5f);
+    _baseSprite = Sprite::createWithSpriteFrameName("base_0.png");
+    _baseSprite->setScale(0.5f);
 
-    mRangeSprite = Sprite::createWithSpriteFrameName("range.png");
-    mRangeSprite->setVisible(false);
-    mRangeSprite->setColor(Color::GREEN);
-    mRangeSprite->setScale(2 * mRange / mRangeSprite->getContentSize().width);
-    mRangeSprite->runAction(RepeatForever::create(RotateBy::create(2.f, 30.f)));
+    _rangeSprite = Sprite::createWithSpriteFrameName("range.png");
+    _rangeSprite->setVisible(false);
+    _rangeSprite->setColor(Color::GREEN);
+    _rangeSprite->setScale(2 * _range / _rangeSprite->getContentSize().width);
+    _rangeSprite->runAction(RepeatForever::create(RotateBy::create(2.f, 30.f)));
 
-    mBody = createBody(mRange);
-    this->setPhysicsBody(mBody);
+    _body = createBody(_range);
+    this->setPhysicsBody(_body);
 
-    mTarget = nullptr;
+    _target = nullptr;
 
-    this->addChild(mRangeSprite);
-    this->addChild(mBaseSprite);
+    this->addChild(_rangeSprite);
+    this->addChild(_baseSprite);
 
-    mGunSprite->addChild(mMuzzlePoint);
-    this->addChild(mGunSprite);
+    _gunSprite->addChild(_muzzlePoint);
+    this->addChild(_gunSprite);
 
     this->scheduleUpdate();
 
     return true;
 }
 
-void Tower::addTarget(Creep *pTarget) {
-    mTargetList.pushBack(pTarget);
+void Tower::addTarget(Creep *target) {
+    _targetList.pushBack(target);
 }
 
-void Tower::removeTarget(Creep *pTarget) {
-    auto found = mTargetList.find(pTarget);
+void Tower::removeTarget(Creep *target) {
+    auto found = _targetList.find(target);
 
-    if (found != mTargetList.end())
-        mTargetList.erase(found);
+    if (found != _targetList.end())
+        _targetList.erase(found);
 }
 
-void Tower::update(float pDelta) {
+void Tower::update(float delta) {
     if (isTargetValid()) {
         adaptRotation();
 
-        mNextShooting = mNextShooting - pDelta;
+        _nextShooting = _nextShooting - delta;
 
-        if (mNextShooting <= 0.f) {
-            shoot(pDelta);
-            mNextShooting = mCooldown;
+        if (_nextShooting <= 0.f) {
+            shoot(delta);
+            _nextShooting = _cooldown;
         }
     } else {
-        if (mTarget != nullptr) {
-            mTargetList.eraseObject(mTarget);
-            mTarget = nullptr;
-            mNextShooting = 0.f;
+        if (_target != nullptr) {
+            _targetList.eraseObject(_target);
+            _target = nullptr;
+            _nextShooting = 0.f;
         }
 
         findTarget();
     }
 }
 
-void Tower::upgrade(cocos2d::Color3B &pColor) {
-    mLevel++;
+void Tower::upgrade(cocos2d::Color3B &color) {
+    _level++;
 
-    mCost = (unsigned int) (mCost + mCost * COST_RATIO);
-    mRange = mRange + mRange * RANGE_RATIO;
-    mDamage = mDamage + mDamage * DAMAGE_RATIO;
-    mCooldown = mCooldown + mCooldown * CD_RATIO;
+    _cost = (unsigned int) (_cost + _cost * COST_RATIO);
+    _range = _range + _range * RANGE_RATIO;
+    _damage = _damage + _damage * DAMAGE_RATIO;
+    _cooldown = _cooldown + _cooldown * CD_RATIO;
 
-    mRangeSprite->setScale(mRange / mModel.baseRange);
-    mRangeSprite->setColor(pColor);
+    _rangeSprite->setScale(_range / _model.baseRange);
+    _rangeSprite->setColor(color);
 
     std::stringstream ss;
-    ss << "base_" << mLevel << ".png";
+    ss << "base_" << _level << ".png";
 
-    mBaseSprite->initWithSpriteFrameName(ss.str());
+    _baseSprite->initWithSpriteFrameName(ss.str());
 
-    mBody->removeFromWorld();
-    mBody = createBody(mRange);
-    this->setPhysicsBody(mBody);
+    _body->removeFromWorld();
+    _body = createBody(_range);
+    this->setPhysicsBody(_body);
 
     CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/upgrade.wav");
 }
 
 bool Tower::isTargetValid() {
-    if (mTarget != nullptr) {
-        auto found = mTargetList.find(mTarget);
+    if (_target != nullptr) {
+        auto found = _targetList.find(_target);
 
-        return found != mTargetList.end() && !mTarget->isDead();
+        return found != _targetList.end() && !_target->isDead();
     }
 
     return false;
 }
 
-PhysicsBody *Tower::createBody(float pRangeRadius) {
-    auto body = PhysicsBody::createCircle(pRangeRadius);
+PhysicsBody *Tower::createBody(float rangeRadius) {
+    auto body = PhysicsBody::createCircle(rangeRadius);
 
     body->setCategoryBitmask(TOWER_RANGE_MASK);
     body->setContactTestBitmask(ENEMY_MASK);
@@ -137,30 +137,30 @@ PhysicsBody *Tower::createBody(float pRangeRadius) {
 }
 
 void Tower::findTarget() {
-    if (!mTargetList.empty())
-        mTarget = mTargetList.at(0);
+    if (!_targetList.empty())
+        _target = _targetList.at(0);
 }
 
 void Tower::adaptRotation() {
-    Vec2 diff = mTarget->getPosition() - this->getPosition();
+    Vec2 diff = _target->getPosition() - this->getPosition();
     diff.normalize();
 
     auto angle = CC_RADIANS_TO_DEGREES(diff.getAngle());
 
-    mGunSprite->setRotation(-1 * angle);
+    _gunSprite->setRotation(-1 * angle);
 }
 
-void Tower::setVerbose(bool pVerbose) {
-    if (pVerbose) {
-        mRangeSprite->setVisible(true);
-        auto currentScale = mRangeSprite->getScale();
-        mRangeSprite->setScale(0.f);
-        mRangeSprite->runAction(ScaleTo::create(0.15f, currentScale));
+void Tower::setVerbose(bool verbose) {
+    if (verbose) {
+        _rangeSprite->setVisible(true);
+        auto currentScale = _rangeSprite->getScale();
+        _rangeSprite->setScale(0.f);
+        _rangeSprite->runAction(ScaleTo::create(0.15f, currentScale));
     } else {
-        mRangeSprite->setVisible(false);
+        _rangeSprite->setVisible(false);
     }
 
-    mVerbose = pVerbose;
+    _verbose = verbose;
 }
 
 Tower::~Tower() {
@@ -168,5 +168,5 @@ Tower::~Tower() {
 }
 
 const Color3B &Tower::getBaseColor() {
-    return mRangeSprite->getColor();
+    return _rangeSprite->getColor();
 }

@@ -6,20 +6,20 @@
 class Beam;
 
 class Laser : public Tower {
-private:
-    Beam *mBeam;
-
 public:
     virtual bool init();
 
-    virtual void update(float pDelta);
+    virtual void update(float delta);
 
-    virtual void upgrade(cocos2d::Color3B &pColor);
+    virtual void upgrade(cocos2d::Color3B &color);
 
     CREATE_FUNC(Laser);
 
 private:
     virtual void shoot(float pDelta) override;
+
+private:
+    Beam *_beam;
 };
 
 #endif
