@@ -125,11 +125,11 @@ void GameplayLayer::update(float pDelta) {
         }
 }
 
-void GameplayLayer::addEnemy(CreepTypes pType, int pOrder, Path &pPath) {
+void GameplayLayer::addEnemy(const ValueMap &pModel, int pOrder, Path &pPath) {
     auto enemy = mCreepPool.fetch();
 
     Vec2 spawnPosition = Vec2(1230, 360.f) + Vec2(pOrder * 100, 0);
-    enemy->ignite(pType, spawnPosition, pPath);
+    enemy->ignite(pModel, spawnPosition, pPath);
 
     this->addChild(enemy);
     mCreeps.pushBack(enemy);
@@ -179,7 +179,7 @@ void GameplayLayer::addExplosion(cocos2d::Vec2 pPosition, float pDuration, float
     mWorld->audioEngine->playEffect(ss.str().c_str());
 }
 
-void GameplayLayer::addTower(TowerTypes pType, cocos2d::Vec2 pTile) {
+void GameplayLayer::addTower(ModelID pType, cocos2d::Vec2 pTile) {
     Tower *tower = nullptr;
 
     switch (pType) {

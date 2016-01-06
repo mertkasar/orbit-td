@@ -20,13 +20,14 @@
 #include <Entities/WheelMenu.h>
 
 #include <sstream>
+#include <platform/CCFileUtils.h>
 
 USING_NS_CC;
 
 #define STARTING_COIN 500
 #define STARTING_LIFE 10
 
-std::map<unsigned int, TowerModel> models;
+std::map<unsigned int, TowerModel> towerModels;
 
 World::World() {
     CCLOG("World created");
@@ -64,12 +65,12 @@ bool World::init() {
     mLife = STARTING_LIFE;
 
     // Load tower models
-    models.insert(std::make_pair(TowerTypes::TURRET,
-                                 TowerModel{TowerTypes::TURRET, "turret_gun.png", 10, 150.f, 3.f, 0.3f}));
-    models.insert(std::make_pair(TowerTypes::LASER,
-                                 TowerModel{TowerTypes::LASER, "laser_gun.png", 30, 150.f, 0.3f, 0.f}));
-    models.insert(std::make_pair(TowerTypes::R_LAUNCHER,
-                                 TowerModel{TowerTypes::R_LAUNCHER, "r_launcher.png", 50, 150.f, 30.f, 1.f}));
+    towerModels.insert(std::make_pair(ModelID::TURRET,
+                                      TowerModel{ModelID::TURRET, "turret_gun.png", 10, 150.f, 3.f, 0.3f}));
+    towerModels.insert(std::make_pair(ModelID::LASER,
+                                      TowerModel{ModelID::LASER, "laser_gun.png", 30, 150.f, 0.3f, 0.f}));
+    towerModels.insert(std::make_pair(ModelID::R_LAUNCHER,
+                                      TowerModel{ModelID::R_LAUNCHER, "r_launcher.png", 50, 150.f, 30.f, 1.f}));
 
     colors.push_back(Color::GREEN);
     colors.push_back(Color::YELLOW);
@@ -77,23 +78,27 @@ bool World::init() {
 
     audioEngine = CocosDenshion::SimpleAudioEngine::getInstance();
     //loadResources();
+    loadModel("models/raptor.plist");
+    loadModel("models/speedy.plist");
+    loadModel("models/pulsar.plist");
+    loadModel("models/panzer.plist");
     buildScene();
     connectListeners();
 
     //Init waves
     mWaves.clear();
-    mWaves.push_back(std::vector<CreepTypes>{SPEEDY, RAPTOR, PULSAR, PANZER});
-    mWaves.push_back(std::vector<CreepTypes>{RAPTOR});
-    mWaves.push_back(std::vector<CreepTypes>{RAPTOR, RAPTOR, RAPTOR});
-    mWaves.push_back(std::vector<CreepTypes>{SPEEDY, SPEEDY, RAPTOR, RAPTOR, RAPTOR});
-    mWaves.push_back(std::vector<CreepTypes>{RAPTOR, RAPTOR, PULSAR, PULSAR});
-    mWaves.push_back(std::vector<CreepTypes>{RAPTOR, RAPTOR, RAPTOR, SPEEDY, SPEEDY, PULSAR, PANZER});
-    mWaves.push_back(std::vector<CreepTypes>(7, SPEEDY));
-    mWaves.push_back(std::vector<CreepTypes>{PULSAR, PULSAR, PULSAR, PULSAR, PULSAR, PULSAR, PANZER});
-    mWaves.push_back(std::vector<CreepTypes>{10, PULSAR});
-    mWaves.push_back(std::vector<CreepTypes>{SPEEDY, SPEEDY, SPEEDY, SPEEDY, RAPTOR, RAPTOR, RAPTOR, RAPTOR, PULSAR,
-                                             PULSAR, PANZER, PANZER});
-    mWaves.push_back(std::vector<CreepTypes>{15, PANZER});
+    mWaves.push_back(std::vector<ModelID>{SPEEDY, RAPTOR, PULSAR, PANZER});
+    mWaves.push_back(std::vector<ModelID>{RAPTOR});
+    mWaves.push_back(std::vector<ModelID>{RAPTOR, RAPTOR, RAPTOR});
+    mWaves.push_back(std::vector<ModelID>{SPEEDY, SPEEDY, RAPTOR, RAPTOR, RAPTOR});
+    mWaves.push_back(std::vector<ModelID>{RAPTOR, RAPTOR, PULSAR, PULSAR});
+    mWaves.push_back(std::vector<ModelID>{RAPTOR, RAPTOR, RAPTOR, SPEEDY, SPEEDY, PULSAR, PANZER});
+    mWaves.push_back(std::vector<ModelID>(7, SPEEDY));
+    mWaves.push_back(std::vector<ModelID>{PULSAR, PULSAR, PULSAR, PULSAR, PULSAR, PULSAR, PANZER});
+    mWaves.push_back(std::vector<ModelID>{10, PULSAR});
+    mWaves.push_back(std::vector<ModelID>{SPEEDY, SPEEDY, SPEEDY, SPEEDY, RAPTOR, RAPTOR, RAPTOR, RAPTOR, PULSAR,
+                                          PULSAR, PANZER, PANZER});
+    mWaves.push_back(std::vector<ModelID>{15, PANZER});
 
     mCurrentWave = 0;
     mCleared = false;
@@ -124,7 +129,7 @@ void World::update(float pDelta) {
     }
 }
 
-bool World::placeTower(TowerTypes pType, Vec2 pTile) {
+bool World::placeTower(ModelID pType, Vec2 pTile) {
     auto traversed = mapLayer->traverseAgainst(pTile, 1);
 
     if (!mapLayer->isPathClear(traversed)) {
@@ -171,7 +176,8 @@ bool World::spawnNextWave() {
         auto wave = mWaves.at(mCurrentWave);
 
         for (unsigned int i = 0; i < wave.size(); i++) {
-            gameplayLayer->addEnemy(wave.at(i), i, mapLayer->mPath);
+            const auto &model = getModel(wave.at(i));
+            gameplayLayer->addEnemy(model, i, mapLayer->mPath);
         }
 
         mCurrentWave++;
@@ -236,4 +242,11 @@ void World::loadResources() {
     audioEngine->preloadEffect("audio/deploy.wav");
     audioEngine->preloadEffect("audio/upgrade.wav");
     audioEngine->preloadEffect("audio/buzz.wav");
+}
+
+void World::loadModel(std::string pPath) {
+    auto data = FileUtils::getInstance()->getValueMapFromFile(pPath);
+    auto key = (unsigned int) data.at("id").asInt();
+
+    mModels.insert(std::make_pair(key, data));
 }

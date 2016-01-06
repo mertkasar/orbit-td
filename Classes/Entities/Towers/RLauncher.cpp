@@ -8,7 +8,7 @@
 USING_NS_CC;
 
 bool RLauncher::init() {
-    if (!Tower::init(models.at(TowerTypes::R_LAUNCHER)))
+    if (!Tower::init(towerModels.at(ModelID::R_LAUNCHER)))
         return false;
 
     mGunSprite->setScale(0.7f);

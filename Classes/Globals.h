@@ -9,14 +9,18 @@
 #define ENEMY_MASK 0x02
 #define MISSILE_MASK 0x03
 
-enum TowerTypes {
+enum ModelID {
     TURRET,
     LASER,
-    R_LAUNCHER
+    R_LAUNCHER,
+    RAPTOR,
+    SPEEDY,
+    PANZER,
+    PULSAR,
 };
 
 struct TowerModel {
-    TowerTypes type;
+    ModelID type;
     std::string gunSpritePath;
     unsigned int baseCost;
     float baseRange;
@@ -24,14 +28,7 @@ struct TowerModel {
     float baseCD;
 };
 
-extern std::map<unsigned int, TowerModel> models;
-
-enum CreepTypes {
-    RAPTOR,
-    SPEEDY,
-    PANZER,
-    PULSAR,
-};
+extern std::map<unsigned int, TowerModel> towerModels;
 
 //Colors
 namespace Color {

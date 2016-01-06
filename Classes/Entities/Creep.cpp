@@ -4,6 +4,7 @@
 #include <2d/CCAction.h>
 #include <physics/CCPhysicsBody.h>
 #include <Utilities/SteeringDirector.h>
+#include <base/CCValue.h>
 
 USING_NS_CC;
 
@@ -79,11 +80,17 @@ void Creep::update(float pDelta) {
         mKilled = true;
 }
 
-void Creep::ignite(CreepTypes pType, cocos2d::Vec2 pPosition, const Path &pPath) {
+void Creep::ignite(const cocos2d::ValueMap &pModel, cocos2d::Vec2 pPosition, const Path &pPath) {
     mKilled = false;
     mReachedEnd = false;
 
-    reShape(pType);
+    mSprite->initWithSpriteFrameName(pModel.at("sprite").asString());
+    mMaxHP = pModel.at("max_hp").asFloat();
+    mReward = pModel.at("reward").asFloat();
+    mBody->setMass(pModel.at("mass").asFloat());
+    mBody->setVelocityLimit(pModel.at("max_velocity").asFloat());
+
+    mCurrentHP = mMaxHP;
 
     this->setPosition(pPosition);
     this->setScale(0.5f);
@@ -109,45 +116,4 @@ void Creep::updateHPBar() {
     auto fg = mHPBar->getChildByName("fg");
     auto ratio = mCurrentHP / mMaxHP;
     fg->setScaleY(HBAR_HEIGHT * ratio);
-}
-
-void Creep::reShape(CreepTypes pType) {
-    switch (pType) {
-        case RAPTOR:
-            mSprite->initWithSpriteFrameName("raptor.png");
-            mMaxHP = 100.f;
-            mReward = 10;
-            mBody->setMass(5.5f);
-            mBody->setVelocityLimit(80.f);
-            break;
-
-        case SPEEDY:
-            mSprite->initWithSpriteFrameName("speedy.png");
-            mMaxHP = 50.f;
-            mReward = 5;
-            mBody->setMass(3.5f);
-            mBody->setVelocityLimit(130.f);
-            break;
-
-        case PULSAR:
-            mSprite->initWithSpriteFrameName("pulsar.png");
-            mMaxHP = 130.f;
-            mReward = 25;
-            mBody->setMass(5.5f);
-            mBody->setVelocityLimit(80.f);
-            break;
-
-        case PANZER:
-            mSprite->initWithSpriteFrameName("panzer.png");
-            mMaxHP = 300.f;
-            mReward = 20;
-            mBody->setMass(6.5f);
-            mBody->setVelocityLimit(40.f);
-            break;
-
-        default:
-            break;
-    }
-
-    mCurrentHP = mMaxHP;
 }

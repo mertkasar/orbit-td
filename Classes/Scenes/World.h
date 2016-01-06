@@ -2,6 +2,7 @@
 #define GAME_SCENE_H
 
 #include <2d/CCLayer.h>
+#include <base/CCValue.h>
 #include <Globals.h>
 
 namespace cocos2d {
@@ -36,7 +37,9 @@ private:
 
     cocos2d::PhysicsWorld *mPhysicsWorld;
 
-    std::vector<std::vector<CreepTypes>> mWaves;
+    std::unordered_map<unsigned int, cocos2d::ValueMap> mModels;
+
+    std::vector<std::vector<ModelID>> mWaves;
     unsigned int mCurrentWave;
     bool mCleared;
 
@@ -69,7 +72,7 @@ public:
 
     CREATE_FUNC(World);
 
-    bool placeTower(TowerTypes pType, cocos2d::Vec2 pTile);
+    bool placeTower(ModelID pType, cocos2d::Vec2 pTile);
 
     void destroyTower(cocos2d::Vec2 pTile);
 
@@ -97,6 +100,10 @@ public:
         return mPhysicsWorld;
     }
 
+    const cocos2d::ValueMap &getModel(unsigned int pID) const {
+        return mModels.at(pID);
+    }
+
     void setPhysicsWorld(cocos2d::PhysicsWorld *pPhysicsWorld) {
         mPhysicsWorld = pPhysicsWorld;
     }
@@ -111,6 +118,8 @@ private:
     void buildScene();
 
     void connectListeners();
+
+    void loadModel(std::string pPath);
 };
 
 #endif // GAME_SCENE_H

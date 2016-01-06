@@ -5,6 +5,7 @@
 #include <Utilities/Pool.h>
 #include <Globals.h>
 #include <Entities/Missile.h>
+#include <base/CCValue.h>
 
 class World;
 
@@ -50,9 +51,9 @@ public:
 
     virtual void update(float pDelta);
 
-    void addTower(TowerTypes pType, cocos2d::Vec2 pTile);
+    void addTower(ModelID pType, cocos2d::Vec2 pTile);
 
-    void addEnemy(CreepTypes pType, int pOrder, Path &pPath);
+    void addEnemy(const cocos2d::ValueMap &pModel, int pOrder, Path &pPath);
 
     void addMissile(cocos2d::Vec2 pPosition, const cocos2d::Color3B &pBaseColor, float pDamage, Creep *pTarget);
 

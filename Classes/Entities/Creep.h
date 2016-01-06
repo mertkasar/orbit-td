@@ -3,6 +3,7 @@
 
 #include <2d/CCNode.h>
 #include <Utilities/Path.h>
+#include <base/CCValue.h>
 
 namespace cocos2d {
     class Sprite;
@@ -36,7 +37,7 @@ public:
 
     CREATE_FUNC(Creep);
 
-    void ignite(CreepTypes pType, cocos2d::Vec2 pPosition, const Path &pPath);
+    void ignite(const cocos2d::ValueMap &pModel, cocos2d::Vec2 pPosition, const Path &pPath);
 
     void deal(float pDamage);
 
@@ -66,8 +67,6 @@ public:
 
 private:
     void updateHPBar();
-
-    void reShape(CreepTypes pType);
 };
 
 

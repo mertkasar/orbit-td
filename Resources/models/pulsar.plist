@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>id</key>
+	<integer>6</integer>
+	<key>sprite</key>
+	<string>pulsar.png</string>
+	<key>max_hp</key>
+	<real>130.0</real>
+	<key>reward</key>
+	<real>25.0</real>
+	<key>mass</key>
+	<real>5.5</real>
+	<key>max_velocity</key>
+	<real>80.0</real>
+</dict>
+</plist>

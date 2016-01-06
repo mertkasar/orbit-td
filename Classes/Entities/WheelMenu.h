@@ -40,7 +40,7 @@ private:
 
     cocos2d::Vec2 mCurrentTile;
 
-    TowerTypes mSelectedType;
+    ModelID mSelectedType;
 
     State mState;
 
