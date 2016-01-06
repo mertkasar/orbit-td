@@ -28,7 +28,7 @@ public:
 
     CREATE_FUNC(Explosion);
 
-    void ignite(cocos2d::Vec2 pPosition);
+    void restart(cocos2d::Vec2 pPosition);
 
 private:
     void end();

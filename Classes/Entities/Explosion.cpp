@@ -27,7 +27,7 @@ bool Explosion::init() {
     return true;
 }
 
-void Explosion::ignite(cocos2d::Vec2 pPosition) {
+void Explosion::restart(cocos2d::Vec2 pPosition) {
     this->setPosition(pPosition);
 
     //Create an explosion animation among 3 different styles

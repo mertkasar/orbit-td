@@ -37,7 +37,7 @@ public:
 
     CREATE_FUNC(Creep);
 
-    void ignite(const cocos2d::ValueMap &pModel, cocos2d::Vec2 pPosition, const Path &pPath);
+    void restart(const cocos2d::ValueMap &pModel, cocos2d::Vec2 pPosition, const Path &pPath);
 
     void deal(float pDamage);
 

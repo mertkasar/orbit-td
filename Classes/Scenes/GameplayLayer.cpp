@@ -129,7 +129,7 @@ void GameplayLayer::addEnemy(const ValueMap &pModel, int pOrder, Path &pPath) {
     auto enemy = mCreepPool.fetch();
 
     Vec2 spawnPosition = Vec2(1230, 360.f) + Vec2(pOrder * 100, 0);
-    enemy->ignite(pModel, spawnPosition, pPath);
+    enemy->restart(pModel, spawnPosition, pPath);
 
     this->addChild(enemy);
     mCreeps.pushBack(enemy);
@@ -139,7 +139,7 @@ void GameplayLayer::addMissile(cocos2d::Vec2 pPosition, const cocos2d::Color3B &
                                Creep *pTarget) {
     auto missile = mMissilePool.fetch();
 
-    missile->ignite(pPosition, pBaseColor, pDamage, pTarget);
+    missile->restart(pPosition, pBaseColor, pDamage, pTarget);
 
     auto emitter = missile->getEmitter();
     if (emitter->getParent() == nullptr) {
@@ -156,7 +156,7 @@ void GameplayLayer::addBullet(cocos2d::Vec2 pPosition, const cocos2d::Color3B &p
                               Creep *pTarget) {
     auto bullet = mBulletPool.fetch();
 
-    bullet->ignite(pPosition, pBaseColor, pDamage, pTarget);
+    bullet->restart(pPosition, pBaseColor, pDamage, pTarget);
 
     mWorld->audioEngine->playEffect("audio/laser_gun.wav", false, 1.0f, 0.0f, 0.3f);
 
@@ -166,7 +166,7 @@ void GameplayLayer::addBullet(cocos2d::Vec2 pPosition, const cocos2d::Color3B &p
 void GameplayLayer::addExplosion(cocos2d::Vec2 pPosition, float pDuration, float pStrength) {
     // Create explosion animation
     auto explosion = mExplosionPool.fetch();
-    explosion->ignite(pPosition);
+    explosion->restart(pPosition);
     this->addChild(explosion);
 
     // Create shake animation

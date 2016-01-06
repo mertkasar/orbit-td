@@ -29,7 +29,7 @@ public:
 
     CREATE_FUNC(Bullet);
 
-    void ignite(cocos2d::Vec2 pPosition, const cocos2d::Color3B &pBaseColor, float pDamage, Creep *pTarget);
+    void restart(cocos2d::Vec2 pPosition, const cocos2d::Color3B &pBaseColor, float pDamage, Creep *pTarget);
 
     Creep *getTarget() const {
         return mTarget;

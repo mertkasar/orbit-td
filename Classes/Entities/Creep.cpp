@@ -80,7 +80,7 @@ void Creep::update(float pDelta) {
         mKilled = true;
 }
 
-void Creep::ignite(const cocos2d::ValueMap &pModel, cocos2d::Vec2 pPosition, const Path &pPath) {
+void Creep::restart(const cocos2d::ValueMap &pModel, cocos2d::Vec2 pPosition, const Path &pPath) {
     mKilled = false;
     mReachedEnd = false;
 

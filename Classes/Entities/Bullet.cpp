@@ -64,7 +64,7 @@ void Bullet::update(float pDelta) {
     }
 }
 
-void Bullet::ignite(cocos2d::Vec2 pPosition, const cocos2d::Color3B &pBaseColor, float pDamage, Creep *pTarget) {
+void Bullet::restart(cocos2d::Vec2 pPosition, const cocos2d::Color3B &pBaseColor, float pDamage, Creep *pTarget) {
     setDamage(pDamage);
     setTarget(pTarget);
 
