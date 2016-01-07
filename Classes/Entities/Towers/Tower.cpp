@@ -46,17 +46,17 @@ bool Tower::init(const TowerModel &model) {
     _rangeSprite->runAction(RepeatForever::create(RotateBy::create(2.f, 30.f)));
 
     _body = createBody(_range);
-    this->setPhysicsBody(_body);
+    setPhysicsBody(_body);
 
     _target = nullptr;
 
-    this->addChild(_rangeSprite);
-    this->addChild(_baseSprite);
+    addChild(_rangeSprite);
+    addChild(_baseSprite);
 
     _gunSprite->addChild(_muzzlePoint);
-    this->addChild(_gunSprite);
+    addChild(_gunSprite);
 
-    this->scheduleUpdate();
+    scheduleUpdate();
 
     return true;
 }
@@ -111,7 +111,7 @@ void Tower::upgrade(cocos2d::Color3B &color) {
 
     _body->removeFromWorld();
     _body = createBody(_range);
-    this->setPhysicsBody(_body);
+    setPhysicsBody(_body);
 
     CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/upgrade.wav");
 }
@@ -142,7 +142,7 @@ void Tower::findTarget() {
 }
 
 void Tower::adaptRotation() {
-    Vec2 diff = _target->getPosition() - this->getPosition();
+    Vec2 diff = _target->getPosition() - getPosition();
     diff.normalize();
 
     auto angle = CC_RADIANS_TO_DEGREES(diff.getAngle());

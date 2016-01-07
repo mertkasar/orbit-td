@@ -120,12 +120,12 @@ void World::update(float delta) {
 
     if (_life <= 0) {
         _hudLayer->notify('I', "Game Over!");
-        this->unscheduleUpdate();
+        unscheduleUpdate();
     }
 
     if (isCleared()) {
         _hudLayer->notify('I', "All waves are cleared!");
-        this->unscheduleUpdate();
+        unscheduleUpdate();
     }
 }
 
@@ -168,7 +168,7 @@ void World::upgradeTower(cocos2d::Vec2 tile) {
     tower->upgrade(color);
     _mapLayer->setSlotColor(tile, color);
 
-    this->balanceTotalCoin(-tower->getCost());
+    balanceTotalCoin(-tower->getCost());
 }
 
 bool World::spawnNextWave() {
@@ -204,12 +204,12 @@ void World::buildScene() {
 
     _hudLayer->notify('I', "Game is starting!", 2.f);
 
-    this->addChild(_backgroundLayer);
-    this->addChild(gameCanvas);
-    this->addChild(_hudLayer);
-    this->addChild(_wheelMenu);
+    addChild(_backgroundLayer);
+    addChild(gameCanvas);
+    addChild(_hudLayer);
+    addChild(_wheelMenu);
 
-    this->scheduleUpdate();
+    scheduleUpdate();
 }
 
 void World::connectListeners() {

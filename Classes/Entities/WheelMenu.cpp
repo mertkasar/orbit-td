@@ -94,12 +94,12 @@ bool WheelMenu::init(World *world) {
     _rootMenu->addChild(_verboseMenu);
     _rootMenu->addChild(_validationMenu);
 
-    this->addChild(_mock);
-    this->addChild(_rootMenu);
+    addChild(_mock);
+    addChild(_rootMenu);
 
     setState(IDLE);
 
-    this->scheduleUpdate();
+    scheduleUpdate();
 
     return true;
 }
@@ -162,14 +162,14 @@ void WheelMenu::openAt(cocos2d::Vec2 position) {
     if (nodeValue == 0) {
         _currentTile = position;
 
-        this->setPosition(algorithm::toCircularGrid(position));
+        setPosition(algorithm::toCircularGrid(position));
 
         _world->_mapLayer->activateSlot(_currentTile);
 
         setState(PURCHASE);
     } else if (nodeValue == 1) {
         _currentTile = position;
-        this->setPosition(algorithm::toCircularGrid(position));
+        setPosition(algorithm::toCircularGrid(position));
 
         _world->_gameplayLayer->getTower(_currentTile)->setVerbose(true);
 

@@ -45,12 +45,12 @@ bool GameplayLayer::init() {
 
     _paused = false;
 
-    this->setName("gameplay_layer");
+    setName("gameplay_layer");
 
     auto spriteCache = SpriteFrameCache::getInstance();
     spriteCache->addSpriteFramesWithFile("textures/gameplay_layer.plist");
 
-    this->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
     auto contactListener = EventListenerPhysicsContact::create();
     contactListener->onContactBegin = [](PhysicsContact &pContact) {
@@ -101,9 +101,9 @@ bool GameplayLayer::init() {
     Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
 
     _particleBatch = ParticleBatchNode::create("textures/particles/missile_fire.png", 3000);
-    this->addChild(_particleBatch);
+    addChild(_particleBatch);
 
-    this->scheduleUpdate();
+    scheduleUpdate();
 
     return true;
 }
@@ -131,7 +131,7 @@ void GameplayLayer::addEnemy(const ValueMap &model, int order, Path &path) {
     Vec2 spawnPosition = Vec2(1230, 360.f) + Vec2(order * 100, 0);
     enemy->restart(model, spawnPosition, path);
 
-    this->addChild(enemy);
+    addChild(enemy);
     _creeps.pushBack(enemy);
 }
 
@@ -148,7 +148,7 @@ void GameplayLayer::addMissile(cocos2d::Vec2 position, const cocos2d::Color3B &b
 
     _world->_audioEngine->playEffect("audio/missile_launch.wav");
 
-    this->addChild(missile);
+    addChild(missile);
     _missiles.pushBack(missile);
 }
 
@@ -160,17 +160,17 @@ void GameplayLayer::addBullet(cocos2d::Vec2 position, const cocos2d::Color3B &ba
 
     _world->_audioEngine->playEffect("audio/laser_gun.wav", false, 1.0f, 0.0f, 0.3f);
 
-    this->addChild(bullet);
+    addChild(bullet);
 }
 
 void GameplayLayer::addExplosion(cocos2d::Vec2 position, float duration, float strength) {
     // Create explosion animation
     auto explosion = _explosionPool.fetch();
     explosion->restart(position);
-    this->addChild(explosion);
+    addChild(explosion);
 
     // Create shake animation
-    this->getParent()->runAction(Shake::actionWithDuration(duration, strength));
+    getParent()->runAction(Shake::actionWithDuration(duration, strength));
 
     // Play a random explosion sfx
     int index = random(1, 3);
@@ -203,7 +203,7 @@ void GameplayLayer::addTower(ModelID type, cocos2d::Vec2 tile) {
         _world->balanceTotalCoin(-tower->getCost());
         _towerMap.insert(std::make_pair(tile, tower));
 
-        this->addChild(tower);
+        addChild(tower);
         CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/deploy.wav");
     }
 }
@@ -228,9 +228,9 @@ void GameplayLayer::deleteTower(Vec2 tile) {
 }
 
 void GameplayLayer::pauseScene() {
-    this->pause();
+    pause();
 
-    for (auto child : this->getChildren())
+    for (auto child : getChildren())
         child->pause();
 
     _world->getPhysicsWorld()->setSpeed(0.f);
@@ -242,9 +242,9 @@ void GameplayLayer::pauseScene() {
 }
 
 void GameplayLayer::resumeScene() {
-    this->resume();
+    resume();
 
-    for (auto child : this->getChildren())
+    for (auto child : getChildren())
         child->resume();
 
     _world->getPhysicsWorld()->setSpeed(1.f);

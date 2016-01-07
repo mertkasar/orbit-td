@@ -21,14 +21,14 @@ bool Explosion::init() {
         return false;
 
     _sprite = Sprite::create("textures/explosion.png");
-    this->addChild(_sprite);
-    this->setScale(1.5f);
+    addChild(_sprite);
+    setScale(1.5f);
 
     return true;
 }
 
 void Explosion::restart(cocos2d::Vec2 position) {
-    this->setPosition(position);
+    setPosition(position);
 
     //Create an explosion animation among 3 different styles
     int row = random(0, 2);

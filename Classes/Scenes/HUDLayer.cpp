@@ -35,7 +35,7 @@ bool HUDLayer::init(World *world) {
 
     _world = world;
 
-    this->setName("hud_layer");
+    setName("hud_layer");
 
     auto spriteCache = SpriteFrameCache::getInstance();
     spriteCache->addSpriteFramesWithFile("textures/ui_layer.plist");
@@ -103,11 +103,11 @@ bool HUDLayer::init(World *world) {
             Vec2(_bottomPanel->getContentSize().width / 2.f + 20, _bottomPanel->getContentSize().height / 2.f - 30));
     _bottomPanel->addChild(text);
 
-    this->addChild(_topPanel);
-    this->addChild(_notificationPanel);
-    this->addChild(_bottomPanel);
+    addChild(_topPanel);
+    addChild(_notificationPanel);
+    addChild(_bottomPanel);
 
-    this->scheduleUpdate();
+    scheduleUpdate();
 
     return true;
 }

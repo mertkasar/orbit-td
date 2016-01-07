@@ -56,18 +56,18 @@ bool Beam::init() {
     tile->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
     _end->addChild(tile);
 
-    this->addChild(_start);
-    this->addChild(_mid);
-    this->addChild(_end);
+    addChild(_start);
+    addChild(_mid);
+    addChild(_end);
 
-    this->setCascadeOpacityEnabled(true);
-    this->scheduleUpdate();
+    setCascadeOpacityEnabled(true);
+    scheduleUpdate();
 
     return true;
 }
 
 void Beam::update(cocos2d::Vec2 end) {
-    auto diff = end - this->convertToWorldSpace(this->getPosition());
+    auto diff = end - convertToWorldSpace(getPosition());
     auto ratio = (diff.length() - DIM) / DIM;
 
     _mid->setScaleX(ratio);

@@ -33,7 +33,7 @@ bool MapLayer::init() {
     if (!Layer::init())
         return false;
 
-    this->setName("map_layer");
+    setName("map_layer");
 
     auto spriteCache = SpriteFrameCache::getInstance();
     spriteCache->addSpriteFramesWithFile("textures/map_layer.plist");
@@ -41,7 +41,7 @@ bool MapLayer::init() {
     //Draw Planet
     auto planet = DrawNode::create();
     planet->drawSolidCircle(Vec2(-480.f, 360.f), 600.f, 0.f, 50, Color4F::BLUE);
-    this->addChild(planet);
+    addChild(planet);
 
     // Prepare sample grid
     _grid.create(Vec2(5, 10));
@@ -54,7 +54,7 @@ bool MapLayer::init() {
         Sprite *orbit = Sprite::createWithSpriteFrameName("orbit.png");
         orbit->setColor(Color::GREY);
         orbit->setPosition(algorithm::toCircularGrid(Vec2(2, j)));
-        this->addChild(orbit);
+        addChild(orbit);
     }
 
     for (int i = 0; i < size.x; i++) {
@@ -65,14 +65,14 @@ bool MapLayer::init() {
                 Sprite *shadow = Sprite::createWithSpriteFrameName("touch_shadow.png");
                 shadow->setColor(Color::BG);
                 shadow->setPosition(position);
-                this->addChild(shadow);
+                addChild(shadow);
 
                 Sprite *touchArea = Sprite::createWithSpriteFrameName("touch.png");
                 touchArea->setColor(Color::GREY);
                 touchArea->setPosition(position);
 
                 _slotMap.insert(std::make_pair(Vec2(i, j), touchArea));
-                this->addChild(touchArea);
+                addChild(touchArea);
             }
         }
     }
@@ -88,7 +88,7 @@ bool MapLayer::init() {
         drawPath();
     }
 
-    this->addChild(_pathCanvas);
+    addChild(_pathCanvas);
 
     return true;
 }

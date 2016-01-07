@@ -42,7 +42,7 @@ void Shake::update(float time) {
     float rand_x = fgRangeRand(-_strength_x, _strength_x);
     float rand_y = fgRangeRand(-_strength_y, _strength_y);
 
-    auto target = this->getTarget();
+    auto target = getTarget();
     auto currentPosition = target->getPosition();
 
     // move the target to a shaked position
@@ -55,7 +55,7 @@ void Shake::update(float time) {
 }
 
 void Shake::stop() {
-    auto target = this->getTarget();
+    auto target = getTarget();
     auto currentPosition = target->getPosition();
 
     // Action is done, reset clip position

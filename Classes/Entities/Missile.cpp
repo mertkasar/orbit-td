@@ -35,18 +35,18 @@ bool Missile::init() {
     _body->setCollisionBitmask(NULL_MASK);
     _body->setMass(5.5f);
     _body->setVelocityLimit(MISSILE_MAX_VEL);
-    this->setPhysicsBody(_body);
+    setPhysicsBody(_body);
 
     _fireEmitter = ParticleSystemQuad::create("missile_fire.plist");
-    _fireEmitter->setPosition(this->getPosition());
+    _fireEmitter->setPosition(getPosition());
 
-    this->addChild(_sprite);
+    addChild(_sprite);
 
     return true;
 }
 
 void Missile::update(float delta) {
-    _fireEmitter->setPosition(this->getPosition());
+    _fireEmitter->setPosition(getPosition());
 
     if (_target != nullptr) {
         if (!_target->isDead())
@@ -56,7 +56,7 @@ void Missile::update(float delta) {
     }
 
     float reachRadius = 10 + _sprite->getContentSize().width / 2.f;
-    if (this->getPosition().distance(_targetPosition) <= reachRadius) {
+    if (getPosition().distance(_targetPosition) <= reachRadius) {
         die(delta);
 
         if (_target != nullptr) {
@@ -80,20 +80,20 @@ void Missile::update(float delta) {
 void Missile::restart(cocos2d::Vec2 position, const cocos2d::Color3B &baseColor, float damage, Creep *target) {
     _dead = false;
 
-    this->setPosition(position);
+    setPosition(position);
     setDamage(damage);
     setTarget(target);
     _body->setVelocity(Vec2::ZERO);
 
-    this->setScale(0.5f);
+    setScale(0.5f);
 
     _fireEmitter->setStartColor(Color4F(baseColor));
 
     //TODO: This doesn't work as I expected, I need a resume operation not a reset!
     _fireEmitter->resetSystem();
 
-    this->scheduleUpdate();
-    this->scheduleOnce(CC_SCHEDULE_SELECTOR(Missile::die), MISSILE_EXPIRE_TIME);
+    scheduleUpdate();
+    scheduleOnce(CC_SCHEDULE_SELECTOR(Missile::die), MISSILE_EXPIRE_TIME);
 }
 
 void Missile::die(float pDelta) {

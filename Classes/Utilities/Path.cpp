@@ -20,15 +20,15 @@ bool Path::isReached(const TraverseData &traversed, cocos2d::Vec2 destination) {
 }
 
 void Path::construct(const TraverseData &traversed, cocos2d::Vec2 start, Vec2 goal) {
-    this->clear();
+    clear();
 
     auto current = start;
     while (current != goal) {
-        this->addWaypoint(WayPoint{current, algorithm::toCircularGrid(current), DEFAULT_WAYPOINT_DENSITY});
+        addWaypoint(WayPoint{current, algorithm::toCircularGrid(current), DEFAULT_WAYPOINT_DENSITY});
         current = traversed.find(current)->second;
     }
 
-    this->addWaypoint(WayPoint{goal, algorithm::toCircularGrid(goal), 0.f});
+    addWaypoint(WayPoint{goal, algorithm::toCircularGrid(goal), 0.f});
 
     _nextWaypoint = _waypoints.at(_index);
     _currentWaypoint = _waypoints.at(_index);
@@ -44,10 +44,10 @@ void Path::forward() {
 }
 
 void Path::clone(const Path &path) {
-    this->clear();
+    clear();
 
     for (auto waypoint : path.getWayPoints())
-        this->addWaypoint(waypoint);
+        addWaypoint(waypoint);
 
     _nextWaypoint = path.getNextWaypoint();
     _currentWaypoint = path.getCurrentWaypoint();

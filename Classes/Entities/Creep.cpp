@@ -33,7 +33,7 @@ bool Creep::init() {
     _body->setCategoryBitmask(ENEMY_MASK);
     _body->setContactTestBitmask(TOWER_RANGE_MASK);
     _body->setCollisionBitmask(NULL_MASK);
-    this->setPhysicsBody(_body);
+    setPhysicsBody(_body);
 
     _HPBar = Node::create();
     _HPBar->setPosition(Vec2(80.f, -40.f));
@@ -52,8 +52,8 @@ bool Creep::init() {
     hpBarF->setScale(HBAR_WIDTH, HBAR_HEIGHT);
     _HPBar->addChild(hpBarF);
 
-    this->addChild(_sprite);
-    this->addChild(_HPBar);
+    addChild(_sprite);
+    addChild(_HPBar);
 
     return true;
 }
@@ -61,7 +61,7 @@ bool Creep::init() {
 void Creep::update(float delta) {
     WayPoint target = _path.getNextWaypoint();
     float reachRadius = target._reachRadius + _sprite->getContentSize().width / 2.f;
-    if (this->getPosition().distance(target._location) <= reachRadius) {
+    if (getPosition().distance(target._location) <= reachRadius) {
         if (_path.eop())
             _reachedEnd = true;
         else {
@@ -92,15 +92,15 @@ void Creep::restart(const cocos2d::ValueMap &model, cocos2d::Vec2 position, cons
 
     _currentHP = _maxHP;
 
-    this->setPosition(position);
-    this->setScale(0.5f);
+    setPosition(position);
+    setScale(0.5f);
     _body->setVelocity(Vec2::ZERO);
 
     _path.clone(path);
 
     updateHPBar();
 
-    this->scheduleUpdate();
+    scheduleUpdate();
 }
 
 void Creep::deal(float damage) {

@@ -13,20 +13,20 @@ bool TowerMock::init() {
 
     auto sprite = Sprite::createWithSpriteFrameName("base_0.png");
     sprite->setScale(0.5f);
-    this->addChild(sprite);
+    addChild(sprite);
 
     sprite = Sprite::create();
     sprite->setName("gun");
-    this->addChild(sprite);
+    addChild(sprite);
 
     sprite = Sprite::createWithSpriteFrameName("range.png");
     sprite->setColor(Color::GREEN);
     sprite->runAction(RepeatForever::create(RotateBy::create(2.f, 30.f)));
-    this->addChild(sprite);
+    addChild(sprite);
 
-    this->setVisible(false);
-    this->setCascadeOpacityEnabled(true);
-    this->setOpacity((GLubyte) OPACITY);
+    setVisible(false);
+    setCascadeOpacityEnabled(true);
+    setOpacity((GLubyte) OPACITY);
 
     return true;
 }

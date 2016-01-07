@@ -28,7 +28,7 @@ bool Bullet::init() {
 
     _sprite = Sprite::createWithSpriteFrameName("bullet.png");
     _sprite->setScale(0.5f);
-    this->addChild(_sprite);
+    addChild(_sprite);
 
     return true;
 }
@@ -41,7 +41,7 @@ void Bullet::update(float delta) {
             _target = nullptr;
     }
 
-    auto diff = _targetPosition - this->getPosition();
+    auto diff = _targetPosition - getPosition();
     float reachRadius = 10 + _sprite->getContentSize().width / 2.f;
 
     if (diff.length() <= reachRadius) {
@@ -60,7 +60,7 @@ void Bullet::update(float delta) {
         _sprite->setRotation(-angle);
 
         // Move the bullet
-        this->setPosition(this->getPosition() + velocity * delta);
+        setPosition(getPosition() + velocity * delta);
     }
 }
 
@@ -70,6 +70,6 @@ void Bullet::restart(cocos2d::Vec2 position, const cocos2d::Color3B &baseColor, 
 
     _sprite->setColor(baseColor);
 
-    this->setPosition(position);
-    this->scheduleUpdate();
+    setPosition(position);
+    scheduleUpdate();
 }
