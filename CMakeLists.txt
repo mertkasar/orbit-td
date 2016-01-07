@@ -128,17 +128,17 @@ set(GAME_SRC
   Classes/Scenes/GameplayLayer.cpp
   Classes/Scenes/MapLayer.cpp
   Classes/Scenes/HUDLayer.cpp
-  Classes/Entities/Creep.cpp
+        Classes/Entities/EnemyShip.cpp
   Classes/Entities/Missile.cpp
   Classes/Entities/Explosion.cpp
-  Classes/Entities/Beam.cpp
+        Classes/Entities/LaserBeam.cpp
   Classes/Entities/Bullet.cpp
   Classes/Entities/TowerMock.cpp
   Classes/Entities/WheelMenu.cpp
-  Classes/Entities/Towers/Tower.cpp
-  Classes/Entities/Towers/Turret.cpp
-  Classes/Entities/Towers/Laser.cpp
-  Classes/Entities/Towers/RLauncher.cpp
+  Classes/Entities/Turret.cpp
+  Classes/Entities/MachineGun.cpp
+  Classes/Entities/LaserGun.cpp
+  Classes/Entities/MissileLauncher.cpp
   Classes/Utilities/SteeringDirector.cpp
   Classes/Utilities/Path.cpp
   Classes/Utilities/Grid.cpp
@@ -154,17 +154,17 @@ set(GAME_HEADERS
   Classes/Scenes/GameplayLayer.h
   Classes/Scenes/MapLayer.h
   Classes/Scenes/HUDLayer.h
-  Classes/Entities/Creep.h
+        Classes/Entities/EnemyShip.h
   Classes/Entities/Missile.h
   Classes/Entities/Explosion.h
-  Classes/Entities/Beam.h
+        Classes/Entities/LaserBeam.h
   Classes/Entities/Bullet.h
   Classes/Entities/TowerMock.h
   Classes/Entities/WheelMenu.h
-  Classes/Entities/Towers/Tower.h
-  Classes/Entities/Towers/Turret.h
-  Classes/Entities/Towers/Laser.h
-  Classes/Entities/Towers/RLauncher.h
+  Classes/Entities/Turret.h
+  Classes/Entities/MachineGun.h
+  Classes/Entities/LaserGun.h
+  Classes/Entities/MissileLauncher.h
   Classes/Utilities/SteeringDirector.h
   Classes/Utilities/Path.h
   Classes/Utilities/Grid.h

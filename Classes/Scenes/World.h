@@ -17,9 +17,9 @@ namespace CocosDenshion {
     class SimpleAudioEngine;
 }
 
-class Tower;
+class Turret;
 
-class Creep;
+class EnemyShip;
 
 class MapLayer;
 

@@ -9,9 +9,9 @@
 
 class World;
 
-class Tower;
+class Turret;
 
-class Creep;
+class EnemyShip;
 
 class Path;
 
@@ -38,13 +38,13 @@ public:
 
     void addEnemy(const cocos2d::ValueMap &model, int order, Path &path);
 
-    void addMissile(cocos2d::Vec2 position, const cocos2d::Color3B &baseColor, float damage, Creep *target);
+    void addMissile(cocos2d::Vec2 position, const cocos2d::Color3B &baseColor, float damage, EnemyShip *target);
 
-    void addBullet(cocos2d::Vec2 position, const cocos2d::Color3B &baseColor, float pDamage, Creep *target);
+    void addBullet(cocos2d::Vec2 position, const cocos2d::Color3B &baseColor, float pDamage, EnemyShip *target);
 
     void addExplosion(cocos2d::Vec2 position, float duration, float strength);
 
-    Tower *getTower(cocos2d::Vec2 tile);
+    Turret *getTower(cocos2d::Vec2 tile);
 
     void deleteTower(cocos2d::Vec2 tile);
 
@@ -60,7 +60,7 @@ public:
         return _paused;
     }
 
-    cocos2d::Vector<Creep *> &getCreepList() {
+    cocos2d::Vector<EnemyShip *> &getCreepList() {
         return _creeps;
     }
 
@@ -69,15 +69,15 @@ private:
 
     bool _paused;
 
-    Pool<Creep> _creepPool;
+    Pool<EnemyShip> _creepPool;
     Pool<Missile> _missilePool;
     Pool<Bullet> _bulletPool;
     Pool<Explosion> _explosionPool;
 
-    cocos2d::Vector<Creep *> _creeps;
+    cocos2d::Vector<EnemyShip *> _creeps;
     cocos2d::Vector<Missile *> _missiles;
 
-    std::map<cocos2d::Vec2, Tower *> _towerMap;
+    std::map<cocos2d::Vec2, Turret *> _towerMap;
 
     cocos2d::ParticleBatchNode *_particleBatch;
 };

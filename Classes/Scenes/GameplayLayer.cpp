@@ -10,12 +10,12 @@
 
 #include <Scenes/World.h>
 #include <Scenes/MapLayer.h>
-#include <Entities/Creep.h>
+#include <Entities/EnemyShip.h>
 #include <Entities/Explosion.h>
 #include <Entities/Bullet.h>
-#include <Entities/Towers/Turret.h>
-#include <Entities/Towers/Laser.h>
-#include <Entities/Towers/RLauncher.h>
+#include <Entities/MachineGun.h>
+#include <Entities/LaserGun.h>
+#include <Entities/MissileLauncher.h>
 #include <Utilities/Shake.h>
 #include <2d/CCSpriteFrameCache.h>
 #include <sstream>
@@ -60,15 +60,15 @@ bool GameplayLayer::init() {
         if ((a->getCategoryBitmask() == TOWER_RANGE_MASK && b->getCategoryBitmask() == ENEMY_MASK) ||
             (a->getCategoryBitmask() == ENEMY_MASK && b->getCategoryBitmask() == TOWER_RANGE_MASK)) {
 
-            Tower *tower = nullptr;
-            Creep *enemy = nullptr;
+            Turret *tower = nullptr;
+            EnemyShip *enemy = nullptr;
 
             if (a->getCategoryBitmask() == TOWER_RANGE_MASK) {
-                tower = static_cast<Tower *>(a->getNode());
-                enemy = static_cast<Creep *>(b->getNode());
+                tower = static_cast<Turret *>(a->getNode());
+                enemy = static_cast<EnemyShip *>(b->getNode());
             } else {
-                tower = static_cast<Tower *>(b->getNode());
-                enemy = static_cast<Creep *>(a->getNode());
+                tower = static_cast<Turret *>(b->getNode());
+                enemy = static_cast<EnemyShip *>(a->getNode());
             }
 
             tower->addTarget(enemy);
@@ -83,15 +83,15 @@ bool GameplayLayer::init() {
         if ((a->getCategoryBitmask() == TOWER_RANGE_MASK && b->getCategoryBitmask() == ENEMY_MASK) ||
             (a->getCategoryBitmask() == ENEMY_MASK && b->getCategoryBitmask() == TOWER_RANGE_MASK)) {
 
-            Tower *tower = nullptr;
-            Creep *enemy = nullptr;
+            Turret *tower = nullptr;
+            EnemyShip *enemy = nullptr;
 
             if (a->getCategoryBitmask() == TOWER_RANGE_MASK) {
-                tower = static_cast<Tower *>(a->getNode());
-                enemy = static_cast<Creep *>(b->getNode());
+                tower = static_cast<Turret *>(a->getNode());
+                enemy = static_cast<EnemyShip *>(b->getNode());
             } else {
-                tower = static_cast<Tower *>(b->getNode());
-                enemy = static_cast<Creep *>(a->getNode());
+                tower = static_cast<Turret *>(b->getNode());
+                enemy = static_cast<EnemyShip *>(a->getNode());
             }
 
             tower->removeTarget(enemy);
@@ -136,7 +136,7 @@ void GameplayLayer::addEnemy(const ValueMap &model, int order, Path &path) {
 }
 
 void GameplayLayer::addMissile(cocos2d::Vec2 position, const cocos2d::Color3B &baseColor, float damage,
-                               Creep *target) {
+                               EnemyShip *target) {
     auto missile = _missilePool.fetch();
 
     missile->restart(position, baseColor, damage, target);
@@ -153,12 +153,12 @@ void GameplayLayer::addMissile(cocos2d::Vec2 position, const cocos2d::Color3B &b
 }
 
 void GameplayLayer::addBullet(cocos2d::Vec2 position, const cocos2d::Color3B &baseColor, float pDamage,
-                              Creep *target) {
+                              EnemyShip *target) {
     auto bullet = _bulletPool.fetch();
 
     bullet->restart(position, baseColor, pDamage, target);
 
-    _world->_audioEngine->playEffect("audio/laser_gun.wav", false, 1.0f, 0.0f, 0.3f);
+    _world->_audioEngine->playEffect("audio/machine_gun.wav", false, 1.0f, 0.0f, 0.3f);
 
     addChild(bullet);
 }
@@ -180,17 +180,17 @@ void GameplayLayer::addExplosion(cocos2d::Vec2 position, float duration, float s
 }
 
 void GameplayLayer::addTower(ModelID type, cocos2d::Vec2 tile) {
-    Tower *tower = nullptr;
+    Turret *tower = nullptr;
 
     switch (type) {
-        case TURRET:
-            tower = Turret::create();
+        case MACHINE_GUN:
+            tower = MachineGun::create();
             break;
-        case LASER:
-            tower = Laser::create();
+        case LASER_GUN:
+            tower = LaserGun::create();
             break;
-        case R_LAUNCHER:
-            tower = RLauncher::create();
+        case MISSILE_LAUNCHER:
+            tower = MissileLauncher::create();
             break;
         default:
             break;
@@ -208,7 +208,7 @@ void GameplayLayer::addTower(ModelID type, cocos2d::Vec2 tile) {
     }
 }
 
-Tower *GameplayLayer::getTower(Vec2 tile) {
+Turret *GameplayLayer::getTower(Vec2 tile) {
     auto found = _towerMap.find(tile);
 
     assert(found != _towerMap.end());

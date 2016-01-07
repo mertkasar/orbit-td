@@ -11,7 +11,7 @@ namespace cocos2d {
     class ParticleSystemQuad;
 }
 
-class Creep;
+class EnemyShip;
 
 class Missile : public cocos2d::Node {
 public:
@@ -25,13 +25,13 @@ public:
 
     CREATE_FUNC(Missile);
 
-    void restart(cocos2d::Vec2 position, const cocos2d::Color3B &baseColor, float damage, Creep *target);
+    void restart(cocos2d::Vec2 position, const cocos2d::Color3B &baseColor, float damage, EnemyShip *target);
 
-    Creep *getTarget() const {
+    EnemyShip *getTarget() const {
         return _target;
     }
 
-    void setTarget(Creep *target) {
+    void setTarget(EnemyShip *target) {
         _target = target;
     }
 
@@ -57,7 +57,7 @@ private:
     cocos2d::PhysicsBody *_body;
     cocos2d::ParticleSystemQuad *_fireEmitter;
 
-    Creep *_target;
+    EnemyShip *_target;
     cocos2d::Vec2 _targetPosition;
 
     float _damage;

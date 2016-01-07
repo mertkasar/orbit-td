@@ -15,8 +15,8 @@
 #include <Scenes/MapLayer.h>
 #include <Scenes/GameplayLayer.h>
 #include <Scenes/HUDLayer.h>
-#include <Entities/Towers/Tower.h>
-#include <Entities/Creep.h>
+#include <Entities/Turret.h>
+#include <Entities/EnemyShip.h>
 #include <Entities/WheelMenu.h>
 
 #include <sstream>

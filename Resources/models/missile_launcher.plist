@@ -5,7 +5,7 @@
 	<key>id</key>
 	<integer>2</integer>
 	<key>gun_sprite_name</key>
-	<string>r_launcher.png</string>
+	<string>missile_launcher.png</string>
 	<key>base_cost</key>
 	<real>50.0</real>
 	<key>base_range</key>
@@ -13,6 +13,6 @@
 	<key>base_damage</key>
 	<real>30.0</real>
 	<key>base_cd</key>
-	<real>0.3</real>
+	<real>1.0</real>
 </dict>
 </plist>

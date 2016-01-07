@@ -1,10 +1,10 @@
-#include <Entities/Towers/Tower.h>
+#include "Turret.h"
 
 #include <2d/CCSprite.h>
 #include <2d/CCActionInterval.h>
 #include <physics/CCPhysicsBody.h>
 
-#include <Entities/Creep.h>
+#include "EnemyShip.h"
 #include <sstream>
 #include <audio/include/SimpleAudioEngine.h>
 
@@ -15,11 +15,11 @@ USING_NS_CC;
 #define DAMAGE_RATIO 0.1f
 #define CD_RATIO -0.2f
 
-Tower::~Tower() {
-    CCLOG("Tower deleted");
+Turret::~Turret() {
+    CCLOG("Turret deleted");
 }
 
-bool Tower::init(const cocos2d::ValueMap &model) {
+bool Turret::init(const cocos2d::ValueMap &model) {
     if (!Node::init())
         return false;
 
@@ -65,18 +65,18 @@ bool Tower::init(const cocos2d::ValueMap &model) {
     return true;
 }
 
-void Tower::addTarget(Creep *target) {
+void Turret::addTarget(EnemyShip *target) {
     _targetList.pushBack(target);
 }
 
-void Tower::removeTarget(Creep *target) {
+void Turret::removeTarget(EnemyShip *target) {
     auto found = _targetList.find(target);
 
     if (found != _targetList.end())
         _targetList.erase(found);
 }
 
-void Tower::update(float delta) {
+void Turret::update(float delta) {
     if (isTargetValid()) {
         adaptRotation();
 
@@ -97,7 +97,7 @@ void Tower::update(float delta) {
     }
 }
 
-void Tower::upgrade(cocos2d::Color3B &color) {
+void Turret::upgrade(cocos2d::Color3B &color) {
     _level++;
 
     _cost = (unsigned int) (_cost + _cost * COST_RATIO);
@@ -120,7 +120,7 @@ void Tower::upgrade(cocos2d::Color3B &color) {
     CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("audio/upgrade.wav");
 }
 
-bool Tower::isTargetValid() {
+bool Turret::isTargetValid() {
     if (_target != nullptr) {
         auto found = _targetList.find(_target);
 
@@ -130,7 +130,7 @@ bool Tower::isTargetValid() {
     return false;
 }
 
-PhysicsBody *Tower::createBody(float rangeRadius) {
+PhysicsBody *Turret::createBody(float rangeRadius) {
     auto body = PhysicsBody::createCircle(rangeRadius);
 
     body->setCategoryBitmask(TOWER_RANGE_MASK);
@@ -140,12 +140,12 @@ PhysicsBody *Tower::createBody(float rangeRadius) {
     return body;
 }
 
-void Tower::findTarget() {
+void Turret::findTarget() {
     if (!_targetList.empty())
         _target = _targetList.at(0);
 }
 
-void Tower::adaptRotation() {
+void Turret::adaptRotation() {
     Vec2 diff = _target->getPosition() - getPosition();
     diff.normalize();
 
@@ -154,7 +154,7 @@ void Tower::adaptRotation() {
     _gunSprite->setRotation(-1 * angle);
 }
 
-void Tower::setVerbose(bool verbose) {
+void Turret::setVerbose(bool verbose) {
     if (verbose) {
         _rangeSprite->setVisible(true);
         auto currentScale = _rangeSprite->getScale();
@@ -168,7 +168,7 @@ void Tower::setVerbose(bool verbose) {
     _verbose = verbose;
 }
 
-const Color3B &Tower::getBaseColor() {
+const Color3B &Turret::getBaseColor() {
     return _rangeSprite->getColor();
 }
 

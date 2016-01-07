@@ -1,15 +1,15 @@
-#include <Entities/Towers/Turret.h>
+#include "MachineGun.h"
 
 #include <2d/CCSprite.h>
 
-#include <Entities/Creep.h>
+#include "EnemyShip.h"
 #include <Scenes/GameplayLayer.h>
 
-bool Turret::init() {
-    return Tower::init(_models.at(ModelID::TURRET));
+bool MachineGun::init() {
+    return Turret::init(_models.at(ModelID::MACHINE_GUN));
 }
 
-void Turret::shoot(float delta) {
+void MachineGun::shoot(float delta) {
     GameplayLayer *gameplayLayer = static_cast<GameplayLayer *>(getParent());
     const cocos2d::Vec2 &origin = _gunSprite->convertToWorldSpace(_muzzlePoint->getPosition());
 

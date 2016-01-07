@@ -1,5 +1,5 @@
-#ifndef TOWER_H
-#define TOWER_H
+#ifndef TURRET_H
+#define TURRET_H
 
 #include <2d/CCNode.h>
 #include <Globals.h>
@@ -12,20 +12,20 @@ namespace cocos2d {
     class Color;
 }
 
-class Creep;
+class EnemyShip;
 
 
-class Tower : public cocos2d::Node {
+class Turret : public cocos2d::Node {
 public:
-    ~Tower();
+    ~Turret();
 
     bool init(const cocos2d::ValueMap &model);
 
     virtual void update(float delta);
 
-    void addTarget(Creep *target);
+    void addTarget(EnemyShip *target);
 
-    void removeTarget(Creep *target);
+    void removeTarget(EnemyShip *target);
 
     virtual void upgrade(cocos2d::Color3B &color);
 
@@ -71,8 +71,8 @@ protected:
     cocos2d::PhysicsBody *_body;
     cocos2d::Node *_muzzlePoint;
 
-    Creep *_target;
-    cocos2d::Vector<Creep *> _targetList;
+    EnemyShip *_target;
+    cocos2d::Vector<EnemyShip *> _targetList;
 
     //cocos2d::ValueMap &_model;
 
@@ -87,4 +87,4 @@ protected:
 };
 
 
-#endif // TOWER_H
+#endif // TURRET_H

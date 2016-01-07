@@ -1,5 +1,5 @@
-#ifndef ENEMY_H
-#define ENEMY_H
+#ifndef ENEMY_SHIP_H
+#define ENEMY_SHIP_H
 
 #include <2d/CCNode.h>
 #include <Utilities/Path.h>
@@ -11,17 +11,17 @@ namespace cocos2d {
     class PhysicsBody;
 }
 
-class Creep : public cocos2d::Node {
+class EnemyShip : public cocos2d::Node {
 public:
-    Creep();
+    EnemyShip();
 
-    virtual ~Creep();
+    virtual ~EnemyShip();
 
     virtual bool init();
 
     virtual void update(float delta);
 
-    CREATE_FUNC(Creep);
+    CREATE_FUNC(EnemyShip);
 
     void restart(const cocos2d::ValueMap &model, cocos2d::Vec2 position, const Path &path);
 
@@ -70,4 +70,4 @@ private:
 };
 
 
-#endif // ENEMY_H
+#endif // ENEMY_SHIP_H

@@ -8,9 +8,9 @@
 		<string>models/speedy.plist</string>
 		<string>models/pulsar.plist</string>
 		<string>models/panzer.plist</string>
-		<string>models/turret.plist</string>
-		<string>models/laser.plist</string>
-		<string>models/r_launcher.plist</string>
+		<string>models/machine_gun.plist</string>
+		<string>models/laser_gun.plist</string>
+		<string>models/missile_launcher.plist</string>
 	</array>
 	<key>audio</key>
 	<dict>
@@ -23,7 +23,7 @@
 			<string>audio/explosion_1.wav</string>
 			<string>audio/explosion_2.wav</string>
 			<string>audio/explosion_3.wav</string>
-			<string>audio/laser_gun.wav</string>
+			<string>audio/machine_gun.wav</string>
 			<string>audio/missile_launch.wav</string>
 			<string>audio/click.wav</string>
 			<string>audio/open.wav</string>

@@ -1,19 +1,19 @@
-#ifndef BEAM_H
-#define BEAM_H
+#ifndef LASER_BEAM_H
+#define LASER_BEAM_H
 
 #include <2d/CCNode.h>
 
-class Beam : public cocos2d::Node {
+class LaserBeam : public cocos2d::Node {
 public:
-    Beam();
+    LaserBeam();
 
-    virtual ~Beam();
+    virtual ~LaserBeam();
 
     virtual bool init();
 
     void update(cocos2d::Vec2 end);
 
-    CREATE_FUNC(Beam);
+    CREATE_FUNC(LaserBeam);
 
     void setColor(const cocos2d::Color3B &baseColor);
 
@@ -23,4 +23,4 @@ private:
     cocos2d::Node *_end;
 };
 
-#endif //BEAM_H
+#endif //LASER_BEAM_H

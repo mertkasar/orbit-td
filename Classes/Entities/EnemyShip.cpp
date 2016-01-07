@@ -1,25 +1,24 @@
-#include <Entities/Creep.h>
+#include "EnemyShip.h"
 
 #include <2d/CCSprite.h>
 #include <2d/CCAction.h>
 #include <physics/CCPhysicsBody.h>
 #include <Utilities/SteeringDirector.h>
-#include <base/CCValue.h>
 
 USING_NS_CC;
 
 #define HBAR_WIDTH 2.f
 #define HBAR_HEIGHT 8.f
 
-Creep::Creep() {
-    CCLOG("Creep created");
+EnemyShip::EnemyShip() {
+    CCLOG("EnemyShip created");
 }
 
-Creep::~Creep() {
-    CCLOG("Creep deleted");
+EnemyShip::~EnemyShip() {
+    CCLOG("EnemyShip deleted");
 }
 
-bool Creep::init() {
+bool EnemyShip::init() {
     if (!Node::init())
         return false;
 
@@ -58,7 +57,7 @@ bool Creep::init() {
     return true;
 }
 
-void Creep::update(float delta) {
+void EnemyShip::update(float delta) {
     WayPoint target = _path.getNextWaypoint();
     float reachRadius = target._reachRadius + _sprite->getContentSize().width / 2.f;
     if (getPosition().distance(target._location) <= reachRadius) {
@@ -80,7 +79,7 @@ void Creep::update(float delta) {
         _killed = true;
 }
 
-void Creep::restart(const cocos2d::ValueMap &model, cocos2d::Vec2 position, const Path &path) {
+void EnemyShip::restart(const cocos2d::ValueMap &model, cocos2d::Vec2 position, const Path &path) {
     _killed = false;
     _reachedEnd = false;
 
@@ -103,7 +102,7 @@ void Creep::restart(const cocos2d::ValueMap &model, cocos2d::Vec2 position, cons
     scheduleUpdate();
 }
 
-void Creep::deal(float damage) {
+void EnemyShip::deal(float damage) {
     _currentHP = _currentHP - damage;
 
     if (_currentHP < 0.f)
@@ -112,7 +111,7 @@ void Creep::deal(float damage) {
     updateHPBar();
 }
 
-void Creep::updateHPBar() {
+void EnemyShip::updateHPBar() {
     auto fg = _HPBar->getChildByName("fg");
     auto ratio = _currentHP / _maxHP;
     fg->setScaleY(HBAR_HEIGHT * ratio);

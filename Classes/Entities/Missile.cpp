@@ -5,7 +5,7 @@
 #include <physics/CCPhysicsBody.h>
 
 #include <Utilities/SteeringDirector.h>
-#include <Entities/Creep.h>
+#include "EnemyShip.h"
 #include <2d/CCParticleSystem.h>
 #include <2d/CCParticleExamples.h>
 #include <Utilities/Shake.h>
@@ -77,7 +77,7 @@ void Missile::update(float delta) {
     }
 }
 
-void Missile::restart(cocos2d::Vec2 position, const cocos2d::Color3B &baseColor, float damage, Creep *target) {
+void Missile::restart(cocos2d::Vec2 position, const cocos2d::Color3B &baseColor, float damage, EnemyShip *target) {
     _dead = false;
 
     setPosition(position);

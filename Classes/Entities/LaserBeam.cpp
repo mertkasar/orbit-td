@@ -1,22 +1,22 @@
-#include <Entities/Beam.h>
+#include "LaserBeam.h"
 
 #include <2d/CCSprite.h>
-#include <Entities/Creep.h>
+#include "EnemyShip.h"
 #include <2d/CCSpriteFrame.h>
 
 USING_NS_CC;
 
 #define DIM 64.f
 
-Beam::Beam() {
-    CCLOG("Beam created");
+LaserBeam::LaserBeam() {
+    CCLOG("LaserBeam created");
 }
 
-Beam::~Beam() {
-    CCLOG("Beam deleted");
+LaserBeam::~LaserBeam() {
+    CCLOG("LaserBeam deleted");
 }
 
-bool Beam::init() {
+bool LaserBeam::init() {
     if (!Node::init())
         return false;
 
@@ -66,7 +66,7 @@ bool Beam::init() {
     return true;
 }
 
-void Beam::update(cocos2d::Vec2 end) {
+void LaserBeam::update(cocos2d::Vec2 end) {
     auto diff = end - convertToWorldSpace(getPosition());
     auto ratio = (diff.length() - DIM) / DIM;
 
@@ -74,7 +74,7 @@ void Beam::update(cocos2d::Vec2 end) {
     _end->setPosition(diff.length() - DIM / 2.f, 0.f);
 }
 
-void Beam::setColor(const Color3B &baseColor) {
+void LaserBeam::setColor(const Color3B &baseColor) {
     _start->getChildByTag(0)->setColor(baseColor);
     _mid->getChildByTag(0)->setColor(baseColor);
     _end->getChildByTag(0)->setColor(baseColor);

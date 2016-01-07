@@ -9,7 +9,7 @@ namespace cocos2d {
     class Animate;
 }
 
-class Creep;
+class EnemyShip;
 
 class Explosion : public cocos2d::Node {
 public:

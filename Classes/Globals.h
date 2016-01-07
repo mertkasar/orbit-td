@@ -14,9 +14,9 @@ extern std::unordered_map<unsigned int, cocos2d::ValueMap> _models;
 #define MISSILE_MASK 0x03
 
 enum ModelID {
-    TURRET,
-    LASER,
-    R_LAUNCHER,
+    MACHINE_GUN,
+    LASER_GUN,
+    MISSILE_LAUNCHER,
     RAPTOR,
     SPEEDY,
     PANZER,

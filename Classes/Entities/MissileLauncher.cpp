@@ -1,14 +1,14 @@
-#include <Entities/Towers/RLauncher.h>
+#include "MissileLauncher.h"
 
 #include <2d/CCSprite.h>
 
-#include <Entities/Creep.h>
+#include "EnemyShip.h"
 #include <Scenes/GameplayLayer.h>
 
 USING_NS_CC;
 
-bool RLauncher::init() {
-    if (!Tower::init(_models.at(ModelID::R_LAUNCHER)))
+bool MissileLauncher::init() {
+    if (!Turret::init(_models.at(ModelID::MISSILE_LAUNCHER)))
         return false;
 
     _gunSprite->setScale(0.7f);
@@ -16,7 +16,7 @@ bool RLauncher::init() {
     return true;
 }
 
-void RLauncher::shoot(float delta) {
+void MissileLauncher::shoot(float delta) {
     GameplayLayer *gameplayLayer = static_cast<GameplayLayer *>(getParent());
     const cocos2d::Vec2 &origin = _gunSprite->convertToWorldSpace(_muzzlePoint->getPosition());
 

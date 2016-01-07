@@ -199,7 +199,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>r_launcher.png</key>
+            <key>missile_launcher.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -289,7 +289,7 @@
                 <key>textureRotated</key>
                 <true/>
             </dict>
-            <key>turret_gun.png</key>
+            <key>machine_gun.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>

@@ -1,17 +1,17 @@
-#include <Entities/Towers/Laser.h>
+#include "LaserGun.h"
 
 #include <2d/CCSprite.h>
 
-#include <Entities/Creep.h>
-#include <Entities/Beam.h>
+#include "EnemyShip.h"
+#include "LaserBeam.h"
 
 USING_NS_CC;
 
-bool Laser::init() {
-    if (!Tower::init(_models.at(ModelID::LASER)))
+bool LaserGun::init() {
+    if (!Turret::init(_models.at(ModelID::LASER_GUN)))
         return false;
 
-    _beam = Beam::create();
+    _beam = LaserBeam::create();
     _beam->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
     _beam->setColor(getBaseColor());
     _beam->setVisible(false);
@@ -20,7 +20,7 @@ bool Laser::init() {
     return true;
 }
 
-void Laser::update(float delta) {
+void LaserGun::update(float delta) {
     if (isTargetValid()) {
         if (!_beam->isVisible()) {
             _beam->setVisible(true);
@@ -31,16 +31,16 @@ void Laser::update(float delta) {
         }
     }
 
-    Tower::update(delta);
+    Turret::update(delta);
 }
 
-void Laser::upgrade(cocos2d::Color3B &color) {
-    Tower::upgrade(color);
+void LaserGun::upgrade(cocos2d::Color3B &color) {
+    Turret::upgrade(color);
 
     _beam->setColor(color);
 }
 
-void Laser::shoot(float pDelta) {
+void LaserGun::shoot(float pDelta) {
     _target->deal(_damage);
     _beam->update(_target->getPosition());
 }

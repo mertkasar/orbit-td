@@ -9,7 +9,7 @@
 #include <Scenes/World.h>
 #include <Scenes/MapLayer.h>
 #include <Scenes/GameplayLayer.h>
-#include <Entities/Towers/Tower.h>
+#include <Entities/Turret.h>
 #include <2d/CCSprite.h>
 #include <Entities/TowerMock.h>
 
@@ -44,19 +44,19 @@ bool WheelMenu::init(World *world) {
     const float SHIFT = 90.f;
 
     auto item = ui::Button::create("btn_trt.png", "", "", ui::Widget::TextureResType::PLIST);
-    item->setTag(TURRET);
+    item->setTag(MACHINE_GUN);
     item->setPosition(Vec2(-SHIFT, 0.f));
     item->addTouchEventListener(CC_CALLBACK_2(WheelMenu::towerButtonCallback, this));
     _purchaseMenu->addChild(item);
 
     item = ui::Button::create("btn_lsr.png", "", "", ui::Widget::TextureResType::PLIST);
-    item->setTag(LASER);
+    item->setTag(LASER_GUN);
     item->setPosition(Vec2(0, SHIFT));
     item->addTouchEventListener(CC_CALLBACK_2(WheelMenu::towerButtonCallback, this));
     _purchaseMenu->addChild(item);
 
     item = ui::Button::create("btn_rl.png", "", "", ui::Widget::TextureResType::PLIST);
-    item->setTag(R_LAUNCHER);
+    item->setTag(MISSILE_LAUNCHER);
     item->setPosition(Vec2(SHIFT, 0.f));
     item->addTouchEventListener(CC_CALLBACK_2(WheelMenu::towerButtonCallback, this));
     _purchaseMenu->addChild(item);

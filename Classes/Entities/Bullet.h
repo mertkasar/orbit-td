@@ -7,7 +7,7 @@ namespace cocos2d {
     class Sprite;
 }
 
-class Creep;
+class EnemyShip;
 
 class Bullet : public cocos2d::Node {
 public:
@@ -21,13 +21,13 @@ public:
 
     CREATE_FUNC(Bullet);
 
-    void restart(cocos2d::Vec2 position, const cocos2d::Color3B &baseColor, float damage, Creep *target);
+    void restart(cocos2d::Vec2 position, const cocos2d::Color3B &baseColor, float damage, EnemyShip *target);
 
-    Creep *getTarget() const {
+    EnemyShip *getTarget() const {
         return _target;
     }
 
-    void setTarget(Creep *target) {
+    void setTarget(EnemyShip *target) {
         _target = target;
     }
 
@@ -42,7 +42,7 @@ public:
 private:
     cocos2d::Sprite *_sprite;
 
-    Creep *_target;
+    EnemyShip *_target;
     cocos2d::Vec2 _targetPosition;
 
     float _damage;
