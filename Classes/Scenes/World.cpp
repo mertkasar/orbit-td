@@ -27,7 +27,7 @@ USING_NS_CC;
 #define STARTING_COIN 500
 #define STARTING_LIFE 10
 
-std::map<unsigned int, TowerModel> towerModels;
+std::unordered_map<unsigned int, cocos2d::ValueMap> _models;
 
 World::World() {
     CCLOG("World created");
@@ -63,14 +63,6 @@ bool World::init() {
 
     _totalCoin = STARTING_COIN;
     _life = STARTING_LIFE;
-
-    // Load tower models
-    towerModels.insert(std::make_pair(ModelID::TURRET,
-                                      TowerModel{ModelID::TURRET, "turret_gun.png", 10, 150.f, 3.f, 0.3f}));
-    towerModels.insert(std::make_pair(ModelID::LASER,
-                                      TowerModel{ModelID::LASER, "laser_gun.png", 30, 150.f, 0.3f, 0.f}));
-    towerModels.insert(std::make_pair(ModelID::R_LAUNCHER,
-                                      TowerModel{ModelID::R_LAUNCHER, "r_launcher.png", 50, 150.f, 30.f, 1.f}));
 
     _colors.push_back(Color::GREEN);
     _colors.push_back(Color::YELLOW);

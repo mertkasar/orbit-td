@@ -33,9 +33,8 @@ bool TowerMock::init() {
 
 void TowerMock::setSkin(ModelID type) {
     auto gunSprite = static_cast<Sprite*>(getChildByName("gun"));
-    auto model = (*towerModels.find(type)).second;
 
-    gunSprite->initWithSpriteFrameName(model.gunSpritePath);
+    gunSprite->initWithSpriteFrameName(_models.at(type).at("gun_sprite_name").asString());
     gunSprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
     gunSprite->setOpacity((GLubyte) OPACITY);
 }

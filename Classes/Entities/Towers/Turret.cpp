@@ -6,7 +6,7 @@
 #include <Scenes/GameplayLayer.h>
 
 bool Turret::init() {
-    return Tower::init(towerModels.at(ModelID::TURRET));
+    return Tower::init(_models.at(ModelID::TURRET));
 }
 
 void Turret::shoot(float delta) {

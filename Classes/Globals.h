@@ -3,6 +3,10 @@
 
 #include <base/ccTypes.h>
 
+// TODO: THIS IS A BAD IDEA! FIX IT!
+#include <base/CCValue.h>
+extern std::unordered_map<unsigned int, cocos2d::ValueMap> _models;
+
 //Collision bitmasks
 #define NULL_MASK 0x00
 #define TOWER_RANGE_MASK 0x01
@@ -18,17 +22,6 @@ enum ModelID {
     PANZER,
     PULSAR,
 };
-
-struct TowerModel {
-    ModelID type;
-    std::string gunSpritePath;
-    unsigned int baseCost;
-    float baseRange;
-    float baseDamage;
-    float baseCD;
-};
-
-extern std::map<unsigned int, TowerModel> towerModels;
 
 //Colors
 namespace Color {

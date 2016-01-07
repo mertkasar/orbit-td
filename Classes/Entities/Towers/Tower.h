@@ -19,7 +19,7 @@ class Tower : public cocos2d::Node {
 public:
     ~Tower();
 
-    bool init(const TowerModel &model);
+    bool init(const cocos2d::ValueMap &model);
 
     virtual void update(float delta);
 
@@ -74,7 +74,7 @@ protected:
     Creep *_target;
     cocos2d::Vector<Creep *> _targetList;
 
-    TowerModel _model;
+    //cocos2d::ValueMap &_model;
 
     unsigned int _cost;
     float _range;

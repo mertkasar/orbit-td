@@ -99,7 +99,7 @@ private:
 
     cocos2d::PhysicsWorld *__physicsWorld;
 
-    std::unordered_map<unsigned int, cocos2d::ValueMap> _models;
+    //std::unordered_map<unsigned int, cocos2d::ValueMap> _models;
 
     std::vector<std::vector<ModelID>> _waves;
     unsigned int _currentWave;

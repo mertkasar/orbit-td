@@ -15,21 +15,25 @@ USING_NS_CC;
 #define DAMAGE_RATIO 0.1f
 #define CD_RATIO -0.2f
 
-bool Tower::init(const TowerModel &model) {
+Tower::~Tower() {
+    CCLOG("Tower deleted");
+}
+
+bool Tower::init(const cocos2d::ValueMap &model) {
     if (!Node::init())
         return false;
 
-    _model = model;
-    _cost = model.baseCost;
-    _range = model.baseRange;
-    _damage = model.baseDamage;
-    _cooldown = model.baseCD;
+    //_model = model;
+    _cost = model.at("base_cost").asFloat();;
+    _range = model.at("base_range").asFloat();
+    _damage = model.at("base_damage").asFloat();
+    _cooldown = model.at("base_cd").asFloat();
 
     _level = 0;
     _nextShooting = 0.f;
     _verbose = true;
 
-    _gunSprite = Sprite::createWithSpriteFrameName(model.gunSpritePath);
+    _gunSprite = Sprite::createWithSpriteFrameName(model.at("gun_sprite_name").asString());
     _gunSprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
 
     _muzzlePoint = Node::create();
@@ -101,7 +105,7 @@ void Tower::upgrade(cocos2d::Color3B &color) {
     _damage = _damage + _damage * DAMAGE_RATIO;
     _cooldown = _cooldown + _cooldown * CD_RATIO;
 
-    _rangeSprite->setScale(_range / _model.baseRange);
+    _rangeSprite->setScale(_range / 150.f); // TODO: Hard-coded value!
     _rangeSprite->setColor(color);
 
     std::stringstream ss;
@@ -160,13 +164,12 @@ void Tower::setVerbose(bool verbose) {
         _rangeSprite->setVisible(false);
     }
 
-    _verbose = verbose;
-}
 
-Tower::~Tower() {
-    CCLOG("Tower deleted");
+    _verbose = verbose;
 }
 
 const Color3B &Tower::getBaseColor() {
     return _rangeSprite->getColor();
 }
+
+

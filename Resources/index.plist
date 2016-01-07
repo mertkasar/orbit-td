@@ -8,6 +8,9 @@
 		<string>models/speedy.plist</string>
 		<string>models/pulsar.plist</string>
 		<string>models/panzer.plist</string>
+		<string>models/turret.plist</string>
+		<string>models/laser.plist</string>
+		<string>models/r_launcher.plist</string>
 	</array>
 	<key>audio</key>
 	<dict>

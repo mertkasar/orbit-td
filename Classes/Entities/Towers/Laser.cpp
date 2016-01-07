@@ -8,7 +8,7 @@
 USING_NS_CC;
 
 bool Laser::init() {
-    if (!Tower::init(towerModels.at(ModelID::LASER)))
+    if (!Tower::init(_models.at(ModelID::LASER)))
         return false;
 
     _beam = Beam::create();

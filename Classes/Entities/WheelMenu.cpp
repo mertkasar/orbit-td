@@ -201,7 +201,7 @@ void WheelMenu::updateButtonStates() {
         bool enabled;
         for (unsigned int i = 0; i < 3; ++i) {
             btn = static_cast<ui::Button *>(_purchaseMenu->getChildByTag(i));
-            enabled = _lastCoin >= towerModels.at(i).baseCost;
+            enabled = _lastCoin >= _models.at(i).at("base_cost").asFloat();
             btn->setEnabled(enabled);
             btn->setBright(enabled);
         }
