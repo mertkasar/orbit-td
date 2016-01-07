@@ -77,11 +77,7 @@ bool World::init() {
     _colors.push_back(Color::BLUE);
 
     _audioEngine = CocosDenshion::SimpleAudioEngine::getInstance();
-    //loadResources();
-    loadModel("models/raptor.plist");
-    loadModel("models/speedy.plist");
-    loadModel("models/pulsar.plist");
-    loadModel("models/panzer.plist");
+    loadResources();
     buildScene();
     connectListeners();
 
@@ -103,8 +99,8 @@ bool World::init() {
     _currentWave = 0;
     _cleared = false;
 
-    /*audioEngine->setBackgroundMusicVolume(0.6f);
-    audioEngine->playBackgroundMusic("audio/ambient.mp3", true);*/
+    /*_audioEngine->setBackgroundMusicVolume(0.6f);
+    _audioEngine->playBackgroundMusic("audio/ambient.mp3", true);*/
 
     _audioEngine->setBackgroundMusicVolume(0.f);
     _audioEngine->setEffectsVolume(0.f);
@@ -231,17 +227,20 @@ void World::connectListeners() {
 }
 
 void World::loadResources() {
-    _audioEngine->preloadBackgroundMusic("audio/ambient.mp3");
-    _audioEngine->preloadEffect("audio/explosion_1.wav");
-    _audioEngine->preloadEffect("audio/explosion_2.wav");
-    _audioEngine->preloadEffect("audio/explosion_3.wav");
-    _audioEngine->preloadEffect("audio/laser_gun.wav");
-    _audioEngine->preloadEffect("audio/missile_launch.wav");
-    _audioEngine->preloadEffect("audio/click.wav");
-    _audioEngine->preloadEffect("audio/open.wav");
-    _audioEngine->preloadEffect("audio/deploy.wav");
-    _audioEngine->preloadEffect("audio/upgrade.wav");
-    _audioEngine->preloadEffect("audio/buzz.wav");
+    auto index = FileUtils::getInstance()->getValueMapFromFile("index.plist");
+
+    for (auto model : index.at("model").asValueVector()) {
+        loadModel(model.asString());
+    }
+
+    /*auto audio = index.at("audio").asValueMap();
+    for (auto bg : audio.at("background").asValueVector()) {
+        _audioEngine->preloadBackgroundMusic(bg.asString().c_str());
+    }
+
+    for (auto effect : audio.at("effect").asValueVector()) {
+        _audioEngine->preloadEffect(effect.asString().c_str());
+    }*/
 }
 
 void World::loadModel(std::string path) {
