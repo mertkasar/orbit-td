@@ -1,14 +1,15 @@
 #include "EnemyShip.h"
 
+#include "../Utilities/SteeringDirector.h"
+
 #include <2d/CCSprite.h>
 #include <2d/CCAction.h>
 #include <physics/CCPhysicsBody.h>
-#include <Utilities/SteeringDirector.h>
-
-USING_NS_CC;
 
 #define HBAR_WIDTH 2.f
 #define HBAR_HEIGHT 8.f
+
+USING_NS_CC;
 
 EnemyShip::EnemyShip() {
     CCLOG("EnemyShip created");

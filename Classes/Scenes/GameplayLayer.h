@@ -1,10 +1,11 @@
 #ifndef GAMEPLAY_LAYER_H
 #define GAMEPLAY_LAYER_H
 
+#include "../Globals.h"
+#include "../Utilities/Pool.h"
+#include "../Entities/Missile.h"
+
 #include <2d/CCLayer.h>
-#include <Utilities/Pool.h>
-#include <Globals.h>
-#include <Entities/Missile.h>
 #include <base/CCValue.h>
 
 class World;

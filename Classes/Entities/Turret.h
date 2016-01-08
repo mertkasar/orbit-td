@@ -1,8 +1,9 @@
 #ifndef TURRET_H
 #define TURRET_H
 
+#include "../Globals.h"
+
 #include <2d/CCNode.h>
-#include <Globals.h>
 
 namespace cocos2d {
     class Sprite;

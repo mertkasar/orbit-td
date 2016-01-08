@@ -1,11 +1,11 @@
 #ifndef PATH_H
 #define PATH_H
 
-#include <vector>
+#include "Algorithm.h"
 
 #include <math/Vec2.h>
 
-#include <Utilities/Algorithm.h>
+#include <vector>
 
 struct WayPoint {
     cocos2d::Vec2 _tile;

@@ -1,9 +1,9 @@
 #include "MissileLauncher.h"
 
-#include <2d/CCSprite.h>
-
 #include "EnemyShip.h"
-#include <Scenes/GameplayLayer.h>
+#include "../Scenes/GameplayLayer.h"
+
+#include <2d/CCSprite.h>
 
 USING_NS_CC;
 

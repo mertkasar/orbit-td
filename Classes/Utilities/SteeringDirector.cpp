@@ -1,4 +1,4 @@
-#include <Utilities/SteeringDirector.h>
+#include "SteeringDirector.h"
 
 #include <2d/CCNode.h>
 #include <physics/CCPhysicsBody.h>

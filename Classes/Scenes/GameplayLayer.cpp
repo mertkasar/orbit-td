@@ -1,23 +1,24 @@
-#include <Scenes/GameplayLayer.h>
+#include "GameplayLayer.h"
+
+#include "World.h"
+#include "MapLayer.h"
+#include "../Entities/EnemyShip.h"
+#include "../Entities/Explosion.h"
+#include "../Entities/Bullet.h"
+#include "../Entities/MachineGun.h"
+#include "../Entities/LaserGun.h"
+#include "../Entities/MissileLauncher.h"
+#include "../Utilities/Shake.h"
 
 #include <2d/CCParticleBatchNode.h>
 #include <2d/CCParticleSystemQuad.h>
+#include <2d/CCSpriteFrameCache.h>
 #include <base/CCDirector.h>
-#include <physics/CCPhysicsContact.h>
 #include <base/CCEventDispatcher.h>
+#include <physics/CCPhysicsContact.h>
 #include <physics/CCPhysicsWorld.h>
 #include <SimpleAudioEngine.h>
 
-#include <Scenes/World.h>
-#include <Scenes/MapLayer.h>
-#include <Entities/EnemyShip.h>
-#include <Entities/Explosion.h>
-#include <Entities/Bullet.h>
-#include <Entities/MachineGun.h>
-#include <Entities/LaserGun.h>
-#include <Entities/MissileLauncher.h>
-#include <Utilities/Shake.h>
-#include <2d/CCSpriteFrameCache.h>
 #include <sstream>
 
 USING_NS_CC;

@@ -1,4 +1,11 @@
-#include <Scenes/World.h>
+#include "World.h"
+
+#include "MapLayer.h"
+#include "GameplayLayer.h"
+#include "HUDLayer.h"
+#include "../Entities/Turret.h"
+#include "../Entities/EnemyShip.h"
+#include "../Entities/WheelMenu.h"
 
 #include <base/CCDirector.h>
 #include <base/CCEventDispatcher.h>
@@ -11,16 +18,9 @@
 #include <physics/CCPhysicsContact.h>
 #include <ui/UIImageView.h>
 #include <SimpleAudioEngine.h>
-
-#include <Scenes/MapLayer.h>
-#include <Scenes/GameplayLayer.h>
-#include <Scenes/HUDLayer.h>
-#include <Entities/Turret.h>
-#include <Entities/EnemyShip.h>
-#include <Entities/WheelMenu.h>
+#include <platform/CCFileUtils.h>
 
 #include <sstream>
-#include <platform/CCFileUtils.h>
 
 USING_NS_CC;
 

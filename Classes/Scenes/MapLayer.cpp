@@ -1,16 +1,17 @@
-#include <Scenes/MapLayer.h>
+#include "MapLayer.h"
+
+#include "World.h"
 
 #include <2d/CCDrawNode.h>
 #include <2d/CCActionInterval.h>
 #include <2d/CCSprite.h>
-
-#include <Scenes/World.h>
 #include <2d/CCSpriteFrameCache.h>
+
 #include <queue>
 
-USING_NS_CC;
-
 #define NODE_TOUCH_SIZE 50.f
+
+USING_NS_CC;
 
 MapLayer::MapLayer(World *world) {
     _world = world;

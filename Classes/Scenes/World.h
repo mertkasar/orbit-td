@@ -1,9 +1,10 @@
-#ifndef GAME_SCENE_H
-#define GAME_SCENE_H
+#ifndef WORLD_H
+#define WORLD_H
+
+#include "../Globals.h"
 
 #include <2d/CCLayer.h>
 #include <base/CCValue.h>
-#include <Globals.h>
 
 namespace cocos2d {
     class DrawNode;
@@ -16,10 +17,6 @@ namespace cocos2d {
 namespace CocosDenshion {
     class SimpleAudioEngine;
 }
-
-class Turret;
-
-class EnemyShip;
 
 class MapLayer;
 
@@ -122,4 +119,4 @@ public:
     std::vector<cocos2d::Color3B> _colors;
 };
 
-#endif // GAME_SCENE_H
+#endif // WORLD_H

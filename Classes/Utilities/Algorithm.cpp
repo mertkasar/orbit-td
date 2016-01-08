@@ -1,14 +1,10 @@
-#include <Utilities/Algorithm.h>
-
-#include <queue>
-
-#include <Utilities/Grid.h>
-
-USING_NS_CC;
+#include "Algorithm.h"
 
 #define GRID_RADIUS 600.f
 #define GRID_START_ANGLE 20.f
 #define GRID_SHIFT_ANGLE 10.f
+
+USING_NS_CC;
 
 cocos2d::Vec2 algorithm::toCircularGrid(Vec2 node) {
     float angle = GRID_START_ANGLE - node.x * GRID_SHIFT_ANGLE;

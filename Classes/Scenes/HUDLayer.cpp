@@ -1,18 +1,19 @@
-#include <Scenes/HUDLayer.h>
+#include "HUDLayer.h"
+
+#include "World.h"
+#include "GameplayLayer.h"
 
 #include <2d/CCMenu.h>
 #include <2d/CCActionInterval.h>
 #include <2d/CCActionInstant.h>
+#include <2d/CCSpriteFrameCache.h>
+#include <ui/UILayout.h>
 #include <ui/UIImageView.h>
 #include <ui/UIButton.h>
 #include <ui/UIText.h>
 #include <SimpleAudioEngine.h>
 
-#include <Scenes/World.h>
-#include <Scenes/GameplayLayer.h>
-
 #include <sstream>
-#include <2d/CCSpriteFrameCache.h>
 
 USING_NS_CC;
 

@@ -1,11 +1,11 @@
 #ifndef MAP_LAYER_H
 #define MAP_LAYER_H
 
-#include <2d/CCLayer.h>
+#include "../Utilities/Path.h"
+#include "../Utilities/Grid.h"
+#include "../Utilities/Algorithm.h"
 
-#include <Utilities/Path.h>
-#include <Utilities/Grid.h>
-#include <Utilities/Algorithm.h>
+#include <2d/CCLayer.h>
 
 class World;
 

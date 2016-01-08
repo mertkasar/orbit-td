@@ -1,11 +1,11 @@
-#include <Entities/TowerMock.h>
+#include "TowerMock.h"
 
 #include <2d/CCSprite.h>
 #include <2d/CCActionInterval.h>
 
-USING_NS_CC;
-
 #define OPACITY 150.f
+
+USING_NS_CC;
 
 bool TowerMock::init() {
     if (!Node::init())

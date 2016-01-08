@@ -1,9 +1,9 @@
 #include "LaserGun.h"
 
-#include <2d/CCSprite.h>
-
 #include "EnemyShip.h"
 #include "LaserBeam.h"
+
+#include <2d/CCSprite.h>
 
 USING_NS_CC;
 

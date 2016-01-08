@@ -1,8 +1,9 @@
 #ifndef ENEMY_SHIP_H
 #define ENEMY_SHIP_H
 
+#include "../Utilities/Path.h"
+
 #include <2d/CCNode.h>
-#include <Utilities/Path.h>
 #include <base/CCValue.h>
 
 namespace cocos2d {

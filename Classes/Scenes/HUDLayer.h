@@ -2,9 +2,8 @@
 #define HUD_LAYER_H
 
 #include <math/Vec2.h>
-#include <ui/UILayout.h>
-#include <ui/UIWidget.h>
 #include <2d/CCLayer.h>
+#include <ui/UIWidget.h>
 
 namespace cocos2d {
     class Ref;
@@ -12,6 +11,10 @@ namespace cocos2d {
     class Node;
 
     class Layer;
+
+    namespace ui {
+        class Layout;
+    }
 }
 
 class World;

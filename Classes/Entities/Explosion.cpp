@@ -1,6 +1,6 @@
-#include <2d/CCSprite.h>
+#include "Explosion.h"
 
-#include <Entities/Explosion.h>
+#include <2d/CCSprite.h>
 #include <2d/CCSpriteFrame.h>
 #include <2d/CCAnimation.h>
 #include <2d/CCActionInterval.h>

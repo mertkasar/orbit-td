@@ -1,19 +1,20 @@
 #include "Turret.h"
 
+#include "EnemyShip.h"
+
 #include <2d/CCSprite.h>
 #include <2d/CCActionInterval.h>
 #include <physics/CCPhysicsBody.h>
+#include <SimpleAudioEngine.h>
 
-#include "EnemyShip.h"
 #include <sstream>
-#include <audio/include/SimpleAudioEngine.h>
-
-USING_NS_CC;
 
 #define COST_RATIO 0.1f
 #define RANGE_RATIO 0.15f
 #define DAMAGE_RATIO 0.1f
 #define CD_RATIO -0.2f
+
+USING_NS_CC;
 
 Turret::~Turret() {
     CCLOG("Turret deleted");

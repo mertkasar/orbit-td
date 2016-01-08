@@ -1,18 +1,17 @@
-#include <Entities/Bullet.h>
+#include "Bullet.h"
+
+#include "EnemyShip.h"
+#include "../Utilities/SteeringDirector.h"
+#include "../Utilities/Shake.h"
 
 #include <2d/CCSprite.h>
-#include <2d/CCAction.h>
-#include <physics/CCPhysicsBody.h>
-
-#include <Utilities/SteeringDirector.h>
-#include "EnemyShip.h"
 #include <2d/CCParticleSystem.h>
 #include <2d/CCParticleExamples.h>
-#include <Utilities/Shake.h>
-
-USING_NS_CC;
+#include <physics/CCPhysicsBody.h>
 
 #define BULLET_MAX_VEL 500.f
+
+USING_NS_CC;
 
 Bullet::Bullet() {
     CCLOG("Bullet created");

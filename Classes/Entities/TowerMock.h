@@ -1,8 +1,9 @@
 #ifndef TOWER_MOCK_H
 #define TOWER_MOCK_H
 
+#include "../Globals.h"
+
 #include <2d/CCNode.h>
-#include <Globals.h>
 
 class TowerMock : public cocos2d::Node  {
 public:
@@ -13,4 +14,4 @@ public:
     void setSkin(ModelID type);
 };
 
-#endif //ORBIT_TD_MOCK_H
+#endif //TOWER_MOCK_H

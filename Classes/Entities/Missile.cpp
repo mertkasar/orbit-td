@@ -1,19 +1,18 @@
-#include <Entities/Missile.h>
+#include "Missile.h"
+
+#include "EnemyShip.h"
+#include "../Utilities/SteeringDirector.h"
+#include "../Utilities/Shake.h"
 
 #include <2d/CCSprite.h>
-#include <2d/CCAction.h>
-#include <physics/CCPhysicsBody.h>
-
-#include <Utilities/SteeringDirector.h>
-#include "EnemyShip.h"
 #include <2d/CCParticleSystem.h>
 #include <2d/CCParticleExamples.h>
-#include <Utilities/Shake.h>
-
-USING_NS_CC;
+#include <physics/CCPhysicsBody.h>
 
 #define MISSILE_MAX_VEL 160.f
 #define MISSILE_EXPIRE_TIME 4.f //as seconds
+
+USING_NS_CC;
 
 Missile::Missile() {
     CCLOG("Missile created");

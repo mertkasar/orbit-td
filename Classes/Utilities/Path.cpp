@@ -1,8 +1,8 @@
-#include <Utilities/Path.h>
-
-USING_NS_CC;
+#include "Path.h"
 
 #define DEFAULT_WAYPOINT_DENSITY 15.f
+
+USING_NS_CC;
 
 Path::Path() : _waypoints(), _index(0), _nextWaypoint(), _currentWaypoint() {
 }

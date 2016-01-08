@@ -1,13 +1,11 @@
-#ifndef WHEELMENU_H
-#define WHEELMENU_H
+#ifndef WHEEL_MENU_H
+#define WHEEL_MENU_H
+
+#include "../Globals.h"
 
 #include <math/Vec2.h>
 #include <ui/UILayout.h>
 #include <ui/UIWidget.h>
-
-#include <Globals.h>
-
-class TowerMock;
 
 namespace cocos2d {
     class Ref;
@@ -18,6 +16,8 @@ namespace cocos2d {
 }
 
 class World;
+
+class TowerMock;
 
 class WheelMenu : public cocos2d::Node {
 public:
@@ -85,4 +85,4 @@ private:
     TowerMock *_mock;
 };
 
-#endif //WHEELMENU_H
+#endif //WHEEL_MENU_H

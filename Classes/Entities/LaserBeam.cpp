@@ -1,12 +1,13 @@
 #include "LaserBeam.h"
 
-#include <2d/CCSprite.h>
 #include "EnemyShip.h"
+
+#include <2d/CCSprite.h>
 #include <2d/CCSpriteFrame.h>
 
-USING_NS_CC;
-
 #define DIM 64.f
+
+USING_NS_CC;
 
 LaserBeam::LaserBeam() {
     CCLOG("LaserBeam created");

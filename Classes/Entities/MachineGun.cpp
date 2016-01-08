@@ -1,9 +1,9 @@
 #include "MachineGun.h"
 
-#include <2d/CCSprite.h>
-
 #include "EnemyShip.h"
-#include <Scenes/GameplayLayer.h>
+#include "../Scenes/GameplayLayer.h"
+
+#include <2d/CCSprite.h>
 
 bool MachineGun::init() {
     return Turret::init(_models.at(ModelID::MACHINE_GUN));

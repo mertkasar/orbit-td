@@ -3,15 +3,15 @@
 
 #include <base/ccTypes.h>
 
-// TODO: THIS IS A BAD IDEA! FIX IT!
-#include <base/CCValue.h>
-extern std::unordered_map<unsigned int, cocos2d::ValueMap> _models;
-
 //Collision bitmasks
 #define NULL_MASK 0x00
 #define TOWER_RANGE_MASK 0x01
 #define ENEMY_MASK 0x02
 #define MISSILE_MASK 0x03
+
+// TODO: THIS IS A BAD IDEA! FIX IT!
+#include <base/CCValue.h>
+extern std::unordered_map<unsigned int, cocos2d::ValueMap> _models;
 
 enum ModelID {
     MACHINE_GUN,

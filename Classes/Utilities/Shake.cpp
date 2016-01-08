@@ -1,6 +1,6 @@
 // Code by Francois Guibert
 // Contact: www.frozax.com - http://twitter.com/frozax - www.facebook.com/frozax
-#include <Utilities/Shake.h>
+#include "Shake.h"
 
 USING_NS_CC;
 
