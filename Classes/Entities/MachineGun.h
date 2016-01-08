@@ -5,9 +5,9 @@
 
 class MachineGun : public Turret {
 public:
-    virtual bool init();
+    static MachineGun *create(const cocos2d::ValueMap &model);
 
-    CREATE_FUNC(MachineGun);
+    virtual bool init(const cocos2d::ValueMap &model);
 
 private:
     virtual void shoot(float delta);

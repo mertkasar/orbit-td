@@ -4,6 +4,7 @@
 #include "../Globals.h"
 
 #include <2d/CCNode.h>
+#include <base/CCValue.h>
 
 namespace cocos2d {
     class Sprite;
@@ -15,12 +16,11 @@ namespace cocos2d {
 
 class EnemyShip;
 
-
 class Turret : public cocos2d::Node {
 public:
     ~Turret();
 
-    bool init(const cocos2d::ValueMap &model);
+    virtual bool init(const cocos2d::ValueMap &model);
 
     virtual void update(float delta);
 
@@ -78,6 +78,7 @@ protected:
     //cocos2d::ValueMap &_model;
 
     unsigned int _cost;
+    float _base_range;
     float _range;
     float _damage;
     float _cooldown;

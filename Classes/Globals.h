@@ -9,10 +9,6 @@
 #define ENEMY_MASK 0x02
 #define MISSILE_MASK 0x03
 
-// TODO: THIS IS A BAD IDEA! FIX IT!
-#include <base/CCValue.h>
-extern std::unordered_map<unsigned int, cocos2d::ValueMap> _models;
-
 enum ModelID {
     MACHINE_GUN,
     LASER_GUN,

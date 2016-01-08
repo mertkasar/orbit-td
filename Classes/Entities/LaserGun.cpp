@@ -7,8 +7,20 @@
 
 USING_NS_CC;
 
-bool LaserGun::init() {
-    if (!Turret::init(_models.at(ModelID::LASER_GUN)))
+LaserGun *LaserGun::create(const ValueMap &model) {
+    LaserGun *obj = new(std::nothrow) LaserGun();
+
+    if (obj && obj->init(model)) {
+        obj->autorelease();
+    } else {
+        CC_SAFE_DELETE(obj);
+    }
+
+    return obj;
+}
+
+bool LaserGun::init(const ValueMap &model) {
+    if (!Turret::init(model))
         return false;
 
     _beam = LaserBeam::create();

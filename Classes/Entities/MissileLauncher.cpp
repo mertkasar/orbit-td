@@ -7,8 +7,20 @@
 
 USING_NS_CC;
 
-bool MissileLauncher::init() {
-    if (!Turret::init(_models.at(ModelID::MISSILE_LAUNCHER)))
+MissileLauncher *MissileLauncher::create(const ValueMap &model) {
+    MissileLauncher *obj = new(std::nothrow) MissileLauncher();
+
+    if (obj && obj->init(model)) {
+        obj->autorelease();
+    } else {
+        CC_SAFE_DELETE(obj);
+    }
+
+    return obj;
+}
+
+bool MissileLauncher::init(const ValueMap &model) {
+    if (!Turret::init(model))
         return false;
 
     _gunSprite->setScale(0.7f);

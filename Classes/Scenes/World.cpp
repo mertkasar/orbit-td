@@ -22,10 +22,10 @@
 
 #include <sstream>
 
-USING_NS_CC;
-
 #define STARTING_COIN 500
 #define STARTING_LIFE 10
+
+USING_NS_CC;
 
 std::unordered_map<unsigned int, cocos2d::ValueMap> _models;
 

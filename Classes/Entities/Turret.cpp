@@ -20,13 +20,14 @@ Turret::~Turret() {
     CCLOG("Turret deleted");
 }
 
-bool Turret::init(const cocos2d::ValueMap &model) {
+bool Turret::init(const ValueMap &model) {
     if (!Node::init())
         return false;
 
     //_model = model;
     _cost = model.at("base_cost").asFloat();;
-    _range = model.at("base_range").asFloat();
+    _base_range = model.at("base_range").asFloat();
+    _range = _base_range;
     _damage = model.at("base_damage").asFloat();
     _cooldown = model.at("base_cd").asFloat();
 
@@ -106,7 +107,7 @@ void Turret::upgrade(cocos2d::Color3B &color) {
     _damage = _damage + _damage * DAMAGE_RATIO;
     _cooldown = _cooldown + _cooldown * CD_RATIO;
 
-    _rangeSprite->setScale(_range / 150.f); // TODO: Hard-coded value!
+    _rangeSprite->setScale(_range / _base_range);
     _rangeSprite->setColor(color);
 
     std::stringstream ss;

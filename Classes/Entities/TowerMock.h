@@ -4,6 +4,7 @@
 #include "../Globals.h"
 
 #include <2d/CCNode.h>
+#include <base/CCValue.h>
 
 class TowerMock : public cocos2d::Node  {
 public:
@@ -11,7 +12,7 @@ public:
 
     CREATE_FUNC(TowerMock);
 
-    void setSkin(ModelID type);
+    void update(const cocos2d::ValueMap &model);
 };
 
 #endif //TOWER_MOCK_H

@@ -5,9 +5,9 @@
 
 class MissileLauncher : public Turret {
 public:
-    virtual bool init();
+    static MissileLauncher *create(const cocos2d::ValueMap &model);
 
-    CREATE_FUNC(MissileLauncher);
+    virtual bool init(const cocos2d::ValueMap &model);
 
 private:
     virtual void shoot(float delta);

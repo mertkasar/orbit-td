@@ -201,7 +201,7 @@ void WheelMenu::updateButtonStates() {
         bool enabled;
         for (unsigned int i = 0; i < 3; ++i) {
             btn = static_cast<ui::Button *>(_purchaseMenu->getChildByTag(i));
-            enabled = _lastCoin >= _models.at(i).at("base_cost").asFloat();
+            enabled = _lastCoin >= _world->getModel(i).at("base_cost").asFloat();
             btn->setEnabled(enabled);
             btn->setBright(enabled);
         }
@@ -224,7 +224,7 @@ void WheelMenu::towerButtonCallback(Ref *sender, ui::Widget::TouchEventType type
 
         _mock->setVisible(true);
         _mock->setScale(1.f);
-        _mock->setSkin(_selectedType);
+        _mock->update(_world->getModel(_selectedType));
 
         setState(VALIDATION);
 

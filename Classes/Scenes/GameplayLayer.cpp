@@ -185,13 +185,13 @@ void GameplayLayer::addTower(ModelID type, cocos2d::Vec2 tile) {
 
     switch (type) {
         case MACHINE_GUN:
-            tower = MachineGun::create();
+            tower = MachineGun::create(_world->getModel(type));
             break;
         case LASER_GUN:
-            tower = LaserGun::create();
+            tower = LaserGun::create(_world->getModel(type));
             break;
         case MISSILE_LAUNCHER:
-            tower = MissileLauncher::create();
+            tower = MissileLauncher::create(_world->getModel(type));
             break;
         default:
             break;

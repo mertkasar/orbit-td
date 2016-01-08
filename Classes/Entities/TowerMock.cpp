@@ -31,10 +31,10 @@ bool TowerMock::init() {
     return true;
 }
 
-void TowerMock::setSkin(ModelID type) {
+void TowerMock::update(const cocos2d::ValueMap &model) {
     auto gunSprite = static_cast<Sprite*>(getChildByName("gun"));
 
-    gunSprite->initWithSpriteFrameName(_models.at(type).at("gun_sprite_name").asString());
+    gunSprite->initWithSpriteFrameName(model.at("gun_sprite_name").asString());
     gunSprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
     gunSprite->setOpacity((GLubyte) OPACITY);
 }
