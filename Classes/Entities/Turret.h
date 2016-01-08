@@ -28,7 +28,7 @@ public:
 
     void removeTarget(EnemyShip *target);
 
-    virtual void upgrade(cocos2d::Color3B &color);
+    virtual void upgrade();
 
     unsigned int getTargetCount() const {
         return (unsigned int) _targetList.size();

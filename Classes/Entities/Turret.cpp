@@ -99,7 +99,7 @@ void Turret::update(float delta) {
     }
 }
 
-void Turret::upgrade(cocos2d::Color3B &color) {
+void Turret::upgrade() {
     _level++;
 
     _cost = (unsigned int) (_cost + _cost * COST_RATIO);
@@ -108,7 +108,20 @@ void Turret::upgrade(cocos2d::Color3B &color) {
     _cooldown = _cooldown + _cooldown * CD_RATIO;
 
     _rangeSprite->setScale(_range / _base_range);
-    _rangeSprite->setColor(color);
+
+    switch (_level) {
+        case 0:
+            _rangeSprite->setColor(Color::GREEN);
+            break;
+        case 1:
+            _rangeSprite->setColor(Color::YELLOW);
+            break;
+        case 2:
+            _rangeSprite->setColor(Color::BLUE);
+            break;
+        default:
+            break;
+    }
 
     std::stringstream ss;
     ss << "base_" << _level << ".png";

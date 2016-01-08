@@ -65,10 +65,6 @@ bool World::init() {
     _totalCoin = STARTING_COIN;
     _life = STARTING_LIFE;
 
-    _colors.push_back(Color::GREEN);
-    _colors.push_back(Color::YELLOW);
-    _colors.push_back(Color::BLUE);
-
     _audioEngine = CocosDenshion::SimpleAudioEngine::getInstance();
     loadResources();
     buildScene();
@@ -138,10 +134,9 @@ void World::destroyTower(Vec2 tile) {
 
 void World::upgradeTower(cocos2d::Vec2 tile) {
     auto tower = _gameplayLayer->getTower(tile);
-    auto color = _colors.at(tower->getLevel() + 1);
 
-    tower->upgrade(color);
-    _mapLayer->setSlotColor(tile, color);
+    tower->upgrade();
+    _mapLayer->setSlotColor(tile, tower->getBaseColor());
 
     balanceTotalCoin(-tower->getCost());
 }

@@ -13,7 +13,7 @@ public:
 
     virtual void update(float delta);
 
-    virtual void upgrade(cocos2d::Color3B &color);
+    virtual void upgrade();
 
 private:
     virtual void shoot(float pDelta);

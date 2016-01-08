@@ -46,10 +46,10 @@ void LaserGun::update(float delta) {
     Turret::update(delta);
 }
 
-void LaserGun::upgrade(cocos2d::Color3B &color) {
-    Turret::upgrade(color);
+void LaserGun::upgrade() {
+    Turret::upgrade();
 
-    _beam->setColor(color);
+    _beam->setColor(getBaseColor());
 }
 
 void LaserGun::shoot(float pDelta) {

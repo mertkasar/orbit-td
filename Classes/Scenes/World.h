@@ -115,8 +115,6 @@ public:
     MapLayer *_mapLayer;
     GameplayLayer *_gameplayLayer;
     HUDLayer *_hudLayer;
-
-    std::vector<cocos2d::Color3B> _colors;
 };
 
 #endif // WORLD_H
