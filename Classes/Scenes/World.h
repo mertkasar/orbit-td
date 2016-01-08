@@ -98,7 +98,7 @@ private:
 
     std::unordered_map<unsigned int, cocos2d::ValueMap> _models;
 
-    std::vector<std::vector<ModelID>> _waves;
+    cocos2d::ValueVector _waves;
     unsigned int _currentWave;
     bool _cleared;
 

@@ -74,21 +74,7 @@ bool World::init() {
     buildScene();
     connectListeners();
 
-    //Init waves
-    _waves.clear();
-    _waves.push_back(std::vector<ModelID>{SPEEDY, RAPTOR, PULSAR, PANZER});
-    _waves.push_back(std::vector<ModelID>{RAPTOR});
-    _waves.push_back(std::vector<ModelID>{RAPTOR, RAPTOR, RAPTOR});
-    _waves.push_back(std::vector<ModelID>{SPEEDY, SPEEDY, RAPTOR, RAPTOR, RAPTOR});
-    _waves.push_back(std::vector<ModelID>{RAPTOR, RAPTOR, PULSAR, PULSAR});
-    _waves.push_back(std::vector<ModelID>{RAPTOR, RAPTOR, RAPTOR, SPEEDY, SPEEDY, PULSAR, PANZER});
-    _waves.push_back(std::vector<ModelID>(7, SPEEDY));
-    _waves.push_back(std::vector<ModelID>{PULSAR, PULSAR, PULSAR, PULSAR, PULSAR, PULSAR, PANZER});
-    _waves.push_back(std::vector<ModelID>{10, PULSAR});
-    _waves.push_back(std::vector<ModelID>{SPEEDY, SPEEDY, SPEEDY, SPEEDY, RAPTOR, RAPTOR, RAPTOR, RAPTOR, PULSAR,
-                                          PULSAR, PANZER, PANZER});
-    _waves.push_back(std::vector<ModelID>{15, PANZER});
-
+    _waves = FileUtils::getInstance()->getValueVectorFromFile("waves.plist");
     _currentWave = 0;
     _cleared = false;
 
@@ -162,10 +148,10 @@ void World::upgradeTower(cocos2d::Vec2 tile) {
 
 bool World::spawnNextWave() {
     if (_currentWave < _waves.size()) {
-        auto wave = _waves.at(_currentWave);
+        auto wave = _waves.at(_currentWave).asValueVector();
 
         for (unsigned int i = 0; i < wave.size(); i++) {
-            const auto &model = getModel(wave.at(i));
+            const auto &model = getModel((unsigned int) wave.at(i).asInt());
             _gameplayLayer->addEnemy(model, i, _mapLayer->_path);
         }
 
