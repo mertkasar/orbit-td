@@ -6,7 +6,6 @@
 #include <2d/CCMenu.h>
 #include <2d/CCActionInterval.h>
 #include <2d/CCActionInstant.h>
-#include <2d/CCSpriteFrameCache.h>
 #include <ui/UILayout.h>
 #include <ui/UIImageView.h>
 #include <ui/UIButton.h>
@@ -35,11 +34,6 @@ bool HUDLayer::init(World *world) {
         return false;
 
     _world = world;
-
-    setName("hud_layer");
-
-    auto spriteCache = SpriteFrameCache::getInstance();
-    spriteCache->addSpriteFramesWithFile("textures/ui_layer.plist");
 
     _topPanel = ui::Layout::create();
     _topPanel->setBackGroundImage("top_panel.png", ui::Widget::TextureResType::PLIST);

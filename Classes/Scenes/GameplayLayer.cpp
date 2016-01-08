@@ -12,7 +12,6 @@
 
 #include <2d/CCParticleBatchNode.h>
 #include <2d/CCParticleSystemQuad.h>
-#include <2d/CCSpriteFrameCache.h>
 #include <base/CCDirector.h>
 #include <base/CCEventDispatcher.h>
 #include <physics/CCPhysicsContact.h>
@@ -45,11 +44,6 @@ bool GameplayLayer::init() {
         return false;
 
     _paused = false;
-
-    setName("gameplay_layer");
-
-    auto spriteCache = SpriteFrameCache::getInstance();
-    spriteCache->addSpriteFramesWithFile("textures/gameplay_layer.plist");
 
     setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 

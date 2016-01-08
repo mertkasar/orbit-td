@@ -10,6 +10,7 @@
 #include <base/CCDirector.h>
 #include <base/CCEventDispatcher.h>
 #include <base/CCEventListenerTouch.h>
+#include <2d/CCSpriteFrameCache.h>
 #include <2d/CCActionInterval.h>
 #include <2d/CCActionInstant.h>
 #include <2d/CCDrawNode.h>
@@ -233,6 +234,11 @@ void World::loadResources() {
     for (auto effect : audio.at("effect").asValueVector()) {
         _audioEngine->preloadEffect(effect.asString().c_str());
     }*/
+
+    auto spriteCache = SpriteFrameCache::getInstance();
+    for (auto sheet : index.at("spritesheet").asValueVector()) {
+        spriteCache->addSpriteFramesWithFile(sheet.asString());
+    }
 }
 
 void World::loadModel(std::string path) {

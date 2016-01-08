@@ -32,5 +32,11 @@
 			<string>audio/buzz.wav</string>
 		</array>
 	</dict>
+	<key>spritesheet</key>
+	<array>
+		<string>textures/gameplay_layer.plist</string>
+		<string>textures/map_layer.plist</string>
+		<string>textures/ui_layer.plist</string>
+	</array>
 </dict>
 </plist>

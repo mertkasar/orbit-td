@@ -5,7 +5,6 @@
 #include <2d/CCDrawNode.h>
 #include <2d/CCActionInterval.h>
 #include <2d/CCSprite.h>
-#include <2d/CCSpriteFrameCache.h>
 
 #include <queue>
 
@@ -33,11 +32,6 @@ MapLayer *MapLayer::create(World *world) {
 bool MapLayer::init() {
     if (!Layer::init())
         return false;
-
-    setName("map_layer");
-
-    auto spriteCache = SpriteFrameCache::getInstance();
-    spriteCache->addSpriteFramesWithFile("textures/map_layer.plist");
 
     //Draw Planet
     auto planet = DrawNode::create();
