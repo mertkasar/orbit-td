@@ -7,17 +7,9 @@ namespace cocos2d {
     class Sprite;
 }
 
-class Creep;
+class EnemyShip;
 
 class Bullet : public cocos2d::Node {
-private:
-    cocos2d::Sprite *mSprite;
-
-    Creep *mTarget;
-    cocos2d::Vec2 mTargetPosition;
-
-    float mDamage;
-
 public:
     Bullet();
 
@@ -25,27 +17,36 @@ public:
 
     virtual bool init();
 
-    virtual void update(float pDelta);
+    virtual void update(float delta);
 
     CREATE_FUNC(Bullet);
 
-    void ignite(cocos2d::Vec2 pPosition, const cocos2d::Color3B &pBaseColor, float pDamage, Creep *pTarget);
+    void restart(cocos2d::Vec2 position, const cocos2d::Color3B &baseColor, float damage, EnemyShip *target);
 
-    Creep *getTarget() const {
-        return mTarget;
+    EnemyShip *getTarget() const {
+        return _target;
     }
 
-    void setTarget(Creep *pTarget) {
-        mTarget = pTarget;
+    void setTarget(EnemyShip *target) {
+        _target = target;
     }
 
     float getDamage() const {
-        return mDamage;
+        return _damage;
     }
 
-    void setDamage(float pDamage) {
-        mDamage = pDamage;
+    void setDamage(float damage) {
+        _damage = damage;
     }
+
+private:
+    cocos2d::Sprite *_sprite;
+
+    EnemyShip *_target;
+    cocos2d::Vec2 _targetPosition;
+
+    float _damage;
+
 };
 
 #endif //BULLET_H

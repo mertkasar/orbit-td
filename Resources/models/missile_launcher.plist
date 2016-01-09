@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>id</key>
+	<integer>2</integer>
+	<key>gun_sprite_name</key>
+	<string>missile_launcher.png</string>
+	<key>base_cost</key>
+	<real>50.0</real>
+	<key>base_range</key>
+	<real>150.0</real>
+	<key>base_damage</key>
+	<real>30.0</real>
+	<key>base_cd</key>
+	<real>1.0</real>
+</dict>
+</plist>

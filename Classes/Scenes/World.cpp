@@ -1,8 +1,16 @@
-#include <Scenes/World.h>
+#include "World.h"
+
+#include "MapLayer.h"
+#include "GameplayLayer.h"
+#include "HUDLayer.h"
+#include "../Entities/Turret.h"
+#include "../Entities/EnemyShip.h"
+#include "../Entities/WheelMenu.h"
 
 #include <base/CCDirector.h>
 #include <base/CCEventDispatcher.h>
 #include <base/CCEventListenerTouch.h>
+#include <2d/CCSpriteFrameCache.h>
 #include <2d/CCActionInterval.h>
 #include <2d/CCActionInstant.h>
 #include <2d/CCDrawNode.h>
@@ -11,23 +19,16 @@
 #include <physics/CCPhysicsContact.h>
 #include <ui/UIImageView.h>
 #include <SimpleAudioEngine.h>
-
-#include <Scenes/MapLayer.h>
-#include <Scenes/GameplayLayer.h>
-#include <Scenes/HUDLayer.h>
-#include <Entities/Towers/Tower.h>
-#include <Entities/Creep.h>
+#include <platform/CCFileUtils.h>
 
 #include <sstream>
-
-USING_NS_CC;
 
 #define STARTING_COIN 500
 #define STARTING_LIFE 10
 
-#define NODE_TOUCH_SIZE 50.f
+USING_NS_CC;
 
-std::map<unsigned int, TowerModel> models;
+std::unordered_map<unsigned int, cocos2d::ValueMap> _models;
 
 World::World() {
     CCLOG("World created");
@@ -57,138 +58,99 @@ bool World::init() {
         return false;
     }
 
-    mVisibleSize = Director::getInstance()->getVisibleSize();
-    mOrigin = Director::getInstance()->getVisibleOrigin();
-    mCanvasCenter = Vec2(mVisibleSize / 2.f) + mOrigin;
+    _visibleSize = Director::getInstance()->getVisibleSize();
+    _origin = Director::getInstance()->getVisibleOrigin();
+    _canvasCenter = Vec2(_visibleSize / 2.f) + _origin;
 
-    mTotalCoin = STARTING_COIN;
-    mLife = STARTING_LIFE;
+    _totalCoin = STARTING_COIN;
+    _life = STARTING_LIFE;
 
-    // Load tower models
-    models.insert(std::make_pair(TowerTypes::TURRET,
-                                 TowerModel{TowerTypes::TURRET, "turret_gun.png", 10, 150.f, 3.f, 0.3f}));
-    models.insert(std::make_pair(TowerTypes::LASER,
-                                 TowerModel{TowerTypes::LASER, "laser_gun.png", 30, 150.f, 0.3f, 0.f}));
-    models.insert(std::make_pair(TowerTypes::R_LAUNCHER,
-                                 TowerModel{TowerTypes::R_LAUNCHER, "r_launcher.png", 50, 150.f, 30.f, 1.f}));
-
-    colors.push_back(Color::GREEN);
-    colors.push_back(Color::YELLOW);
-    colors.push_back(Color::BLUE);
-
-    audioEngine = CocosDenshion::SimpleAudioEngine::getInstance();
+    _audioEngine = CocosDenshion::SimpleAudioEngine::getInstance();
     loadResources();
     buildScene();
     connectListeners();
 
-    //Init waves
-    mWaves.clear();
-    mWaves.push_back(std::vector<CreepTypes>{SPEEDY, RAPTOR, PULSAR, PANZER});
-    mWaves.push_back(std::vector<CreepTypes>{RAPTOR});
-    mWaves.push_back(std::vector<CreepTypes>{RAPTOR, RAPTOR, RAPTOR});
-    mWaves.push_back(std::vector<CreepTypes>{SPEEDY, SPEEDY, RAPTOR, RAPTOR, RAPTOR});
-    mWaves.push_back(std::vector<CreepTypes>{RAPTOR, RAPTOR, PULSAR, PULSAR});
-    mWaves.push_back(std::vector<CreepTypes>{RAPTOR, RAPTOR, RAPTOR, SPEEDY, SPEEDY, PULSAR, PANZER});
-    mWaves.push_back(std::vector<CreepTypes>(7, SPEEDY));
-    mWaves.push_back(std::vector<CreepTypes>{PULSAR, PULSAR, PULSAR, PULSAR, PULSAR, PULSAR, PANZER});
-    mWaves.push_back(std::vector<CreepTypes>{10, PULSAR});
-    mWaves.push_back(std::vector<CreepTypes>{SPEEDY, SPEEDY, SPEEDY, SPEEDY, RAPTOR, RAPTOR, RAPTOR, RAPTOR, PULSAR,
-                                             PULSAR, PANZER, PANZER});
-    mWaves.push_back(std::vector<CreepTypes>{15, PANZER});
+    _waves = FileUtils::getInstance()->getValueVectorFromFile("waves.plist");
+    _currentWave = 0;
+    _cleared = false;
 
-    mCurrentWave = 0;
-    mCleared = false;
+    /*_audioEngine->setBackgroundMusicVolume(0.6f);
+    _audioEngine->playBackgroundMusic("audio/ambient.mp3", true);*/
 
-    audioEngine->setBackgroundMusicVolume(0.6f);
-    audioEngine->playBackgroundMusic("audio/ambient.mp3", true);
+    _audioEngine->setBackgroundMusicVolume(0.f);
+    _audioEngine->setEffectsVolume(0.f);
 
     return true;
 }
 
-void World::update(float pDelta) {
-    mWheelMenu.update(pDelta);
-
-    if (gameplayLayer->getCreepList().size() <= 0) {
+void World::update(float delta) {
+    if (_gameplayLayer->getCreepList().size() <= 0) {
         if (!spawnNextWave())
-            mCleared = true;
+            _cleared = true;
     }
 
-    if (mLife <= 0) {
-        hudLayer->notify('I', "Game Over!");
-        this->unscheduleUpdate();
+    if (_life <= 0) {
+        _hudLayer->notify('I', "Game Over!");
+        unscheduleUpdate();
     }
 
     if (isCleared()) {
-        hudLayer->notify('I', "All waves are cleared!");
-        this->unscheduleUpdate();
+        _hudLayer->notify('I', "All waves are cleared!");
+        unscheduleUpdate();
     }
 }
 
-bool World::placeTower(TowerTypes pType, Vec2 pTile) {
-    Grid testGrid = mGrid;
-    testGrid.setNode(pTile, 1);
+bool World::placeTower(ModelID type, Vec2 tile) {
+    auto traversed = _mapLayer->traverseAgainst(tile, 1);
 
-    auto traversed = algorithm::traverse(testGrid, mStart, mGoal);
+    if (!_mapLayer->isPathClear(traversed)) {
+        _hudLayer->notify('E', "You can't block the path!");
+        return false;
+    };
 
-    if (isAvailable(traversed, pTile)) {
-        gameplayLayer->buildMock(pTile);
+    if (!_gameplayLayer->isEnemyPathsClear(traversed, tile)) {
+        _hudLayer->notify('E', "You can't block enemies!");
+        return false;
+    };
 
-        mapLayer->activateSlot(pTile);
+    _gameplayLayer->addTower(type, tile);
+    _mapLayer->activateSlot(tile);
 
-        mPath.construct(traversed, mStart, mGoal);
-        drawPath();
+    _mapLayer->updateMap(traversed, tile, 1);
+    _gameplayLayer->updateEnemyPaths(traversed, _mapLayer->_goal);
 
-        for (auto enemy : gameplayLayer->getCreepList()) {
-            auto &enemyPath = enemy->getPath();
-            auto from = enemyPath.getCurrentWaypoint().tile;
-
-            enemyPath.construct(traversed, from, mGoal);
-        }
-
-        mGrid.setNode(pTile, 1);
-
-        return true;
-    }
-
-    return false;
+    return true;
 }
 
-void World::destroyTower(Vec2 pTile) {
-    gameplayLayer->deleteTower(pTile);
-    mGrid.setNode(pTile, 0);
+void World::destroyTower(Vec2 tile) {
+    auto traversed = _mapLayer->traverseAgainst(tile, 0);
 
-    auto traversed = algorithm::traverse(mGrid, mStart, mGoal);
+    _gameplayLayer->deleteTower(tile);
+    _mapLayer->deactivateSlot(tile);
 
-    mPath.construct(traversed, mStart, mGoal);
-    drawPath();
-
-    for (auto enemy : gameplayLayer->getCreepList()) {
-        auto &enemyPath = enemy->getPath();
-        auto from = enemyPath.getCurrentWaypoint().tile;
-
-        enemyPath.construct(traversed, from, mGoal);
-    }
+    _mapLayer->updateMap(traversed, tile, 0);
+    _gameplayLayer->updateEnemyPaths(traversed, _mapLayer->_goal);
 }
 
-void World::upgradeTower(cocos2d::Vec2 pTile) {
-    auto tower = gameplayLayer->getTower(pTile);
-    auto color = colors.at(tower->getLevel() + 1);
+void World::upgradeTower(cocos2d::Vec2 tile) {
+    auto tower = _gameplayLayer->getTower(tile);
 
-    tower->upgrade(color);
-    mapLayer->setSlotColor(pTile, color);
+    tower->upgrade();
+    _mapLayer->setSlotColor(tile, tower->getBaseColor());
 
-    this->balanceTotalCoin(-tower->getCost());
+    balanceTotalCoin(-tower->getCost());
 }
 
 bool World::spawnNextWave() {
-    if (mCurrentWave < mWaves.size()) {
-        auto wave = mWaves.at(mCurrentWave);
+    if (_currentWave < _waves.size()) {
+        auto wave = _waves.at(_currentWave).asValueVector();
 
         for (unsigned int i = 0; i < wave.size(); i++) {
-            gameplayLayer->addEnemy(wave.at(i), i, mPath);
+            const auto &model = getModel((unsigned int) wave.at(i).asInt());
+            _gameplayLayer->addEnemy(model, i, _mapLayer->_path);
         }
 
-        mCurrentWave++;
+        _currentWave++;
 
         return true;
     }
@@ -197,71 +159,39 @@ bool World::spawnNextWave() {
 }
 
 void World::buildScene() {
-    backgroundLayer = LayerColor::create(Color4B(Color::BG));
-
-    // Prepare sample grid
-    mGrid.create(Vec2(5, 10));
-    for (int i = 0; i < mGrid.getSize().x; i++)
-        mGrid.setNode(Vec2(i, 0), 2);
-    mGrid.setNode(Vec2(2, 0), 0);
-
-    mStart = Vec2(2, 9);
-    mGoal = Vec2(2, 0);
+    _backgroundLayer = LayerColor::create(Color4B(Color::BG));
 
     auto gameCanvas = Node::create();
 
-    mapLayer = MapLayer::create(this);
-    gameCanvas->addChild(mapLayer);
+    _mapLayer = MapLayer::create(this);
+    gameCanvas->addChild(_mapLayer);
 
-    gameplayLayer = GameplayLayer::create(this);
-    mPathCanvas = DrawNode::create();
+    _gameplayLayer = GameplayLayer::create(this);
+    gameCanvas->addChild(_gameplayLayer);
 
-    auto traversed = algorithm::traverse(mGrid, mStart, mGoal);
-    if (mPath.isReached(traversed, mStart)) {
-        mPath.construct(traversed, mStart, mGoal);
-        drawPath();
-    }
+    _hudLayer = HUDLayer::create(this);
+    _wheelMenu = WheelMenu::create(this);
 
-    gameplayLayer->addChild(mPathCanvas);
-    gameCanvas->addChild(gameplayLayer);
+    _hudLayer->notify('I', "Game is starting!", 2.f);
 
-    hudLayer = HUDLayer::create(this);
-    mWheelMenu.init(hudLayer, this);
+    addChild(_backgroundLayer);
+    addChild(gameCanvas);
+    addChild(_hudLayer);
+    addChild(_wheelMenu);
 
-    hudLayer->notify('I', "Game is starting!", 2.f);
-
-    this->addChild(backgroundLayer);
-    this->addChild(gameCanvas);
-    this->addChild(hudLayer);
-
-    this->scheduleUpdate();
+    scheduleUpdate();
 }
 
 void World::connectListeners() {
     auto touchListener = EventListenerTouchOneByOne::create();
     touchListener->setSwallowTouches(true);
-    touchListener->onTouchBegan = [&](Touch *pTouch, Event *pEvent) {
-        Vec2 touched = Vec2(-1, -1);
-        Vec2 size = mGrid.getSize();
-        for (int i = 0; i < size.x; i++) {
-            for (int j = 0; j < size.y; j++) {
-                Vec2 current = Vec2(i, j);
-                Vec2 location = algorithm::toCircularGrid(current);
-                Rect boundingBox = Rect(location.x - NODE_TOUCH_SIZE / 2.f,
-                                        location.y - NODE_TOUCH_SIZE / 2.f,
-                                        NODE_TOUCH_SIZE, NODE_TOUCH_SIZE);
+    touchListener->onTouchBegan = [&](Touch *touch, Event *pEvent) {
+        Vec2 touched = _mapLayer->getTouchedSlot(touch->getLocation());
 
-                if (boundingBox.containsPoint(pTouch->getLocation())) {
-                    touched = current;
-                    break;
-                }
-            }
-        }
-
-        if (mWheelMenu.isOpen()) {
-            mWheelMenu.close();
+        if (_wheelMenu->isOpen()) {
+            _wheelMenu->close();
         } else if (touched.x > -1 && touched.y > -1) {
-            mWheelMenu.openAt(touched);
+            _wheelMenu->openAt(touched);
         }
 
         return true;
@@ -270,51 +200,31 @@ void World::connectListeners() {
     Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener, this);
 }
 
-bool World::isAvailable(const TraverseData &pTraversed, cocos2d::Vec2 pTile) {
-    if (!mPath.isReached(pTraversed, mStart)) {
-        hudLayer->notify('E', "You can't block the path!");
-        return false;
-    }
-
-    for (auto enemy : gameplayLayer->getCreepList()) {
-        auto current = enemy->getPath().getCurrentWaypoint().tile;
-
-        if ((current == pTile) || !enemy->getPath().isReached(pTraversed, current)) {
-            hudLayer->notify('E', "You can't block enemies!");
-            return false;
-        }
-    }
-
-    return true;
-}
-
-void World::drawPath() {
-    mPathCanvas->clear();
-    auto waypoints = mPath.getWayPoints();
-
-    for (unsigned int i = 0; i < waypoints.size(); i++) {
-        auto waypoint = waypoints.at(i);
-
-        mPathCanvas->drawSolidCircle(waypoint.location, 6.f, 0.f, 50, Color4F::RED);
-        mPathCanvas->drawCircle(waypoint.location, waypoint.reachRadius, 0.f, 50, false, Color4F::RED);
-
-        if (i != 0) {
-            auto previousWaypoint = waypoints.at(i - 1);
-            mPathCanvas->drawLine(waypoint.location, previousWaypoint.location, Color4F::RED);
-        }
-    }
-}
-
 void World::loadResources() {
-    audioEngine->preloadBackgroundMusic("audio/ambient.mp3");
-    audioEngine->preloadEffect("audio/explosion_1.wav");
-    audioEngine->preloadEffect("audio/explosion_2.wav");
-    audioEngine->preloadEffect("audio/explosion_3.wav");
-    audioEngine->preloadEffect("audio/laser_gun.wav");
-    audioEngine->preloadEffect("audio/missile_launch.wav");
-    audioEngine->preloadEffect("audio/click.wav");
-    audioEngine->preloadEffect("audio/open.wav");
-    audioEngine->preloadEffect("audio/deploy.wav");
-    audioEngine->preloadEffect("audio/upgrade.wav");
-    audioEngine->preloadEffect("audio/buzz.wav");
+    auto index = FileUtils::getInstance()->getValueMapFromFile("index.plist");
+
+    for (auto model : index.at("model").asValueVector()) {
+        loadModel(model.asString());
+    }
+
+    /*auto audio = index.at("audio").asValueMap();
+    for (auto bg : audio.at("background").asValueVector()) {
+        _audioEngine->preloadBackgroundMusic(bg.asString().c_str());
+    }
+
+    for (auto effect : audio.at("effect").asValueVector()) {
+        _audioEngine->preloadEffect(effect.asString().c_str());
+    }*/
+
+    auto spriteCache = SpriteFrameCache::getInstance();
+    for (auto sheet : index.at("spritesheet").asValueVector()) {
+        spriteCache->addSpriteFramesWithFile(sheet.asString());
+    }
+}
+
+void World::loadModel(std::string path) {
+    auto data = FileUtils::getInstance()->getValueMapFromFile(path);
+    auto key = (unsigned int) data.at("id").asInt();
+
+    _models.insert(std::make_pair(key, data));
 }

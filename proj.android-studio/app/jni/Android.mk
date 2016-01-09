@@ -21,16 +21,17 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../../Classes/Entities/Explosion.cpp \
                    ../../../Classes/Entities/Beam.cpp \
                    ../../../Classes/Entities/Bullet.cpp \
-                   ../../../Classes/Entities/Towers/Tower.cpp \
-                   ../../../Classes/Entities/Towers/Turret.cpp \
-                   ../../../Classes/Entities/Towers/Laser.cpp \
-                   ../../../Classes/Entities/Towers/RLauncher.cpp \
+                   ../../../Classes/Entities/TowerMock.cpp \
+                   ../../../Classes/Entities/WheelMenu.cpp \
+                   ../../../Classes/Entities/Turret.cpp \
+                   ../../../Classes/Entities/MachineGun.cpp \
+                   ../../../Classes/Entities/LaserGun.cpp \
+                   ../../../Classes/Entities/MissileLauncher.cpp \
                    ../../../Classes/Utilities/SteeringDirector.cpp \
                    ../../../Classes/Utilities/Path.cpp \
                    ../../../Classes/Utilities/Grid.cpp \
                    ../../../Classes/Utilities/Algorithm.cpp \
                    ../../../Classes/Utilities/Shake.cpp \
-                   ../../../Classes/UI/WheelMenu.cpp \
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../Classes
 

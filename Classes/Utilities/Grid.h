@@ -9,37 +9,36 @@ class Grid {
 public:
     typedef std::vector<cocos2d::Vec2> Locations;
 
-private:
-    std::vector<std::vector<int>> mGrid;
-
-public:
     Grid();
 
-    Grid(cocos2d::Vec2);
+    Grid(cocos2d::Vec2 size);
 
-    bool create(cocos2d::Vec2, int value = 0);
+    bool create(cocos2d::Vec2 size, int value = 0);
 
-    Locations getNeighbours(cocos2d::Vec2) const;
+    Locations getNeighbours(cocos2d::Vec2 node) const;
 
-    void fill(int);
+    void fill(int value);
 
     void clear() {
-        mGrid.clear();
+        _grid.clear();
     }
 
     void setNode(cocos2d::Vec2 node, int value) {
-        mGrid[node.x][node.y] = value;
+        _grid[node.x][node.y] = value;
     }
 
     int getNode(cocos2d::Vec2 node) const {
-        return mGrid[node.x][node.y];
+        return _grid[node.x][node.y];
     }
 
     cocos2d::Vec2 getSize() const;
 
-    bool isBounded(cocos2d::Vec2) const;
+    bool isBounded(cocos2d::Vec2 node) const;
 
     void print();
+
+private:
+    std::vector<std::vector<int>> _grid;
 };
 
 #endif // GRID_H

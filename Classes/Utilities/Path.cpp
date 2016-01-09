@@ -1,63 +1,63 @@
-#include <Utilities/Path.h>
-
-USING_NS_CC;
+#include "Path.h"
 
 #define DEFAULT_WAYPOINT_DENSITY 15.f
 
-Path::Path() : mWaypoints(), mIndex(0), mNextWaypoint(), mCurrentWaypoint() {
+USING_NS_CC;
+
+Path::Path() : _waypoints(), _index(0), _nextWaypoint(), _currentWaypoint() {
 }
 
 Path::~Path() {
 
 }
 
-void Path::addWaypoint(WayPoint pWaypoint) {
-    mWaypoints.push_back(pWaypoint);
+void Path::addWaypoint(WayPoint waypoint) {
+    _waypoints.push_back(waypoint);
 }
 
-bool Path::isReached(const TraverseData &pTraversed, cocos2d::Vec2 pDestination) {
-    return (bool) pTraversed.count(pDestination);
+bool Path::isReached(const TraverseData &traversed, cocos2d::Vec2 destination) {
+    return (bool) traversed.count(destination);
 }
 
-void Path::construct(const TraverseData &pTraversed, cocos2d::Vec2 pStart, Vec2 pGoal) {
-    this->clear();
+void Path::construct(const TraverseData &traversed, cocos2d::Vec2 start, Vec2 goal) {
+    clear();
 
-    auto current = pStart;
-    while (current != pGoal) {
-        this->addWaypoint(WayPoint{current, algorithm::toCircularGrid(current), DEFAULT_WAYPOINT_DENSITY});
-        current = pTraversed.find(current)->second;
+    auto current = start;
+    while (current != goal) {
+        addWaypoint(WayPoint{current, algorithm::toCircularGrid(current), DEFAULT_WAYPOINT_DENSITY});
+        current = traversed.find(current)->second;
     }
 
-    this->addWaypoint(WayPoint{pGoal, algorithm::toCircularGrid(pGoal), 0.f});
+    addWaypoint(WayPoint{goal, algorithm::toCircularGrid(goal), 0.f});
 
-    mNextWaypoint = mWaypoints.at(mIndex);
-    mCurrentWaypoint = mWaypoints.at(mIndex);
+    _nextWaypoint = _waypoints.at(_index);
+    _currentWaypoint = _waypoints.at(_index);
 }
 
 void Path::forward() {
     if (!eop()) {
-        mIndex++;
+        _index++;
 
-        mCurrentWaypoint = mNextWaypoint;
-        mNextWaypoint = mWaypoints.at(mIndex);
+        _currentWaypoint = _nextWaypoint;
+        _nextWaypoint = _waypoints.at(_index);
     }
 }
 
-void Path::clone(const Path &pPath) {
-    this->clear();
+void Path::clone(const Path &path) {
+    clear();
 
-    for (auto waypoint : pPath.getWayPoints())
-        this->addWaypoint(waypoint);
+    for (auto waypoint : path.getWayPoints())
+        addWaypoint(waypoint);
 
-    mNextWaypoint = pPath.getNextWaypoint();
-    mCurrentWaypoint = pPath.getCurrentWaypoint();
-    mIndex = pPath.getIndex();
+    _nextWaypoint = path.getNextWaypoint();
+    _currentWaypoint = path.getCurrentWaypoint();
+    _index = path.getIndex();
 }
 
 void Path::clear() {
-    mWaypoints.clear();
+    _waypoints.clear();
 
-    mNextWaypoint = WayPoint();
-    mCurrentWaypoint = WayPoint();
-    mIndex = 0;
+    _nextWaypoint = WayPoint();
+    _currentWaypoint = WayPoint();
+    _index = 0;
 }

@@ -9,24 +9,10 @@
 #define ENEMY_MASK 0x02
 #define MISSILE_MASK 0x03
 
-enum TowerTypes {
-    TURRET,
-    LASER,
-    R_LAUNCHER
-};
-
-struct TowerModel {
-    TowerTypes type;
-    std::string gunSpritePath;
-    unsigned int baseCost;
-    float baseRange;
-    float baseDamage;
-    float baseCD;
-};
-
-extern std::map<unsigned int, TowerModel> models;
-
-enum CreepTypes {
+enum ModelID {
+    MACHINE_GUN,
+    LASER_GUN,
+    MISSILE_LAUNCHER,
     RAPTOR,
     SPEEDY,
     PANZER,
@@ -43,5 +29,6 @@ namespace Color {
     const cocos2d::Color3B BG = {45, 45, 45};
 }
 
+typedef std::map<cocos2d::Vec2, cocos2d::Vec2> TraverseData;
 
 #endif //GLOBALS_H

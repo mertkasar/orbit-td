@@ -14,7 +14,7 @@ private:
 public:
     static SteeringDirector *getInstance();
 
-    void seek(cocos2d::Node *pSeeker, cocos2d::Vec2 pSeeking);
+    void seek(cocos2d::Node *seeker, cocos2d::Vec2 seeking);
 };
 
 #endif //STEERING_DIRECTOR_H

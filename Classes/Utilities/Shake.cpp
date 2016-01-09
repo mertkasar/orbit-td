@@ -1,6 +1,6 @@
 // Code by Francois Guibert
 // Contact: www.frozax.com - http://twitter.com/frozax - www.facebook.com/frozax
-#include <Utilities/Shake.h>
+#include "Shake.h"
 
 USING_NS_CC;
 
@@ -42,7 +42,7 @@ void Shake::update(float time) {
     float rand_x = fgRangeRand(-_strength_x, _strength_x);
     float rand_y = fgRangeRand(-_strength_y, _strength_y);
 
-    auto target = this->getTarget();
+    auto target = getTarget();
     auto currentPosition = target->getPosition();
 
     // move the target to a shaked position
@@ -54,8 +54,8 @@ void Shake::update(float time) {
     _displacement_y = rand_y;
 }
 
-void Shake::stop(void) {
-    auto target = this->getTarget();
+void Shake::stop() {
+    auto target = getTarget();
     auto currentPosition = target->getPosition();
 
     // Action is done, reset clip position

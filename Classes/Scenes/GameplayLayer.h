@@ -1,16 +1,18 @@
 #ifndef GAMEPLAY_LAYER_H
 #define GAMEPLAY_LAYER_H
 
+#include "../Globals.h"
+#include "../Utilities/Pool.h"
+#include "../Entities/Missile.h"
+
 #include <2d/CCLayer.h>
-#include <Utilities/Pool.h>
-#include <Globals.h>
-#include <Entities/Missile.h>
+#include <base/CCValue.h>
 
 class World;
 
-class Tower;
+class Turret;
 
-class Creep;
+class EnemyShip;
 
 class Path;
 
@@ -24,63 +26,61 @@ namespace cocos2d {
 
 class GameplayLayer : public cocos2d::Layer {
 private:
-    World *mWorld;
-
-    bool mPaused;
-
-    Pool<Creep> mCreepPool;
-    Pool<Missile> mMissilePool;
-    Pool<Bullet> mBulletPool;
-    Pool<Explosion> mExplosionPool;
-
-    cocos2d::Vector<Creep *> mCreeps;
-    cocos2d::Vector<Missile *> mMissiles;
-
-    std::map<cocos2d::Vec2, Tower *> mTowerMap;
-
-    Tower *mMock;
-
-    cocos2d::ParticleBatchNode *mParticleBatch;
-
-private:
-    GameplayLayer(World *pWorld);
+    GameplayLayer(World *world);
 
 public:
-    static GameplayLayer *create(World *pWorld);
+    static GameplayLayer *create(World *world);
 
     virtual bool init();
 
-    virtual void update(float pDelta);
+    virtual void update(float delta);
 
-    void addEnemy(CreepTypes pType, int pOrder, Path &pPath);
+    void addTower(ModelID type, cocos2d::Vec2 tile);
 
-    void addMissile(cocos2d::Vec2 pPosition, const cocos2d::Color3B &pBaseColor, float pDamage, Creep *pTarget);
+    void addEnemy(const cocos2d::ValueMap &model, int order, Path &path);
 
-    void addBullet(cocos2d::Vec2 pPosition, const cocos2d::Color3B &pBaseColor, float pDamage, Creep *pTarget);
+    void addMissile(cocos2d::Vec2 position, const cocos2d::Color3B &baseColor, float damage, EnemyShip *target);
 
-    void addExplosion(cocos2d::Vec2 pPosition, float pDuration, float pStrength);
+    void addBullet(cocos2d::Vec2 position, const cocos2d::Color3B &baseColor, float damage, EnemyShip *target);
 
-    void createMock(TowerTypes pType, cocos2d::Vec2 pTile);
+    void addExplosion(cocos2d::Vec2 position, float duration, float strength);
 
-    void removeMock();
+    Turret *getTower(cocos2d::Vec2 tile);
 
-    void buildMock(cocos2d::Vec2 pTile);
-
-    Tower *getTower(cocos2d::Vec2 pTile);
-
-    void deleteTower(cocos2d::Vec2 pTile);
+    void deleteTower(cocos2d::Vec2 tile);
 
     void pauseScene();
 
     void resumeScene();
 
+    void updateEnemyPaths(const TraverseData &traversed, cocos2d::Vec2 goal);
+
+    bool isEnemyPathsClear(const TraverseData &traversed, cocos2d::Vec2 node);
+
     bool isPaused() const {
-        return mPaused;
+        return _paused;
     }
 
-    cocos2d::Vector<Creep *> &getCreepList() {
-        return mCreeps;
+    cocos2d::Vector<EnemyShip *> &getCreepList() {
+        return _creeps;
     }
+
+private:
+    World *_world;
+
+    bool _paused;
+
+    Pool<EnemyShip> _creepPool;
+    Pool<Missile> _missilePool;
+    Pool<Bullet> _bulletPool;
+    Pool<Explosion> _explosionPool;
+
+    cocos2d::Vector<EnemyShip *> _creeps;
+    cocos2d::Vector<Missile *> _missiles;
+
+    std::map<cocos2d::Vec2, Turret *> _towerMap;
+
+    cocos2d::ParticleBatchNode *_particleBatch;
 };
 
 #endif //GAMEPLAY_LAYER_H

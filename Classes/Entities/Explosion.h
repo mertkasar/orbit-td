@@ -9,12 +9,9 @@ namespace cocos2d {
     class Animate;
 }
 
-class Creep;
+class EnemyShip;
 
 class Explosion : public cocos2d::Node {
-private:
-    cocos2d::Sprite *mSprite;
-
 public:
     Explosion();
 
@@ -28,12 +25,15 @@ public:
 
     CREATE_FUNC(Explosion);
 
-    void ignite(cocos2d::Vec2 pPosition);
+    void restart(cocos2d::Vec2 position);
 
 private:
     void end();
 
-    cocos2d::Animate *createAnimation(std::string pPath, int pRow, int pDimension, float pInterval);
+    cocos2d::Animate *createAnimation(std::string path, int row, int dimension, float interval);
+
+private:
+    cocos2d::Sprite *_sprite;
 };
 
 #endif //EXPLOSION_H

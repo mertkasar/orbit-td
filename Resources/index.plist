@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>model</key>
+	<array>
+		<string>models/raptor.plist</string>
+		<string>models/speedy.plist</string>
+		<string>models/pulsar.plist</string>
+		<string>models/panzer.plist</string>
+		<string>models/machine_gun.plist</string>
+		<string>models/laser_gun.plist</string>
+		<string>models/missile_launcher.plist</string>
+	</array>
+	<key>audio</key>
+	<dict>
+		<key>background</key>
+		<array>
+			<string>audio/ambient.mp3</string>
+		</array>
+		<key>effect</key>
+		<array>
+			<string>audio/explosion_1.wav</string>
+			<string>audio/explosion_2.wav</string>
+			<string>audio/explosion_3.wav</string>
+			<string>audio/machine_gun.wav</string>
+			<string>audio/missile_launch.wav</string>
+			<string>audio/click.wav</string>
+			<string>audio/open.wav</string>
+			<string>audio/deploy.wav</string>
+			<string>audio/upgrade.wav</string>
+			<string>audio/buzz.wav</string>
+		</array>
+	</dict>
+	<key>spritesheet</key>
+	<array>
+		<string>textures/gameplay_layer.plist</string>
+		<string>textures/map_layer.plist</string>
+		<string>textures/ui_layer.plist</string>
+	</array>
+</dict>
+</plist>
