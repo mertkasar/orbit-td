@@ -147,11 +147,11 @@ void GameplayLayer::addMissile(cocos2d::Vec2 position, const cocos2d::Color3B &b
     _missiles.pushBack(missile);
 }
 
-void GameplayLayer::addBullet(cocos2d::Vec2 position, const cocos2d::Color3B &baseColor, float pDamage,
+void GameplayLayer::addBullet(cocos2d::Vec2 position, const cocos2d::Color3B &baseColor, float damage,
                               EnemyShip *target) {
     auto bullet = _bulletPool.fetch();
 
-    bullet->restart(position, baseColor, pDamage, target);
+    bullet->restart(position, baseColor, damage, target);
 
     _world->_audioEngine->playEffect("audio/machine_gun.wav", false, 1.0f, 0.0f, 0.3f);
 

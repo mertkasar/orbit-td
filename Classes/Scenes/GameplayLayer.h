@@ -41,7 +41,7 @@ public:
 
     void addMissile(cocos2d::Vec2 position, const cocos2d::Color3B &baseColor, float damage, EnemyShip *target);
 
-    void addBullet(cocos2d::Vec2 position, const cocos2d::Color3B &baseColor, float pDamage, EnemyShip *target);
+    void addBullet(cocos2d::Vec2 position, const cocos2d::Color3B &baseColor, float damage, EnemyShip *target);
 
     void addExplosion(cocos2d::Vec2 position, float duration, float strength);
 
