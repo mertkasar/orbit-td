@@ -98,6 +98,25 @@ bool HUDLayer::init(World *world) {
             Vec2(_bottomPanel->getContentSize().width / 2.f + 20, _bottomPanel->getContentSize().height / 2.f - 30));
     _bottomPanel->addChild(text);
 
+    // Add interpolation animations
+    _bottomPanel->setOpacity((GLubyte) 0.f);
+    _bottomPanel->runAction(FadeIn::create(0.3f));
+
+    for (auto element : _topPanel->getChildren()) {
+        auto elementPos = element->getPosition();
+        element->setPosition(elementPos + Vec2(0.f, _topPanel->getContentSize().height));
+        element->runAction(Sequence::create(DelayTime::create(0.3f), MoveTo::create(1.f, elementPos), NULL));
+    }
+
+    _topPanel->setOpacity((GLubyte) 0.f);
+    _topPanel->runAction(FadeIn::create(0.3f));
+
+    for (auto element : _bottomPanel->getChildren()) {
+        auto elementPos = element->getPosition();
+        element->setPosition(elementPos - Vec2(0.f, _bottomPanel->getContentSize().height));
+        element->runAction(Sequence::create(DelayTime::create(0.3f), MoveTo::create(1.f, elementPos), NULL));
+    }
+
     addChild(_topPanel);
     addChild(_notificationPanel);
     addChild(_bottomPanel);
