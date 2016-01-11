@@ -94,6 +94,8 @@ private:
 
     cocos2d::PhysicsWorld *__physicsWorld;
 
+    cocos2d::DrawNode *_planet;
+
     std::unordered_map<unsigned int, cocos2d::ValueMap> _models;
 
     cocos2d::ValueVector _waves;

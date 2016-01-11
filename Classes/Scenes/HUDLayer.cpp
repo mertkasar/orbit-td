@@ -100,26 +100,28 @@ bool HUDLayer::init(World *world) {
     _bottomPanel->addChild(text);
 
     // Add interpolation animations
+    float d = 3.f;
+
     _bottomPanel->setOpacity((GLubyte) 0.f);
-    _bottomPanel->runAction(FadeIn::create(0.3f));
+    _bottomPanel->runAction(Sequence::create(DelayTime::create(d), FadeIn::create(0.3f), NULL));
 
     for (auto element : _topPanel->getChildren()) {
         auto elementPos = element->getPosition();
         element->setPosition(elementPos + Vec2(0.f, _topPanel->getContentSize().height));
 
         auto easedMoveTo = EaseBackOut::create(MoveTo::create(1.f, elementPos));
-        element->runAction(Sequence::create(DelayTime::create(0.3f), easedMoveTo, NULL));
+        element->runAction(Sequence::create(DelayTime::create(d + 0.3f), easedMoveTo, NULL));
     }
 
     _topPanel->setOpacity((GLubyte) 0.f);
-    _topPanel->runAction(FadeIn::create(0.3f));
+    _topPanel->runAction(Sequence::create(DelayTime::create(d), FadeIn::create(0.3f), NULL));
 
     for (auto element : _bottomPanel->getChildren()) {
         auto elementPos = element->getPosition();
         element->setPosition(elementPos - Vec2(0.f, _bottomPanel->getContentSize().height));
 
         auto easedMoveTo = EaseBackOut::create(MoveTo::create(1.f, elementPos));
-        element->runAction(Sequence::create(DelayTime::create(0.3f), easedMoveTo, NULL));
+        element->runAction(Sequence::create(DelayTime::create(d + 0.3f), easedMoveTo, NULL));
     }
 
     addChild(_topPanel);

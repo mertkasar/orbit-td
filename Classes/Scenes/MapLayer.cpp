@@ -4,6 +4,7 @@
 
 #include <2d/CCDrawNode.h>
 #include <2d/CCActionInterval.h>
+#include <2d/CCActionEase.h>
 #include <2d/CCSprite.h>
 
 #include <queue>
@@ -33,16 +34,13 @@ bool MapLayer::init() {
     if (!Layer::init())
         return false;
 
-    //Draw Planet
-    auto planet = DrawNode::create();
-    planet->drawSolidCircle(Vec2(-480.f, 360.f), 600.f, 0.f, 50, Color4F::BLUE);
-    addChild(planet);
-
     // Prepare sample grid
     _grid.create(Vec2(5, 10));
     for (int i = 0; i < _grid.getSize().x; i++)
         _grid.setNode(Vec2(i, 0), 2);
     _grid.setNode(Vec2(2, 0), 0);
+
+    float d = 2.5f;
 
     Vec2 size = _grid.getSize();
     for (int i = 0; i < size.y; i++) {
@@ -51,7 +49,7 @@ bool MapLayer::init() {
         orbit->setPosition(algorithm::toCircularGrid(Vec2(2, i)));
 
         orbit->setOpacity((GLubyte) 0.f);
-        orbit->runAction(Sequence::create(DelayTime::create(i * 0.1f), FadeIn::create(0.3f), NULL));
+        orbit->runAction(Sequence::create(DelayTime::create(d + i * 0.1f), FadeIn::create(0.3f), NULL));
 
         addChild(orbit);
     }
@@ -60,7 +58,7 @@ bool MapLayer::init() {
         for (int j = 0; j < size.y; j++) {
             if (_grid.getNode(Vec2(i, j)) == 0) {
                 Vec2 position = algorithm::toCircularGrid(Vec2(i, j));
-                auto scaleUpEffect = Sequence::create(DelayTime::create(0.3f + j * 0.1f), ScaleTo::create(0.3f, 1.f), NULL);
+                auto scaleUpEffect = Sequence::create(DelayTime::create(d + 0.3f + j * 0.1f), ScaleTo::create(0.3f, 1.f), NULL);
 
                 Sprite *shadow = Sprite::createWithSpriteFrameName("touch_shadow.png");
                 shadow->setColor(Color::BG);
@@ -96,7 +94,7 @@ bool MapLayer::init() {
         drawPath();
     }
 
-    //addChild(_pathCanvas);
+    addChild(_pathCanvas);
 
     return true;
 }
@@ -165,7 +163,7 @@ TraverseData MapLayer::traverseAgainst(Vec2 node, unsigned int value) {
 }
 
 void MapLayer::drawPath() {
-    _pathCanvas->clear();
+   /* _pathCanvas->clear();
     auto waypoints = _path.getWayPoints();
 
     for (unsigned int i = 0; i < waypoints.size(); i++) {
@@ -178,7 +176,7 @@ void MapLayer::drawPath() {
             auto previousWaypoint = waypoints.at(i - 1);
             _pathCanvas->drawLine(waypoint._location, previousWaypoint._location, Color4F::RED);
         }
-    }
+    }*/
 }
 
 Vec2 MapLayer::getTouchedSlot(Vec2 location) {

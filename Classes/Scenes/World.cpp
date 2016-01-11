@@ -13,6 +13,7 @@
 #include <2d/CCSpriteFrameCache.h>
 #include <2d/CCActionInterval.h>
 #include <2d/CCActionInstant.h>
+#include <2d/CCActionEase.h>
 #include <2d/CCDrawNode.h>
 #include <physics/CCPhysicsWorld.h>
 #include <physics/CCPhysicsContact.h>
@@ -158,6 +159,12 @@ bool World::spawnNextWave() {
 void World::buildScene() {
     _backgroundLayer = LayerColor::create(Color4B(Color::BG));
 
+    //Draw Planet
+    _planet = DrawNode::create();
+    _planet->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _planet->drawSolidCircle(Vec2(0.f, 0.f), 600.f, 0.f, 50, Color4F(Color::BLUE));
+    _planet->runAction(EaseExponentialIn::create(MoveBy::create(2.5f, Vec2(-480.f, 360.f))));
+
     auto gameCanvas = Node::create();
 
     _mapLayer = MapLayer::create(this);
@@ -172,6 +179,7 @@ void World::buildScene() {
     _hudLayer->notify('I', "Game is starting!", 2.f);
 
     addChild(_backgroundLayer);
+    addChild(_planet);
     addChild(gameCanvas);
     addChild(_hudLayer);
     addChild(_wheelMenu);
