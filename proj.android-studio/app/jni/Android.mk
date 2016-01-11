@@ -27,6 +27,7 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../../Classes/Entities/MachineGun.cpp \
                    ../../../Classes/Entities/LaserGun.cpp \
                    ../../../Classes/Entities/MissileLauncher.cpp \
+                   ../../../Classes/Entities/Planet.cpp \
                    ../../../Classes/Utilities/SteeringDirector.cpp \
                    ../../../Classes/Utilities/Path.cpp \
                    ../../../Classes/Utilities/Grid.cpp \

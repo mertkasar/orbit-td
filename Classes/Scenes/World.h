@@ -7,8 +7,6 @@
 #include <base/CCValue.h>
 
 namespace cocos2d {
-    class DrawNode;
-    
     class PhysicsWorld;
 };
 
@@ -23,6 +21,8 @@ class GameplayLayer;
 class HUDLayer;
 
 class WheelMenu;
+
+class Planet;
 
 class World : public cocos2d::Layer {
 public:
@@ -94,7 +94,7 @@ private:
 
     cocos2d::PhysicsWorld *__physicsWorld;
 
-    cocos2d::DrawNode *_planet;
+    Planet *_planet;
 
     std::unordered_map<unsigned int, cocos2d::ValueMap> _models;
 

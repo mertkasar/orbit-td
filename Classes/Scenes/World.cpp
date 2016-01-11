@@ -6,6 +6,7 @@
 #include "../Entities/Turret.h"
 #include "../Entities/EnemyShip.h"
 #include "../Entities/WheelMenu.h"
+#include "../Entities/Planet.h"
 
 #include <base/CCDirector.h>
 #include <base/CCEventDispatcher.h>
@@ -14,7 +15,7 @@
 #include <2d/CCActionInterval.h>
 #include <2d/CCActionInstant.h>
 #include <2d/CCActionEase.h>
-#include <2d/CCDrawNode.h>
+#include <2d/CCSprite.h>
 #include <physics/CCPhysicsWorld.h>
 #include <physics/CCPhysicsContact.h>
 #include <ui/UIImageView.h>
@@ -160,10 +161,8 @@ void World::buildScene() {
     _backgroundLayer = LayerColor::create(Color4B(Color::BG));
 
     //Draw Planet
-    _planet = DrawNode::create();
-    _planet->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-    _planet->drawSolidCircle(Vec2(0.f, 0.f), 600.f, 0.f, 50, Color4F(Color::BLUE));
-    _planet->runAction(EaseExponentialIn::create(MoveBy::create(2.5f, Vec2(-480.f, 360.f))));
+    _planet = Planet::create();
+    _planet->runAction(EaseExponentialIn::create(MoveBy::create(2.5f, Vec2(-450.f, 360.f))));
 
     auto gameCanvas = Node::create();
 

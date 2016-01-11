@@ -128,10 +128,10 @@ set(GAME_SRC
   Classes/Scenes/GameplayLayer.cpp
   Classes/Scenes/MapLayer.cpp
   Classes/Scenes/HUDLayer.cpp
-        Classes/Entities/EnemyShip.cpp
+  Classes/Entities/EnemyShip.cpp
   Classes/Entities/Missile.cpp
   Classes/Entities/Explosion.cpp
-        Classes/Entities/LaserBeam.cpp
+  Classes/Entities/LaserBeam.cpp
   Classes/Entities/Bullet.cpp
   Classes/Entities/TowerMock.cpp
   Classes/Entities/WheelMenu.cpp
@@ -139,6 +139,7 @@ set(GAME_SRC
   Classes/Entities/MachineGun.cpp
   Classes/Entities/LaserGun.cpp
   Classes/Entities/MissileLauncher.cpp
+  Classes/Entities/Planet.cpp
   Classes/Utilities/SteeringDirector.cpp
   Classes/Utilities/Path.cpp
   Classes/Utilities/Grid.cpp
@@ -154,10 +155,10 @@ set(GAME_HEADERS
   Classes/Scenes/GameplayLayer.h
   Classes/Scenes/MapLayer.h
   Classes/Scenes/HUDLayer.h
-        Classes/Entities/EnemyShip.h
+  Classes/Entities/EnemyShip.h
   Classes/Entities/Missile.h
   Classes/Entities/Explosion.h
-        Classes/Entities/LaserBeam.h
+  Classes/Entities/LaserBeam.h
   Classes/Entities/Bullet.h
   Classes/Entities/TowerMock.h
   Classes/Entities/WheelMenu.h
@@ -165,6 +166,7 @@ set(GAME_HEADERS
   Classes/Entities/MachineGun.h
   Classes/Entities/LaserGun.h
   Classes/Entities/MissileLauncher.h
+  Classes/Entities/Planet.h
   Classes/Utilities/SteeringDirector.h
   Classes/Utilities/Path.h
   Classes/Utilities/Grid.h
