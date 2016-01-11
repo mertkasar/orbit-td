@@ -8,9 +8,7 @@
 
 namespace cocos2d {
     class DrawNode;
-
-    class Label;
-
+    
     class PhysicsWorld;
 };
 

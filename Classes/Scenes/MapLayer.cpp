@@ -45,10 +45,14 @@ bool MapLayer::init() {
     _grid.setNode(Vec2(2, 0), 0);
 
     Vec2 size = _grid.getSize();
-    for (int j = 0; j < size.y; j++) {
+    for (int i = 0; i < size.y; i++) {
         Sprite *orbit = Sprite::createWithSpriteFrameName("orbit.png");
         orbit->setColor(Color::GREY);
-        orbit->setPosition(algorithm::toCircularGrid(Vec2(2, j)));
+        orbit->setPosition(algorithm::toCircularGrid(Vec2(2, i)));
+
+        orbit->setOpacity((GLubyte) 0.f);
+        orbit->runAction(Sequence::create(DelayTime::create(i * 0.1f), FadeIn::create(0.3f), NULL));
+
         addChild(orbit);
     }
 
@@ -56,10 +60,15 @@ bool MapLayer::init() {
         for (int j = 0; j < size.y; j++) {
             if (_grid.getNode(Vec2(i, j)) == 0) {
                 Vec2 position = algorithm::toCircularGrid(Vec2(i, j));
+                auto scaleUpEffect = Sequence::create(DelayTime::create(0.3f + j * 0.1f), ScaleTo::create(0.3f, 1.f), NULL);
 
                 Sprite *shadow = Sprite::createWithSpriteFrameName("touch_shadow.png");
                 shadow->setColor(Color::BG);
                 shadow->setPosition(position);
+
+                shadow->setScale(0.f);
+                shadow->runAction(scaleUpEffect->clone());
+
                 addChild(shadow);
 
                 Sprite *touchArea = Sprite::createWithSpriteFrameName("touch.png");
@@ -67,6 +76,10 @@ bool MapLayer::init() {
                 touchArea->setPosition(position);
 
                 _slotMap.insert(std::make_pair(Vec2(i, j), touchArea));
+
+                touchArea->setScale(0.f);
+                touchArea->runAction(Sequence::create(DelayTime::create(0.3f), scaleUpEffect->clone(), NULL));
+
                 addChild(touchArea);
             }
         }
@@ -83,7 +96,7 @@ bool MapLayer::init() {
         drawPath();
     }
 
-    addChild(_pathCanvas);
+    //addChild(_pathCanvas);
 
     return true;
 }

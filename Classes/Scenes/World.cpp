@@ -14,7 +14,6 @@
 #include <2d/CCActionInterval.h>
 #include <2d/CCActionInstant.h>
 #include <2d/CCDrawNode.h>
-#include <2d/CCLabel.h>
 #include <physics/CCPhysicsWorld.h>
 #include <physics/CCPhysicsContact.h>
 #include <ui/UIImageView.h>
@@ -72,8 +71,11 @@ bool World::init() {
     _currentWave = 0;
     _cleared = false;
 
-    _audioEngine->setBackgroundMusicVolume(0.6f);
-    _audioEngine->playBackgroundMusic("audio/ambient.mp3", true);
+    /*_audioEngine->setBackgroundMusicVolume(0.6f);
+    _audioEngine->playBackgroundMusic("audio/ambient.mp3", true);*/
+
+    _audioEngine->setBackgroundMusicVolume(0.f);
+    _audioEngine->setEffectsVolume(0.f);
 
     return true;
 }
@@ -174,7 +176,7 @@ void World::buildScene() {
     addChild(_hudLayer);
     addChild(_wheelMenu);
 
-    scheduleUpdate();
+    //scheduleUpdate();
 }
 
 void World::connectListeners() {
@@ -202,14 +204,14 @@ void World::loadResources() {
         loadModel(model.asString());
     }
 
-    auto audio = index.at("audio").asValueMap();
+   /*auto audio = index.at("audio").asValueMap();
     for (auto bg : audio.at("background").asValueVector()) {
         _audioEngine->preloadBackgroundMusic(bg.asString().c_str());
     }
 
     for (auto effect : audio.at("effect").asValueVector()) {
         _audioEngine->preloadEffect(effect.asString().c_str());
-    }
+    }*/
 
     auto spriteCache = SpriteFrameCache::getInstance();
     for (auto sheet : index.at("spritesheet").asValueVector()) {
