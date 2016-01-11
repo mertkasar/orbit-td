@@ -6,6 +6,7 @@
 #include <2d/CCMenu.h>
 #include <2d/CCActionInterval.h>
 #include <2d/CCActionInstant.h>
+#include <2d/CCActionEase.h>
 #include <ui/UILayout.h>
 #include <ui/UIImageView.h>
 #include <ui/UIButton.h>
@@ -105,7 +106,9 @@ bool HUDLayer::init(World *world) {
     for (auto element : _topPanel->getChildren()) {
         auto elementPos = element->getPosition();
         element->setPosition(elementPos + Vec2(0.f, _topPanel->getContentSize().height));
-        element->runAction(Sequence::create(DelayTime::create(0.3f), MoveTo::create(1.f, elementPos), NULL));
+
+        auto easedMoveTo = EaseBackOut::create(MoveTo::create(1.f, elementPos));
+        element->runAction(Sequence::create(DelayTime::create(0.3f), easedMoveTo, NULL));
     }
 
     _topPanel->setOpacity((GLubyte) 0.f);
@@ -114,7 +117,9 @@ bool HUDLayer::init(World *world) {
     for (auto element : _bottomPanel->getChildren()) {
         auto elementPos = element->getPosition();
         element->setPosition(elementPos - Vec2(0.f, _bottomPanel->getContentSize().height));
-        element->runAction(Sequence::create(DelayTime::create(0.3f), MoveTo::create(1.f, elementPos), NULL));
+
+        auto easedMoveTo = EaseBackOut::create(MoveTo::create(1.f, elementPos));
+        element->runAction(Sequence::create(DelayTime::create(0.3f), easedMoveTo, NULL));
     }
 
     addChild(_topPanel);
