@@ -28,8 +28,6 @@
 
 USING_NS_CC;
 
-std::unordered_map<unsigned int, cocos2d::ValueMap> _models;
-
 World::World() {
     CCLOG("World created");
 }
@@ -43,7 +41,7 @@ Scene *World::createScene() {
 
     auto physicsWorld = scene->getPhysicsWorld();
     physicsWorld->setGravity(Vect(0, 0));
-//    physicsWorld->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+//  physicsWorld->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 
     auto layer = World::create();
     layer->setPhysicsWorld(physicsWorld);
@@ -74,11 +72,8 @@ bool World::init() {
     _currentWave = 0;
     _cleared = false;
 
-    /*_audioEngine->setBackgroundMusicVolume(0.6f);
-    _audioEngine->playBackgroundMusic("audio/ambient.mp3", true);*/
-
-    _audioEngine->setBackgroundMusicVolume(0.f);
-    _audioEngine->setEffectsVolume(0.f);
+    _audioEngine->setBackgroundMusicVolume(0.6f);
+    _audioEngine->playBackgroundMusic("audio/ambient.mp3", true);
 
     return true;
 }
@@ -207,14 +202,14 @@ void World::loadResources() {
         loadModel(model.asString());
     }
 
-    /*auto audio = index.at("audio").asValueMap();
+    auto audio = index.at("audio").asValueMap();
     for (auto bg : audio.at("background").asValueVector()) {
         _audioEngine->preloadBackgroundMusic(bg.asString().c_str());
     }
 
     for (auto effect : audio.at("effect").asValueVector()) {
         _audioEngine->preloadEffect(effect.asString().c_str());
-    }*/
+    }
 
     auto spriteCache = SpriteFrameCache::getInstance();
     for (auto sheet : index.at("spritesheet").asValueVector()) {
