@@ -3,6 +3,7 @@
 #include "MapLayer.h"
 #include "GameplayLayer.h"
 #include "HUDLayer.h"
+#include "MainMenuLayer.h"
 #include "../Entities/Turret.h"
 #include "../Entities/EnemyShip.h"
 #include "../Entities/WheelMenu.h"
@@ -67,7 +68,7 @@ bool World::init() {
     _audioEngine = CocosDenshion::SimpleAudioEngine::getInstance();
     loadResources();
     buildScene();
-    connectListeners();
+    //connectListeners();
 
     _waves = FileUtils::getInstance()->getValueVectorFromFile("waves.plist");
     _currentWave = 0;
@@ -162,7 +163,9 @@ void World::buildScene() {
 
     //Draw Planet
     _planet = Planet::create();
-    _planet->runAction(EaseExponentialIn::create(MoveBy::create(2.5f, Vec2(-450.f, 360.f))));
+//    _planet->runAction(EaseExponentialIn::create(MoveBy::create(2.5f, Vec2(-450.f, 360.f))));
+
+    _mainMenuLayer = MainMenuLayer::create(this);
 
     auto gameCanvas = Node::create();
 
@@ -179,9 +182,10 @@ void World::buildScene() {
 
     addChild(_backgroundLayer);
     addChild(_planet);
-    addChild(gameCanvas);
+    addChild(_mainMenuLayer);
+    /*addChild(gameCanvas);
     addChild(_hudLayer);
-    addChild(_wheelMenu);
+    addChild(_wheelMenu);*/
 
     //scheduleUpdate();
 }

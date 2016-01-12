@@ -16,6 +16,7 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../../Classes/Scenes/GameplayLayer.cpp \
                    ../../../Classes/Scenes/MapLayer.cpp \
                    ../../../Classes/Scenes/HUDLayer.cpp \
+                   ../../../Classes/Scenes/MainMenuLayer.cpp \
                    ../../../Classes/Entities/Creep.cpp \
                    ../../../Classes/Entities/Missile.cpp \
                    ../../../Classes/Entities/Explosion.cpp \

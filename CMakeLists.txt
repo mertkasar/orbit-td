@@ -128,6 +128,7 @@ set(GAME_SRC
   Classes/Scenes/GameplayLayer.cpp
   Classes/Scenes/MapLayer.cpp
   Classes/Scenes/HUDLayer.cpp
+  Classes/Scenes/MainMenuLayer.cpp
   Classes/Entities/EnemyShip.cpp
   Classes/Entities/Missile.cpp
   Classes/Entities/Explosion.cpp
@@ -155,6 +156,7 @@ set(GAME_HEADERS
   Classes/Scenes/GameplayLayer.h
   Classes/Scenes/MapLayer.h
   Classes/Scenes/HUDLayer.h
+  Classes/Scenes/MainMenuLayer.h
   Classes/Entities/EnemyShip.h
   Classes/Entities/Missile.h
   Classes/Entities/Explosion.h

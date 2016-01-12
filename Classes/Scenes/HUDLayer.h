@@ -8,10 +8,6 @@
 namespace cocos2d {
     class Ref;
 
-    class Node;
-
-    class Layer;
-
     namespace ui {
         class Layout;
     }

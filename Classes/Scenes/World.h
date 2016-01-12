@@ -18,6 +18,8 @@ class MapLayer;
 
 class GameplayLayer;
 
+class MainMenuLayer;
+
 class HUDLayer;
 
 class WheelMenu;
@@ -88,10 +90,6 @@ private:
     void loadModel(std::string path);
 
 private:
-    cocos2d::Size _visibleSize;
-    cocos2d::Vec2 _origin;
-    cocos2d::Vec2 _canvasCenter;
-
     cocos2d::PhysicsWorld *__physicsWorld;
 
     Planet *_planet;
@@ -111,7 +109,12 @@ private:
 public:
     CocosDenshion::SimpleAudioEngine *_audioEngine;
 
+    cocos2d::Size _visibleSize;
+    cocos2d::Vec2 _origin;
+    cocos2d::Vec2 _canvasCenter;
+
     cocos2d::LayerColor *_backgroundLayer;
+    MainMenuLayer *_mainMenuLayer;
     MapLayer *_mapLayer;
     GameplayLayer *_gameplayLayer;
     HUDLayer *_hudLayer;
