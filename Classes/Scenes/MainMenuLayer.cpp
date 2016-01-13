@@ -4,6 +4,8 @@
 #include <ui/UILayout.h>
 #include <ui/UIButton.h>
 #include <SimpleAudioEngine.h>
+#include <2d/CCActionInterval.h>
+#include <2d/CCActionInstant.h>
 
 USING_NS_CC;
 
@@ -31,6 +33,7 @@ bool MainMenuLayer::init() {
     _menu = ui::Layout::create();
     _menu->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     _menu->setPosition(_world->_canvasCenter + Vec2(500.f, 0.f));
+    _menu->setCascadeOpacityEnabled(true);
 
     auto button = ui::Button::create("textures/btn_start.png", "", "");
     button->setName("start_button");
@@ -65,9 +68,16 @@ bool MainMenuLayer::init() {
     return true;
 }
 
+void MainMenuLayer::hide() {
+    auto hideSequence = Sequence::create(FadeOut::create(0.4f),
+                                         CallFunc::create([&]() { _menu->setVisible(false); }),
+                                         NULL);
+    _menu->runAction(hideSequence);
+}
+
 void MainMenuLayer::startButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type) {
     if (type == ui::Widget::TouchEventType::ENDED) {
-        CCLOG("Start Button clicked!");
+        _world->setState(World::GAMEPLAY);
         _world->_audioEngine->playEffect("audio/click.wav");
     }
 }

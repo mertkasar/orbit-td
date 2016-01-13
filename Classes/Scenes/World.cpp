@@ -67,8 +67,14 @@ bool World::init() {
 
     _audioEngine = CocosDenshion::SimpleAudioEngine::getInstance();
     loadResources();
-    buildScene();
-    //connectListeners();
+
+    _backgroundLayer = LayerColor::create(Color4B(Color::BG));
+    addChild(_backgroundLayer);
+
+    _planet = Planet::create();
+    addChild(_planet);
+
+    setState(MAIN_MENU);
 
     _waves = FileUtils::getInstance()->getValueVectorFromFile("waves.plist");
     _currentWave = 0;
@@ -158,36 +164,35 @@ bool World::spawnNextWave() {
     return false;
 }
 
-void World::buildScene() {
-    _backgroundLayer = LayerColor::create(Color4B(Color::BG));
+void World::setState(World::State state) {
+    if (state == MAIN_MENU) {
+        _mainMenuLayer = MainMenuLayer::create(this);
+        addChild(_mainMenuLayer);
+    } else if (state == GAMEPLAY) {
+        _mainMenuLayer->hide();
 
-    //Draw Planet
-    _planet = Planet::create();
-//    _planet->runAction(EaseExponentialIn::create(MoveBy::create(2.5f, Vec2(-450.f, 360.f))));
+        _planet->runAction(EaseExponentialIn::create(MoveBy::create(2.5f, Vec2(-450.f, 360.f))));
 
-    _mainMenuLayer = MainMenuLayer::create(this);
+        auto gameCanvas = Node::create();
 
-    auto gameCanvas = Node::create();
+        _mapLayer = MapLayer::create(this);
+        gameCanvas->addChild(_mapLayer);
 
-    _mapLayer = MapLayer::create(this);
-    gameCanvas->addChild(_mapLayer);
+        _gameplayLayer = GameplayLayer::create(this);
+        gameCanvas->addChild(_gameplayLayer);
 
-    _gameplayLayer = GameplayLayer::create(this);
-    gameCanvas->addChild(_gameplayLayer);
+        addChild(gameCanvas);
 
-    _hudLayer = HUDLayer::create(this);
-    _wheelMenu = WheelMenu::create(this);
+        _hudLayer = HUDLayer::create(this);
+        _hudLayer->notify('I', "Game is starting!", 2.f);
+        addChild(_hudLayer);
 
-    _hudLayer->notify('I', "Game is starting!", 2.f);
+        _wheelMenu = WheelMenu::create(this);
+        addChild(_wheelMenu);
 
-    addChild(_backgroundLayer);
-    addChild(_planet);
-    addChild(_mainMenuLayer);
-    /*addChild(gameCanvas);
-    addChild(_hudLayer);
-    addChild(_wheelMenu);*/
-
-    //scheduleUpdate();
+        //scheduleUpdate();
+        connectListeners();
+    }
 }
 
 void World::connectListeners() {
@@ -215,14 +220,14 @@ void World::loadResources() {
         loadModel(model.asString());
     }
 
-   /*auto audio = index.at("audio").asValueMap();
-    for (auto bg : audio.at("background").asValueVector()) {
-        _audioEngine->preloadBackgroundMusic(bg.asString().c_str());
-    }
+    /*auto audio = index.at("audio").asValueMap();
+     for (auto bg : audio.at("background").asValueVector()) {
+         _audioEngine->preloadBackgroundMusic(bg.asString().c_str());
+     }
 
-    for (auto effect : audio.at("effect").asValueVector()) {
-        _audioEngine->preloadEffect(effect.asString().c_str());
-    }*/
+     for (auto effect : audio.at("effect").asValueVector()) {
+         _audioEngine->preloadEffect(effect.asString().c_str());
+     }*/
 
     auto spriteCache = SpriteFrameCache::getInstance();
     for (auto sheet : index.at("spritesheet").asValueVector()) {

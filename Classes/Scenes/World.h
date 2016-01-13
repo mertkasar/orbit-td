@@ -28,6 +28,12 @@ class Planet;
 
 class World : public cocos2d::Layer {
 public:
+    enum State{
+        MAIN_MENU,
+        GAMEPLAY
+    };
+
+public:
     World();
 
     ~World();
@@ -64,6 +70,10 @@ public:
         return _life;
     }
 
+    State getState() const{
+        return _state;
+    }
+
     cocos2d::PhysicsWorld *getPhysicsWorld() const {
         return __physicsWorld;
     }
@@ -76,6 +86,8 @@ public:
         __physicsWorld = _physicsWorld;
     }
 
+    void setState(State state);
+
     bool isCleared() {
         return _cleared;
     }
@@ -83,14 +95,14 @@ public:
 private:
     void loadResources();
 
-    void buildScene();
-
     void connectListeners();
 
     void loadModel(std::string path);
 
 private:
     cocos2d::PhysicsWorld *__physicsWorld;
+
+    State _state;
 
     Planet *_planet;
 

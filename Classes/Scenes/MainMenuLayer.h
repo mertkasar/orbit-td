@@ -23,6 +23,8 @@ public:
 
     virtual bool init();
 
+    void hide();
+
 private:
     void startButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type);
 
