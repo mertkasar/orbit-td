@@ -68,8 +68,10 @@ bool World::init() {
     _audioEngine = CocosDenshion::SimpleAudioEngine::getInstance();
     loadResources();
 
-    _backgroundLayer = LayerColor::create(Color4B(Color::BG));
-    addChild(_backgroundLayer);
+    _backgroundSprite = Sprite::create("textures/background.png");
+    _backgroundSprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    _backgroundSprite->setPosition(Vec2(0.f, -80.f));
+    addChild(_backgroundSprite);
 
     _planet = Planet::create();
     addChild(_planet);
@@ -172,6 +174,7 @@ void World::setState(World::State state) {
         _mainMenuLayer->hide();
 
         _planet->runAction(EaseExponentialIn::create(MoveBy::create(2.5f, Vec2(-450.f, 360.f))));
+        _backgroundSprite->runAction(EaseExponentialIn::create(MoveBy::create(2.5f, Vec2(40.f, 80.f))));
 
         auto gameCanvas = Node::create();
 

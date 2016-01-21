@@ -8,6 +8,8 @@
 
 namespace cocos2d {
     class PhysicsWorld;
+
+    class Sprite;
 };
 
 namespace CocosDenshion {
@@ -125,7 +127,7 @@ public:
     cocos2d::Vec2 _origin;
     cocos2d::Vec2 _canvasCenter;
 
-    cocos2d::LayerColor *_backgroundLayer;
+    cocos2d::Sprite *_backgroundSprite;
     MainMenuLayer *_mainMenuLayer;
     MapLayer *_mapLayer;
     GameplayLayer *_gameplayLayer;
