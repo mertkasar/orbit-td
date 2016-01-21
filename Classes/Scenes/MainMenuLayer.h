@@ -26,11 +26,13 @@ public:
     void hide();
 
 private:
+    void createOptionsMenu();
+
     void startButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type);
 
-    void highscoresButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type);
-
     void optionsButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type);
+
+    void helpButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type);
 
     void quitButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type);
 
