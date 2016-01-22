@@ -14,6 +14,7 @@
 #include <SimpleAudioEngine.h>
 
 #include <sstream>
+#include <2d/CCSprite.h>
 
 USING_NS_CC;
 
@@ -66,17 +67,10 @@ bool HUDLayer::init(World *world) {
     _bottomPanel->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
     button = ui::Button::create("btn_pause.png", "", "", ui::Widget::TextureResType::PLIST);
-    button->setName("next_button");
-    button->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-    button->setPosition(Vec2(200, _bottomPanel->getContentSize().height / 2.f));
-    button->addTouchEventListener(CC_CALLBACK_2(HUDLayer::pauseButtonCallback, this));
-    _bottomPanel->addChild(button);
-
-    button = ui::Button::create("btn_ff.png", "", "", ui::Widget::TextureResType::PLIST);
-    button->setName("menu_button");
+    button->setName("pause_button");
     button->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     button->setPosition(Vec2(_bottomPanel->getContentSize().width - 200, _bottomPanel->getContentSize().height / 2.f));
-    button->addTouchEventListener(CC_CALLBACK_2(HUDLayer::ffButtonCallback, this));
+    button->addTouchEventListener(CC_CALLBACK_2(HUDLayer::pauseButtonCallback, this));
     _bottomPanel->addChild(button);
 
     auto text = ui::Text::create("Waves:0/0", "fonts/ubuntu.ttf", 28);
@@ -92,12 +86,28 @@ bool HUDLayer::init(World *world) {
             Vec2(_bottomPanel->getContentSize().width / 2.f + 20, _bottomPanel->getContentSize().height / 2.f - 5));
     _bottomPanel->addChild(text);
 
-    text = ui::Text::create("Total Life:\t10", "fonts/ubuntu.ttf", 28);
+    _shieldBar = ui::Layout::create();
+    _shieldBar->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    _shieldBar->setPosition(Vec2(90.f, 10.f));
+
+    auto sprite = Sprite::create("textures/hud_shield.png");
+    sprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    _shieldBar->addChild(sprite);
+
+    text = ui::Text::create("20", "fonts/kenvector_future.ttf", 32);
     text->setName("#life_text");
     text->setTextHorizontalAlignment(TextHAlignment::CENTER);
-    text->setPosition(
-            Vec2(_bottomPanel->getContentSize().width / 2.f + 20, _bottomPanel->getContentSize().height / 2.f - 30));
-    _bottomPanel->addChild(text);
+    text->setColor(Color::ORANGE);
+    text->setPosition(Vec2(50.f, 50.f));
+    _shieldBar->addChild(text);
+
+    sprite = Sprite::create("textures/shield_bar.png");
+    sprite->setName("#shield_bar");
+    sprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    sprite->setPosition(108.f, 35.f);
+    _shieldBar->addChild(sprite);
+
+    _bottomPanel->addChild(_shieldBar);
 
     // Add interpolation animations
     float d = 3.f;
@@ -140,12 +150,6 @@ void HUDLayer::update(float delta) {
     auto text = static_cast<ui::Text *>(_bottomPanel->getChildByName("#coin_text"));
     text->setString(ss_c.str());
 
-    std::stringstream ss_l;
-    ss_l << "Remaining Life:\t" << _world->getRemainingLife();
-
-    text = static_cast<ui::Text *>(_bottomPanel->getChildByName("#life_text"));
-    text->setString(ss_l.str());
-
     std::stringstream ss_w;
     ss_w << "Waves: " << 0 << " / " << 0;
 
@@ -181,13 +185,28 @@ void HUDLayer::notify(char type, std::string message, float duration) {
     _notificationPanel->addChild(notification);
 }
 
+void HUDLayer::updateLife() {
+    unsigned int life = _world->getRemainingLife();
+
+    if (life <= 20) {
+        std::stringstream ss_l;
+        ss_l << life;
+
+        auto text = static_cast<ui::Text *>(_shieldBar->getChildByName("#life_text"));
+        text->setString(ss_l.str());
+
+        auto bar = static_cast<Sprite *>(_shieldBar->getChildByName("#shield_bar"));
+        bar->setTextureRect(Rect(0, 0, life * 15, 35));
+    }
+}
+
+
 void HUDLayer::menuButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type) {
     if (type == ui::Widget::TouchEventType::ENDED) {
         _world->_audioEngine->playEffect("audio/click.wav");
         notify('W', "Opening menu!");
     }
 }
-
 
 void HUDLayer::nextButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type) {
     if (type == ui::Widget::TouchEventType::ENDED) {
@@ -211,13 +230,5 @@ void HUDLayer::pauseButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::To
 
         _world->_audioEngine->playEffect("audio/click.wav");
         notify('W', "Game paused!");
-    }
-}
-
-void HUDLayer::ffButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type) {
-    if (type == ui::Widget::TouchEventType::ENDED) {
-
-        _world->_audioEngine->playEffect("audio/click.wav");
-        notify('W', "Double time!");
     }
 }

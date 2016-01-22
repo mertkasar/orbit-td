@@ -2,6 +2,7 @@
 
 #include "World.h"
 #include "MapLayer.h"
+#include "HUDLayer.h"
 #include "../Entities/EnemyShip.h"
 #include "../Entities/Explosion.h"
 #include "../Entities/Bullet.h"
@@ -115,6 +116,7 @@ void GameplayLayer::update(float delta) {
                 _world->balanceTotalCoin(enemy->getReward());
             } else if (enemy->isReachedEnd()) {
                 _world->balanceRemainingLife(-1);
+                _world->_hudLayer->updateLife();
                 _world->_audioEngine->playEffect("audio/buzz.wav");
             }
         }

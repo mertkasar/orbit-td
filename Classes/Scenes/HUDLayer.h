@@ -25,6 +25,8 @@ public:
 
     void notify(char type, std::string message, float duration = 1.f);
 
+    void updateLife();
+
 private:
     void menuButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type);
 
@@ -32,14 +34,14 @@ private:
 
     void pauseButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type);
 
-    void ffButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type);
-
 private:
     World *_world;
 
     cocos2d::ui::Layout *_topPanel;
     cocos2d::ui::Layout *_notificationPanel;
     cocos2d::ui::Layout *_bottomPanel;
+
+    cocos2d::ui::Layout *_shieldBar;
 };
 
 #endif //HUD_LAYER_H
