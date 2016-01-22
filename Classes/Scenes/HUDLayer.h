@@ -42,6 +42,7 @@ private:
     cocos2d::ui::Layout *_bottomPanel;
 
     cocos2d::ui::Layout *_shieldBar;
+    cocos2d::ui::Layout *_energy;
 };
 
 #endif //HUD_LAYER_H

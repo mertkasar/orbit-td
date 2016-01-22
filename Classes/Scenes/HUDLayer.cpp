@@ -7,6 +7,7 @@
 #include <2d/CCActionInterval.h>
 #include <2d/CCActionInstant.h>
 #include <2d/CCActionEase.h>
+#include <2d/CCSprite.h>
 #include <ui/UILayout.h>
 #include <ui/UIImageView.h>
 #include <ui/UIButton.h>
@@ -14,7 +15,6 @@
 #include <SimpleAudioEngine.h>
 
 #include <sstream>
-#include <2d/CCSprite.h>
 
 USING_NS_CC;
 
@@ -79,13 +79,6 @@ bool HUDLayer::init(World *world) {
     text->setPosition(Vec2(260.f, 90.f));
     _topPanel->addChild(text);
 
-    text = ui::Text::create("Total Coin:\t0", "fonts/ubuntu.ttf", 28);
-    text->setName("#coin_text");
-    text->setTextHorizontalAlignment(TextHAlignment::CENTER);
-    text->setPosition(
-            Vec2(_bottomPanel->getContentSize().width / 2.f + 20, _bottomPanel->getContentSize().height / 2.f - 5));
-    _bottomPanel->addChild(text);
-
     _shieldBar = ui::Layout::create();
     _shieldBar->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
     _shieldBar->setPosition(Vec2(90.f, 10.f));
@@ -95,7 +88,7 @@ bool HUDLayer::init(World *world) {
     _shieldBar->addChild(sprite);
 
     text = ui::Text::create("20", "fonts/kenvector_future.ttf", 32);
-    text->setName("#life_text");
+    text->setName("#shield_text");
     text->setTextHorizontalAlignment(TextHAlignment::CENTER);
     text->setColor(Color::ORANGE);
     text->setPosition(Vec2(50.f, 50.f));
@@ -108,6 +101,21 @@ bool HUDLayer::init(World *world) {
     _shieldBar->addChild(sprite);
 
     _bottomPanel->addChild(_shieldBar);
+
+    _energy = ui::Layout::create();
+    _energy->setPosition(Vec2(700, 60.f));
+
+    sprite = Sprite::create("textures/hud_energy.png");
+    _energy->addChild(sprite);
+
+    text = ui::Text::create("5000", "fonts/kenvector_future.ttf", 40);
+    text->setName("#energy_text");
+    text->setTextHorizontalAlignment(TextHAlignment::LEFT);
+    text->setColor(Color::ICE);
+    text->setPosition(Vec2(110.f, 0.f));
+    _energy->addChild(text);
+
+    _bottomPanel->addChild(_energy);
 
     // Add interpolation animations
     float d = 3.f;
@@ -145,9 +153,9 @@ bool HUDLayer::init(World *world) {
 
 void HUDLayer::update(float delta) {
     std::stringstream ss_c;
-    ss_c << "Total Coin:\t" << _world->getTotalCoin();
+    ss_c << _world->getTotalCoin();
 
-    auto text = static_cast<ui::Text *>(_bottomPanel->getChildByName("#coin_text"));
+    auto text = static_cast<ui::Text *>(_energy->getChildByName("#energy_text"));
     text->setString(ss_c.str());
 
     std::stringstream ss_w;
@@ -192,7 +200,7 @@ void HUDLayer::updateLife() {
         std::stringstream ss_l;
         ss_l << life;
 
-        auto text = static_cast<ui::Text *>(_shieldBar->getChildByName("#life_text"));
+        auto text = static_cast<ui::Text *>(_shieldBar->getChildByName("#shield_text"));
         text->setString(ss_l.str());
 
         auto bar = static_cast<Sprite *>(_shieldBar->getChildByName("#shield_bar"));

@@ -25,7 +25,7 @@
 
 #include <sstream>
 
-#define STARTING_COIN 500
+#define STARTING_COIN 1000
 #define STARTING_LIFE 20
 
 USING_NS_CC;
