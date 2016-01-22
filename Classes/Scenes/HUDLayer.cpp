@@ -43,17 +43,17 @@ bool HUDLayer::init(World *world) {
     _topPanel->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
     _topPanel->setPosition(Vec2(0, 720));
 
-    auto button = ui::Button::create("btn_next.png", "", "", ui::Widget::TextureResType::PLIST);
+    auto button = ui::Button::create("textures/btn_next_n.png", "textures/btn_next_t.png", "");
     button->setName("next_button");
     button->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-    button->setPosition(Vec2(100, _topPanel->getContentSize().height / 2.f));
+    button->setPosition(Vec2(140.f, 90.f));
     button->addTouchEventListener(CC_CALLBACK_2(HUDLayer::nextButtonCallback, this));
     _topPanel->addChild(button);
 
-    button = ui::Button::create("btn_menu.png", "", "", ui::Widget::TextureResType::PLIST);
+    button = ui::Button::create("textures/btn_menu_n.png", "textures/btn_menu_t.png", "");
     button->setName("menu_button");
     button->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-    button->setPosition(Vec2(_topPanel->getContentSize().width - 100, _topPanel->getContentSize().height / 2.f));
+    button->setPosition(Vec2(1220.f, 90.f));
     button->addTouchEventListener(CC_CALLBACK_2(HUDLayer::menuButtonCallback, this));
     _topPanel->addChild(button);
 
@@ -66,17 +66,17 @@ bool HUDLayer::init(World *world) {
     _bottomPanel->setContentSize(_bottomPanel->getBackGroundImageTextureSize());
     _bottomPanel->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 
-    button = ui::Button::create("btn_pause.png", "", "", ui::Widget::TextureResType::PLIST);
+    button = ui::Button::create("textures/btn_pause_n.png", "textures/btn_pause_t.png", "");
     button->setName("pause_button");
     button->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-    button->setPosition(Vec2(_bottomPanel->getContentSize().width - 200, _bottomPanel->getContentSize().height / 2.f));
+    button->setPosition(Vec2(1220.f, 60.f));
     button->addTouchEventListener(CC_CALLBACK_2(HUDLayer::pauseButtonCallback, this));
     _bottomPanel->addChild(button);
 
     auto text = ui::Text::create("Waves:0/0", "fonts/ubuntu.ttf", 28);
     text->setName("#wave_text");
     text->setTextHorizontalAlignment(TextHAlignment::CENTER);
-    text->setPosition(Vec2(220.f, 80.f));
+    text->setPosition(Vec2(260.f, 90.f));
     _topPanel->addChild(text);
 
     text = ui::Text::create("Total Coin:\t0", "fonts/ubuntu.ttf", 28);
