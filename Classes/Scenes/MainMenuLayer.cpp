@@ -117,6 +117,7 @@ void MainMenuLayer::quitButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget
         auto dialog = DialogBox::create(_world);
         dialog->setCaption("Are you sure you want to exit?");
         dialog->setAction(CC_CALLBACK_2(MainMenuLayer::exitCallback, this));
+        dialog->runAction(dialog->show());
         _world->addChild(dialog);
 
         _world->_audioEngine->playEffect("audio/click.wav");
@@ -126,5 +127,7 @@ void MainMenuLayer::quitButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget
 void MainMenuLayer::exitCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type) {
     if (type == ui::Widget::TouchEventType::ENDED) {
         Director::getInstance()->end();
+
+        _world->_audioEngine->playEffect("audio/click.wav");
     }
 }

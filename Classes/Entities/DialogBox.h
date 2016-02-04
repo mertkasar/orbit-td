@@ -8,6 +8,8 @@ namespace cocos2d {
         class Text;
         class Button;
     }
+
+    class FiniteTimeAction;
 }
 
 class World;
@@ -21,6 +23,10 @@ public:
     void setCaption(std::string caption);
 
     void setAction(const ccWidgetTouchCallback& action);
+
+    cocos2d::FiniteTimeAction *show();
+
+    cocos2d::FiniteTimeAction *hide();
 
 private:
     void noButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type);
