@@ -36,6 +36,8 @@ private:
 
     void quitButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type);
 
+    void exitCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type);
+
 private:
     World *_world;
 

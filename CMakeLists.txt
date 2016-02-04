@@ -136,6 +136,7 @@ set(GAME_SRC
   Classes/Entities/Bullet.cpp
   Classes/Entities/TowerMock.cpp
   Classes/Entities/WheelMenu.cpp
+  Classes/Entities/DialogBox.cpp
   Classes/Entities/Turret.cpp
   Classes/Entities/MachineGun.cpp
   Classes/Entities/LaserGun.cpp
@@ -164,6 +165,7 @@ set(GAME_HEADERS
   Classes/Entities/Bullet.h
   Classes/Entities/TowerMock.h
   Classes/Entities/WheelMenu.h
+  Classes/Entities/DialogBox.h
   Classes/Entities/Turret.h
   Classes/Entities/MachineGun.h
   Classes/Entities/LaserGun.h

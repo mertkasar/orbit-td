@@ -1,5 +1,7 @@
 #include "MainMenuLayer.h"
+
 #include "World.h"
+#include "../Entities/DialogBox.h"
 
 #include <ui/UILayout.h>
 #include <ui/UIButton.h>
@@ -7,6 +9,7 @@
 #include <2d/CCActionInterval.h>
 #include <2d/CCActionInstant.h>
 #include <2d/CCSprite.h>
+#include <base/CCDirector.h>
 
 USING_NS_CC;
 
@@ -111,7 +114,17 @@ void MainMenuLayer::helpButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget
 
 void MainMenuLayer::quitButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type) {
     if (type == ui::Widget::TouchEventType::ENDED) {
-        CCLOG("Quit Button clicked!");
+        auto dialog = DialogBox::create(_world);
+        dialog->setCaption("Are you sure you want to exit?");
+        dialog->setAction(CC_CALLBACK_2(MainMenuLayer::exitCallback, this));
+        _world->addChild(dialog);
+
         _world->_audioEngine->playEffect("audio/click.wav");
+    }
+}
+
+void MainMenuLayer::exitCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type) {
+    if (type == ui::Widget::TouchEventType::ENDED) {
+        Director::getInstance()->end();
     }
 }
