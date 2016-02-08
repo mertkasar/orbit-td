@@ -8,6 +8,7 @@
 #include "../Entities/EnemyShip.h"
 #include "../Entities/WheelMenu.h"
 #include "../Entities/Planet.h"
+#include "../Entities/ResultPanel.h"
 
 #include <base/CCDirector.h>
 #include <base/CCEventDispatcher.h>
@@ -99,11 +100,18 @@ void World::update(float delta) {
 
     if (_life <= 0) {
         _hudLayer->notify('I', "Game Over!");
+        _gameplayLayer->pauseScene();
+        auto resultPanel = ResultPanel::create(this);
+        resultPanel->runAction(resultPanel->show());
+        addChild(resultPanel);
         unscheduleUpdate();
     }
 
     if (isCleared()) {
         _hudLayer->notify('I', "All waves are cleared!");
+        auto resultPanel = ResultPanel::create(this);
+        resultPanel->runAction(resultPanel->show());
+        addChild(resultPanel);
         unscheduleUpdate();
     }
 }

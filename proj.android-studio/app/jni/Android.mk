@@ -25,6 +25,7 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../../Classes/Entities/TowerMock.cpp \
                    ../../../Classes/Entities/WheelMenu.cpp \
                    ../../../Classes/Entities/DialogBox.cpp \
+                   ../../../Classes/Entities/ResultPanel.cpp \
                    ../../../Classes/Entities/Turret.cpp \
                    ../../../Classes/Entities/MachineGun.cpp \
                    ../../../Classes/Entities/LaserGun.cpp \

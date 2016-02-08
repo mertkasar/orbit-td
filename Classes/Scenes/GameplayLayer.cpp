@@ -100,6 +100,7 @@ bool GameplayLayer::init() {
     addChild(_particleBatch);
 
     scheduleUpdate();
+    _world->scheduleUpdate();
 
     return true;
 }
