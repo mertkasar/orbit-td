@@ -28,31 +28,34 @@ bool DialogBox::init(World *world) {
 
     _world = world;
 
-    setTouchEnabled(true);
-    setSwallowTouches(true);
+    auto contentSize = Size(620, 250);
     setCascadeOpacityEnabled(true);
     setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-    setBackGroundImage("textures/dialog_bg.png");
+    setBackGroundImage("textures/bg_panel.png");
+    setBackGroundImageScale9Enabled(true);
+    setContentSize(contentSize);
     setPosition(_world->_canvasCenter);
     setScaleY(0.f);
+
+    auto mid = Vec2(contentSize / 2.f);
 
     _text = ui::Text::create();
     _text->setFontName("fonts/kenvector_future.ttf");
     _text->setFontSize(24);
     _text->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     _text->setColor(Color::ICE);
-    _text->setPosition(Vec2(0.f, 50.f));
+    _text->setPosition(mid + Vec2(0.f, 50.f));
     _text->setVisible(false);
     addChild(_text);
 
     auto button = ui::Button::create("textures/btn_no_n.png", "textures/btn_no_t.png", "");
-    button->setPosition(Vec2(-150.f, -50.f));
+    button->setPosition(mid + Vec2(-150.f, -50.f));
     button->addTouchEventListener(CC_CALLBACK_2(DialogBox::noButtonCallback, this));
     button->setVisible(false);
     addChild(button);
 
     _yesButton = ui::Button::create("textures/btn_yes_n.png", "textures/btn_yes_t.png", "");
-    _yesButton->setPosition(Vec2(150.f, -50.f));
+    _yesButton->setPosition(mid + Vec2(150.f, -50.f));
     _yesButton->setVisible(false);
     addChild(_yesButton);
 
