@@ -108,7 +108,9 @@ void ResultPanel::replayButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget
 
 void ResultPanel::menuButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type) {
     if (type == ui::Widget::TouchEventType::ENDED) {
-        CCLOG("Menu button clicked!");
+        runAction(hide());
+        
+        _world->setState(World::MAIN_MENU);
         _world->_audioEngine->playEffect("audio/click.wav");
     }
 }

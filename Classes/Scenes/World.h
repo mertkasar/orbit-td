@@ -73,7 +73,7 @@ public:
     }
 
     State getState() const{
-        return _state;
+        return _currentState;
     }
 
     cocos2d::PhysicsWorld *getPhysicsWorld() const {
@@ -104,7 +104,7 @@ private:
 private:
     cocos2d::PhysicsWorld *__physicsWorld;
 
-    State _state;
+    State _currentState;
 
     Planet *_planet;
 

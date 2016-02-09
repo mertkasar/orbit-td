@@ -15,6 +15,7 @@
 #include <SimpleAudioEngine.h>
 
 #include <sstream>
+#include <Entities/DialogBox.h>
 
 USING_NS_CC;
 
@@ -42,6 +43,7 @@ bool HUDLayer::init(World *world) {
     _topPanel->setContentSize(_topPanel->getBackGroundImageTextureSize());
     _topPanel->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
     _topPanel->setPosition(Vec2(0, 720));
+    _topPanel->setOpacity(0);
 
     auto button = ui::Button::create("textures/btn_next_n.png", "textures/btn_next_t.png", "");
     button->setName("next_button");
@@ -65,6 +67,7 @@ bool HUDLayer::init(World *world) {
     _bottomPanel->setBackGroundImage("bottom_panel.png", ui::Widget::TextureResType::PLIST);
     _bottomPanel->setContentSize(_bottomPanel->getBackGroundImageTextureSize());
     _bottomPanel->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    _bottomPanel->setOpacity(0);
 
     button = ui::Button::create("textures/btn_pause_n.png", "textures/btn_pause_t.png", "");
     button->setName("pause_button");
@@ -117,36 +120,9 @@ bool HUDLayer::init(World *world) {
 
     _bottomPanel->addChild(_energy);
 
-    // Add interpolation animations
-    float d = 3.f;
-
-    _bottomPanel->setOpacity((GLubyte) 0.f);
-    _bottomPanel->runAction(Sequence::create(DelayTime::create(d), FadeIn::create(0.3f), NULL));
-
-    for (auto element : _topPanel->getChildren()) {
-        auto elementPos = element->getPosition();
-        element->setPosition(elementPos + Vec2(0.f, _topPanel->getContentSize().height));
-
-        auto easedMoveTo = EaseBackOut::create(MoveTo::create(1.f, elementPos));
-        element->runAction(Sequence::create(DelayTime::create(d + 0.3f), easedMoveTo, NULL));
-    }
-
-    _topPanel->setOpacity((GLubyte) 0.f);
-    _topPanel->runAction(Sequence::create(DelayTime::create(d), FadeIn::create(0.3f), NULL));
-
-    for (auto element : _bottomPanel->getChildren()) {
-        auto elementPos = element->getPosition();
-        element->setPosition(elementPos - Vec2(0.f, _bottomPanel->getContentSize().height));
-
-        auto easedMoveTo = EaseBackOut::create(MoveTo::create(1.f, elementPos));
-        element->runAction(Sequence::create(DelayTime::create(d + 0.3f), easedMoveTo, NULL));
-    }
-
     addChild(_topPanel);
     addChild(_notificationPanel);
     addChild(_bottomPanel);
-
-    scheduleUpdate();
 
     return true;
 }
@@ -208,11 +184,66 @@ void HUDLayer::updateLife() {
     }
 }
 
+void HUDLayer::show(float delay) { // Add interpolation animations
+    _bottomPanel->runAction(Sequence::create(DelayTime::create(delay), FadeIn::create(0.3f), NULL));
+
+    for (auto element : _topPanel->getChildren()) {
+        auto elementPos = element->getPosition();
+        element->setPosition(elementPos + Vec2(0.f, _topPanel->getContentSize().height));
+
+        auto easedMoveTo = EaseBackOut::create(MoveTo::create(1.f, elementPos));
+        element->runAction(Sequence::create(DelayTime::create(delay + 0.3f), easedMoveTo, NULL));
+    }
+
+    _topPanel->runAction(Sequence::create(DelayTime::create(delay), FadeIn::create(0.3f), NULL));
+
+    for (auto element : _bottomPanel->getChildren()) {
+        auto elementPos = element->getPosition();
+        element->setPosition(elementPos - Vec2(0.f, _bottomPanel->getContentSize().height));
+
+        auto easedMoveTo = EaseBackOut::create(MoveTo::create(1.f, elementPos));
+        element->runAction(Sequence::create(DelayTime::create(delay + 0.3f), easedMoveTo, NULL));
+    }
+
+    scheduleUpdate();
+}
+
+void HUDLayer::hide(float delay) {
+    _bottomPanel->runAction(Sequence::create(DelayTime::create(delay + 0.8f), FadeOut::create(0.3f), NULL));
+
+    for (auto element : _topPanel->getChildren()) {
+        auto desiredPos = Vec2(0.f, _topPanel->getContentSize().height);
+        auto easedMoveTo = EaseBackIn::create(MoveBy::create(1.f, desiredPos));
+        element->runAction(Sequence::create(DelayTime::create(delay), easedMoveTo, NULL));
+    }
+
+    _topPanel->runAction(Sequence::create(DelayTime::create(delay + 0.8f), FadeOut::create(0.3f), NULL));
+
+    for (auto element : _bottomPanel->getChildren()) {
+        auto desiredPos = -1 * Vec2(0.f, _topPanel->getContentSize().height);
+        auto easedMoveTo = EaseBackIn::create(MoveBy::create(1.f, desiredPos));
+        element->runAction(Sequence::create(DelayTime::create(delay), easedMoveTo, NULL));
+    }
+
+    unscheduleUpdate();
+}
 
 void HUDLayer::menuButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type) {
     if (type == ui::Widget::TouchEventType::ENDED) {
+        _dialogBox = DialogBox::create(_world);
+        _dialogBox->setCaption("Are you sure you want to\n   back to the main menu?");
+        _dialogBox->setAction([&](Ref *__sender, ui::Widget::TouchEventType __type) {
+            if (__type == ui::Widget::TouchEventType::ENDED) {
+                _dialogBox->runAction(Sequence::create(_dialogBox->hide(), RemoveSelf::create(true), NULL));
+
+                _world->setState(World::MAIN_MENU);
+                _world->_audioEngine->playEffect("audio/click.wav");
+            }
+        });
+        _dialogBox->runAction(_dialogBox->show());
+
+        _world->addChild(_dialogBox);
         _world->_audioEngine->playEffect("audio/click.wav");
-        notify('W', "Opening menu!");
     }
 }
 

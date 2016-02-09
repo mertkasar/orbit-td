@@ -23,7 +23,9 @@ public:
 
     virtual bool init();
 
-    void hide();
+    void show(float delay = 0);
+
+    void hide(float delay = 0);
 
 private:
     void createOptionsMenu();
@@ -35,8 +37,6 @@ private:
     void helpButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type);
 
     void quitButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type);
-
-    void exitCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type);
 
 private:
     World *_world;

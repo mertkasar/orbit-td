@@ -56,6 +56,8 @@ bool MainMenuLayer::init() {
     button->addTouchEventListener(CC_CALLBACK_2(MainMenuLayer::quitButtonCallback, this));
     addChild(button);
 
+    setOpacity(0);
+
     return true;
 }
 
@@ -81,8 +83,16 @@ void MainMenuLayer::createOptionsMenu() {
     addChild(button);
 }
 
-void MainMenuLayer::hide() {
-    auto hideSequence = Sequence::create(FadeOut::create(0.4f),
+void MainMenuLayer::show(float delay) {
+    auto showSequence = Sequence::create(DelayTime::create(delay),
+                                         FadeIn::create(0.4f),
+                                         NULL);
+    runAction(showSequence);
+}
+
+void MainMenuLayer::hide(float delay) {
+    auto hideSequence = Sequence::create(DelayTime::create(delay),
+                                         FadeOut::create(0.4f),
                                          CallFunc::create([&]() { this->setVisible(false); }),
                                          NULL);
     runAction(hideSequence);
@@ -116,17 +126,16 @@ void MainMenuLayer::quitButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget
     if (type == ui::Widget::TouchEventType::ENDED) {
         auto dialog = DialogBox::create(_world);
         dialog->setCaption("Are you sure you want to exit?");
-        dialog->setAction(CC_CALLBACK_2(MainMenuLayer::exitCallback, this));
+        dialog->setAction([&](Ref *__sender, ui::Widget::TouchEventType __type) {
+            if (__type == ui::Widget::TouchEventType::ENDED) {
+                dialog->runAction(Sequence::create(dialog->hide(), RemoveSelf::create(true), NULL));
+
+                Director::getInstance()->end();
+                _world->_audioEngine->playEffect("audio/click.wav");
+            }
+        });
         dialog->runAction(dialog->show());
         _world->addChild(dialog);
-
-        _world->_audioEngine->playEffect("audio/click.wav");
-    }
-}
-
-void MainMenuLayer::exitCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type) {
-    if (type == ui::Widget::TouchEventType::ENDED) {
-        Director::getInstance()->end();
 
         _world->_audioEngine->playEffect("audio/click.wav");
     }

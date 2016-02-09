@@ -177,7 +177,24 @@ bool World::spawnNextWave() {
 void World::setState(World::State state) {
     if (state == MAIN_MENU) {
         _mainMenuLayer = MainMenuLayer::create(this);
-        addChild(_mainMenuLayer);
+
+        if (_currentState == GAMEPLAY){
+            _planet->runAction(EaseExponentialIn::create(MoveBy::create(2.5f, Vec2(450.f, -360.f))));
+            _backgroundSprite->runAction(EaseExponentialIn::create(MoveBy::create(2.5f, Vec2(-40.f, -80.f))));
+
+            _gameplayLayer->setVisible(false);
+            _mapLayer->setVisible(false);
+            _hudLayer->hide();
+
+            _mainMenuLayer->show(2.5f);
+            addChild(_mainMenuLayer);
+        } else {
+            _mainMenuLayer = MainMenuLayer::create(this);
+            _mainMenuLayer->show(0.f);
+            addChild(_mainMenuLayer);
+        }
+
+        _currentState = state;
     } else if (state == GAMEPLAY) {
         _mainMenuLayer->hide();
 
@@ -196,6 +213,7 @@ void World::setState(World::State state) {
 
         _hudLayer = HUDLayer::create(this);
         _hudLayer->notify('I', "Game is starting!", 2.f);
+        _hudLayer->show(3.f);
         addChild(_hudLayer);
 
         _wheelMenu = WheelMenu::create(this);
@@ -203,6 +221,8 @@ void World::setState(World::State state) {
 
         //scheduleUpdate();
         connectListeners();
+
+        _currentState = state;
     }
 }
 
