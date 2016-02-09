@@ -35,6 +35,8 @@ public:
 
     virtual void update(float delta);
 
+    void reset();
+
     void addTower(ModelID type, cocos2d::Vec2 tile);
 
     void addEnemy(const cocos2d::ValueMap &model, int order, Path &path);
@@ -77,6 +79,7 @@ private:
 
     cocos2d::Vector<EnemyShip *> _creeps;
     cocos2d::Vector<Missile *> _missiles;
+    cocos2d::Vector<Bullet *> _bullets;
 
     std::map<cocos2d::Vec2, Turret *> _towerMap;
 

@@ -46,6 +46,8 @@ public:
 
     virtual void update(float delta);
 
+    void resetGame();
+
     CREATE_FUNC(World);
 
     bool placeTower(ModelID type, cocos2d::Vec2 tile);

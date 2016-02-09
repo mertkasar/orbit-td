@@ -123,6 +123,26 @@ void GameplayLayer::update(float delta) {
         }
 }
 
+void GameplayLayer::reset() {
+    for (auto creep : _creeps)
+        creep->removeFromParent();
+    _creeps.clear();
+
+    for (auto missile : _missiles)
+        missile->removeFromParent();
+    _missiles.clear();
+
+    for (auto pair : _towerMap)
+        pair.second->removeFromParent();
+    _towerMap.clear();
+
+    for (auto bullet : _bullets)
+        bullet->removeFromParent();
+    _bullets.clear();
+
+    _particleBatch->removeAllChildren();
+}
+
 void GameplayLayer::addEnemy(const ValueMap &model, int order, Path &path) {
     auto enemy = _creepPool.fetch();
 
@@ -159,6 +179,7 @@ void GameplayLayer::addBullet(cocos2d::Vec2 position, const cocos2d::Color3B &ba
     _world->_audioEngine->playEffect("audio/machine_gun.wav", false, 1.0f, 0.0f, 0.3f);
 
     addChild(bullet);
+    _bullets.pushBack(bullet);
 }
 
 void GameplayLayer::addExplosion(cocos2d::Vec2 position, float duration, float strength) {

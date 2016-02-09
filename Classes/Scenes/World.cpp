@@ -116,6 +116,25 @@ void World::update(float delta) {
     }
 }
 
+void World::resetGame() {
+    if (_currentState == GAMEPLAY) {
+        _mapLayer->reset();
+
+        _gameplayLayer->reset();
+        _gameplayLayer->resumeScene();
+
+        _totalCoin = STARTING_COIN;
+        _life = STARTING_LIFE;
+
+        _hudLayer->updateLife();
+
+        _currentWave = 0;
+        _cleared = false;
+
+        scheduleUpdate();
+    } else CCLOG("Failed to reset the game: Wrong state!");
+}
+
 bool World::placeTower(ModelID type, Vec2 tile) {
     auto traversed = _mapLayer->traverseAgainst(tile, 1);
 
@@ -178,7 +197,7 @@ void World::setState(World::State state) {
     if (state == MAIN_MENU) {
         _mainMenuLayer = MainMenuLayer::create(this);
 
-        if (_currentState == GAMEPLAY){
+        if (_currentState == GAMEPLAY) {
             _planet->runAction(EaseExponentialIn::create(MoveBy::create(2.5f, Vec2(450.f, -360.f))));
             _backgroundSprite->runAction(EaseExponentialIn::create(MoveBy::create(2.5f, Vec2(-40.f, -80.f))));
 

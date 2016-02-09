@@ -99,6 +99,17 @@ bool MapLayer::init() {
     return true;
 }
 
+void MapLayer::reset() {
+    for (auto pair : _slotMap)
+        deactivateSlot(pair.first);
+
+    _grid.clear();
+    _grid.create(Vec2(5, 10));
+    for (int i = 0; i < _grid.getSize().x; i++)
+        _grid.setNode(Vec2(i, 0), 2);
+    _grid.setNode(Vec2(2, 0), 0);
+}
+
 void MapLayer::activateSlot(cocos2d::Vec2 tile) {
     auto found = _slotMap.find(tile);
 
