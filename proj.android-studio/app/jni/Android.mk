@@ -17,10 +17,10 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../../Classes/Scenes/MapLayer.cpp \
                    ../../../Classes/Scenes/HUDLayer.cpp \
                    ../../../Classes/Scenes/MainMenuLayer.cpp \
-                   ../../../Classes/Entities/Creep.cpp \
+                   ../../../Classes/Entities/EnemyShip.cpp \
                    ../../../Classes/Entities/Missile.cpp \
                    ../../../Classes/Entities/Explosion.cpp \
-                   ../../../Classes/Entities/Beam.cpp \
+                   ../../../Classes/Entities/LaserBeam.cpp \
                    ../../../Classes/Entities/Bullet.cpp \
                    ../../../Classes/Entities/TowerMock.cpp \
                    ../../../Classes/Entities/WheelMenu.cpp \
