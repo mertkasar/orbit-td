@@ -18,10 +18,15 @@ class World;
 class DialogBox;
 
 class HUDLayer : public cocos2d::Layer {
+private:
+    HUDLayer(World *world);
+
+    ~HUDLayer();
+
 public:
     static HUDLayer *create(World *world);
 
-    bool init(World *world);
+    virtual bool init();
 
     virtual void update(float delta);
 
@@ -32,6 +37,8 @@ public:
     void show(float delay = 0.f);
 
     void hide(float delay = 0.f);
+
+    void close(float delay = 0.f);
 
 private:
     void menuButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type);

@@ -10,10 +10,19 @@
 
 USING_NS_CC;
 
-DialogBox *DialogBox::create(World *world) {
-    DialogBox *ret = new(std::nothrow) DialogBox();
+DialogBox::DialogBox(World *world) {
+    _world = world;
+    CCLOG("DialogBox created");
+}
 
-    if (ret && ret->init(world)) {
+DialogBox::~DialogBox() {
+    CCLOG("DialogBox deleted");
+}
+
+DialogBox *DialogBox::create(World *world) {
+    DialogBox *ret = new(std::nothrow) DialogBox(world);
+
+    if (ret && ret->init()) {
         ret->autorelease();
     } else {
         CC_SAFE_DELETE(ret);
@@ -22,11 +31,9 @@ DialogBox *DialogBox::create(World *world) {
     return ret;
 }
 
-bool DialogBox::init(World *world) {
+bool DialogBox::init() {
     if (!ui::Layout::init())
         return false;
-
-    _world = world;
 
     auto contentSize = Size(620, 250);
     auto center = Vec2(contentSize / 2.f);

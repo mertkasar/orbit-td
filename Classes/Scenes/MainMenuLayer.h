@@ -18,6 +18,8 @@ class MainMenuLayer : public cocos2d::Layer {
 private:
     MainMenuLayer(World *world);
 
+    ~MainMenuLayer();
+
 public:
     static MainMenuLayer *create(World *world);
 
@@ -26,6 +28,8 @@ public:
     void show(float delay = 0);
 
     void hide(float delay = 0);
+
+    void close(float delay = 0);
 
 private:
     void createOptionsMenu();

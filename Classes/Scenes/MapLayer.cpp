@@ -8,6 +8,7 @@
 #include <2d/CCSprite.h>
 
 #include <queue>
+#include <2d/CCActionInstant.h>
 
 #define NODE_TOUCH_SIZE 50.f
 
@@ -15,6 +16,11 @@ USING_NS_CC;
 
 MapLayer::MapLayer(World *world) {
     _world = world;
+    CCLOG("MapLayer created");
+}
+
+MapLayer::~MapLayer() {
+    CCLOG("MapLayer deleted");
 }
 
 MapLayer *MapLayer::create(World *world) {
@@ -33,6 +39,8 @@ MapLayer *MapLayer::create(World *world) {
 bool MapLayer::init() {
     if (!Layer::init())
         return false;
+
+    setCascadeOpacityEnabled(true);
 
     // Prepare sample grid
     _grid.create(Vec2(5, 10));
@@ -97,6 +105,10 @@ bool MapLayer::init() {
     addChild(_pathCanvas);
 
     return true;
+}
+
+void MapLayer::close(float delay) {
+    runAction(Sequence::create(DelayTime::create(delay), FadeOut::create(0.3f), RemoveSelf::create(true), NULL));
 }
 
 void MapLayer::reset() {

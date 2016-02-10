@@ -28,12 +28,16 @@ class GameplayLayer : public cocos2d::Layer {
 private:
     GameplayLayer(World *world);
 
+    ~GameplayLayer();
+
 public:
     static GameplayLayer *create(World *world);
 
     virtual bool init();
 
     virtual void update(float delta);
+
+    void close(float delta = 0);
 
     void reset();
 

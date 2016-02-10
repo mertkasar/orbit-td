@@ -15,10 +15,15 @@ namespace cocos2d {
 class World;
 
 class DialogBox : public cocos2d::ui::Layout {
+private:
+    DialogBox(World *world);
+
+    ~DialogBox();
+
 public:
     static DialogBox *create(World *world);
 
-    bool init(World *world);
+    virtual bool init();
 
     void setCaption(std::string caption);
 

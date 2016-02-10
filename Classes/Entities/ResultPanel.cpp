@@ -13,6 +13,11 @@ USING_NS_CC;
 
 ResultPanel::ResultPanel(World *world) {
     _world = world;
+    CCLOG("ResultPanel created");
+}
+
+ResultPanel::~ResultPanel() {
+    CCLOG("ResultPanel deleted");
 }
 
 ResultPanel *ResultPanel::create(World *world) {
@@ -82,7 +87,7 @@ bool ResultPanel::init() {
 }
 
 FiniteTimeAction *ResultPanel::show() {
-    auto showContent = [&](){
+    auto showContent = [&]() {
         for (auto child : getChildren())
             child->setVisible(true);
     };
@@ -91,7 +96,7 @@ FiniteTimeAction *ResultPanel::show() {
 }
 
 FiniteTimeAction *ResultPanel::hide() {
-    auto hideContent = [&](){
+    auto hideContent = [&]() {
         for (auto child : getChildren())
             child->setVisible(false);
     };
@@ -101,7 +106,7 @@ FiniteTimeAction *ResultPanel::hide() {
 
 void ResultPanel::replayButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type) {
     if (type == ui::Widget::TouchEventType::ENDED) {
-        runAction(hide());
+        runAction(Sequence::create(hide(), RemoveSelf::create(true), NULL));
 
         _world->resetGame();
         _world->_audioEngine->playEffect("audio/click.wav");
@@ -110,7 +115,7 @@ void ResultPanel::replayButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget
 
 void ResultPanel::menuButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type) {
     if (type == ui::Widget::TouchEventType::ENDED) {
-        runAction(hide());
+        runAction(Sequence::create(hide(), RemoveSelf::create(true), NULL));
 
         _world->setState(World::MAIN_MENU);
         _world->_audioEngine->playEffect("audio/click.wav");

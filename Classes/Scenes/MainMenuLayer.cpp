@@ -1,20 +1,24 @@
-#include "MainMenuLayer.h"
+#include <base/CCDirector.h>
 
 #include "World.h"
+#include "MainMenuLayer.h"
 #include "../Entities/DialogBox.h"
 
-#include <ui/UILayout.h>
-#include <ui/UIButton.h>
-#include <SimpleAudioEngine.h>
-#include <2d/CCActionInterval.h>
-#include <2d/CCActionInstant.h>
 #include <2d/CCSprite.h>
-#include <base/CCDirector.h>
+#include <2d/CCActionInstant.h>
+#include <2d/CCActionInterval.h>
+#include <SimpleAudioEngine.h>
+#include <ui/UIButton.h>
 
 USING_NS_CC;
 
 MainMenuLayer::MainMenuLayer(World *world) {
     _world = world;
+    CCLOG("MainMenuLayer created");
+}
+
+MainMenuLayer::~MainMenuLayer() {
+    CCLOG("MainMenuLayer deleted");
 }
 
 MainMenuLayer *MainMenuLayer::create(World *world) {
@@ -96,6 +100,11 @@ void MainMenuLayer::hide(float delay) {
                                          CallFunc::create([&]() { this->setVisible(false); }),
                                          NULL);
     runAction(hideSequence);
+}
+
+void MainMenuLayer::close(float delay) {
+    hide();
+    runAction(Sequence::create(DelayTime::create(delay + 0.4f), RemoveSelf::create(true), NULL));
 }
 
 void MainMenuLayer::startButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type) {

@@ -13,6 +13,7 @@
 
 #include <2d/CCParticleBatchNode.h>
 #include <2d/CCParticleSystemQuad.h>
+#include <2d/CCActionInstant.h>
 #include <base/CCDirector.h>
 #include <base/CCEventDispatcher.h>
 #include <physics/CCPhysicsContact.h>
@@ -25,6 +26,11 @@ USING_NS_CC;
 
 GameplayLayer::GameplayLayer(World *world) {
     _world = world;
+    CCLOG("GameplayLayer created");
+}
+
+GameplayLayer::~GameplayLayer() {
+    CCLOG("GameplayLayer deleted");
 }
 
 GameplayLayer *GameplayLayer::create(World *world) {
@@ -47,6 +53,7 @@ bool GameplayLayer::init() {
     _paused = false;
 
     setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    setCascadeOpacityEnabled(true);
 
     auto contactListener = EventListenerPhysicsContact::create();
     contactListener->onContactBegin = [](PhysicsContact &pContact) {
@@ -100,7 +107,6 @@ bool GameplayLayer::init() {
     addChild(_particleBatch);
 
     scheduleUpdate();
-    _world->scheduleUpdate();
 
     return true;
 }
@@ -121,6 +127,10 @@ void GameplayLayer::update(float delta) {
                 _world->_audioEngine->playEffect("audio/buzz.wav");
             }
         }
+}
+
+void GameplayLayer::close(float delay) {
+    runAction(Sequence::create(DelayTime::create(delay), FadeOut::create(0.3f), RemoveSelf::create(true), NULL));
 }
 
 void GameplayLayer::reset() {

@@ -28,6 +28,7 @@
 
 #define STARTING_COIN 1000
 #define STARTING_LIFE 20
+#define START_DELAY 5
 
 USING_NS_CC;
 
@@ -131,7 +132,7 @@ void World::resetGame() {
         _currentWave = 0;
         _cleared = false;
 
-        scheduleUpdate();
+        scheduleOnce([&](float delta){scheduleUpdate();}, START_DELAY, "start");
     } else CCLOG("Failed to reset the game: Wrong state!");
 }
 
@@ -201,21 +202,23 @@ void World::setState(World::State state) {
             _planet->runAction(EaseExponentialIn::create(MoveBy::create(2.5f, Vec2(450.f, -360.f))));
             _backgroundSprite->runAction(EaseExponentialIn::create(MoveBy::create(2.5f, Vec2(-40.f, -80.f))));
 
-            _gameplayLayer->setVisible(false);
-            _mapLayer->setVisible(false);
-            _hudLayer->hide();
+            _gameplayLayer->close();
+            _mapLayer->close();
+            _hudLayer->close();
 
             _mainMenuLayer->show(2.5f);
+
+            unscheduleUpdate();
+
             addChild(_mainMenuLayer);
         } else {
-            _mainMenuLayer = MainMenuLayer::create(this);
             _mainMenuLayer->show(0.f);
             addChild(_mainMenuLayer);
         }
 
         _currentState = state;
     } else if (state == GAMEPLAY) {
-        _mainMenuLayer->hide();
+        _mainMenuLayer->close();
 
         _planet->runAction(EaseExponentialIn::create(MoveBy::create(2.5f, Vec2(-450.f, 360.f))));
         _backgroundSprite->runAction(EaseExponentialIn::create(MoveBy::create(2.5f, Vec2(40.f, 80.f))));
@@ -232,13 +235,13 @@ void World::setState(World::State state) {
 
         _hudLayer = HUDLayer::create(this);
         _hudLayer->notify('I', "Game is starting!", 2.f);
-        _hudLayer->show(3.f);
+        _hudLayer->show(2.5f);
         addChild(_hudLayer);
 
         _wheelMenu = WheelMenu::create(this);
         addChild(_wheelMenu);
 
-        //scheduleUpdate();
+        scheduleOnce([&](float delta){scheduleUpdate();}, START_DELAY, "start");
         connectListeners();
 
         _currentState = state;

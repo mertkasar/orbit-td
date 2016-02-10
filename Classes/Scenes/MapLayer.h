@@ -19,10 +19,14 @@ class MapLayer : public cocos2d::Layer {
 private:
     MapLayer(World *world);
 
+    ~MapLayer();
+
 public:
     static MapLayer *create(World *world);
 
     virtual bool init();
+
+    void close(float delay = 0);
 
     void activateSlot(cocos2d::Vec2 tile);
 

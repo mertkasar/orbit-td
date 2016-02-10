@@ -18,6 +18,8 @@ class ResultPanel : public cocos2d::ui::Layout {
 private:
     ResultPanel(World *world);
 
+    ~ResultPanel();
+
 public:
     static ResultPanel *create(World *world);
 

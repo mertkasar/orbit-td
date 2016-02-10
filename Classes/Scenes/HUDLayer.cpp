@@ -19,10 +19,19 @@
 
 USING_NS_CC;
 
-HUDLayer *HUDLayer::create(World *world) {
-    HUDLayer *layer = new(std::nothrow) HUDLayer();
+HUDLayer::HUDLayer(World *world) {
+    _world = world;
+    CCLOG("HUDLayer created");
+}
 
-    if (layer && layer->init(world)) {
+HUDLayer::~HUDLayer() {
+    CCLOG("HUDLayer deleted");
+}
+
+HUDLayer *HUDLayer::create(World *world) {
+    HUDLayer *layer = new(std::nothrow) HUDLayer(world);
+
+    if (layer && layer->init()) {
         layer->autorelease();
         return layer;
     } else {
@@ -32,11 +41,9 @@ HUDLayer *HUDLayer::create(World *world) {
     }
 }
 
-bool HUDLayer::init(World *world) {
+bool HUDLayer::init() {
     if (!Layer::init())
         return false;
-
-    _world = world;
 
     _topPanel = ui::Layout::create();
     _topPanel->setBackGroundImage("top_panel.png", ui::Widget::TextureResType::PLIST);
@@ -226,6 +233,13 @@ void HUDLayer::hide(float delay) {
     }
 
     unscheduleUpdate();
+}
+
+void HUDLayer::close(float delay) {
+    hide();
+    runAction(Sequence::create(DelayTime::create(delay + 1.1f),
+                               RemoveSelf::create(true),
+                               NULL));
 }
 
 void HUDLayer::menuButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type) {
