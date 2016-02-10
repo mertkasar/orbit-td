@@ -3,9 +3,12 @@
 #include "MapLayer.h"
 #include "GameplayLayer.h"
 #include "HUDLayer.h"
+#include "MainMenuLayer.h"
 #include "../Entities/Turret.h"
 #include "../Entities/EnemyShip.h"
 #include "../Entities/WheelMenu.h"
+#include "../Entities/Planet.h"
+#include "../Entities/ResultPanel.h"
 
 #include <base/CCDirector.h>
 #include <base/CCEventDispatcher.h>
@@ -13,8 +16,8 @@
 #include <2d/CCSpriteFrameCache.h>
 #include <2d/CCActionInterval.h>
 #include <2d/CCActionInstant.h>
-#include <2d/CCDrawNode.h>
-#include <2d/CCLabel.h>
+#include <2d/CCActionEase.h>
+#include <2d/CCSprite.h>
 #include <physics/CCPhysicsWorld.h>
 #include <physics/CCPhysicsContact.h>
 #include <ui/UIImageView.h>
@@ -23,8 +26,9 @@
 
 #include <sstream>
 
-#define STARTING_COIN 500
-#define STARTING_LIFE 10
+#define STARTING_COIN 1000
+#define STARTING_LIFE 20
+#define START_DELAY 5
 
 USING_NS_CC;
 
@@ -65,15 +69,26 @@ bool World::init() {
 
     _audioEngine = CocosDenshion::SimpleAudioEngine::getInstance();
     loadResources();
-    buildScene();
-    connectListeners();
+
+    _backgroundSprite = Sprite::create("textures/background.png");
+    _backgroundSprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    _backgroundSprite->setPosition(Vec2(0.f, -80.f));
+    addChild(_backgroundSprite);
+
+    _planet = Planet::create();
+    addChild(_planet);
+
+    setState(MAIN_MENU);
 
     _waves = FileUtils::getInstance()->getValueVectorFromFile("waves.plist");
     _currentWave = 0;
     _cleared = false;
 
-    _audioEngine->setBackgroundMusicVolume(0.6f);
-    _audioEngine->playBackgroundMusic("audio/ambient.mp3", true);
+    /*_audioEngine->setBackgroundMusicVolume(0.6f);
+    _audioEngine->playBackgroundMusic("audio/ambient.mp3", true);*/
+
+    _audioEngine->setBackgroundMusicVolume(0.f);
+    _audioEngine->setEffectsVolume(0.f);
 
     return true;
 }
@@ -86,13 +101,39 @@ void World::update(float delta) {
 
     if (_life <= 0) {
         _hudLayer->notify('I', "Game Over!");
+        _gameplayLayer->pauseScene();
+        auto resultPanel = ResultPanel::create(this);
+        resultPanel->runAction(resultPanel->show());
+        addChild(resultPanel);
         unscheduleUpdate();
     }
 
     if (isCleared()) {
         _hudLayer->notify('I', "All waves are cleared!");
+        auto resultPanel = ResultPanel::create(this);
+        resultPanel->runAction(resultPanel->show());
+        addChild(resultPanel);
         unscheduleUpdate();
     }
+}
+
+void World::resetGame() {
+    if (_currentState == GAMEPLAY) {
+        _mapLayer->reset();
+
+        _gameplayLayer->reset();
+        _gameplayLayer->resumeScene();
+
+        _totalCoin = STARTING_COIN;
+        _life = STARTING_LIFE;
+
+        _hudLayer->updateLife();
+
+        _currentWave = 0;
+        _cleared = false;
+
+        scheduleOnce([&](float delta){scheduleUpdate();}, START_DELAY, "start");
+    } else CCLOG("Failed to reset the game: Wrong state!");
 }
 
 bool World::placeTower(ModelID type, Vec2 tile) {
@@ -153,28 +194,58 @@ bool World::spawnNextWave() {
     return false;
 }
 
-void World::buildScene() {
-    _backgroundLayer = LayerColor::create(Color4B(Color::BG));
+void World::setState(World::State state) {
+    if (state == MAIN_MENU) {
+        _mainMenuLayer = MainMenuLayer::create(this);
 
-    auto gameCanvas = Node::create();
+        if (_currentState == GAMEPLAY) {
+            _planet->runAction(EaseExponentialIn::create(MoveBy::create(2.5f, Vec2(450.f, -360.f))));
+            _backgroundSprite->runAction(EaseExponentialIn::create(MoveBy::create(2.5f, Vec2(-40.f, -80.f))));
 
-    _mapLayer = MapLayer::create(this);
-    gameCanvas->addChild(_mapLayer);
+            _gameplayLayer->close();
+            _mapLayer->close();
+            _hudLayer->close();
 
-    _gameplayLayer = GameplayLayer::create(this);
-    gameCanvas->addChild(_gameplayLayer);
+            _mainMenuLayer->show(2.5f);
 
-    _hudLayer = HUDLayer::create(this);
-    _wheelMenu = WheelMenu::create(this);
+            unscheduleUpdate();
 
-    _hudLayer->notify('I', "Game is starting!", 2.f);
+            addChild(_mainMenuLayer);
+        } else {
+            _mainMenuLayer->show(0.f);
+            addChild(_mainMenuLayer);
+        }
 
-    addChild(_backgroundLayer);
-    addChild(gameCanvas);
-    addChild(_hudLayer);
-    addChild(_wheelMenu);
+        _currentState = state;
+    } else if (state == GAMEPLAY) {
+        _mainMenuLayer->close();
 
-    scheduleUpdate();
+        _planet->runAction(EaseExponentialIn::create(MoveBy::create(2.5f, Vec2(-450.f, 360.f))));
+        _backgroundSprite->runAction(EaseExponentialIn::create(MoveBy::create(2.5f, Vec2(40.f, 80.f))));
+
+        auto gameCanvas = Node::create();
+
+        _mapLayer = MapLayer::create(this);
+        gameCanvas->addChild(_mapLayer);
+
+        _gameplayLayer = GameplayLayer::create(this);
+        gameCanvas->addChild(_gameplayLayer);
+
+        addChild(gameCanvas);
+
+        _hudLayer = HUDLayer::create(this);
+        _hudLayer->notify('I', "Game is starting!", 2.f);
+        _hudLayer->show(2.5f);
+        addChild(_hudLayer);
+
+        _wheelMenu = WheelMenu::create(this);
+        addChild(_wheelMenu);
+
+        scheduleOnce([&](float delta){scheduleUpdate();}, START_DELAY, "start");
+        connectListeners();
+
+        _currentState = state;
+    }
 }
 
 void World::connectListeners() {
@@ -202,14 +273,14 @@ void World::loadResources() {
         loadModel(model.asString());
     }
 
-    auto audio = index.at("audio").asValueMap();
-    for (auto bg : audio.at("background").asValueVector()) {
-        _audioEngine->preloadBackgroundMusic(bg.asString().c_str());
-    }
+    /*auto audio = index.at("audio").asValueMap();
+     for (auto bg : audio.at("background").asValueVector()) {
+         _audioEngine->preloadBackgroundMusic(bg.asString().c_str());
+     }
 
-    for (auto effect : audio.at("effect").asValueVector()) {
-        _audioEngine->preloadEffect(effect.asString().c_str());
-    }
+     for (auto effect : audio.at("effect").asValueVector()) {
+         _audioEngine->preloadEffect(effect.asString().c_str());
+     }*/
 
     auto spriteCache = SpriteFrameCache::getInstance();
     for (auto sheet : index.at("spritesheet").asValueVector()) {

@@ -28,12 +28,18 @@ class GameplayLayer : public cocos2d::Layer {
 private:
     GameplayLayer(World *world);
 
+    ~GameplayLayer();
+
 public:
     static GameplayLayer *create(World *world);
 
     virtual bool init();
 
     virtual void update(float delta);
+
+    void close(float delta = 0);
+
+    void reset();
 
     void addTower(ModelID type, cocos2d::Vec2 tile);
 
@@ -77,6 +83,7 @@ private:
 
     cocos2d::Vector<EnemyShip *> _creeps;
     cocos2d::Vector<Missile *> _missiles;
+    cocos2d::Vector<Bullet *> _bullets;
 
     std::map<cocos2d::Vec2, Turret *> _towerMap;
 

@@ -128,6 +128,7 @@ void Turret::upgrade() {
 
     _baseSprite->initWithSpriteFrameName(ss.str());
 
+    removeComponent(_body);
     _body->removeFromWorld();
     _body = createBody(_range);
     setPhysicsBody(_body);

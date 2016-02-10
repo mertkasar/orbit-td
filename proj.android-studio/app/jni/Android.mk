@@ -16,17 +16,21 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../../Classes/Scenes/GameplayLayer.cpp \
                    ../../../Classes/Scenes/MapLayer.cpp \
                    ../../../Classes/Scenes/HUDLayer.cpp \
-                   ../../../Classes/Entities/Creep.cpp \
+                   ../../../Classes/Scenes/MainMenuLayer.cpp \
+                   ../../../Classes/Entities/EnemyShip.cpp \
                    ../../../Classes/Entities/Missile.cpp \
                    ../../../Classes/Entities/Explosion.cpp \
-                   ../../../Classes/Entities/Beam.cpp \
+                   ../../../Classes/Entities/LaserBeam.cpp \
                    ../../../Classes/Entities/Bullet.cpp \
                    ../../../Classes/Entities/TowerMock.cpp \
                    ../../../Classes/Entities/WheelMenu.cpp \
+                   ../../../Classes/Entities/DialogBox.cpp \
+                   ../../../Classes/Entities/ResultPanel.cpp \
                    ../../../Classes/Entities/Turret.cpp \
                    ../../../Classes/Entities/MachineGun.cpp \
                    ../../../Classes/Entities/LaserGun.cpp \
                    ../../../Classes/Entities/MissileLauncher.cpp \
+                   ../../../Classes/Entities/Planet.cpp \
                    ../../../Classes/Utilities/SteeringDirector.cpp \
                    ../../../Classes/Utilities/Path.cpp \
                    ../../../Classes/Utilities/Grid.cpp \

@@ -27,6 +27,8 @@ namespace Color {
     const cocos2d::Color3B GREY = {108, 115, 131};
     const cocos2d::Color3B RED = {172, 57, 57};
     const cocos2d::Color3B BG = {45, 45, 45};
+    const cocos2d::Color3B ORANGE = {230, 126, 34};
+    const cocos2d::Color3B ICE = {196, 225, 244};
 }
 
 typedef std::map<cocos2d::Vec2, cocos2d::Vec2> TraverseData;

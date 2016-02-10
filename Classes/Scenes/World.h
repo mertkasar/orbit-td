@@ -7,11 +7,9 @@
 #include <base/CCValue.h>
 
 namespace cocos2d {
-    class DrawNode;
-
-    class Label;
-
     class PhysicsWorld;
+
+    class Sprite;
 };
 
 namespace CocosDenshion {
@@ -22,11 +20,21 @@ class MapLayer;
 
 class GameplayLayer;
 
+class MainMenuLayer;
+
 class HUDLayer;
 
 class WheelMenu;
 
+class Planet;
+
 class World : public cocos2d::Layer {
+public:
+    enum State{
+        MAIN_MENU,
+        GAMEPLAY
+    };
+
 public:
     World();
 
@@ -37,6 +45,8 @@ public:
     virtual bool init();
 
     virtual void update(float delta);
+
+    void resetGame();
 
     CREATE_FUNC(World);
 
@@ -64,6 +74,10 @@ public:
         return _life;
     }
 
+    State getState() const{
+        return _currentState;
+    }
+
     cocos2d::PhysicsWorld *getPhysicsWorld() const {
         return __physicsWorld;
     }
@@ -76,6 +90,8 @@ public:
         __physicsWorld = _physicsWorld;
     }
 
+    void setState(State state);
+
     bool isCleared() {
         return _cleared;
     }
@@ -83,18 +99,16 @@ public:
 private:
     void loadResources();
 
-    void buildScene();
-
     void connectListeners();
 
     void loadModel(std::string path);
 
 private:
-    cocos2d::Size _visibleSize;
-    cocos2d::Vec2 _origin;
-    cocos2d::Vec2 _canvasCenter;
-
     cocos2d::PhysicsWorld *__physicsWorld;
+
+    State _currentState;
+
+    Planet *_planet;
 
     std::unordered_map<unsigned int, cocos2d::ValueMap> _models;
 
@@ -111,7 +125,12 @@ private:
 public:
     CocosDenshion::SimpleAudioEngine *_audioEngine;
 
-    cocos2d::LayerColor *_backgroundLayer;
+    cocos2d::Size _visibleSize;
+    cocos2d::Vec2 _origin;
+    cocos2d::Vec2 _canvasCenter;
+
+    cocos2d::Sprite *_backgroundSprite;
+    MainMenuLayer *_mainMenuLayer;
     MapLayer *_mapLayer;
     GameplayLayer *_gameplayLayer;
     HUDLayer *_hudLayer;

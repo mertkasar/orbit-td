@@ -4,9 +4,11 @@
 
 #include <2d/CCDrawNode.h>
 #include <2d/CCActionInterval.h>
+#include <2d/CCActionEase.h>
 #include <2d/CCSprite.h>
 
 #include <queue>
+#include <2d/CCActionInstant.h>
 
 #define NODE_TOUCH_SIZE 50.f
 
@@ -14,6 +16,11 @@ USING_NS_CC;
 
 MapLayer::MapLayer(World *world) {
     _world = world;
+    CCLOG("MapLayer created");
+}
+
+MapLayer::~MapLayer() {
+    CCLOG("MapLayer deleted");
 }
 
 MapLayer *MapLayer::create(World *world) {
@@ -33,10 +40,7 @@ bool MapLayer::init() {
     if (!Layer::init())
         return false;
 
-    //Draw Planet
-    auto planet = DrawNode::create();
-    planet->drawSolidCircle(Vec2(-480.f, 360.f), 600.f, 0.f, 50, Color4F::BLUE);
-    addChild(planet);
+    setCascadeOpacityEnabled(true);
 
     // Prepare sample grid
     _grid.create(Vec2(5, 10));
@@ -44,11 +48,17 @@ bool MapLayer::init() {
         _grid.setNode(Vec2(i, 0), 2);
     _grid.setNode(Vec2(2, 0), 0);
 
+    float d = 2.5f;
+
     Vec2 size = _grid.getSize();
-    for (int j = 0; j < size.y; j++) {
+    for (int i = 0; i < size.y; i++) {
         Sprite *orbit = Sprite::createWithSpriteFrameName("orbit.png");
         orbit->setColor(Color::GREY);
-        orbit->setPosition(algorithm::toCircularGrid(Vec2(2, j)));
+        orbit->setPosition(algorithm::toCircularGrid(Vec2(2, i)));
+
+        orbit->setOpacity((GLubyte) 0.f);
+        orbit->runAction(Sequence::create(DelayTime::create(d + i * 0.1f), FadeIn::create(0.3f), NULL));
+
         addChild(orbit);
     }
 
@@ -56,10 +66,15 @@ bool MapLayer::init() {
         for (int j = 0; j < size.y; j++) {
             if (_grid.getNode(Vec2(i, j)) == 0) {
                 Vec2 position = algorithm::toCircularGrid(Vec2(i, j));
+                auto scaleUpEffect = Sequence::create(DelayTime::create(d + 0.3f + j * 0.1f), ScaleTo::create(0.3f, 1.f), NULL);
 
                 Sprite *shadow = Sprite::createWithSpriteFrameName("touch_shadow.png");
                 shadow->setColor(Color::BG);
                 shadow->setPosition(position);
+
+                shadow->setScale(0.f);
+                shadow->runAction(scaleUpEffect->clone());
+
                 addChild(shadow);
 
                 Sprite *touchArea = Sprite::createWithSpriteFrameName("touch.png");
@@ -67,6 +82,10 @@ bool MapLayer::init() {
                 touchArea->setPosition(position);
 
                 _slotMap.insert(std::make_pair(Vec2(i, j), touchArea));
+
+                touchArea->setScale(0.f);
+                touchArea->runAction(Sequence::create(DelayTime::create(0.3f), scaleUpEffect->clone(), NULL));
+
                 addChild(touchArea);
             }
         }
@@ -86,6 +105,21 @@ bool MapLayer::init() {
     addChild(_pathCanvas);
 
     return true;
+}
+
+void MapLayer::close(float delay) {
+    runAction(Sequence::create(DelayTime::create(delay), FadeOut::create(0.3f), RemoveSelf::create(true), NULL));
+}
+
+void MapLayer::reset() {
+    for (auto pair : _slotMap)
+        deactivateSlot(pair.first);
+
+    _grid.clear();
+    _grid.create(Vec2(5, 10));
+    for (int i = 0; i < _grid.getSize().x; i++)
+        _grid.setNode(Vec2(i, 0), 2);
+    _grid.setNode(Vec2(2, 0), 0);
 }
 
 void MapLayer::activateSlot(cocos2d::Vec2 tile) {
@@ -152,7 +186,7 @@ TraverseData MapLayer::traverseAgainst(Vec2 node, unsigned int value) {
 }
 
 void MapLayer::drawPath() {
-    _pathCanvas->clear();
+   /* _pathCanvas->clear();
     auto waypoints = _path.getWayPoints();
 
     for (unsigned int i = 0; i < waypoints.size(); i++) {
@@ -165,7 +199,7 @@ void MapLayer::drawPath() {
             auto previousWaypoint = waypoints.at(i - 1);
             _pathCanvas->drawLine(waypoint._location, previousWaypoint._location, Color4F::RED);
         }
-    }
+    }*/
 }
 
 Vec2 MapLayer::getTouchedSlot(Vec2 location) {

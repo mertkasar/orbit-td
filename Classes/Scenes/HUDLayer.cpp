@@ -6,6 +6,8 @@
 #include <2d/CCMenu.h>
 #include <2d/CCActionInterval.h>
 #include <2d/CCActionInstant.h>
+#include <2d/CCActionEase.h>
+#include <2d/CCSprite.h>
 #include <ui/UILayout.h>
 #include <ui/UIImageView.h>
 #include <ui/UIButton.h>
@@ -13,13 +15,23 @@
 #include <SimpleAudioEngine.h>
 
 #include <sstream>
+#include <Entities/DialogBox.h>
 
 USING_NS_CC;
 
-HUDLayer *HUDLayer::create(World *world) {
-    HUDLayer *layer = new(std::nothrow) HUDLayer();
+HUDLayer::HUDLayer(World *world) {
+    _world = world;
+    CCLOG("HUDLayer created");
+}
 
-    if (layer && layer->init(world)) {
+HUDLayer::~HUDLayer() {
+    CCLOG("HUDLayer deleted");
+}
+
+HUDLayer *HUDLayer::create(World *world) {
+    HUDLayer *layer = new(std::nothrow) HUDLayer(world);
+
+    if (layer && layer->init()) {
         layer->autorelease();
         return layer;
     } else {
@@ -29,29 +41,28 @@ HUDLayer *HUDLayer::create(World *world) {
     }
 }
 
-bool HUDLayer::init(World *world) {
+bool HUDLayer::init() {
     if (!Layer::init())
         return false;
-
-    _world = world;
 
     _topPanel = ui::Layout::create();
     _topPanel->setBackGroundImage("top_panel.png", ui::Widget::TextureResType::PLIST);
     _topPanel->setContentSize(_topPanel->getBackGroundImageTextureSize());
     _topPanel->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
     _topPanel->setPosition(Vec2(0, 720));
+    _topPanel->setOpacity(0);
 
-    auto button = ui::Button::create("btn_next.png", "", "", ui::Widget::TextureResType::PLIST);
+    auto button = ui::Button::create("textures/btn_next_n.png", "textures/btn_next_t.png", "");
     button->setName("next_button");
     button->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-    button->setPosition(Vec2(100, _topPanel->getContentSize().height / 2.f));
+    button->setPosition(Vec2(140.f, 90.f));
     button->addTouchEventListener(CC_CALLBACK_2(HUDLayer::nextButtonCallback, this));
     _topPanel->addChild(button);
 
-    button = ui::Button::create("btn_menu.png", "", "", ui::Widget::TextureResType::PLIST);
+    button = ui::Button::create("textures/btn_menu_n.png", "textures/btn_menu_t.png", "");
     button->setName("menu_button");
     button->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-    button->setPosition(Vec2(_topPanel->getContentSize().width - 100, _topPanel->getContentSize().height / 2.f));
+    button->setPosition(Vec2(1220.f, 90.f));
     button->addTouchEventListener(CC_CALLBACK_2(HUDLayer::menuButtonCallback, this));
     _topPanel->addChild(button);
 
@@ -63,62 +74,72 @@ bool HUDLayer::init(World *world) {
     _bottomPanel->setBackGroundImage("bottom_panel.png", ui::Widget::TextureResType::PLIST);
     _bottomPanel->setContentSize(_bottomPanel->getBackGroundImageTextureSize());
     _bottomPanel->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    _bottomPanel->setOpacity(0);
 
-    button = ui::Button::create("btn_pause.png", "", "", ui::Widget::TextureResType::PLIST);
-    button->setName("next_button");
+    button = ui::Button::create("textures/btn_pause_n.png", "textures/btn_pause_t.png", "");
+    button->setName("pause_button");
     button->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-    button->setPosition(Vec2(200, _bottomPanel->getContentSize().height / 2.f));
+    button->setPosition(Vec2(1220.f, 60.f));
     button->addTouchEventListener(CC_CALLBACK_2(HUDLayer::pauseButtonCallback, this));
-    _bottomPanel->addChild(button);
-
-    button = ui::Button::create("btn_ff.png", "", "", ui::Widget::TextureResType::PLIST);
-    button->setName("menu_button");
-    button->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-    button->setPosition(Vec2(_bottomPanel->getContentSize().width - 200, _bottomPanel->getContentSize().height / 2.f));
-    button->addTouchEventListener(CC_CALLBACK_2(HUDLayer::ffButtonCallback, this));
     _bottomPanel->addChild(button);
 
     auto text = ui::Text::create("Waves:0/0", "fonts/ubuntu.ttf", 28);
     text->setName("#wave_text");
     text->setTextHorizontalAlignment(TextHAlignment::CENTER);
-    text->setPosition(Vec2(220.f, 80.f));
+    text->setPosition(Vec2(260.f, 90.f));
     _topPanel->addChild(text);
 
-    text = ui::Text::create("Total Coin:\t0", "fonts/ubuntu.ttf", 28);
-    text->setName("#coin_text");
-    text->setTextHorizontalAlignment(TextHAlignment::CENTER);
-    text->setPosition(
-            Vec2(_bottomPanel->getContentSize().width / 2.f + 20, _bottomPanel->getContentSize().height / 2.f - 5));
-    _bottomPanel->addChild(text);
+    _shieldBar = ui::Layout::create();
+    _shieldBar->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    _shieldBar->setPosition(Vec2(90.f, 10.f));
 
-    text = ui::Text::create("Total Life:\t10", "fonts/ubuntu.ttf", 28);
-    text->setName("#life_text");
+    auto sprite = Sprite::create("textures/hud_shield.png");
+    sprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    _shieldBar->addChild(sprite);
+
+    text = ui::Text::create("20", "fonts/kenvector_future.ttf", 32);
+    text->setName("#shield_text");
     text->setTextHorizontalAlignment(TextHAlignment::CENTER);
-    text->setPosition(
-            Vec2(_bottomPanel->getContentSize().width / 2.f + 20, _bottomPanel->getContentSize().height / 2.f - 30));
-    _bottomPanel->addChild(text);
+    text->setColor(Color::ORANGE);
+    text->setPosition(Vec2(50.f, 50.f));
+    _shieldBar->addChild(text);
+
+    sprite = Sprite::create("textures/shield_bar.png");
+    sprite->setName("#shield_bar");
+    sprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    sprite->setPosition(108.f, 35.f);
+    _shieldBar->addChild(sprite);
+
+    _bottomPanel->addChild(_shieldBar);
+
+    _energy = ui::Layout::create();
+    _energy->setPosition(Vec2(700, 60.f));
+
+    sprite = Sprite::create("textures/hud_energy.png");
+    _energy->addChild(sprite);
+
+    text = ui::Text::create("5000", "fonts/kenvector_future.ttf", 40);
+    text->setName("#energy_text");
+    text->setTextHorizontalAlignment(TextHAlignment::LEFT);
+    text->setColor(Color::ICE);
+    text->setPosition(Vec2(110.f, 0.f));
+    _energy->addChild(text);
+
+    _bottomPanel->addChild(_energy);
 
     addChild(_topPanel);
     addChild(_notificationPanel);
     addChild(_bottomPanel);
-
-    scheduleUpdate();
 
     return true;
 }
 
 void HUDLayer::update(float delta) {
     std::stringstream ss_c;
-    ss_c << "Total Coin:\t" << _world->getTotalCoin();
+    ss_c << _world->getTotalCoin();
 
-    auto text = static_cast<ui::Text *>(_bottomPanel->getChildByName("#coin_text"));
+    auto text = static_cast<ui::Text *>(_energy->getChildByName("#energy_text"));
     text->setString(ss_c.str());
-
-    std::stringstream ss_l;
-    ss_l << "Remaining Life:\t" << _world->getRemainingLife();
-
-    text = static_cast<ui::Text *>(_bottomPanel->getChildByName("#life_text"));
-    text->setString(ss_l.str());
 
     std::stringstream ss_w;
     ss_w << "Waves: " << 0 << " / " << 0;
@@ -155,13 +176,90 @@ void HUDLayer::notify(char type, std::string message, float duration) {
     _notificationPanel->addChild(notification);
 }
 
-void HUDLayer::menuButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type) {
-    if (type == ui::Widget::TouchEventType::ENDED) {
-        _world->_audioEngine->playEffect("audio/click.wav");
-        notify('W', "Opening menu!");
+void HUDLayer::updateLife() {
+    unsigned int life = _world->getRemainingLife();
+
+    if (life <= 20) {
+        std::stringstream ss_l;
+        ss_l << life;
+
+        auto text = static_cast<ui::Text *>(_shieldBar->getChildByName("#shield_text"));
+        text->setString(ss_l.str());
+
+        auto bar = static_cast<Sprite *>(_shieldBar->getChildByName("#shield_bar"));
+        bar->setTextureRect(Rect(0, 0, life * 15, 35));
     }
 }
 
+void HUDLayer::show(float delay) { // Add interpolation animations
+    _bottomPanel->runAction(Sequence::create(DelayTime::create(delay), FadeIn::create(0.3f), NULL));
+
+    for (auto element : _topPanel->getChildren()) {
+        auto elementPos = element->getPosition();
+        element->setPosition(elementPos + Vec2(0.f, _topPanel->getContentSize().height));
+
+        auto easedMoveTo = EaseBackOut::create(MoveTo::create(1.f, elementPos));
+        element->runAction(Sequence::create(DelayTime::create(delay + 0.3f), easedMoveTo, NULL));
+    }
+
+    _topPanel->runAction(Sequence::create(DelayTime::create(delay), FadeIn::create(0.3f), NULL));
+
+    for (auto element : _bottomPanel->getChildren()) {
+        auto elementPos = element->getPosition();
+        element->setPosition(elementPos - Vec2(0.f, _bottomPanel->getContentSize().height));
+
+        auto easedMoveTo = EaseBackOut::create(MoveTo::create(1.f, elementPos));
+        element->runAction(Sequence::create(DelayTime::create(delay + 0.3f), easedMoveTo, NULL));
+    }
+
+    scheduleUpdate();
+}
+
+void HUDLayer::hide(float delay) {
+    _bottomPanel->runAction(Sequence::create(DelayTime::create(delay + 0.8f), FadeOut::create(0.3f), NULL));
+
+    for (auto element : _topPanel->getChildren()) {
+        auto desiredPos = Vec2(0.f, _topPanel->getContentSize().height);
+        auto easedMoveTo = EaseBackIn::create(MoveBy::create(1.f, desiredPos));
+        element->runAction(Sequence::create(DelayTime::create(delay), easedMoveTo, NULL));
+    }
+
+    _topPanel->runAction(Sequence::create(DelayTime::create(delay + 0.8f), FadeOut::create(0.3f), NULL));
+
+    for (auto element : _bottomPanel->getChildren()) {
+        auto desiredPos = -1 * Vec2(0.f, _topPanel->getContentSize().height);
+        auto easedMoveTo = EaseBackIn::create(MoveBy::create(1.f, desiredPos));
+        element->runAction(Sequence::create(DelayTime::create(delay), easedMoveTo, NULL));
+    }
+
+    unscheduleUpdate();
+}
+
+void HUDLayer::close(float delay) {
+    hide();
+    runAction(Sequence::create(DelayTime::create(delay + 1.1f),
+                               RemoveSelf::create(true),
+                               NULL));
+}
+
+void HUDLayer::menuButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type) {
+    if (type == ui::Widget::TouchEventType::ENDED) {
+        _dialogBox = DialogBox::create(_world);
+        _dialogBox->setCaption("Are you sure you want to\n   back to the main menu?");
+        _dialogBox->setAction([&](Ref *__sender, ui::Widget::TouchEventType __type) {
+            if (__type == ui::Widget::TouchEventType::ENDED) {
+                _dialogBox->runAction(Sequence::create(_dialogBox->hide(), RemoveSelf::create(true), NULL));
+
+                _world->setState(World::MAIN_MENU);
+                _world->_audioEngine->playEffect("audio/click.wav");
+            }
+        });
+        _dialogBox->runAction(_dialogBox->show());
+
+        _world->addChild(_dialogBox);
+        _world->_audioEngine->playEffect("audio/click.wav");
+    }
+}
 
 void HUDLayer::nextButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type) {
     if (type == ui::Widget::TouchEventType::ENDED) {
@@ -185,13 +283,5 @@ void HUDLayer::pauseButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::To
 
         _world->_audioEngine->playEffect("audio/click.wav");
         notify('W', "Game paused!");
-    }
-}
-
-void HUDLayer::ffButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type) {
-    if (type == ui::Widget::TouchEventType::ENDED) {
-
-        _world->_audioEngine->playEffect("audio/click.wav");
-        notify('W', "Double time!");
     }
 }

@@ -2,6 +2,7 @@
 
 #include "World.h"
 #include "MapLayer.h"
+#include "HUDLayer.h"
 #include "../Entities/EnemyShip.h"
 #include "../Entities/Explosion.h"
 #include "../Entities/Bullet.h"
@@ -12,6 +13,7 @@
 
 #include <2d/CCParticleBatchNode.h>
 #include <2d/CCParticleSystemQuad.h>
+#include <2d/CCActionInstant.h>
 #include <base/CCDirector.h>
 #include <base/CCEventDispatcher.h>
 #include <physics/CCPhysicsContact.h>
@@ -24,6 +26,11 @@ USING_NS_CC;
 
 GameplayLayer::GameplayLayer(World *world) {
     _world = world;
+    CCLOG("GameplayLayer created");
+}
+
+GameplayLayer::~GameplayLayer() {
+    CCLOG("GameplayLayer deleted");
 }
 
 GameplayLayer *GameplayLayer::create(World *world) {
@@ -46,6 +53,7 @@ bool GameplayLayer::init() {
     _paused = false;
 
     setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    setCascadeOpacityEnabled(true);
 
     auto contactListener = EventListenerPhysicsContact::create();
     contactListener->onContactBegin = [](PhysicsContact &pContact) {
@@ -115,9 +123,34 @@ void GameplayLayer::update(float delta) {
                 _world->balanceTotalCoin(enemy->getReward());
             } else if (enemy->isReachedEnd()) {
                 _world->balanceRemainingLife(-1);
+                _world->_hudLayer->updateLife();
                 _world->_audioEngine->playEffect("audio/buzz.wav");
             }
         }
+}
+
+void GameplayLayer::close(float delay) {
+    runAction(Sequence::create(DelayTime::create(delay), FadeOut::create(0.3f), RemoveSelf::create(true), NULL));
+}
+
+void GameplayLayer::reset() {
+    for (auto creep : _creeps)
+        creep->removeFromParent();
+    _creeps.clear();
+
+    for (auto missile : _missiles)
+        missile->removeFromParent();
+    _missiles.clear();
+
+    for (auto pair : _towerMap)
+        pair.second->removeFromParent();
+    _towerMap.clear();
+
+    for (auto bullet : _bullets)
+        bullet->removeFromParent();
+    _bullets.clear();
+
+    _particleBatch->removeAllChildren();
 }
 
 void GameplayLayer::addEnemy(const ValueMap &model, int order, Path &path) {
@@ -156,6 +189,7 @@ void GameplayLayer::addBullet(cocos2d::Vec2 position, const cocos2d::Color3B &ba
     _world->_audioEngine->playEffect("audio/machine_gun.wav", false, 1.0f, 0.0f, 0.3f);
 
     addChild(bullet);
+    _bullets.pushBack(bullet);
 }
 
 void GameplayLayer::addExplosion(cocos2d::Vec2 position, float duration, float strength) {

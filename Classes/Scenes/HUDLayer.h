@@ -8,10 +8,6 @@
 namespace cocos2d {
     class Ref;
 
-    class Node;
-
-    class Layer;
-
     namespace ui {
         class Layout;
     }
@@ -19,15 +15,30 @@ namespace cocos2d {
 
 class World;
 
+class DialogBox;
+
 class HUDLayer : public cocos2d::Layer {
+private:
+    HUDLayer(World *world);
+
+    ~HUDLayer();
+
 public:
     static HUDLayer *create(World *world);
 
-    bool init(World *world);
+    virtual bool init();
 
     virtual void update(float delta);
 
     void notify(char type, std::string message, float duration = 1.f);
+
+    void updateLife();
+
+    void show(float delay = 0.f);
+
+    void hide(float delay = 0.f);
+
+    void close(float delay = 0.f);
 
 private:
     void menuButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type);
@@ -36,14 +47,17 @@ private:
 
     void pauseButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type);
 
-    void ffButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type);
-
 private:
     World *_world;
 
     cocos2d::ui::Layout *_topPanel;
     cocos2d::ui::Layout *_notificationPanel;
     cocos2d::ui::Layout *_bottomPanel;
+
+    cocos2d::ui::Layout *_shieldBar;
+    cocos2d::ui::Layout *_energy;
+
+    DialogBox *_dialogBox;
 };
 
 #endif //HUD_LAYER_H
