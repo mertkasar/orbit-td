@@ -83,10 +83,10 @@ bool HUDLayer::init() {
     button->addTouchEventListener(CC_CALLBACK_2(HUDLayer::pauseButtonCallback, this));
     _bottomPanel->addChild(button);
 
-    auto text = ui::Text::create("Waves:0/0", "fonts/ubuntu.ttf", 28);
+    auto text = ui::Text::create("Waves:0/0", "fonts/kenvector_future.ttf", 28);
     text->setName("#wave_text");
     text->setTextHorizontalAlignment(TextHAlignment::CENTER);
-    text->setPosition(Vec2(260.f, 90.f));
+    text->setPosition(Vec2(300.f, 90.f));
     _topPanel->addChild(text);
 
     _shieldBar = ui::Layout::create();
@@ -140,12 +140,6 @@ void HUDLayer::update(float delta) {
 
     auto text = static_cast<ui::Text *>(_energy->getChildByName("#energy_text"));
     text->setString(ss_c.str());
-
-    std::stringstream ss_w;
-    ss_w << "Waves: " << 0 << " / " << 0;
-
-    text = static_cast<ui::Text *>(_topPanel->getChildByName("#wave_text"));
-    text->setString(ss_w.str());
 }
 
 void HUDLayer::notify(char type, std::string message, float duration) {
@@ -155,7 +149,7 @@ void HUDLayer::notify(char type, std::string message, float duration) {
     }
 
     //Create new notification
-    auto notification = ui::Text::create(message, "fonts/ubuntu.ttf", 24.f);
+    auto notification = ui::Text::create(message, "fonts/kenvector_future.ttf", 24.f);
     notification->setTextHorizontalAlignment(TextHAlignment::CENTER);
     notification->runAction(Sequence::create(FadeOut::create(duration), RemoveSelf::create(), NULL));
 
@@ -180,15 +174,23 @@ void HUDLayer::updateLife() {
     unsigned int life = _world->getRemainingLife();
 
     if (life <= 20) {
-        std::stringstream ss_l;
-        ss_l << life;
+        std::stringstream ss;
+        ss << life;
 
         auto text = static_cast<ui::Text *>(_shieldBar->getChildByName("#shield_text"));
-        text->setString(ss_l.str());
+        text->setString(ss.str());
 
         auto bar = static_cast<Sprite *>(_shieldBar->getChildByName("#shield_bar"));
         bar->setTextureRect(Rect(0, 0, life * 15, 35));
     }
+}
+
+void HUDLayer::updateWaveIndicators(int current, int total) {
+    std::stringstream ss;
+    ss << "Waves: " << current << " / " << total;
+
+    auto text = static_cast<ui::Text *>(_topPanel->getChildByName("#wave_text"));
+    text->setString(ss.str());
 }
 
 void HUDLayer::show(float delay) { // Add interpolation animations

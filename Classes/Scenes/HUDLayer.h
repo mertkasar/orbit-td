@@ -34,6 +34,8 @@ public:
 
     void updateLife();
 
+    void updateWaveIndicators(int current, int total);
+
     void show(float delay = 0.f);
 
     void hide(float delay = 0.f);
