@@ -277,13 +277,18 @@ void HUDLayer::nextButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::Tou
 void HUDLayer::pauseButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type) {
     if (type == ui::Widget::TouchEventType::ENDED) {
         auto layer = _world->_gameplayLayer;
+        auto button = static_cast<ui::Button *>(_bottomPanel->getChildByName("pause_button"));
 
-        if (layer->isPaused())
+        if (layer->isPaused()) {
             layer->resumeScene();
-        else
+            button->loadTextures("textures/btn_pause_n.png", "textures/btn_pause_t.png", "");
+            notify('W', "Game resumed!");
+        } else {
             layer->pauseScene();
+            button->loadTextures("textures/btn_resume_n.png", "textures/btn_resume_t.png", "");
+            notify('W', "Game paused!");
+        }
 
         _world->_audioEngine->playEffect("audio/click.wav");
-        notify('W', "Game paused!");
     }
 }
