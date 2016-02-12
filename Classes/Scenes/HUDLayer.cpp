@@ -16,6 +16,7 @@
 
 #include <sstream>
 #include <Entities/DialogBox.h>
+#include <Entities/CostIndicator.h>
 
 USING_NS_CC;
 
@@ -191,6 +192,17 @@ void HUDLayer::updateWaveIndicators(int current, int total) {
 
     auto text = static_cast<ui::Text *>(_topPanel->getChildByName("#wave_text"));
     text->setString(ss.str());
+}
+
+void HUDLayer::addCostIndicator(int cost, Vec2 position) {
+    auto indicator = CostIndicator::create();
+    indicator->update(cost);
+    indicator->setPosition(position);
+
+    auto riseAction = EaseExponentialOut::create(MoveBy::create(1.5f, Vec2(0.f, 20.f)));
+    indicator->runAction(Sequence::create(riseAction, RemoveSelf::create(true), NULL));
+
+    addChild(indicator);
 }
 
 void HUDLayer::show(float delay) { // Add interpolation animations

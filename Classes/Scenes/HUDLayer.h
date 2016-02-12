@@ -36,6 +36,8 @@ public:
 
     void updateWaveIndicators(int current, int total);
 
+    void addCostIndicator(int cost, cocos2d::Vec2 position);
+
     void show(float delay = 0.f);
 
     void hide(float delay = 0.f);

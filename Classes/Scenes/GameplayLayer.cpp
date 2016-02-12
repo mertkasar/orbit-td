@@ -120,7 +120,10 @@ void GameplayLayer::update(float delta) {
 
             if (enemy->isKilled()) {
                 addExplosion(enemy->getPosition(), 0.5f, 3.f);
-                _world->balanceTotalCoin(enemy->getReward());
+
+                auto reward = enemy->getReward();
+                _world->balanceTotalCoin(reward);
+                _world->_hudLayer->addCostIndicator(reward, enemy->getPosition());
             } else if (enemy->isReachedEnd()) {
                 _world->balanceRemainingLife(-1);
                 _world->_hudLayer->updateLife();
