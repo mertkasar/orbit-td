@@ -43,7 +43,7 @@ bool Turret::init(const ValueMap &model) {
     _muzzlePoint->setPosition(size.width, size.height / 2.f);
 
     _baseSprite = Sprite::createWithSpriteFrameName("base_0.png");
-    _baseSprite->setScale(0.5f);
+    _baseSprite->setScale(0.6f);
 
     _rangeSprite = Sprite::createWithSpriteFrameName("range.png");
     _rangeSprite->setVisible(false);
