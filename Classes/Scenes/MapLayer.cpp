@@ -10,7 +10,7 @@
 #include <queue>
 #include <2d/CCActionInstant.h>
 
-#define NODE_TOUCH_SIZE 50.f
+#define NODE_TOUCH_SIZE 95.f
 
 USING_NS_CC;
 
@@ -68,7 +68,7 @@ bool MapLayer::init() {
                 Vec2 position = algorithm::toCircularGrid(Vec2(i, j));
                 auto scaleUpEffect = Sequence::create(DelayTime::create(d + 0.3f + j * 0.1f), ScaleTo::create(0.3f, 1.f), NULL);
 
-                Sprite *shadow = Sprite::createWithSpriteFrameName("touch_shadow.png");
+                Sprite *shadow = Sprite::create("textures/touch_bg.png");
                 shadow->setColor(Color::BG);
                 shadow->setPosition(position);
 
@@ -77,7 +77,7 @@ bool MapLayer::init() {
 
                 addChild(shadow);
 
-                Sprite *touchArea = Sprite::createWithSpriteFrameName("touch.png");
+                Sprite *touchArea = Sprite::create("textures/touch.png");
                 touchArea->setColor(Color::GREY);
                 touchArea->setPosition(position);
 

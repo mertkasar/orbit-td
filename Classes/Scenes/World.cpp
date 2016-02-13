@@ -188,6 +188,8 @@ bool World::spawnNextWave() {
 
         _currentWave++;
 
+        _hudLayer->updateWaveIndicators(_currentWave, _waves.size());
+
         return true;
     }
 
@@ -205,6 +207,7 @@ void World::setState(World::State state) {
             _gameplayLayer->close();
             _mapLayer->close();
             _hudLayer->close();
+            _wheelMenu->close();
 
             _mainMenuLayer->show(2.5f);
 
@@ -234,8 +237,8 @@ void World::setState(World::State state) {
         addChild(gameCanvas);
 
         _hudLayer = HUDLayer::create(this);
-        _hudLayer->notify('I', "Game is starting!", 2.f);
         _hudLayer->show(2.5f);
+        _hudLayer->updateWaveIndicators(_currentWave, _waves.size());
         addChild(_hudLayer);
 
         _wheelMenu = WheelMenu::create(this);

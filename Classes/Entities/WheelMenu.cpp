@@ -2,6 +2,7 @@
 
 #include "Turret.h"
 #include "TowerMock.h"
+#include "CostIndicator.h"
 #include "../Scenes/World.h"
 #include "../Scenes/MapLayer.h"
 #include "../Scenes/GameplayLayer.h"
@@ -89,6 +90,12 @@ bool WheelMenu::init(World *world) {
     _validationMenu->addChild(item);
 
     _mock = TowerMock::create();
+
+    _energyCost = CostIndicator::create();
+    _energyCost->update(-130);
+    _energyCost->setPosition(Vec2(0.f, -60.f));
+    _energyCost->setVisible(false);
+    addChild(_energyCost);
 
     _rootMenu->addChild(_purchaseMenu);
     _rootMenu->addChild(_verboseMenu);
@@ -191,6 +198,7 @@ void WheelMenu::close() {
     }
 
     _mock->setVisible(false);
+    _energyCost->setVisible(false);
 
     setState(IDLE);
 }
@@ -221,10 +229,14 @@ void WheelMenu::towerButtonCallback(Ref *sender, ui::Widget::TouchEventType type
     if (type == ui::Widget::TouchEventType::ENDED) {
         auto btn = static_cast<ui::Button *>(sender);
         _selectedType = static_cast<ModelID>(btn->getTag());
+        auto &selectedModel = _world->getModel(_selectedType);
 
         _mock->setVisible(true);
         _mock->setScale(1.f);
-        _mock->update(_world->getModel(_selectedType));
+        _mock->update(selectedModel);
+
+        _energyCost->update(-selectedModel.at("base_cost").asInt());
+        _energyCost->setVisible(true);
 
         setState(VALIDATION);
 
@@ -248,6 +260,10 @@ void WheelMenu::sellButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::To
     if (type == ui::Widget::TouchEventType::ENDED) {
         setState(VALIDATION);
 
+        auto cost = _world->_gameplayLayer->getTower(_currentTile)->getCost();
+        _energyCost->update(cost);
+        _energyCost->setVisible(true);
+
         auto btn = static_cast<ui::Button *>(_validationMenu->getChildByTag(ACCEPT));
 
         //Bind tower placement function as accept button callback
@@ -266,6 +282,10 @@ void WheelMenu::sellButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::To
 void WheelMenu::upgradeButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type) {
     if (type == ui::Widget::TouchEventType::ENDED) {
         setState(VALIDATION);
+
+        auto cost = _world->_gameplayLayer->getTower(_currentTile)->getCost();
+        _energyCost->update(-cost);
+        _energyCost->setVisible(true);
 
         auto btn = static_cast<ui::Button *>(_validationMenu->getChildByTag(ACCEPT));
 

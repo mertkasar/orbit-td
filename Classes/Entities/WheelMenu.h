@@ -3,9 +3,7 @@
 
 #include "../Globals.h"
 
-#include <math/Vec2.h>
 #include <ui/UILayout.h>
-#include <ui/UIWidget.h>
 
 namespace cocos2d {
     class Ref;
@@ -13,11 +11,17 @@ namespace cocos2d {
     class Node;
 
     class Layer;
+
+    namespace ui {
+        class Layout;
+    }
 }
 
 class World;
 
 class TowerMock;
+
+class CostIndicator;
 
 class WheelMenu : public cocos2d::Node {
 public:
@@ -83,6 +87,8 @@ private:
     cocos2d::ui::Layout *_validationMenu;
 
     TowerMock *_mock;
+
+    CostIndicator *_energyCost;
 };
 
 #endif //WHEEL_MENU_H

@@ -138,6 +138,7 @@ set(GAME_SRC
   Classes/Entities/WheelMenu.cpp
   Classes/Entities/DialogBox.cpp
   Classes/Entities/ResultPanel.cpp
+  Classes/Entities/CostIndicator.cpp
   Classes/Entities/Turret.cpp
   Classes/Entities/MachineGun.cpp
   Classes/Entities/LaserGun.cpp
@@ -168,6 +169,7 @@ set(GAME_HEADERS
   Classes/Entities/WheelMenu.h
   Classes/Entities/DialogBox.h
   Classes/Entities/ResultPanel.h
+  Classes/Entities/CostIndicator.h
   Classes/Entities/Turret.h
   Classes/Entities/MachineGun.h
   Classes/Entities/LaserGun.h
