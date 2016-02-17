@@ -10,6 +10,8 @@ namespace cocos2d {
     class PhysicsWorld;
 
     class Sprite;
+
+    class UserDefault;
 };
 
 namespace CocosDenshion {
@@ -124,6 +126,7 @@ private:
 
 public:
     CocosDenshion::SimpleAudioEngine *_audioEngine;
+    cocos2d::UserDefault *_prefs;
 
     cocos2d::Size _visibleSize;
     cocos2d::Vec2 _origin;

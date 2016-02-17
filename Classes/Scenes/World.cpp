@@ -13,6 +13,7 @@
 #include <base/CCDirector.h>
 #include <base/CCEventDispatcher.h>
 #include <base/CCEventListenerTouch.h>
+#include <base/CCUserDefault.h>
 #include <2d/CCSpriteFrameCache.h>
 #include <2d/CCActionInterval.h>
 #include <2d/CCActionInstant.h>
@@ -67,6 +68,7 @@ bool World::init() {
     _totalCoin = STARTING_COIN;
     _life = STARTING_LIFE;
 
+    _prefs = UserDefault::getInstance();
     _audioEngine = CocosDenshion::SimpleAudioEngine::getInstance();
     loadResources();
 
@@ -84,11 +86,17 @@ bool World::init() {
     _currentWave = 0;
     _cleared = false;
 
-    /*_audioEngine->setBackgroundMusicVolume(0.6f);
-    _audioEngine->playBackgroundMusic("audio/ambient.mp3", true);*/
+    _prefs->getBoolForKey("muted");
 
-    _audioEngine->setBackgroundMusicVolume(0.f);
-    _audioEngine->setEffectsVolume(0.f);
+    auto muted = _prefs->getBoolForKey("muted");
+    _audioEngine->playBackgroundMusic("audio/ambient.mp3", true);
+
+    if (!muted) {
+        _audioEngine->setBackgroundMusicVolume(0.6f);
+    } else {
+        _audioEngine->setBackgroundMusicVolume(0.f);
+        _audioEngine->setEffectsVolume(0.f);
+    }
 
     return true;
 }
@@ -132,8 +140,9 @@ void World::resetGame() {
         _currentWave = 0;
         _cleared = false;
 
-        scheduleOnce([&](float delta){scheduleUpdate();}, START_DELAY, "start");
-    } else CCLOG("Failed to reset the game: Wrong state!");
+        scheduleOnce([&](float delta) { scheduleUpdate(); }, START_DELAY, "start");
+    } else
+        CCLOG("Failed to reset the game: Wrong state!");
 }
 
 bool World::placeTower(ModelID type, Vec2 tile) {
@@ -244,7 +253,7 @@ void World::setState(World::State state) {
         _wheelMenu = WheelMenu::create(this);
         addChild(_wheelMenu);
 
-        scheduleOnce([&](float delta){scheduleUpdate();}, START_DELAY, "start");
+        scheduleOnce([&](float delta) { scheduleUpdate(); }, START_DELAY, "start");
         connectListeners();
 
         _currentState = state;

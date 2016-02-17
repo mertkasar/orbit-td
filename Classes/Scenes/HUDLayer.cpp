@@ -289,7 +289,7 @@ void HUDLayer::nextButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::Tou
 void HUDLayer::pauseButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type) {
     if (type == ui::Widget::TouchEventType::ENDED) {
         auto layer = _world->_gameplayLayer;
-        auto button = static_cast<ui::Button *>(_bottomPanel->getChildByName("pause_button"));
+        auto button = static_cast<ui::Button *>(sender);
 
         if (layer->isPaused()) {
             layer->resumeScene();

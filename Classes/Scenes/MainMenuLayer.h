@@ -38,6 +38,8 @@ private:
 
     void optionsButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type);
 
+    void soundButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type);
+
     void helpButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type);
 
     void quitButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type);
@@ -46,6 +48,8 @@ private:
     World *_world;
 
     cocos2d::ui::Layout *_menu;
+
+    bool _muted;
 };
 
 #endif // MAIN_MENU_LAYER_H

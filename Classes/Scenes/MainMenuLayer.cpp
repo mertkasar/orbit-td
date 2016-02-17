@@ -4,6 +4,7 @@
 #include "MainMenuLayer.h"
 #include "../Entities/DialogBox.h"
 
+#include <base/CCUserDefault.h>
 #include <2d/CCSprite.h>
 #include <2d/CCActionInstant.h>
 #include <2d/CCActionInterval.h>
@@ -37,6 +38,8 @@ MainMenuLayer *MainMenuLayer::create(World *world) {
 bool MainMenuLayer::init() {
     if (!Layer::init())
         return false;
+
+    _muted = _world->_prefs->getBoolForKey("muted");
 
     setCascadeOpacityEnabled(true);
 
@@ -76,9 +79,14 @@ void MainMenuLayer::createOptionsMenu() {
     button->addTouchEventListener(CC_CALLBACK_2(MainMenuLayer::optionsButtonCallback, this));
     addChild(button);
 
-    button = ui::Button::create("textures/btn_unmute_n.png", "textures/btn_unmute_t.png", "");
+    if (_muted)
+        button = ui::Button::create("textures/btn_mute_n.png", "textures/btn_mute_t.png", "");
+    else
+        button = ui::Button::create("textures/btn_unmute_n.png", "textures/btn_unmute_t.png", "");
+
     button->setName("unmute_button");
     button->setPosition(Vec2(60.f, 155.f));
+    button->addTouchEventListener(CC_CALLBACK_2(MainMenuLayer::soundButtonCallback, this));
     addChild(button);
 
     button = ui::Button::create("textures/btn_info_n.png", "textures/btn_info_t.png", "");
@@ -120,6 +128,26 @@ void MainMenuLayer::startButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widge
 void MainMenuLayer::optionsButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type) {
     if (type == ui::Widget::TouchEventType::ENDED) {
         CCLOG("Options Button clicked!");
+        _world->_audioEngine->playEffect("audio/click.wav");
+    }
+}
+
+void MainMenuLayer::soundButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type) {
+    if (type == ui::Widget::TouchEventType::ENDED) {
+        _muted = !_muted;
+        _world->_prefs->setBoolForKey("muted", _muted);
+
+        auto button = static_cast<ui::Button *>(sender);
+        if (_muted) {
+            button->loadTextures("textures/btn_mute_n.png", "textures/btn_mute_t.png", "");
+            _world->_audioEngine->setBackgroundMusicVolume(0.f);
+            _world->_audioEngine->setEffectsVolume(0.f);
+        } else {
+            _world->_audioEngine->setBackgroundMusicVolume(0.6f);
+            _world->_audioEngine->setEffectsVolume(1.f);
+            button->loadTextures("textures/btn_unmute_n.png", "textures/btn_unmute_t.png", "");
+        }
+
         _world->_audioEngine->playEffect("audio/click.wav");
     }
 }
