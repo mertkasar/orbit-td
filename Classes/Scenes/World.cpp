@@ -216,7 +216,9 @@ void World::setState(World::State state) {
             _gameplayLayer->close();
             _mapLayer->close();
             _hudLayer->close();
-            _wheelMenu->close();
+
+            if (_wheelMenu->isOpen())
+                _wheelMenu->close();
 
             _mainMenuLayer->show(2.5f);
 

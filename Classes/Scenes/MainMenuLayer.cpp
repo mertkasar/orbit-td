@@ -165,10 +165,7 @@ void MainMenuLayer::quitButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget
         dialog->setCaption("Are you sure you want to exit?");
         dialog->setAction([&](Ref *__sender, ui::Widget::TouchEventType __type) {
             if (__type == ui::Widget::TouchEventType::ENDED) {
-                dialog->runAction(Sequence::create(dialog->hide(), RemoveSelf::create(true), NULL));
-
                 Director::getInstance()->end();
-                _world->_audioEngine->playEffect("audio/click.wav");
             }
         });
         dialog->runAction(dialog->show());
