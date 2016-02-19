@@ -13,6 +13,8 @@ namespace cocos2d {
     class Sprite;
 
     class DrawNode;
+
+    class ParticleBatchNode;
 }
 
 class MapLayer : public cocos2d::Layer {
@@ -49,8 +51,8 @@ private:
     World *_world;
 
     std::map<cocos2d::Vec2, cocos2d::Sprite *> _slotMap;
-    cocos2d::DrawNode *_pathCanvas;
 
+    cocos2d::Node *_pathCanvas;
 public:
     Grid _grid;
     Path _path;

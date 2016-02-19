@@ -6,11 +6,15 @@
 #include <2d/CCActionInterval.h>
 #include <2d/CCActionEase.h>
 #include <2d/CCSprite.h>
+#include <2d/CCActionInstant.h>
+#include <2d/CCParticleBatchNode.h>
+#include <2d/CCParticleSystemQuad.h>
 
 #include <queue>
-#include <2d/CCActionInstant.h>
 
 #define NODE_TOUCH_SIZE 95.f
+#define ARROW_DELAY 0.2f
+#define ARROW_FADE 0.3f
 
 USING_NS_CC;
 
@@ -66,7 +70,8 @@ bool MapLayer::init() {
         for (int j = 0; j < size.y; j++) {
             if (_grid.getNode(Vec2(i, j)) == 0) {
                 Vec2 position = algorithm::toCircularGrid(Vec2(i, j));
-                auto scaleUpEffect = Sequence::create(DelayTime::create(d + 0.3f + j * 0.1f), ScaleTo::create(0.3f, 1.f), NULL);
+                auto scaleUpEffect = Sequence::create(DelayTime::create(d + 0.3f + j * 0.1f),
+                                                      ScaleTo::create(0.3f, 1.f), NULL);
 
                 Sprite *shadow = Sprite::create("textures/touch_bg.png");
                 shadow->setColor(Color::BG);
@@ -94,15 +99,13 @@ bool MapLayer::init() {
     _start = Vec2(2, 9);
     _goal = Vec2(2, 0);
 
-    _pathCanvas = DrawNode::create();
+    _pathCanvas = Node::create();
+    addChild(_pathCanvas);
 
     auto traversed = traverseAgainst(_start, 0);
     if (_path.isReached(traversed, _start)) {
         _path.construct(traversed, _start, _goal);
-        drawPath();
     }
-
-    addChild(_pathCanvas);
 
     return true;
 }
@@ -186,20 +189,41 @@ TraverseData MapLayer::traverseAgainst(Vec2 node, unsigned int value) {
 }
 
 void MapLayer::drawPath() {
-   /* _pathCanvas->clear();
     auto waypoints = _path.getWayPoints();
-
     for (unsigned int i = 0; i < waypoints.size(); i++) {
-        auto waypoint = waypoints.at(i);
-
-        _pathCanvas->drawSolidCircle(waypoint._location, 6.f, 0.f, 50, Color4F::RED);
-        _pathCanvas->drawCircle(waypoint._location, waypoint._reachRadius, 0.f, 50, false, Color4F::RED);
+        auto current = waypoints.at(i);
+        auto fadeSequence = Sequence::create(FadeIn::create(ARROW_FADE),
+                                             FadeOut::create(ARROW_FADE),
+                                             RemoveSelf::create(true),
+                                             NULL);
 
         if (i != 0) {
-            auto previousWaypoint = waypoints.at(i - 1);
-            _pathCanvas->drawLine(waypoint._location, previousWaypoint._location, Color4F::RED);
+            auto previous = waypoints.at(i - 1);
+            auto distance = current._location - previous._location;
+            auto angle = distance.getAngle();
+
+            auto arrow = Sprite::create("textures/arrow.png");
+            arrow->setScale(1.3f);
+            arrow->setPosition(current._location - distance / 2);
+            arrow->setRotation(-CC_RADIANS_TO_DEGREES(angle));
+            arrow->setOpacity(0);
+            arrow->runAction(Sequence::create(DelayTime::create(i * ARROW_DELAY),
+                                              fadeSequence->clone(),
+                                              NULL));
+            _pathCanvas->addChild(arrow);
+
+            arrow = Sprite::create("textures/arrow.png");
+            arrow->setScale(1.3f);
+            arrow->setPosition(current._location);
+            arrow->setRotation(-CC_RADIANS_TO_DEGREES(angle));
+            arrow->setOpacity(0);
+            arrow->runAction(Sequence::create(DelayTime::create((i + 1) * ARROW_DELAY),
+                                              fadeSequence->clone(),
+                                              NULL));
+            _pathCanvas->addChild(arrow);
+
         }
-    }*/
+    }
 }
 
 Vec2 MapLayer::getTouchedSlot(Vec2 location) {
