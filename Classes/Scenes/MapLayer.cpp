@@ -254,5 +254,4 @@ bool MapLayer::isPathClear(const TraverseData &traversed) {
 void MapLayer::updateMap(const TraverseData &traversed, Vec2 tile, int value) {
     _grid.setNode(tile, value);
     _path.construct(traversed, _start, _goal);
-    drawPath();
 }

@@ -32,7 +32,7 @@ class Planet;
 
 class World : public cocos2d::Layer {
 public:
-    enum State{
+    enum State {
         MAIN_MENU,
         GAMEPLAY
     };
@@ -58,7 +58,7 @@ public:
 
     void upgradeTower(cocos2d::Vec2 tile);
 
-    bool spawnNextWave();
+    void spawnNextWave(float delta);
 
     void balanceTotalCoin(int balance) {
         _totalCoin = _totalCoin + balance;
@@ -76,8 +76,12 @@ public:
         return _life;
     }
 
-    State getState() const{
+    State getState() const {
         return _currentState;
+    }
+
+    bool isCleared() const {
+        return _currentWave >= _waves.size();
     }
 
     cocos2d::PhysicsWorld *getPhysicsWorld() const {
@@ -93,10 +97,6 @@ public:
     }
 
     void setState(State state);
-
-    bool isCleared() {
-        return _cleared;
-    }
 
 private:
     void loadResources();
@@ -116,7 +116,7 @@ private:
 
     cocos2d::ValueVector _waves;
     unsigned int _currentWave;
-    bool _cleared;
+    bool _spawned;
 
     WheelMenu *_wheelMenu;
 

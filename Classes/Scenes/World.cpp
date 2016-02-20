@@ -84,7 +84,7 @@ bool World::init() {
 
     _waves = FileUtils::getInstance()->getValueVectorFromFile("waves.plist");
     _currentWave = 0;
-    _cleared = false;
+    _spawned = false;
 
     _prefs->getBoolForKey("muted");
 
@@ -103,21 +103,24 @@ bool World::init() {
 
 void World::update(float delta) {
     if (_gameplayLayer->getCreepList().size() <= 0) {
-        if (!spawnNextWave())
-            _cleared = true;
+        if (!_spawned) {
+            if (!isCleared()) {
+                scheduleOnce([&](float) { _mapLayer->drawPath(); }, 1.f, "draw_path");
+                scheduleOnce(CC_SCHEDULE_SELECTOR(World::spawnNextWave), 3.f);
+                _spawned = true;
+            } else {
+                _hudLayer->notify('I', "All waves are cleared!");
+                auto resultPanel = ResultPanel::create(this);
+                resultPanel->runAction(resultPanel->show());
+                addChild(resultPanel);
+                unscheduleUpdate();
+            }
+        }
     }
 
     if (_life <= 0) {
         _hudLayer->notify('I', "Game Over!");
         _gameplayLayer->pauseScene();
-        auto resultPanel = ResultPanel::create(this);
-        resultPanel->runAction(resultPanel->show());
-        addChild(resultPanel);
-        unscheduleUpdate();
-    }
-
-    if (isCleared()) {
-        _hudLayer->notify('I', "All waves are cleared!");
         auto resultPanel = ResultPanel::create(this);
         resultPanel->runAction(resultPanel->show());
         addChild(resultPanel);
@@ -138,7 +141,7 @@ void World::resetGame() {
         _hudLayer->updateLife();
 
         _currentWave = 0;
-        _cleared = false;
+        _spawned = false;
 
         scheduleOnce([&](float delta) { scheduleUpdate(); }, START_DELAY, "start");
     } else
@@ -186,23 +189,19 @@ void World::upgradeTower(cocos2d::Vec2 tile) {
     balanceTotalCoin(-tower->getCost());
 }
 
-bool World::spawnNextWave() {
-    if (_currentWave < _waves.size()) {
-        auto wave = _waves.at(_currentWave).asValueVector();
+void World::spawnNextWave(float delta) {
+    auto wave = _waves.at(_currentWave).asValueVector();
 
-        for (unsigned int i = 0; i < wave.size(); i++) {
-            const auto &model = getModel((unsigned int) wave.at(i).asInt());
-            _gameplayLayer->addEnemy(model, i, _mapLayer->_path);
-        }
-
-        _currentWave++;
-
-        _hudLayer->updateWaveIndicators(_currentWave, _waves.size());
-
-        return true;
+    for (unsigned int i = 0; i < wave.size(); i++) {
+        const auto &model = getModel((unsigned int) wave.at(i).asInt());
+        _gameplayLayer->addEnemy(model, i, _mapLayer->_path);
     }
 
-    return false;
+    _currentWave++;
+
+    _hudLayer->updateWaveIndicators(_currentWave, _waves.size());
+
+    _spawned = false;
 }
 
 void World::setState(World::State state) {

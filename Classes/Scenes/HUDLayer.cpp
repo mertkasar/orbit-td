@@ -277,12 +277,12 @@ void HUDLayer::menuButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::Tou
 
 void HUDLayer::nextButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type) {
     if (type == ui::Widget::TouchEventType::ENDED) {
-        _world->_audioEngine->playEffect("audio/click.wav");
-
-        if (_world->spawnNextWave())
+        if (!_world->isCleared()) {
+            _world->spawnNextWave(0.f);
             notify('W', "Coming next wave!");
-        else
-            notify('E', "Out of waves!");
+        } else
+            notify('E', "No waves remained!");
+        _world->_audioEngine->playEffect("audio/click.wav");
     }
 }
 

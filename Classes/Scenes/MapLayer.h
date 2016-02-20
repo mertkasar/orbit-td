@@ -38,14 +38,13 @@ public:
 
     void updateMap(const TraverseData &traversed, cocos2d::Vec2 tile, int value);
 
+    void drawPath();
+
     TraverseData traverseAgainst(cocos2d::Vec2 node, unsigned int value);
 
     bool isPathClear(const TraverseData &traversed);
 
     cocos2d::Vec2 getTouchedSlot(cocos2d::Vec2 location);
-
-private:
-    void drawPath();
 
 private:
     World *_world;
