@@ -195,17 +195,19 @@ void HUDLayer::updateWaveIndicators(int current, int total) {
 }
 
 void HUDLayer::addCostIndicator(int cost, Vec2 position) {
-    auto indicator = CostIndicator::create();
+    auto indicator = _costIndicatorPool.fetch();
+    indicator->setOpacity(255);
     indicator->update(cost);
     indicator->setPosition(position);
 
     auto riseAction = EaseExponentialOut::create(MoveBy::create(1.5f, Vec2(0.f, 20.f)));
+    indicator->runAction(FadeOut::create(1.f));
     indicator->runAction(Sequence::create(riseAction, RemoveSelf::create(true), NULL));
 
     addChild(indicator);
 }
 
-void HUDLayer::show(float delay) { // Add interpolation animations
+void HUDLayer::show(float delay) {
     _bottomPanel->runAction(Sequence::create(DelayTime::create(delay), FadeIn::create(0.3f), NULL));
 
     for (auto element : _topPanel->getChildren()) {

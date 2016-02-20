@@ -1,6 +1,8 @@
 #ifndef HUD_LAYER_H
 #define HUD_LAYER_H
 
+#include "../Utilities/Pool.h"
+
 #include <math/Vec2.h>
 #include <2d/CCLayer.h>
 #include <ui/UIWidget.h>
@@ -16,6 +18,8 @@ namespace cocos2d {
 class World;
 
 class DialogBox;
+
+class CostIndicator;
 
 class HUDLayer : public cocos2d::Layer {
 private:
@@ -62,6 +66,7 @@ private:
     cocos2d::ui::Layout *_energy;
 
     DialogBox *_dialogBox;
+    Pool<CostIndicator> _costIndicatorPool;
 };
 
 #endif //HUD_LAYER_H
