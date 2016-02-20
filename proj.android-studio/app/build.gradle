@@ -5,7 +5,7 @@ android {
     buildToolsVersion "22.0.1"
 
     defaultConfig {
-        applicationId "com.oms.orbit"
+        applicationId "com.tester.test"
         minSdkVersion 10
         targetSdkVersion 22
         versionCode 1
