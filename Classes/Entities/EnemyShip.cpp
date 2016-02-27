@@ -1,7 +1,5 @@
 #include "EnemyShip.h"
 
-#include "../Utilities/SteeringDirector.h"
-
 #include <2d/CCSprite.h>
 #include <2d/CCAction.h>
 #include <physics/CCPhysicsBody.h>
@@ -70,7 +68,8 @@ void EnemyShip::update(float delta) {
         }
     }
 
-    SteeringDirector::getInstance()->seek(this, target._location);
+    auto steeringForce = algorithm::seek(this, target._location);
+    _body->applyImpulse(steeringForce * delta);
 
     // Adapt rotation
     auto angle = CC_RADIANS_TO_DEGREES(_body->getVelocity().getAngle());

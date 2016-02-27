@@ -11,8 +11,8 @@
 	<key>reward</key>
 	<real>5.0</real>
 	<key>mass</key>
-	<real>3.5</real>
+	<real>0.5</real>
 	<key>max_velocity</key>
-	<real>130.0</real>
+	<real>170.0</real>
 </dict>
 </plist>

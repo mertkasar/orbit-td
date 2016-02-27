@@ -1,7 +1,6 @@
 #include "Missile.h"
 
 #include "EnemyShip.h"
-#include "../Utilities/SteeringDirector.h"
 #include "../Utilities/Shake.h"
 
 #include <2d/CCSprite.h>
@@ -9,7 +8,7 @@
 #include <2d/CCParticleExamples.h>
 #include <physics/CCPhysicsBody.h>
 
-#define MISSILE_MAX_VEL 160.f
+#define MISSILE_MAX_VEL 140.f
 #define MISSILE_EXPIRE_TIME 4.f //as seconds
 
 USING_NS_CC;
@@ -32,7 +31,7 @@ bool Missile::init() {
     _body->setCategoryBitmask(MISSILE_MASK);
     _body->setContactTestBitmask(NULL_MASK);
     _body->setCollisionBitmask(NULL_MASK);
-    _body->setMass(5.5f);
+    _body->setMass(0.5f);
     _body->setVelocityLimit(MISSILE_MAX_VEL);
     setPhysicsBody(_body);
 
@@ -64,7 +63,8 @@ void Missile::update(float delta) {
         }
     }
 
-    SteeringDirector::getInstance()->seek(this, _targetPosition);
+    auto steeringForce = algorithm::seek(this, _targetPosition);
+    _body->applyImpulse(steeringForce * delta);
 
     // Adapt rotation
     auto angle = CC_RADIANS_TO_DEGREES(_body->getVelocity().getAngle());

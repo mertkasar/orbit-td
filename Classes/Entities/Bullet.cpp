@@ -1,7 +1,6 @@
 #include "Bullet.h"
 
 #include "EnemyShip.h"
-#include "../Utilities/SteeringDirector.h"
 #include "../Utilities/Shake.h"
 
 #include <2d/CCSprite.h>

@@ -9,6 +9,8 @@
 
 namespace algorithm {
     cocos2d::Vec2 toCircularGrid(cocos2d::Vec2 node);
+
+    cocos2d::Vec2 seek(cocos2d::Node *seeker, cocos2d::Vec2 seeking);
 };
 
 

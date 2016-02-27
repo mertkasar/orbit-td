@@ -144,7 +144,6 @@ set(GAME_SRC
   Classes/Entities/LaserGun.cpp
   Classes/Entities/MissileLauncher.cpp
   Classes/Entities/Planet.cpp
-  Classes/Utilities/SteeringDirector.cpp
   Classes/Utilities/Path.cpp
   Classes/Utilities/Grid.cpp
   Classes/Utilities/Algorithm.cpp
@@ -175,7 +174,6 @@ set(GAME_HEADERS
   Classes/Entities/LaserGun.h
   Classes/Entities/MissileLauncher.h
   Classes/Entities/Planet.h
-  Classes/Utilities/SteeringDirector.h
   Classes/Utilities/Path.h
   Classes/Utilities/Grid.h
   Classes/Utilities/Algorithm.h
