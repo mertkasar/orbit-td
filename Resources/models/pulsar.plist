@@ -8,6 +8,8 @@
 	<string>pulsar.png</string>
 	<key>max_hp</key>
 	<real>130.0</real>
+	<key>hp_ratio_per_wave</key>
+	<real>1</real>>
 	<key>reward</key>
 	<real>25.0</real>
 	<key>mass</key>

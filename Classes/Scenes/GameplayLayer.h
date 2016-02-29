@@ -43,7 +43,7 @@ public:
 
     void addTower(ModelID type, cocos2d::Vec2 tile);
 
-    void addEnemy(const cocos2d::ValueMap &model, int order, Path &path);
+    void addEnemyShip(const cocos2d::ValueMap &model, int order, Path &path);
 
     void addMissile(cocos2d::Vec2 position, const cocos2d::Color3B &baseColor, float damage, EnemyShip *target);
 
@@ -67,8 +67,8 @@ public:
         return _paused;
     }
 
-    cocos2d::Vector<EnemyShip *> &getCreepList() {
-        return _creeps;
+    cocos2d::Vector<EnemyShip *> &getEnemyShips() {
+        return _ships;
     }
 
 private:
@@ -76,12 +76,12 @@ private:
 
     bool _paused;
 
-    Pool<EnemyShip> _creepPool;
+    Pool<EnemyShip> _shipPool;
     Pool<Missile> _missilePool;
     Pool<Bullet> _bulletPool;
     Pool<Explosion> _explosionPool;
 
-    cocos2d::Vector<EnemyShip *> _creeps;
+    cocos2d::Vector<EnemyShip *> _ships;
     cocos2d::Vector<Missile *> _missiles;
     cocos2d::Vector<Bullet *> _bullets;
 

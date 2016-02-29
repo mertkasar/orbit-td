@@ -7,7 +7,9 @@
 	<key>sprite</key>
 	<string>raptor.png</string>
 	<key>max_hp</key>
-	<real>100.0</real>
+	<real>4.0</real>
+	<key>hp_ratio_per_wave</key>
+	<real>3</real>>
 	<key>reward</key>
 	<real>10.0</real>
 	<key>mass</key>

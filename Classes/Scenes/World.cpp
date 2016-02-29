@@ -27,7 +27,7 @@
 
 #include <sstream>
 
-#define STARTING_COIN 1000
+#define STARTING_COIN 10
 #define STARTING_LIFE 20
 #define START_DELAY 5
 
@@ -80,13 +80,11 @@ bool World::init() {
     _planet = Planet::create();
     addChild(_planet);
 
-    setState(MAIN_MENU);
+    setState(GAMEPLAY);
 
     _waves = FileUtils::getInstance()->getValueVectorFromFile("waves.plist");
     _currentWave = 0;
     _spawned = false;
-
-    _prefs->getBoolForKey("muted");
 
     auto muted = _prefs->getBoolForKey("muted");
     _audioEngine->playBackgroundMusic("audio/ambient.mp3", true);
@@ -98,11 +96,14 @@ bool World::init() {
         _audioEngine->setEffectsVolume(0.f);
     }
 
+    //TODO: For testing purposes, delete it
+    placeTower(ModelID::MACHINE_GUN, Vec2(2, 8));
+
     return true;
 }
 
 void World::update(float delta) {
-    if (_gameplayLayer->getCreepList().size() <= 0) {
+    if (_gameplayLayer->getEnemyShips().size() <= 0) {
         if (!_spawned) {
             if (!isCleared()) {
                 scheduleOnce([&](float) { _mapLayer->drawPath(); }, 1.f, "draw_path");
@@ -194,7 +195,7 @@ void World::spawnNextWave(float delta) {
 
     for (unsigned int i = 0; i < wave.size(); i++) {
         const auto &model = getModel((unsigned int) wave.at(i).asInt());
-        _gameplayLayer->addEnemy(model, i, _mapLayer->_path);
+        _gameplayLayer->addEnemyShip(model, i, _mapLayer->_path);
     }
 
     _currentWave++;
@@ -231,7 +232,9 @@ void World::setState(World::State state) {
 
         _currentState = state;
     } else if (state == GAMEPLAY) {
-        _mainMenuLayer->close();
+        if (_currentState == MAIN_MENU) {
+            _mainMenuLayer->close();
+        }
 
         _planet->runAction(EaseExponentialIn::create(MoveBy::create(2.5f, Vec2(-450.f, 360.f))));
         _backgroundSprite->runAction(EaseExponentialIn::create(MoveBy::create(2.5f, Vec2(40.f, 80.f))));

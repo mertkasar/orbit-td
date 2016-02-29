@@ -11,7 +11,7 @@
 	<key>base_range</key>
 	<real>150.0</real>
 	<key>base_damage</key>
-	<real>3.0</real>
+	<real>2.0</real>
 	<key>base_cd</key>
 	<real>0.3</real>
 </dict>

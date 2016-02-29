@@ -113,10 +113,10 @@ bool GameplayLayer::init() {
 
 void GameplayLayer::update(float delta) {
     //Clear dead enemy objects
-    for (auto enemy : _creeps)
+    for (auto enemy : _ships)
         if (enemy->isDead()) {
             enemy->removeFromParent();
-            _creeps.eraseObject(enemy);
+            _ships.eraseObject(enemy);
 
             if (enemy->isKilled()) {
                 addExplosion(enemy->getPosition(), 0.5f, 3.f);
@@ -137,9 +137,9 @@ void GameplayLayer::close(float delay) {
 }
 
 void GameplayLayer::reset() {
-    for (auto creep : _creeps)
+    for (auto creep : _ships)
         creep->removeFromParent();
-    _creeps.clear();
+    _ships.clear();
 
     for (auto missile : _missiles)
         missile->removeFromParent();
@@ -156,14 +156,14 @@ void GameplayLayer::reset() {
     _particleBatch->removeAllChildren();
 }
 
-void GameplayLayer::addEnemy(const ValueMap &model, int order, Path &path) {
-    auto enemy = _creepPool.fetch();
+void GameplayLayer::addEnemyShip(const ValueMap &model, int order, Path &path) {
+    auto enemy = _shipPool.fetch();
 
     Vec2 spawnPosition = Vec2(1230, 360.f) + Vec2(order * 100, 0);
-    enemy->restart(model, spawnPosition, path);
+    enemy->restart(model, spawnPosition, path, _world->getWaveCount());
 
     addChild(enemy);
-    _creeps.pushBack(enemy);
+    _ships.pushBack(enemy);
 }
 
 void GameplayLayer::addMissile(cocos2d::Vec2 position, const cocos2d::Color3B &baseColor, float damage,
@@ -288,7 +288,7 @@ void GameplayLayer::resumeScene() {
 }
 
 bool GameplayLayer::isEnemyPathsClear(const TraverseData &traversed, Vec2 node) {
-    for (auto enemy : _creeps) {
+    for (auto enemy : _ships) {
         auto current = enemy->getPath().getCurrentWaypoint()._tile;
 
         if ((current == node) || !enemy->getPath().isReached(traversed, current))
@@ -299,7 +299,7 @@ bool GameplayLayer::isEnemyPathsClear(const TraverseData &traversed, Vec2 node) 
 }
 
 void GameplayLayer::updateEnemyPaths(const TraverseData &traversed, Vec2 goal) {
-    for (auto enemy : _creeps) {
+    for (auto enemy : _ships) {
         auto &enemyPath = enemy->getPath();
         auto from = enemyPath.getCurrentWaypoint()._tile;
 

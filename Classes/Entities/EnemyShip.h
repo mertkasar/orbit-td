@@ -24,7 +24,8 @@ public:
 
     CREATE_FUNC(EnemyShip);
 
-    void restart(const cocos2d::ValueMap &model, cocos2d::Vec2 position, const Path &path);
+    void restart(const cocos2d::ValueMap &model, cocos2d::Vec2 position, const Path &path,
+                     unsigned int waveCount);
 
     void deal(float damage);
 

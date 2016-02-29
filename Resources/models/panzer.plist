@@ -8,6 +8,8 @@
 	<string>panzer.png</string>
 	<key>max_hp</key>
 	<real>300.0</real>
+	<key>hp_ratio_per_wave</key>
+	<real>1</real>>
 	<key>reward</key>
 	<real>20.0</real>
 	<key>mass</key>

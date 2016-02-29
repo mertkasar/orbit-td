@@ -92,6 +92,10 @@ public:
         return _models.at(id);
     }
 
+    const unsigned int getWaveCount() const {
+        return _currentWave;
+    };
+
     void setPhysicsWorld(cocos2d::PhysicsWorld *_physicsWorld) {
         __physicsWorld = _physicsWorld;
     }

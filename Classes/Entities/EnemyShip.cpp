@@ -79,12 +79,14 @@ void EnemyShip::update(float delta) {
         _killed = true;
 }
 
-void EnemyShip::restart(const cocos2d::ValueMap &model, cocos2d::Vec2 position, const Path &path) {
+void EnemyShip::restart(const cocos2d::ValueMap &model, cocos2d::Vec2 position, const Path &path,
+                        unsigned int waveCount) {
     _killed = false;
     _reachedEnd = false;
 
     _sprite->initWithSpriteFrameName(model.at("sprite").asString());
-    _maxHP = model.at("max_hp").asFloat();
+    auto hpRatio = model.at("hp_ratio_per_wave").asFloat();
+    _maxHP = model.at("max_hp").asFloat() + waveCount * hpRatio;
     _reward = model.at("reward").asFloat();
     _body->setMass(model.at("mass").asFloat());
     _body->setVelocityLimit(model.at("max_velocity").asFloat());
