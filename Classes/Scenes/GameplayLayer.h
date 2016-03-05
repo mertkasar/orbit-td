@@ -43,7 +43,7 @@ public:
 
     void addTower(ModelID type, cocos2d::Vec2 tile);
 
-    void addEnemyShip(const cocos2d::ValueMap &model, int order, Path &path);
+    void addEnemyShip(const cocos2d::ValueMap &model, unsigned int order, Path &path, unsigned int waveCount);
 
     void addMissile(cocos2d::Vec2 position, const cocos2d::Color3B &baseColor, float damage, EnemyShip *target);
 
@@ -71,8 +71,27 @@ public:
         return _ships;
     }
 
+    void balanceTotalCoin(int balance) {
+        _totalCoin = _totalCoin + balance;
+    }
+
+    unsigned int getTotalCoin() const {
+        return _totalCoin;
+    }
+
+    void balanceRemainingLife(int balance) {
+        _life = _life + balance;
+    }
+
+    unsigned int getRemainingLife() const {
+        return _life;
+    }
+
 private:
     World *_world;
+
+    unsigned int _totalCoin;
+    unsigned int _life;
 
     bool _paused;
 

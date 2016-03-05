@@ -9,6 +9,7 @@
 #include "../Entities/WheelMenu.h"
 #include "../Entities/Planet.h"
 #include "../Entities/ResultPanel.h"
+#include "../Utilities/SpawnManager.h"
 
 #include <base/CCDirector.h>
 #include <base/CCEventDispatcher.h>
@@ -26,10 +27,6 @@
 #include <platform/CCFileUtils.h>
 
 #include <sstream>
-
-#define STARTING_COIN 10
-#define STARTING_LIFE 20
-#define START_DELAY 5
 
 USING_NS_CC;
 
@@ -65,9 +62,6 @@ bool World::init() {
     _origin = Director::getInstance()->getVisibleOrigin();
     _canvasCenter = Vec2(_visibleSize / 2.f) + _origin;
 
-    _totalCoin = STARTING_COIN;
-    _life = STARTING_LIFE;
-
     _prefs = UserDefault::getInstance();
     _audioEngine = CocosDenshion::SimpleAudioEngine::getInstance();
     loadResources();
@@ -82,10 +76,6 @@ bool World::init() {
 
     setState(GAMEPLAY);
 
-    _waves = FileUtils::getInstance()->getValueVectorFromFile("waves.plist");
-    _currentWave = 0;
-    _spawned = false;
-
     auto muted = _prefs->getBoolForKey("muted");
     _audioEngine->playBackgroundMusic("audio/ambient.mp3", true);
 
@@ -97,36 +87,9 @@ bool World::init() {
     }
 
     //TODO: For testing purposes, delete it
-    placeTower(ModelID::MACHINE_GUN, Vec2(2, 8));
+    //placeTower(ModelID::LASER_GUN, Vec2(2, 8));
 
     return true;
-}
-
-void World::update(float delta) {
-    if (_gameplayLayer->getEnemyShips().size() <= 0) {
-        if (!_spawned) {
-            if (!isCleared()) {
-                scheduleOnce([&](float) { _mapLayer->drawPath(); }, 1.f, "draw_path");
-                scheduleOnce(CC_SCHEDULE_SELECTOR(World::spawnNextWave), 3.f);
-                _spawned = true;
-            } else {
-                _hudLayer->notify('I', "All waves are cleared!");
-                auto resultPanel = ResultPanel::create(this);
-                resultPanel->runAction(resultPanel->show());
-                addChild(resultPanel);
-                unscheduleUpdate();
-            }
-        }
-    }
-
-    if (_life <= 0) {
-        _hudLayer->notify('I', "Game Over!");
-        _gameplayLayer->pauseScene();
-        auto resultPanel = ResultPanel::create(this);
-        resultPanel->runAction(resultPanel->show());
-        addChild(resultPanel);
-        unscheduleUpdate();
-    }
 }
 
 void World::resetGame() {
@@ -136,15 +99,9 @@ void World::resetGame() {
         _gameplayLayer->reset();
         _gameplayLayer->resumeScene();
 
-        _totalCoin = STARTING_COIN;
-        _life = STARTING_LIFE;
-
         _hudLayer->updateLife();
 
-        _currentWave = 0;
-        _spawned = false;
-
-        scheduleOnce([&](float delta) { scheduleUpdate(); }, START_DELAY, "start");
+        _spawnManager->reset();
     } else
         CCLOG("Failed to reset the game: Wrong state!");
 }
@@ -187,22 +144,16 @@ void World::upgradeTower(cocos2d::Vec2 tile) {
     tower->upgrade();
     _mapLayer->setSlotColor(tile, tower->getBaseColor());
 
-    balanceTotalCoin(-tower->getCost());
+    _gameplayLayer->balanceTotalCoin(-tower->getCost());
 }
 
-void World::spawnNextWave(float delta) {
-    auto wave = _waves.at(_currentWave).asValueVector();
-
-    for (unsigned int i = 0; i < wave.size(); i++) {
-        const auto &model = getModel((unsigned int) wave.at(i).asInt());
-        _gameplayLayer->addEnemyShip(model, i, _mapLayer->_path);
+void World::spawnWave(const cocos2d::ValueVector &waveData) {
+    for (unsigned int i = 0; i < waveData.size(); i++) {
+        const auto &model = getModel((unsigned int) waveData.at(i).asInt());
+        _gameplayLayer->addEnemyShip(model, i, _mapLayer->_path, _spawnManager->getCurrentWave());
     }
 
-    _currentWave++;
-
-    _hudLayer->updateWaveIndicators(_currentWave, _waves.size());
-
-    _spawned = false;
+    _hudLayer->updateWaveIndicators(_spawnManager->getCurrentWave(), _spawnManager->getTotalWave());
 }
 
 void World::setState(World::State state) {
@@ -214,6 +165,7 @@ void World::setState(World::State state) {
             _backgroundSprite->runAction(EaseExponentialIn::create(MoveBy::create(2.5f, Vec2(-40.f, -80.f))));
 
             _gameplayLayer->close();
+            _spawnManager->removeFromParent();
             _mapLayer->close();
             _hudLayer->close();
 
@@ -249,15 +201,17 @@ void World::setState(World::State state) {
 
         addChild(gameCanvas);
 
+        _spawnManager = SpawnManager::create(this);
+        addChild(_spawnManager);
+
         _hudLayer = HUDLayer::create(this);
         _hudLayer->show(2.5f);
-        _hudLayer->updateWaveIndicators(_currentWave, _waves.size());
+        _hudLayer->updateWaveIndicators(_spawnManager->getCurrentWave(), _spawnManager->getTotalWave());
         addChild(_hudLayer);
 
         _wheelMenu = WheelMenu::create(this);
         addChild(_wheelMenu);
 
-        scheduleOnce([&](float delta) { scheduleUpdate(); }, START_DELAY, "start");
         connectListeners();
 
         _currentState = state;

@@ -9,6 +9,7 @@
 #include "../Entities/MachineGun.h"
 #include "../Entities/LaserGun.h"
 #include "../Entities/MissileLauncher.h"
+#include "../Entities/ResultPanel.h"
 #include "../Utilities/Shake.h"
 
 #include <2d/CCParticleBatchNode.h>
@@ -21,6 +22,9 @@
 #include <SimpleAudioEngine.h>
 
 #include <sstream>
+
+#define STARTING_COIN 10
+#define STARTING_LIFE 20
 
 USING_NS_CC;
 
@@ -49,6 +53,9 @@ GameplayLayer *GameplayLayer::create(World *world) {
 bool GameplayLayer::init() {
     if (!Layer::init())
         return false;
+
+    _totalCoin = STARTING_COIN;
+    _life = STARTING_LIFE;
 
     _paused = false;
 
@@ -112,6 +119,15 @@ bool GameplayLayer::init() {
 }
 
 void GameplayLayer::update(float delta) {
+    if (_life <= 0) {
+        _world->_hudLayer->notify('I', "Game Over!");
+        pauseScene();
+
+        auto resultPanel = ResultPanel::create(_world);
+        resultPanel->runAction(resultPanel->show());
+        _world->addChild(resultPanel);
+    }
+
     //Clear dead enemy objects
     for (auto enemy : _ships)
         if (enemy->isDead()) {
@@ -122,10 +138,10 @@ void GameplayLayer::update(float delta) {
                 addExplosion(enemy->getPosition(), 0.5f, 3.f);
 
                 auto reward = enemy->getReward();
-                _world->balanceTotalCoin(reward);
+                balanceTotalCoin(reward);
                 _world->_hudLayer->addCostIndicator(reward, enemy->getPosition());
             } else if (enemy->isReachedEnd()) {
-                _world->balanceRemainingLife(-1);
+                balanceRemainingLife(-1);
                 _world->_hudLayer->updateLife();
                 _world->_audioEngine->playEffect("audio/buzz.wav");
             }
@@ -137,6 +153,9 @@ void GameplayLayer::close(float delay) {
 }
 
 void GameplayLayer::reset() {
+    _totalCoin = STARTING_COIN;
+    _life = STARTING_LIFE;
+
     for (auto creep : _ships)
         creep->removeFromParent();
     _ships.clear();
@@ -156,11 +175,11 @@ void GameplayLayer::reset() {
     _particleBatch->removeAllChildren();
 }
 
-void GameplayLayer::addEnemyShip(const ValueMap &model, int order, Path &path) {
+void GameplayLayer::addEnemyShip(const ValueMap &model, unsigned int order, Path &path, unsigned int waveCount) {
     auto enemy = _shipPool.fetch();
 
     Vec2 spawnPosition = Vec2(1230, 360.f) + Vec2(order * 100, 0);
-    enemy->restart(model, spawnPosition, path, _world->getWaveCount());
+    enemy->restart(model, spawnPosition, path, waveCount);
 
     addChild(enemy);
     _ships.pushBack(enemy);
@@ -232,7 +251,7 @@ void GameplayLayer::addTower(ModelID type, cocos2d::Vec2 tile) {
         auto position = algorithm::toCircularGrid(tile);
         tower->setPosition(position);
 
-        _world->balanceTotalCoin(-tower->getCost());
+        balanceTotalCoin(-tower->getCost());
         _towerMap.insert(std::make_pair(tile, tower));
 
         addChild(tower);
@@ -254,7 +273,7 @@ void GameplayLayer::deleteTower(Vec2 tile) {
     assert(found != _towerMap.end());
 
     auto tower = found->second;
-    _world->balanceTotalCoin(tower->getCost());
+    balanceTotalCoin(tower->getCost());
     tower->removeFromParentAndCleanup(true);
     _towerMap.erase(found);
 }

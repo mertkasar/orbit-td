@@ -112,7 +112,7 @@ bool WheelMenu::init(World *world) {
 }
 
 void WheelMenu::update(float delta) {
-    auto totalCoin = _world->getTotalCoin();
+    auto totalCoin = _world->_gameplayLayer->getTotalCoin();
 
     if (totalCoin != _lastCoin) {
         _lastCoin = totalCoin;

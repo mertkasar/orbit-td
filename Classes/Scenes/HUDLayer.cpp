@@ -2,21 +2,21 @@
 
 #include "World.h"
 #include "GameplayLayer.h"
+#include "../Entities/DialogBox.h"
+#include "../Entities/CostIndicator.h"
+#include "../Utilities/SpawnManager.h"
 
 #include <2d/CCMenu.h>
 #include <2d/CCActionInterval.h>
 #include <2d/CCActionInstant.h>
 #include <2d/CCActionEase.h>
 #include <2d/CCSprite.h>
-#include <ui/UILayout.h>
 #include <ui/UIImageView.h>
 #include <ui/UIButton.h>
 #include <ui/UIText.h>
 #include <SimpleAudioEngine.h>
 
 #include <sstream>
-#include <Entities/DialogBox.h>
-#include <Entities/CostIndicator.h>
 
 USING_NS_CC;
 
@@ -137,7 +137,7 @@ bool HUDLayer::init() {
 
 void HUDLayer::update(float delta) {
     std::stringstream ss_c;
-    ss_c << _world->getTotalCoin();
+    ss_c << _world->_gameplayLayer->getTotalCoin();
 
     auto text = static_cast<ui::Text *>(_energy->getChildByName("#energy_text"));
     text->setString(ss_c.str());
@@ -172,7 +172,7 @@ void HUDLayer::notify(char type, std::string message, float duration) {
 }
 
 void HUDLayer::updateLife() {
-    unsigned int life = _world->getRemainingLife();
+    unsigned int life = _world->_gameplayLayer->getRemainingLife();
 
     if (life <= 20) {
         std::stringstream ss;
@@ -279,8 +279,8 @@ void HUDLayer::menuButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::Tou
 
 void HUDLayer::nextButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type) {
     if (type == ui::Widget::TouchEventType::ENDED) {
-        if (!_world->isCleared()) {
-            _world->spawnNextWave(0.f);
+        if (!_world->_spawnManager->isCleared()) {
+            _world->_spawnManager->spawnNextWave(0.f);
             notify('W', "Coming next wave!");
         } else
             notify('E', "No waves remained!");

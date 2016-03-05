@@ -36,6 +36,7 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../../Classes/Utilities/Grid.cpp \
                    ../../../Classes/Utilities/Algorithm.cpp \
                    ../../../Classes/Utilities/Shake.cpp \
+                   ../../../Classes/Utilities/SpawnManager.cpp \
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../Classes
 

@@ -30,9 +30,12 @@ class WheelMenu;
 
 class Planet;
 
+class SpawnManager;
+
 class World : public cocos2d::Layer {
 public:
     enum State {
+        IDLE,
         MAIN_MENU,
         GAMEPLAY
     };
@@ -46,8 +49,6 @@ public:
 
     virtual bool init();
 
-    virtual void update(float delta);
-
     void resetGame();
 
     CREATE_FUNC(World);
@@ -58,30 +59,10 @@ public:
 
     void upgradeTower(cocos2d::Vec2 tile);
 
-    void spawnNextWave(float delta);
-
-    void balanceTotalCoin(int balance) {
-        _totalCoin = _totalCoin + balance;
-    }
-
-    unsigned int getTotalCoin() const {
-        return _totalCoin;
-    }
-
-    void balanceRemainingLife(int balance) {
-        _life = _life + balance;
-    }
-
-    unsigned int getRemainingLife() const {
-        return _life;
-    }
+    void spawnWave(const cocos2d::ValueVector &waveData);
 
     State getState() const {
         return _currentState;
-    }
-
-    bool isCleared() const {
-        return _currentWave >= _waves.size();
     }
 
     cocos2d::PhysicsWorld *getPhysicsWorld() const {
@@ -91,10 +72,6 @@ public:
     const cocos2d::ValueMap &getModel(unsigned int id) const {
         return _models.at(id);
     }
-
-    const unsigned int getWaveCount() const {
-        return _currentWave;
-    };
 
     void setPhysicsWorld(cocos2d::PhysicsWorld *_physicsWorld) {
         __physicsWorld = _physicsWorld;
@@ -118,15 +95,7 @@ private:
 
     std::unordered_map<unsigned int, cocos2d::ValueMap> _models;
 
-    cocos2d::ValueVector _waves;
-    unsigned int _currentWave;
-    bool _spawned;
-
     WheelMenu *_wheelMenu;
-
-    unsigned int _totalCoin;
-
-    unsigned int _life;
 
 public:
     CocosDenshion::SimpleAudioEngine *_audioEngine;
@@ -140,6 +109,7 @@ public:
     MainMenuLayer *_mainMenuLayer;
     MapLayer *_mapLayer;
     GameplayLayer *_gameplayLayer;
+    SpawnManager *_spawnManager;
     HUDLayer *_hudLayer;
 };
 
