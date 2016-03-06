@@ -62,6 +62,8 @@ bool World::init() {
     _origin = Director::getInstance()->getVisibleOrigin();
     _canvasCenter = Vec2(_visibleSize / 2.f) + _origin;
 
+    _currentState = IDLE;
+
     _prefs = UserDefault::getInstance();
     _audioEngine = CocosDenshion::SimpleAudioEngine::getInstance();
     loadResources();
@@ -153,7 +155,7 @@ void World::spawnWave(const cocos2d::ValueVector &waveData) {
         _gameplayLayer->addEnemyShip(model, i, _mapLayer->_path, _spawnManager->getCurrentWave());
     }
 
-    _hudLayer->updateWaveIndicators(_spawnManager->getCurrentWave(), _spawnManager->getTotalWave());
+    _hudLayer->updateWaveIndicators(_spawnManager->getCurrentWave(), _spawnManager->getMaxWave());
 }
 
 void World::setState(World::State state) {
@@ -206,7 +208,7 @@ void World::setState(World::State state) {
 
         _hudLayer = HUDLayer::create(this);
         _hudLayer->show(2.5f);
-        _hudLayer->updateWaveIndicators(_spawnManager->getCurrentWave(), _spawnManager->getTotalWave());
+        _hudLayer->updateWaveIndicators(_spawnManager->getCurrentWave(), _spawnManager->getMaxWave());
         addChild(_hudLayer);
 
         _wheelMenu = WheelMenu::create(this);

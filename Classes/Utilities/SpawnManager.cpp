@@ -39,7 +39,9 @@ bool SpawnManager::init() {
     if (!Node::init())
         return false;
 
-    _waves = FileUtils::getInstance()->getValueVectorFromFile("waves.plist");
+    //Load wave patterns from file
+    _patterns = FileUtils::getInstance()->getValueVectorFromFile("waves.plist");
+
     reset();
 
     return true;
@@ -65,7 +67,16 @@ void SpawnManager::update(float delta) {
 }
 
 void SpawnManager::spawnNextWave(float delta) {
-    auto wave = _waves.at(_currentWave).asValueVector();
+    auto tier = getTier();
+    ValueVector wave;
+
+    if (tier == PREDEFINED) {
+        wave = _patterns.at(tier).asValueVector().at(_currentWave).asValueVector();
+    } else {
+        auto tierVector = _patterns.at(tier).asValueVector();
+        auto rand = RandomHelper::random_int(0, (int) tierVector.size() - 1);
+        wave = tierVector.at((unsigned long) rand).asValueVector();
+    }
 
     _world->spawnWave(wave);
 
@@ -78,4 +89,18 @@ void SpawnManager::reset() {
     _spawned = false;
 
     scheduleOnce([&](float delta) { scheduleUpdate(); }, START_DELAY, "start");
+}
+
+SpawnManager::Tier SpawnManager::getTier() {
+    auto wave = getCurrentWave();
+
+    if (wave >= 1 && wave <= 5)
+        return PREDEFINED;
+    else if (wave >= 6 && wave <= 33)
+        return LOW;
+    else if (wave >= 34 && wave <= 66)
+        return MID;
+    else if (wave >= 67 && wave <= 100)
+        return HIGH;
+    else return UNDEFINED;
 }
