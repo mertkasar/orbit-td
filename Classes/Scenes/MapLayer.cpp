@@ -189,6 +189,8 @@ TraverseData MapLayer::traverseAgainst(Vec2 node, unsigned int value) {
 }
 
 void MapLayer::drawPath() {
+    _pathCanvas->removeAllChildren();
+
     auto waypoints = _path.getWayPoints();
     for (unsigned int i = 0; i < waypoints.size(); i++) {
         auto current = waypoints.at(i);

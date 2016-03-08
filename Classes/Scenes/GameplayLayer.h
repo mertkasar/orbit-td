@@ -71,20 +71,24 @@ public:
         return _ships;
     }
 
-    void balanceTotalCoin(int balance) {
-        _totalCoin = _totalCoin + balance;
+    unsigned int getRemainingLife() const {
+        return _life;
     }
 
     unsigned int getTotalCoin() const {
         return _totalCoin;
     }
 
+    unsigned int getEnemiesPresent() const{
+        return (unsigned int) _ships.size();
+    }
+
     void balanceRemainingLife(int balance) {
         _life = _life + balance;
     }
 
-    unsigned int getRemainingLife() const {
-        return _life;
+    void balanceTotalCoin(int balance) {
+        _totalCoin = _totalCoin + balance;
     }
 
 private:

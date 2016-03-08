@@ -52,7 +52,6 @@ void SpawnManager::update(float delta) {
     if (_world->_gameplayLayer->getEnemyShips().size() <= 0) {
         if (!_spawned) {
             if (!isCleared()) {
-                scheduleOnce([&](float) { _world->_mapLayer->drawPath(); }, 1.f, "draw_path");
                 scheduleOnce(CC_SCHEDULE_SELECTOR(SpawnManager::spawnNextWave), 5.f);
                 _spawned = true;
             } else {
