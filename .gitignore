@@ -19,7 +19,8 @@ build/*
 *.perspectivev3
 profile
 xcuserdata
-.idea/*
+.idea
+*.iml
 
 #Cocoa pods
 *.old
