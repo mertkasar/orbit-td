@@ -55,10 +55,7 @@ void SpawnManager::update(float delta) {
                 scheduleOnce(CC_SCHEDULE_SELECTOR(SpawnManager::spawnNextWave), 5.f);
                 _spawned = true;
             } else {
-                _world->_hudLayer->notify('I', "All waves are cleared!");
-                auto resultPanel = ResultPanel::create(_world);
-                resultPanel->runAction(resultPanel->show());
-                _world->addChild(resultPanel);
+                _world->endGame(true);
                 unscheduleUpdate();
             }
         }

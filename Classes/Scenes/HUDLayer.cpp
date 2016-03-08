@@ -137,7 +137,7 @@ bool HUDLayer::init() {
 
 void HUDLayer::update(float delta) {
     std::stringstream ss_c;
-    ss_c << _world->_gameplayLayer->getTotalCoin();
+    ss_c << _world->_gameplayLayer->getTotalEnergy();
 
     auto text = static_cast<ui::Text *>(_energy->getChildByName("#energy_text"));
     text->setString(ss_c.str());

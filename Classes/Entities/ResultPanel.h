@@ -8,6 +8,7 @@ class World;
 namespace cocos2d {
     namespace ui {
         class Text;
+
         class Button;
     }
 
@@ -21,9 +22,11 @@ private:
     ~ResultPanel();
 
 public:
-    static ResultPanel *create(World *world);
+    static ResultPanel *create(World *world, bool win, int point, int energy, int shield);
 
-    virtual bool init();
+    bool init(bool win, int point, int energy, int shield);
+
+    virtual void update(float delta);
 
     cocos2d::FiniteTimeAction *show();
 
@@ -37,7 +40,12 @@ private:
 private:
     World *_world;
 
-    cocos2d::ui::Text *_header;
+    cocos2d::ui::Text *_titleText;
+    cocos2d::ui::Text *_scoreText;
+
+    int _score;
+    int _scoreCounter;
+    int _incrementVal;
 };
 
 #endif //RESULT_PANEL_H

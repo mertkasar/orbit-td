@@ -61,6 +61,8 @@ public:
 
     void spawnWave(const cocos2d::ValueVector &waveData);
 
+    void endGame(bool win);
+
     State getState() const {
         return _currentState;
     }

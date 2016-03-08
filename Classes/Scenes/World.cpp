@@ -149,7 +149,7 @@ void World::upgradeTower(cocos2d::Vec2 tile) {
     tower->upgrade();
     _mapLayer->setSlotColor(tile, tower->getBaseColor());
 
-    _gameplayLayer->balanceTotalCoin(-tower->getCost());
+    _gameplayLayer->balanceTotalEnergy(-tower->getCost());
 }
 
 void World::spawnWave(const cocos2d::ValueVector &waveData) {
@@ -159,6 +159,18 @@ void World::spawnWave(const cocos2d::ValueVector &waveData) {
     }
 
     _hudLayer->updateWaveIndicators(_spawnManager->getCurrentWave(), _spawnManager->getMaxWave());
+}
+
+void World::endGame(bool win) {
+    if (win)
+        _hudLayer->notify('I', "All waves are cleared!");
+    else
+        _hudLayer->notify('I', "Game Over!");
+
+    auto resultPanel = ResultPanel::create(this, win, _gameplayLayer->getTotalPoint(), _gameplayLayer->getTotalEnergy(),
+                                           _gameplayLayer->getRemainingLife());
+    resultPanel->runAction(resultPanel->show());
+    addChild(resultPanel);
 }
 
 void World::setState(World::State state) {

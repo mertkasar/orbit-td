@@ -71,12 +71,16 @@ public:
         return _ships;
     }
 
-    unsigned int getRemainingLife() const {
-        return _life;
+    unsigned int getTotalPoint() const{
+        return _totalPoint;
     }
 
-    unsigned int getTotalCoin() const {
-        return _totalCoin;
+    unsigned int getTotalEnergy() const {
+        return _totalEnergy;
+    }
+
+    unsigned int getRemainingLife() const {
+        return _life;
     }
 
     unsigned int getEnemiesPresent() const{
@@ -87,14 +91,15 @@ public:
         _life = _life + balance;
     }
 
-    void balanceTotalCoin(int balance) {
-        _totalCoin = _totalCoin + balance;
+    void balanceTotalEnergy(int balance) {
+        _totalEnergy = _totalEnergy + balance;
     }
 
 private:
     World *_world;
 
-    unsigned int _totalCoin;
+    unsigned int _totalPoint;
+    unsigned int _totalEnergy;
     unsigned int _life;
 
     bool _paused;

@@ -54,7 +54,7 @@ bool GameplayLayer::init() {
     if (!Layer::init())
         return false;
 
-    _totalCoin = STARTING_COIN;
+    _totalEnergy = STARTING_COIN;
     _life = STARTING_LIFE;
 
     _paused = false;
@@ -120,12 +120,8 @@ bool GameplayLayer::init() {
 
 void GameplayLayer::update(float delta) {
     if (_life <= 0) {
-        _world->_hudLayer->notify('I', "Game Over!");
+        _world->endGame(false);
         pauseScene();
-
-        auto resultPanel = ResultPanel::create(_world);
-        resultPanel->runAction(resultPanel->show());
-        _world->addChild(resultPanel);
     }
 
     //Clear dead enemy objects
@@ -138,7 +134,8 @@ void GameplayLayer::update(float delta) {
                 addExplosion(enemy->getPosition(), 0.5f, 3.f);
 
                 auto reward = enemy->getReward();
-                balanceTotalCoin(reward);
+                balanceTotalEnergy(reward);
+                _totalPoint = _totalPoint + reward;
                 _world->_hudLayer->addCostIndicator(reward, enemy->getPosition());
             } else if (enemy->isReachedEnd()) {
                 balanceRemainingLife(-1);
@@ -153,7 +150,7 @@ void GameplayLayer::close(float delay) {
 }
 
 void GameplayLayer::reset() {
-    _totalCoin = STARTING_COIN;
+    _totalEnergy = STARTING_COIN;
     _life = STARTING_LIFE;
 
     for (auto creep : _ships)
@@ -251,7 +248,7 @@ void GameplayLayer::addTower(ModelID type, cocos2d::Vec2 tile) {
         auto position = algorithm::toCircularGrid(tile);
         tower->setPosition(position);
 
-        balanceTotalCoin(-tower->getCost());
+        balanceTotalEnergy(-tower->getCost());
         _towerMap.insert(std::make_pair(tile, tower));
 
         addChild(tower);
@@ -273,7 +270,7 @@ void GameplayLayer::deleteTower(Vec2 tile) {
     assert(found != _towerMap.end());
 
     auto tower = found->second;
-    balanceTotalCoin(tower->getCost());
+    balanceTotalEnergy(tower->getCost());
     tower->removeFromParentAndCleanup(true);
     _towerMap.erase(found);
 }
