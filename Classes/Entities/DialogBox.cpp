@@ -7,6 +7,9 @@
 #include <2d/CCActionInstant.h>
 #include <2d/CCActionInterval.h>
 #include <SimpleAudioEngine.h>
+#include <base/CCEventListenerTouch.h>
+#include <base/CCDirector.h>
+#include <base/CCEventDispatcher.h>
 
 USING_NS_CC;
 
@@ -35,16 +38,21 @@ bool DialogBox::init() {
     if (!ui::Layout::init())
         return false;
 
-    auto contentSize = Size(620, 250);
+    const Size &contentSize = Size(620, 250);
     auto center = Vec2(contentSize / 2.f);
 
+    setContentSize(contentSize);
     setCascadeOpacityEnabled(true);
     setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     setBackGroundImage("textures/bg_panel.png");
     setBackGroundImageScale9Enabled(true);
-    setContentSize(contentSize);
     setPosition(_world->_canvasCenter);
     setScaleY(0.f);
+
+    auto touchListener = cocos2d::EventListenerTouchOneByOne::create();
+    touchListener->setSwallowTouches(true);
+    touchListener->onTouchBegan = [&](Touch *touch, Event *event) { return true; };
+    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener, this);
 
     _text = ui::Text::create();
     _text->setFontName("fonts/kenvector_future.ttf");
@@ -73,12 +81,12 @@ void DialogBox::setCaption(std::string caption) {
     _text->setString(caption);
 }
 
-void DialogBox::setAction(const ccWidgetTouchCallback& action){
+void DialogBox::setAction(const ccWidgetTouchCallback &action) {
     _yesButton->addTouchEventListener(action);
 }
 
 FiniteTimeAction *DialogBox::show() {
-    auto showContent = [&](){
+    auto showContent = [&]() {
         for (auto child : getChildren())
             child->setVisible(true);
     };
@@ -87,7 +95,7 @@ FiniteTimeAction *DialogBox::show() {
 }
 
 FiniteTimeAction *DialogBox::hide() {
-    auto hideContent = [&](){
+    auto hideContent = [&]() {
         for (auto child : getChildren())
             child->setVisible(false);
     };

@@ -3,6 +3,9 @@
 #include "../Scenes/World.h"
 
 #include <base/CCUserDefault.h>
+#include <base/CCEventListenerTouch.h>
+#include <base/CCDirector.h>
+#include <base/CCEventDispatcher.h>
 #include <2d/CCActionInterval.h>
 #include <2d/CCActionInstant.h>
 #include <2d/CCSprite.h>
@@ -52,6 +55,11 @@ bool ResultPanel::init(bool win, int point, int energy, int shield) {
     setContentSize(contentSize);
     setPosition(_world->_canvasCenter);
     setScaleX(0.f);
+
+    auto touchListener = cocos2d::EventListenerTouchOneByOne::create();
+    touchListener->setSwallowTouches(true);
+    touchListener->onTouchBegan = [&](Touch *touch, Event *event) { return true; };
+    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener, this);
 
     _titleText = ui::Text::create("", "fonts/kenvector_future.ttf", 48);
     _titleText->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
