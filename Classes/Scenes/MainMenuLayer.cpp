@@ -49,12 +49,14 @@ bool MainMenuLayer::init() {
     button->addTouchEventListener(CC_CALLBACK_2(MainMenuLayer::startButtonCallback, this));
     addChild(button);
 
-    createOptionsMenu();
+    if (_muted)
+        button = ui::Button::create("textures/btn_mute_n.png", "textures/btn_mute_t.png", "");
+    else
+        button = ui::Button::create("textures/btn_unmute_n.png", "textures/btn_unmute_t.png", "");
 
-    button = ui::Button::create("textures/btn_help_n.png", "textures/btn_help_t.png", "");
-    button->setName("help_button");
-    button->setPosition(Vec2(180.f, 60.f));
-    button->addTouchEventListener(CC_CALLBACK_2(MainMenuLayer::helpButtonCallback, this));
+    button->setName("unmute_button");
+    button->setPosition(Vec2(60.f, 60.f));
+    button->addTouchEventListener(CC_CALLBACK_2(MainMenuLayer::soundButtonCallback, this));
     addChild(button);
 
     button = ui::Button::create("textures/btn_exit_n.png", "textures/btn_exit_t.png", "");
@@ -66,33 +68,6 @@ bool MainMenuLayer::init() {
     setOpacity(0);
 
     return true;
-}
-
-void MainMenuLayer::createOptionsMenu() {
-    auto frame = Sprite::create("textures/frame.png");
-    frame->setPosition(60.f, 155.f);
-    addChild(frame);
-
-    auto button = ui::Button::create("textures/btn_options_n.png", "textures/btn_options_t.png", "");
-    button->setName("options_button");
-    button->setPosition(Vec2(60.f, 60.f));
-    button->addTouchEventListener(CC_CALLBACK_2(MainMenuLayer::optionsButtonCallback, this));
-    addChild(button);
-
-    if (_muted)
-        button = ui::Button::create("textures/btn_mute_n.png", "textures/btn_mute_t.png", "");
-    else
-        button = ui::Button::create("textures/btn_unmute_n.png", "textures/btn_unmute_t.png", "");
-
-    button->setName("unmute_button");
-    button->setPosition(Vec2(60.f, 155.f));
-    button->addTouchEventListener(CC_CALLBACK_2(MainMenuLayer::soundButtonCallback, this));
-    addChild(button);
-
-    button = ui::Button::create("textures/btn_info_n.png", "textures/btn_info_t.png", "");
-    button->setName("info_button");
-    button->setPosition(Vec2(60.f, 245.f));
-    addChild(button);
 }
 
 void MainMenuLayer::show(float delay) {
@@ -125,13 +100,6 @@ void MainMenuLayer::startButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widge
     }
 }
 
-void MainMenuLayer::optionsButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type) {
-    if (type == ui::Widget::TouchEventType::ENDED) {
-        CCLOG("Options Button clicked!");
-        _world->_audioEngine->playEffect("audio/click.wav");
-    }
-}
-
 void MainMenuLayer::soundButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type) {
     if (type == ui::Widget::TouchEventType::ENDED) {
         _muted = !_muted;
@@ -148,13 +116,6 @@ void MainMenuLayer::soundButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widge
             button->loadTextures("textures/btn_unmute_n.png", "textures/btn_unmute_t.png", "");
         }
 
-        _world->_audioEngine->playEffect("audio/click.wav");
-    }
-}
-
-void MainMenuLayer::helpButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type) {
-    if (type == ui::Widget::TouchEventType::ENDED) {
-        CCLOG("Help Button clicked!");
         _world->_audioEngine->playEffect("audio/click.wav");
     }
 }
