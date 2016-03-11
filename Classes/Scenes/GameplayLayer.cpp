@@ -23,7 +23,7 @@
 
 #include <sstream>
 
-#define STARTING_COIN 10
+#define STARTING_COIN 40
 #define STARTING_LIFE 20
 
 USING_NS_CC;
@@ -270,7 +270,9 @@ void GameplayLayer::deleteTower(Vec2 tile) {
     assert(found != _towerMap.end());
 
     auto tower = found->second;
-    balanceTotalEnergy(tower->getCost());
+    auto refund = tower->getRefund();
+    balanceTotalEnergy(refund);
+    _world->_hudLayer->addCostIndicator(refund, tower->getPosition());
     tower->removeFromParentAndCleanup(true);
     _towerMap.erase(found);
 }

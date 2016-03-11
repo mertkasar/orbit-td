@@ -11,7 +11,6 @@
 
 #define COST_RATIO 0.1f
 #define RANGE_RATIO 0.15f
-#define DAMAGE_RATIO 0.1f
 #define CD_RATIO -0.2f
 
 USING_NS_CC;
@@ -30,6 +29,7 @@ bool Turret::init(const ValueMap &model) {
     _range = _base_range;
     _damage = model.at("base_damage").asFloat();
     _cooldown = model.at("base_cd").asFloat();
+    _dmgRatioPerWave = model.at("dmg_ratio_per_wave").asFloat();
 
     _level = 0;
     _nextShooting = 0.f;
@@ -104,7 +104,7 @@ void Turret::upgrade() {
 
     _cost = (unsigned int) (_cost + _cost * COST_RATIO);
     _range = _range + _range * RANGE_RATIO;
-    _damage = _damage + _damage * DAMAGE_RATIO;
+    _damage = _damage + _damage * _dmgRatioPerWave;
     _cooldown = _cooldown + _cooldown * CD_RATIO;
 
     _rangeSprite->setScale(_range / _base_range);

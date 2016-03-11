@@ -42,6 +42,10 @@ public:
         return _level;
     }
 
+    unsigned int getRefund() const {
+        return getCost() * (getLevel() + 1) / 2;
+    }
+
     const cocos2d::Color3B &getBaseColor();
 
     bool isVerbose() const {
@@ -84,6 +88,7 @@ protected:
     float _cooldown;
 
     unsigned int _level;
+    float _dmgRatioPerWave;
     float _nextShooting;
     bool _verbose;
 };

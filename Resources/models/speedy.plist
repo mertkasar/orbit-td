@@ -9,9 +9,9 @@
 	<key>max_hp</key>
 	<real>2.0</real>
 	<key>hp_ratio_per_wave</key>
-	<real>3</real>>
+	<real>1</real>
 	<key>reward</key>
-	<real>5.0</real>
+	<real>3.0</real>
 	<key>mass</key>
 	<real>0.5</real>
 	<key>max_velocity</key>

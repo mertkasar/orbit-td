@@ -76,7 +76,7 @@ bool World::init() {
     _planet = Planet::create();
     addChild(_planet);
 
-    setState(MAIN_MENU);
+    setState(GAMEPLAY);
 
     auto muted = _prefs->getBoolForKey("muted");
     _audioEngine->playBackgroundMusic("audio/ambient.mp3", true);

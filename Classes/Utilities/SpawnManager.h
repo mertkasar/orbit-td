@@ -10,14 +10,6 @@ class World;
 
 class SpawnManager : public cocos2d::Node {
 private:
-    enum Tier {
-        PREDEFINED,
-        LOW,
-        MID,
-        HIGH,
-        UNDEFINED
-    };
-private:
     SpawnManager(World *world);
 
     ~SpawnManager();
@@ -38,20 +30,17 @@ public:
     };
 
     const unsigned int getMaxWave() const {
-        return MAX_WAVE;
+        return (const unsigned int) _waves.size();
     };
 
     bool isCleared() const {
-        return _currentWave >= MAX_WAVE;
+        return _currentWave >= _waves.size();
     }
-
-private:
-    Tier getTier();
 
 private:
     World *_world;
 
-    cocos2d::ValueVector _patterns;
+    cocos2d::ValueVector _waves;
 
     unsigned int _currentWave;
     bool _spawned;

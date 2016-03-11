@@ -260,8 +260,8 @@ void WheelMenu::sellButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::To
     if (type == ui::Widget::TouchEventType::ENDED) {
         setState(VALIDATION);
 
-        auto cost = _world->_gameplayLayer->getTower(_currentTile)->getCost();
-        _energyCost->update(cost);
+        auto refund = _world->_gameplayLayer->getTower(_currentTile)->getRefund();
+        _energyCost->update(refund);
         _energyCost->setVisible(true);
 
         auto btn = static_cast<ui::Button *>(_validationMenu->getChildByTag(ACCEPT));
