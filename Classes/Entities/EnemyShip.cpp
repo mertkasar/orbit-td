@@ -21,6 +21,8 @@ bool EnemyShip::init() {
     if (!Node::init())
         return false;
 
+    setCascadeOpacityEnabled(true);
+
     _killed = false;
     _reachedEnd = false;
 
@@ -34,6 +36,7 @@ bool EnemyShip::init() {
     setPhysicsBody(_body);
 
     _HPBar = Node::create();
+    _HPBar->setCascadeOpacityEnabled(true);
     _HPBar->setPosition(Vec2(80.f, -40.f));
 
     auto hpBarB = Sprite::createWithSpriteFrameName("hp_bar.png");

@@ -20,6 +20,8 @@ bool Explosion::init() {
     if (!Node::init())
         return false;
 
+    setCascadeOpacityEnabled(true);
+
     _sprite = Sprite::create("textures/explosion.png");
     addChild(_sprite);
     setScale(1.5f);

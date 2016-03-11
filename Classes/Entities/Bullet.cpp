@@ -24,6 +24,8 @@ bool Bullet::init() {
     if (!Node::init())
         return false;
 
+    setCascadeOpacityEnabled(true);
+
     _sprite = Sprite::createWithSpriteFrameName("bullet.png");
     _sprite->setScale(0.5f);
     addChild(_sprite);

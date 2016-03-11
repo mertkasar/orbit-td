@@ -25,6 +25,8 @@ bool Missile::init() {
     if (!Node::init())
         return false;
 
+    setCascadeOpacityEnabled(true);
+
     _sprite = Sprite::createWithSpriteFrameName("missile.png");
 
     _body = PhysicsBody::createCircle(_sprite->getContentSize().width / 2.f);

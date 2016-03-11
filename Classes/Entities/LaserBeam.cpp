@@ -21,6 +21,8 @@ bool LaserBeam::init() {
     if (!Node::init())
         return false;
 
+    setCascadeOpacityEnabled(true);
+
     _start = Node::create();
 
     auto tile = Sprite::createWithSpriteFrameName("start_b.png");

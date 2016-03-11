@@ -23,6 +23,8 @@ bool Turret::init(const ValueMap &model) {
     if (!Node::init())
         return false;
 
+    setCascadeOpacityEnabled(true);
+
     //_model = model;
     _cost = model.at("base_cost").asFloat();;
     _base_range = model.at("base_range").asFloat();
