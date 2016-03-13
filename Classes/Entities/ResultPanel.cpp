@@ -50,7 +50,7 @@ bool ResultPanel::init(bool win, int point, int energy, int shield) {
     auto center = Vec2(contentSize / 2.f);
 
     setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-    setBackGroundImage("textures/bg_panel.png");
+    setBackGroundImage("bg_panel.png", TextureResType::PLIST);
     setBackGroundImageScale9Enabled(true);
     setContentSize(contentSize);
     setPosition(_world->_canvasCenter);
@@ -73,13 +73,13 @@ bool ResultPanel::init(bool win, int point, int energy, int shield) {
     _scoreText->setVisible(false);
     addChild(_scoreText);
 
-    auto button = ui::Button::create("textures/btn_replay_n.png", "textures/btn_replay_t.png", "");
+    auto button = ui::Button::create("btn_replay_n.png", "btn_replay_t.png", "", TextureResType::PLIST);
     button->setPosition(center + Vec2(-110.f, -100.f));
     button->addTouchEventListener(CC_CALLBACK_2(ResultPanel::replayButtonCallback, this));
     button->setVisible(false);
     addChild(button);
 
-    button = ui::Button::create("textures/btn_main_menu_n.png", "textures/btn_main_menu_t.png", "");
+    button = ui::Button::create("btn_main_menu_n.png", "btn_main_menu_t.png", "", TextureResType::PLIST);
     button->setPosition(center + Vec2(110.f, -100.f));
     button->addTouchEventListener(CC_CALLBACK_2(ResultPanel::menuButtonCallback, this));
     button->setVisible(false);

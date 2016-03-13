@@ -43,23 +43,23 @@ bool MainMenuLayer::init() {
 
     setCascadeOpacityEnabled(true);
 
-    auto button = ui::Button::create("textures/btn_play_n.png", "textures/btn_play_t.png", "");
+    auto button = ui::Button::create("btn_play_n.png", "btn_play_t.png", "", ui::Widget::TextureResType::PLIST);
     button->setName("start_button");
     button->setPosition(Vec2(900.f, 250.f));
     button->addTouchEventListener(CC_CALLBACK_2(MainMenuLayer::startButtonCallback, this));
     addChild(button);
 
     if (_muted)
-        button = ui::Button::create("textures/btn_mute_n.png", "textures/btn_mute_t.png", "");
+        button = ui::Button::create("btn_mute_n.png", "btn_mute_t.png", "", ui::Widget::TextureResType::PLIST);
     else
-        button = ui::Button::create("textures/btn_unmute_n.png", "textures/btn_unmute_t.png", "");
+        button = ui::Button::create("btn_unmute_n.png", "btn_unmute_t.png", "", ui::Widget::TextureResType::PLIST);
 
     button->setName("unmute_button");
     button->setPosition(Vec2(60.f, 60.f));
     button->addTouchEventListener(CC_CALLBACK_2(MainMenuLayer::soundButtonCallback, this));
     addChild(button);
 
-    button = ui::Button::create("textures/btn_exit_n.png", "textures/btn_exit_t.png", "");
+    button = ui::Button::create("btn_exit_n.png", "btn_exit_t.png", "", ui::Widget::TextureResType::PLIST);
     button->setName("exit_button");
     button->setPosition(Vec2(1220.f, 60.f));
     button->addTouchEventListener(CC_CALLBACK_2(MainMenuLayer::quitButtonCallback, this));
@@ -107,13 +107,13 @@ void MainMenuLayer::soundButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widge
 
         auto button = static_cast<ui::Button *>(sender);
         if (_muted) {
-            button->loadTextures("textures/btn_mute_n.png", "textures/btn_mute_t.png", "");
+            button->loadTextures("btn_mute_n.png", "btn_mute_t.png", "", ui::Widget::TextureResType::PLIST);
             _world->_audioEngine->setBackgroundMusicVolume(0.f);
             _world->_audioEngine->setEffectsVolume(0.f);
         } else {
             _world->_audioEngine->setBackgroundMusicVolume(0.6f);
             _world->_audioEngine->setEffectsVolume(1.f);
-            button->loadTextures("textures/btn_unmute_n.png", "textures/btn_unmute_t.png", "");
+            button->loadTextures("btn_unmute_n.png", "btn_unmute_t.png", "", ui::Widget::TextureResType::PLIST);
         }
 
         _world->_audioEngine->playEffect("audio/click.wav");

@@ -37,7 +37,7 @@ bool CostIndicator::init() {
     setCascadeOpacityEnabled(true);
     setCascadeColorEnabled(true);
 
-    auto energySprite = Sprite::create("textures/energy.png");
+    auto energySprite = Sprite::createWithSpriteFrameName("energy.png");
     energySprite->setPosition(Vec2(-40.f, 0.f));
     addChild(energySprite);
 

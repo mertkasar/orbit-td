@@ -53,14 +53,14 @@ bool HUDLayer::init() {
     _topPanel->setPosition(Vec2(0, 720));
     _topPanel->setOpacity(0);
 
-    auto button = ui::Button::create("textures/btn_next_n.png", "textures/btn_next_t.png", "");
+    auto button = ui::Button::create("btn_next_n.png", "btn_next_t.png", "", ui::Widget::TextureResType::PLIST);
     button->setName("next_button");
     button->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     button->setPosition(Vec2(140.f, 90.f));
     button->addTouchEventListener(CC_CALLBACK_2(HUDLayer::nextButtonCallback, this));
     _topPanel->addChild(button);
 
-    button = ui::Button::create("textures/btn_menu_n.png", "textures/btn_menu_t.png", "");
+    button = ui::Button::create("btn_menu_n.png", "btn_menu_t.png", "", ui::Widget::TextureResType::PLIST);
     button->setName("menu_button");
     button->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     button->setPosition(Vec2(1220.f, 90.f));
@@ -77,7 +77,7 @@ bool HUDLayer::init() {
     _bottomPanel->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
     _bottomPanel->setOpacity(0);
 
-    button = ui::Button::create("textures/btn_pause_n.png", "textures/btn_pause_t.png", "");
+    button = ui::Button::create("btn_pause_n.png", "btn_pause_t.png", "", ui::Widget::TextureResType::PLIST);
     button->setName("pause_button");
     button->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     button->setPosition(Vec2(1220.f, 60.f));
@@ -94,7 +94,7 @@ bool HUDLayer::init() {
     _shieldBar->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
     _shieldBar->setPosition(Vec2(90.f, 10.f));
 
-    auto sprite = Sprite::create("textures/hud_shield.png");
+    auto sprite = Sprite::createWithSpriteFrameName("hud_shield.png");
     sprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
     _shieldBar->addChild(sprite);
 
@@ -105,7 +105,7 @@ bool HUDLayer::init() {
     text->setPosition(Vec2(50.f, 50.f));
     _shieldBar->addChild(text);
 
-    sprite = Sprite::create("textures/shield_bar.png");
+    sprite = Sprite::createWithSpriteFrameName("shield_bar.png");
     sprite->setName("#shield_bar");
     sprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
     sprite->setPosition(108.f, 35.f);
@@ -116,7 +116,7 @@ bool HUDLayer::init() {
     _energy = ui::Layout::create();
     _energy->setPosition(Vec2(700, 60.f));
 
-    sprite = Sprite::create("textures/hud_energy.png");
+    sprite = Sprite::createWithSpriteFrameName("hud_energy.png");
     _energy->addChild(sprite);
 
     text = ui::Text::create("5000", "fonts/kenvector_future.ttf", 40);
@@ -295,11 +295,11 @@ void HUDLayer::pauseButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::To
 
         if (layer->isPaused()) {
             layer->resumeScene();
-            button->loadTextures("textures/btn_pause_n.png", "textures/btn_pause_t.png", "");
+            button->loadTextures("btn_pause_n.png", "btn_pause_t.png", "", ui::Widget::TextureResType::PLIST);
             notify('W', "Game resumed!");
         } else {
             layer->pauseScene();
-            button->loadTextures("textures/btn_resume_n.png", "textures/btn_resume_t.png", "");
+            button->loadTextures("btn_resume_n.png", "btn_resume_t.png", "", ui::Widget::TextureResType::PLIST);
             notify('W', "Game paused!");
         }
 

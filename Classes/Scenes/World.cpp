@@ -260,14 +260,14 @@ void World::loadResources() {
         loadModel(model.asString());
     }
 
-    /*auto audio = index.at("audio").asValueMap();
-     for (auto bg : audio.at("background").asValueVector()) {
-         _audioEngine->preloadBackgroundMusic(bg.asString().c_str());
-     }
+    auto audio = index.at("audio").asValueMap();
+    for (auto bg : audio.at("background").asValueVector()) {
+        _audioEngine->preloadBackgroundMusic(bg.asString().c_str());
+    }
 
-     for (auto effect : audio.at("effect").asValueVector()) {
-         _audioEngine->preloadEffect(effect.asString().c_str());
-     }*/
+    for (auto effect : audio.at("effect").asValueVector()) {
+        _audioEngine->preloadEffect(effect.asString().c_str());
+    }
 
     auto spriteCache = SpriteFrameCache::getInstance();
     for (auto sheet : index.at("spritesheet").asValueVector()) {

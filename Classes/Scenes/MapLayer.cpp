@@ -73,7 +73,7 @@ bool MapLayer::init() {
                 auto scaleUpEffect = Sequence::create(DelayTime::create(d + 0.3f + j * 0.1f),
                                                       ScaleTo::create(0.3f, 1.f), NULL);
 
-                Sprite *shadow = Sprite::create("textures/touch_bg.png");
+                Sprite *shadow = Sprite::createWithSpriteFrameName("touch_bg.png");
                 shadow->setColor(Color::BG);
                 shadow->setPosition(position);
 
@@ -82,7 +82,7 @@ bool MapLayer::init() {
 
                 addChild(shadow);
 
-                Sprite *touchArea = Sprite::create("textures/touch.png");
+                Sprite *touchArea = Sprite::createWithSpriteFrameName("touch.png");
                 touchArea->setColor(Color::GREY);
                 touchArea->setPosition(position);
 
@@ -204,7 +204,7 @@ void MapLayer::drawPath() {
             auto distance = current._location - previous._location;
             auto angle = distance.getAngle();
 
-            auto arrow = Sprite::create("textures/arrow.png");
+            auto arrow = Sprite::createWithSpriteFrameName("arrow.png");
             arrow->setScale(1.3f);
             arrow->setPosition(current._location - distance / 2);
             arrow->setRotation(-CC_RADIANS_TO_DEGREES(angle));
@@ -214,7 +214,7 @@ void MapLayer::drawPath() {
                                               NULL));
             _pathCanvas->addChild(arrow);
 
-            arrow = Sprite::create("textures/arrow.png");
+            arrow = Sprite::createWithSpriteFrameName("arrow.png");
             arrow->setScale(1.3f);
             arrow->setPosition(current._location);
             arrow->setRotation(-CC_RADIANS_TO_DEGREES(angle));

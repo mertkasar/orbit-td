@@ -44,19 +44,19 @@ bool WheelMenu::init(World *world) {
 
     const float SHIFT = 90.f;
 
-    auto item = ui::Button::create("textures/btn_turret_n.png", "textures/btn_turret_t.png", "");
+    auto item = ui::Button::create("btn_turret_n.png", "btn_turret_t.png", "", ui::Widget::TextureResType::PLIST);
     item->setTag(MACHINE_GUN);
     item->setPosition(Vec2(-SHIFT, 0.f));
     item->addTouchEventListener(CC_CALLBACK_2(WheelMenu::towerButtonCallback, this));
     _purchaseMenu->addChild(item);
 
-    item = ui::Button::create("textures/btn_laser_n.png", "textures/btn_laser_t.png", "");
+    item = ui::Button::create("btn_laser_n.png", "btn_laser_t.png", "", ui::Widget::TextureResType::PLIST);
     item->setTag(LASER_GUN);
     item->setPosition(Vec2(0, SHIFT));
     item->addTouchEventListener(CC_CALLBACK_2(WheelMenu::towerButtonCallback, this));
     _purchaseMenu->addChild(item);
 
-    item = ui::Button::create("textures/btn_rl_n.png", "textures/btn_rl_t.png", "");
+    item = ui::Button::create("btn_rl_n.png", "btn_rl_t.png", "", ui::Widget::TextureResType::PLIST);
     item->setTag(MISSILE_LAUNCHER);
     item->setPosition(Vec2(SHIFT, 0.f));
     item->addTouchEventListener(CC_CALLBACK_2(WheelMenu::towerButtonCallback, this));
@@ -64,13 +64,13 @@ bool WheelMenu::init(World *world) {
 
     _verboseMenu = ui::Layout::create();
 
-    item = ui::Button::create("textures/btn_upgrade_n.png", "textures/btn_upgrade_t.png", "");
+    item = ui::Button::create("btn_upgrade_n.png", "btn_upgrade_t.png", "", ui::Widget::TextureResType::PLIST);
     item->setTag(UPGRADE);
     item->setPosition(Vec2(-SHIFT, 0.f));
     item->addTouchEventListener(CC_CALLBACK_2(WheelMenu::upgradeButtonCallback, this));
     _verboseMenu->addChild(item);
 
-    item = ui::Button::create("textures/btn_sell_n.png", "textures/btn_sell_t.png", "");
+    item = ui::Button::create("btn_sell_n.png", "btn_sell_t.png", "", ui::Widget::TextureResType::PLIST);
     item->setTag(SELL);
     item->setPosition(Vec2(SHIFT, 0.f));
     item->addTouchEventListener(CC_CALLBACK_2(WheelMenu::sellButtonCallback, this));
@@ -78,12 +78,12 @@ bool WheelMenu::init(World *world) {
 
     _validationMenu = ui::Layout::create();
 
-    item = ui::Button::create("textures/btn_accept_n.png", "textures/btn_accept_t.png", "");
+    item = ui::Button::create("btn_accept_n.png", "btn_accept_t.png", "", ui::Widget::TextureResType::PLIST);
     item->setTag(ACCEPT);
     item->setPosition(Vec2(SHIFT, 0.f));
     _validationMenu->addChild(item);
 
-    item = ui::Button::create("textures/btn_decline_n.png", "textures/btn_decline_t.png", "");
+    item = ui::Button::create("btn_decline_n.png", "btn_decline_t.png", "", ui::Widget::TextureResType::PLIST);
     item->setTag(DECLINE);
     item->setPosition(Vec2(-SHIFT, 0.f));
     item->addTouchEventListener(CC_CALLBACK_2(WheelMenu::declineButtonCallback, this));

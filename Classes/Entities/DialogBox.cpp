@@ -44,7 +44,7 @@ bool DialogBox::init() {
     setContentSize(contentSize);
     setCascadeOpacityEnabled(true);
     setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-    setBackGroundImage("textures/bg_panel.png");
+    setBackGroundImage("bg_panel.png", TextureResType::PLIST);
     setBackGroundImageScale9Enabled(true);
     setPosition(_world->_canvasCenter);
     setScaleY(0.f);
@@ -63,13 +63,13 @@ bool DialogBox::init() {
     _text->setVisible(false);
     addChild(_text);
 
-    auto button = ui::Button::create("textures/btn_no_n.png", "textures/btn_no_t.png", "");
+    auto button = ui::Button::create("btn_no_n.png", "btn_no_t.png", "", TextureResType::PLIST);
     button->setPosition(center + Vec2(-150.f, -50.f));
     button->addTouchEventListener(CC_CALLBACK_2(DialogBox::noButtonCallback, this));
     button->setVisible(false);
     addChild(button);
 
-    _yesButton = ui::Button::create("textures/btn_yes_n.png", "textures/btn_yes_t.png", "");
+    _yesButton = ui::Button::create("btn_yes_n.png", "btn_yes_t.png", "", TextureResType::PLIST);
     _yesButton->setPosition(center + Vec2(150.f, -50.f));
     _yesButton->setVisible(false);
     addChild(_yesButton);
