@@ -1,7 +1,7 @@
 #include <AppDelegate.h>
 
 #include <audio/include/SimpleAudioEngine.h>
-#include <Scenes/World.h>
+#include <Scenes/SplashScene.h>
 
 USING_NS_CC;
 
@@ -41,7 +41,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     register_all_packages();
 
-    auto scene = World::createScene();
+    auto scene = SplashScene::createScene();
     director->runWithScene(scene);
 
     return true;

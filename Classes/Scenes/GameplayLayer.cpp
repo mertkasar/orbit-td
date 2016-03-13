@@ -110,7 +110,7 @@ bool GameplayLayer::init() {
 
     Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
 
-    _particleBatch = ParticleBatchNode::create("textures/particles/missile_fire.png", 3000);
+    _particleBatch = ParticleBatchNode::create("textures/missile_fire.png", 3000);
     addChild(_particleBatch);
 
     scheduleUpdate();

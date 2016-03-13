@@ -40,11 +40,12 @@ public:
         GAMEPLAY
     };
 
-public:
+private:
     World();
 
     ~World();
 
+public:
     static cocos2d::Scene *createScene();
 
     virtual bool init();
@@ -82,11 +83,9 @@ public:
     void setState(State state);
 
 private:
-    void loadResources();
-
     void connectListeners();
 
-    void loadModel(std::string path);
+    void loadModels();
 
 private:
     cocos2d::PhysicsWorld *__physicsWorld;

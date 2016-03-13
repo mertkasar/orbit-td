@@ -103,7 +103,7 @@
 	<key>tangentialAcceleration</key>
 	<real>0</real>
 	<key>textureFileName</key>
-	<string>textures/particles/missile_fire.png</string>
+	<string>textures/missile_fire.png</string>
 	<key>textureImageData</key>
 	<string></string>
 </dict>

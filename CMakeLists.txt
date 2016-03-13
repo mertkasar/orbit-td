@@ -124,6 +124,7 @@ endif (WIN32)
 set(GAME_SRC
         Classes/AppDelegate.cpp
         Classes/Scenes/World.cpp
+        Classes/Scenes/SplashScene.cpp
         Classes/Scenes/GameplayLayer.cpp
         Classes/Scenes/MapLayer.cpp
         Classes/Scenes/HUDLayer.cpp
@@ -155,6 +156,7 @@ set(GAME_HEADERS
         Classes/Globals.h
         Classes/AppDelegate.h
         Classes/Scenes/World.h
+        Classes/Scenes/SplashScene.h
         Classes/Scenes/GameplayLayer.h
         Classes/Scenes/MapLayer.h
         Classes/Scenes/HUDLayer.h

@@ -62,11 +62,12 @@ bool World::init() {
     _origin = Director::getInstance()->getVisibleOrigin();
     _canvasCenter = Vec2(_visibleSize / 2.f) + _origin;
 
+    loadModels();
+
     _currentState = IDLE;
 
     _prefs = UserDefault::getInstance();
     _audioEngine = CocosDenshion::SimpleAudioEngine::getInstance();
-    loadResources();
 
     _backgroundSprite = Sprite::create("textures/background.png");
     _backgroundSprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
@@ -76,7 +77,7 @@ bool World::init() {
     _planet = Planet::create();
     addChild(_planet);
 
-    setState(GAMEPLAY);
+    setState(MAIN_MENU);
 
     auto muted = _prefs->getBoolForKey("muted");
     _audioEngine->playBackgroundMusic("audio/ambient.mp3", true);
@@ -253,31 +254,14 @@ void World::connectListeners() {
     Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener, this);
 }
 
-void World::loadResources() {
+void World::loadModels() {
     auto index = FileUtils::getInstance()->getValueMapFromFile("index.plist");
-
     for (auto model : index.at("model").asValueVector()) {
-        loadModel(model.asString());
+        auto path = model.asString();
+
+        auto data = FileUtils::getInstance()->getValueMapFromFile(path);
+        auto key = (unsigned int) data.at("id").asInt();
+
+        _models.insert(std::make_pair(key, data));
     }
-
-    auto audio = index.at("audio").asValueMap();
-    for (auto bg : audio.at("background").asValueVector()) {
-        _audioEngine->preloadBackgroundMusic(bg.asString().c_str());
-    }
-
-    for (auto effect : audio.at("effect").asValueVector()) {
-        _audioEngine->preloadEffect(effect.asString().c_str());
-    }
-
-    auto spriteCache = SpriteFrameCache::getInstance();
-    for (auto sheet : index.at("spritesheet").asValueVector()) {
-        spriteCache->addSpriteFramesWithFile(sheet.asString());
-    }
-}
-
-void World::loadModel(std::string path) {
-    auto data = FileUtils::getInstance()->getValueMapFromFile(path);
-    auto key = (unsigned int) data.at("id").asInt();
-
-    _models.insert(std::make_pair(key, data));
 }

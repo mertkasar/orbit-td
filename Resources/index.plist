@@ -37,5 +37,14 @@
 		<string>textures/spritesheet.plist</string>
 		<string>textures/map_layer.plist</string>
 	</array>
+	<key>textures</key>
+	<array>
+		<string>textures/planet_base.png</string>
+		<string>textures/planet_atmosphere.png</string>
+		<string>textures/planet_overlay.png</string>
+		<string>textures/background.png</string>
+		<string>textures/explosion.png</string>
+		<string>textures/missile_fire.png</string>
+	</array>
 </dict>
 </plist>
