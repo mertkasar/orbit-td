@@ -182,7 +182,9 @@ void HUDLayer::updateLife() {
         text->setString(ss.str());
 
         auto bar = static_cast<Sprite *>(_shieldBar->getChildByName("#shield_bar"));
-        bar->setTextureRect(Rect(0, 0, life * 15, 35));
+        auto rect = bar->getTextureRect();
+        rect.size.width = life * 15;
+        bar->setTextureRect(rect);
     }
 }
 
