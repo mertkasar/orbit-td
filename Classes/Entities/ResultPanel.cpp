@@ -99,17 +99,21 @@ bool ResultPanel::init(bool win, int point, int energy, int shield) {
     _titleText->setString(title);
     _titleText->setColor(color);
 
-    int lastScore = _world->_prefs->getIntegerForKey("highscore");
-    bool highScore = _score > lastScore;
-    if (highScore) {
-        _world->_prefs->setIntegerForKey("highscore", _score);
+    auto highScoreText = ui::Text::create("", "fonts/kenvector_future.ttf", 24);
+    highScoreText->setColor(Color::GREEN);
+    highScoreText->setOpacity(0);
+    highScoreText->setPosition(_scoreText->getPosition() - Vec2(0.f, 50.f));
+    highScoreText->runAction(Sequence::create(DelayTime::create(1.5f), FadeIn::create(0.3f), NULL));
+    addChild(highScoreText);
 
-        auto highScoreText = ui::Text::create("New Highscore!", "fonts/kenvector_future.ttf", 24);
-        highScoreText->setColor(Color::GREEN);
-        highScoreText->setOpacity(0);
-        highScoreText->setPosition(_scoreText->getPosition() - Vec2(0.f, 50.f));
-        highScoreText->runAction(Sequence::create(DelayTime::create(1.5f), FadeIn::create(0.3f), NULL));
-        addChild(highScoreText);
+    int lastScore = _world->_prefs->getIntegerForKey("highscore");
+    if (_score > lastScore) {
+        _world->_prefs->setIntegerForKey("highscore", _score);
+        highScoreText->setString("New Highscore!");
+    } else {
+        std::stringstream ss;
+        ss << "Highscore: " << lastScore;
+        highScoreText->setString(ss.str());
     }
 
     scheduleUpdate();

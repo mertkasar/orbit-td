@@ -47,7 +47,7 @@ bool SplashScene::init() {
     poweredBy->setCascadeOpacityEnabled(true);
     poweredBy->setPosition(sprite->getPosition() - Vec2(-20, 120.f));
 
-    auto label = ui::Text::create("Powered by:", "fonts/kenvector_future.ttf", 20);
+    auto label = ui::Text::create("Powered by", "fonts/kenvector_future.ttf", 20);
     label->setPosition(Vec2(-70.f, 0.f));
     poweredBy->addChild(label);
 
