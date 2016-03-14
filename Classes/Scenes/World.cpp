@@ -125,8 +125,7 @@ bool World::placeTower(ModelID type, Vec2 tile) {
     _mapLayer->updateMap(traversed, tile, 1);
     _gameplayLayer->updateEnemyPaths(traversed, _mapLayer->_goal);
 
-    if (_gameplayLayer->getEnemiesPresent() == 0)
-        _mapLayer->drawPath();
+    _mapLayer->drawPath();
 
     return true;
 }
@@ -140,8 +139,7 @@ void World::destroyTower(Vec2 tile) {
     _mapLayer->updateMap(traversed, tile, 0);
     _gameplayLayer->updateEnemyPaths(traversed, _mapLayer->_goal);
 
-    if (_gameplayLayer->getEnemiesPresent() == 0)
-        _mapLayer->drawPath();
+    _mapLayer->drawPath();
 }
 
 void World::upgradeTower(cocos2d::Vec2 tile) {

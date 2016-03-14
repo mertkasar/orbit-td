@@ -102,6 +102,10 @@ bool MapLayer::init() {
     _pathCanvas = Node::create();
     addChild(_pathCanvas);
 
+    _debugCanvas = DrawNode::create();
+    _debugCanvas->setVisible(false);
+    addChild(_debugCanvas);
+
     auto traversed = traverseAgainst(_start, 0);
     if (_path.isReached(traversed, _start)) {
         _path.construct(traversed, _start, _goal);
@@ -190,6 +194,7 @@ TraverseData MapLayer::traverseAgainst(Vec2 node, unsigned int value) {
 
 void MapLayer::drawPath() {
     _pathCanvas->removeAllChildren();
+    _debugCanvas->removeAllChildren();
 
     auto waypoints = _path.getWayPoints();
     for (unsigned int i = 0; i < waypoints.size(); i++) {
@@ -199,10 +204,14 @@ void MapLayer::drawPath() {
                                              RemoveSelf::create(true),
                                              NULL);
 
+        _debugCanvas->drawSolidCircle(current._location, 6.f, 0.f, 50, Color4F::RED);
+
         if (i != 0) {
             auto previous = waypoints.at(i - 1);
             auto distance = current._location - previous._location;
             auto angle = distance.getAngle();
+
+            _debugCanvas->drawLine(current._location, previous._location, Color4F::RED);
 
             auto arrow = Sprite::createWithSpriteFrameName("arrow.png");
             arrow->setScale(1.3f);
