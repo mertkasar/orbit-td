@@ -21,6 +21,8 @@ class DialogBox;
 
 class CostIndicator;
 
+class WheelMenu;
+
 class HUDLayer : public cocos2d::Layer {
 private:
     HUDLayer(World *world);
@@ -67,6 +69,9 @@ private:
 
     DialogBox *_dialogBox;
     Pool<CostIndicator> _costIndicatorPool;
+
+public:
+    WheelMenu *_wheelMenu;
 };
 
 #endif //HUD_LAYER_H

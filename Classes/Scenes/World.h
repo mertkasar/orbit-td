@@ -26,8 +26,6 @@ class MainMenuLayer;
 
 class HUDLayer;
 
-class WheelMenu;
-
 class Planet;
 
 class SpawnManager;
@@ -83,8 +81,6 @@ public:
     void setState(State state);
 
 private:
-    void connectListeners();
-
     void loadModels();
 
 private:
@@ -95,8 +91,6 @@ private:
     Planet *_planet;
 
     std::unordered_map<unsigned int, cocos2d::ValueMap> _models;
-
-    WheelMenu *_wheelMenu;
 
 public:
     CocosDenshion::SimpleAudioEngine *_audioEngine;

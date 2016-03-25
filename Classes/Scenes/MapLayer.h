@@ -47,12 +47,16 @@ public:
     cocos2d::Vec2 getTouchedSlot(cocos2d::Vec2 location);
 
 private:
+    void connectListener();
+
+private:
     World *_world;
 
     std::map<cocos2d::Vec2, cocos2d::Sprite *> _slotMap;
 
     cocos2d::Node *_pathCanvas;
     cocos2d::DrawNode *_debugCanvas;
+
 public:
     Grid _grid;
     Path _path;

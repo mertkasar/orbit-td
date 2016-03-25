@@ -4,6 +4,7 @@
 #include "GameplayLayer.h"
 #include "../Entities/DialogBox.h"
 #include "../Entities/CostIndicator.h"
+#include "../Entities/WheelMenu.h"
 #include "../Utilities/SpawnManager.h"
 
 #include <2d/CCMenu.h>
@@ -128,9 +129,12 @@ bool HUDLayer::init() {
 
     _bottomPanel->addChild(_energy);
 
+    _wheelMenu = WheelMenu::create(_world);
+
     addChild(_topPanel);
     addChild(_notificationPanel);
     addChild(_bottomPanel);
+    addChild(_wheelMenu);
 
     return true;
 }

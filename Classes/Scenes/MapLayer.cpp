@@ -1,7 +1,12 @@
 #include "MapLayer.h"
 
 #include "World.h"
+#include "../Entities/WheelMenu.h"
+#include "HUDLayer.h"
 
+#include <base/CCDirector.h>
+#include <base/CCEventDispatcher.h>
+#include <base/CCEventListenerTouch.h>
 #include <2d/CCDrawNode.h>
 #include <2d/CCActionInterval.h>
 #include <2d/CCActionEase.h>
@@ -96,6 +101,8 @@ bool MapLayer::init() {
         }
     }
 
+    runAction(Sequence::create(DelayTime::create(d + 9 * 0.1f), CallFunc::create([&]() { connectListener(); }), NULL));
+
     _start = Vec2(2, 9);
     _goal = Vec2(2, 0);
 
@@ -112,6 +119,25 @@ bool MapLayer::init() {
     }
 
     return true;
+}
+
+void MapLayer::connectListener() {
+    auto touchListener = EventListenerTouchOneByOne::create();
+    touchListener->setSwallowTouches(true);
+    touchListener->onTouchBegan = [&](Touch *touch, Event *pEvent) {
+        Vec2 touched = getTouchedSlot(touch->getLocation());
+        auto wheelMenu = _world->_hudLayer->_wheelMenu;
+
+        if (wheelMenu->isOpen()) {
+            wheelMenu->close();
+        } else if (touched.x > -1 && touched.y > -1) {
+            wheelMenu->openAt(touched);
+        }
+
+        return true;
+    };
+
+    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener, this);
 }
 
 void MapLayer::close(float delay) {

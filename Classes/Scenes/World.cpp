@@ -6,7 +6,6 @@
 #include "MainMenuLayer.h"
 #include "../Entities/Turret.h"
 #include "../Entities/EnemyShip.h"
-#include "../Entities/WheelMenu.h"
 #include "../Entities/Planet.h"
 #include "../Entities/ResultPanel.h"
 #include "../Utilities/SpawnManager.h"
@@ -185,9 +184,6 @@ void World::setState(World::State state) {
             _mapLayer->close();
             _hudLayer->close();
 
-            if (_wheelMenu->isOpen())
-                _wheelMenu->close();
-
             _mainMenuLayer->show(2.5f);
 
             unscheduleUpdate();
@@ -225,31 +221,8 @@ void World::setState(World::State state) {
         _hudLayer->updateWaveIndicators(_spawnManager->getCurrentWave(), _spawnManager->getMaxWave());
         addChild(_hudLayer);
 
-        _wheelMenu = WheelMenu::create(this);
-        addChild(_wheelMenu);
-
-        connectListeners();
-
         _currentState = state;
     }
-}
-
-void World::connectListeners() {
-    auto touchListener = EventListenerTouchOneByOne::create();
-    touchListener->setSwallowTouches(true);
-    touchListener->onTouchBegan = [&](Touch *touch, Event *pEvent) {
-        Vec2 touched = _mapLayer->getTouchedSlot(touch->getLocation());
-
-        if (_wheelMenu->isOpen()) {
-            _wheelMenu->close();
-        } else if (touched.x > -1 && touched.y > -1) {
-            _wheelMenu->openAt(touched);
-        }
-
-        return true;
-    };
-
-    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener, this);
 }
 
 void World::loadModels() {
