@@ -312,3 +312,8 @@ void HUDLayer::pauseButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::To
         _world->_audioEngine->playEffect("audio/click.wav");
     }
 }
+
+void HUDLayer::reset() {
+    updateWaveIndicators(1, _world->_spawnManager->getMaxWave());
+    updateLife();
+}

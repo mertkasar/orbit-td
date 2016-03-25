@@ -98,7 +98,7 @@ void World::resetGame() {
         _gameplayLayer->reset();
         _gameplayLayer->resumeScene();
 
-        _hudLayer->updateLife();
+        _hudLayer->reset();
 
         _spawnManager->reset();
     } else

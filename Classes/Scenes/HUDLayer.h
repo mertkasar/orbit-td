@@ -50,6 +50,8 @@ public:
 
     void close(float delay = 0.f);
 
+    void reset();
+
 private:
     void menuButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type);
 
