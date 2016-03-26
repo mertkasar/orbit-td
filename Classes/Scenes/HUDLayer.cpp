@@ -102,7 +102,7 @@ bool HUDLayer::init() {
     text = ui::Text::create("20", "fonts/kenvector_future.ttf", 32);
     text->setName("#shield_text");
     text->setTextHorizontalAlignment(TextHAlignment::CENTER);
-    text->setColor(Color::ORANGE);
+    text->setColor(Palette::ORANGE);
     text->setPosition(Vec2(50.f, 50.f));
     _shieldBar->addChild(text);
 
@@ -123,7 +123,7 @@ bool HUDLayer::init() {
     text = ui::Text::create("5000", "fonts/kenvector_future.ttf", 40);
     text->setName("#energy_text");
     text->setTextHorizontalAlignment(TextHAlignment::LEFT);
-    text->setColor(Color::ICE);
+    text->setColor(Palette::ICE);
     text->setPosition(Vec2(110.f, 0.f));
     _energy->addChild(text);
 

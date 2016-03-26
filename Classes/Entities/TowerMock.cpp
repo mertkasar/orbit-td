@@ -20,7 +20,7 @@ bool TowerMock::init() {
     addChild(sprite);
 
     sprite = Sprite::createWithSpriteFrameName("range.png");
-    sprite->setColor(Color::GREEN);
+    sprite->setColor(Palette::GREEN);
     sprite->runAction(RepeatForever::create(RotateBy::create(2.f, 30.f)));
     addChild(sprite);
 

@@ -62,7 +62,7 @@ bool MapLayer::init() {
     Vec2 size = _grid.getSize();
     for (int i = 0; i < size.y; i++) {
         Sprite *orbit = Sprite::createWithSpriteFrameName("orbit.png");
-        orbit->setColor(Color::GREY);
+        orbit->setColor(Palette::GREY);
         orbit->setPosition(algorithm::toCircularGrid(Vec2(2, i)));
 
         orbit->setOpacity((GLubyte) 0.f);
@@ -79,7 +79,7 @@ bool MapLayer::init() {
                                                       ScaleTo::create(0.3f, 1.f), NULL);
 
                 Sprite *shadow = Sprite::createWithSpriteFrameName("touch_bg.png");
-                shadow->setColor(Color::BG);
+                shadow->setColor(Palette::BG);
                 shadow->setPosition(position);
 
                 shadow->setScale(0.f);
@@ -88,7 +88,7 @@ bool MapLayer::init() {
                 addChild(shadow);
 
                 Sprite *touchArea = Sprite::createWithSpriteFrameName("touch.png");
-                touchArea->setColor(Color::GREY);
+                touchArea->setColor(Palette::GREY);
                 touchArea->setPosition(position);
 
                 _slotMap.insert(std::make_pair(Vec2(i, j), touchArea));
@@ -161,7 +161,7 @@ void MapLayer::activateSlot(cocos2d::Vec2 tile) {
     assert(found != _slotMap.end());
 
     Sprite *slot = found->second;
-    slot->setColor(Color::GREEN);
+    slot->setColor(Palette::GREEN);
     slot->runAction(RepeatForever::create(RotateBy::create(2.f, 30.f)));
 }
 
@@ -171,7 +171,7 @@ void MapLayer::deactivateSlot(cocos2d::Vec2 tile) {
     assert(found != _slotMap.end());
 
     Sprite *slot = found->second;
-    slot->setColor(Color::GREY);
+    slot->setColor(Palette::GREY);
     slot->stopAllActions();
     slot->setRotation(0.f);
 }

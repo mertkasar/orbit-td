@@ -20,7 +20,7 @@ enum ModelID {
 };
 
 //Colors
-namespace Color {
+namespace Palette {
     const cocos2d::Color3B GREEN = {113, 201, 55};
     const cocos2d::Color3B YELLOW = {255, 204, 0};
     const cocos2d::Color3B BLUE = {54, 187, 245};

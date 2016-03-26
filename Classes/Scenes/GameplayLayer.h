@@ -110,6 +110,7 @@ private:
     Pool<Explosion> _explosionPool;
 
     cocos2d::Vector<EnemyShip *> _ships;
+    cocos2d::Vector<EnemyShip *> _deadShips;
     cocos2d::Vector<Missile *> _missiles;
     cocos2d::Vector<Bullet *> _bullets;
 

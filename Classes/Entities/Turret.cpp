@@ -49,7 +49,7 @@ bool Turret::init(const ValueMap &model) {
 
     _rangeSprite = Sprite::createWithSpriteFrameName("range.png");
     _rangeSprite->setVisible(false);
-    _rangeSprite->setColor(Color::GREEN);
+    _rangeSprite->setColor(Palette::GREEN);
     _rangeSprite->setScale(2 * _range / _rangeSprite->getContentSize().width);
     _rangeSprite->runAction(RepeatForever::create(RotateBy::create(2.f, 30.f)));
 
@@ -113,13 +113,13 @@ void Turret::upgrade() {
 
     switch (_level) {
         case 0:
-            _rangeSprite->setColor(Color::GREEN);
+            _rangeSprite->setColor(Palette::GREEN);
             break;
         case 1:
-            _rangeSprite->setColor(Color::YELLOW);
+            _rangeSprite->setColor(Palette::YELLOW);
             break;
         case 2:
-            _rangeSprite->setColor(Color::BLUE);
+            _rangeSprite->setColor(Palette::BLUE);
             break;
         default:
             break;

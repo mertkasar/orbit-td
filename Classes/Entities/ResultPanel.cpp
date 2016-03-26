@@ -69,7 +69,7 @@ bool ResultPanel::init(bool win, int point, int energy, int shield) {
 
     _scoreText = ui::Text::create("", "fonts/kenvector_future.ttf", 48);
     _scoreText->setPosition(Vec2(225.f, 400.f));
-    _scoreText->setColor(Color::ORANGE);
+    _scoreText->setColor(Palette::ORANGE);
     _scoreText->setVisible(false);
     addChild(_scoreText);
 
@@ -90,17 +90,17 @@ bool ResultPanel::init(bool win, int point, int energy, int shield) {
 
     if (win) {
         title = "CLEARED!";
-        color = Color::GREEN;
+        color = Palette::GREEN;
     } else {
         title = "FAILED!";
-        color = Color::RED;
+        color = Palette::RED;
     }
 
     _titleText->setString(title);
     _titleText->setColor(color);
 
     auto highScoreText = ui::Text::create("", "fonts/kenvector_future.ttf", 24);
-    highScoreText->setColor(Color::GREEN);
+    highScoreText->setColor(Palette::GREEN);
     highScoreText->setOpacity(0);
     highScoreText->setPosition(_scoreText->getPosition() - Vec2(0.f, 50.f));
     highScoreText->runAction(Sequence::create(DelayTime::create(1.5f), FadeIn::create(0.3f), NULL));

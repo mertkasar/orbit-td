@@ -58,7 +58,7 @@ bool DialogBox::init() {
     _text->setFontName("fonts/kenvector_future.ttf");
     _text->setFontSize(24);
     _text->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-    _text->setColor(Color::ICE);
+    _text->setColor(Palette::ICE);
     _text->setPosition(center + Vec2(0.f, 50.f));
     _text->setVisible(false);
     addChild(_text);

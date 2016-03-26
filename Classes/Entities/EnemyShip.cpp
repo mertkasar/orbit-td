@@ -42,14 +42,14 @@ bool EnemyShip::init() {
     auto hpBarB = Sprite::createWithSpriteFrameName("hp_bar.png");
     hpBarB->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
     hpBarB->setName("bg");
-    hpBarB->setColor(Color::RED);
+    hpBarB->setColor(Palette::RED);
     hpBarB->setScale(HBAR_WIDTH, HBAR_HEIGHT);
     _HPBar->addChild(hpBarB);
 
     auto hpBarF = Sprite::createWithSpriteFrameName("hp_bar.png");
     hpBarF->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
     hpBarF->setName("fg");
-    hpBarF->setColor(Color::GREEN);
+    hpBarF->setColor(Palette::GREEN);
     hpBarF->setScale(HBAR_WIDTH, HBAR_HEIGHT);
     _HPBar->addChild(hpBarF);
 

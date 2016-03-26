@@ -23,7 +23,7 @@
 
 #include <sstream>
 
-#define STARTING_COIN 40
+#define STARTING_COIN 4000
 #define STARTING_LIFE 20
 
 USING_NS_CC;
@@ -128,7 +128,7 @@ void GameplayLayer::update(float delta) {
     for (auto enemy : _ships)
         if (enemy->isDead()) {
             enemy->removeFromParent();
-            _ships.eraseObject(enemy);
+            _deadShips.pushBack(enemy);
 
             if (enemy->isKilled()) {
                 addExplosion(enemy->getPosition(), 0.5f, 3.f);
@@ -143,6 +143,11 @@ void GameplayLayer::update(float delta) {
                 _world->_audioEngine->playEffect("audio/buzz.wav");
             }
         }
+
+    for (auto ship : _deadShips) {
+        _ships.eraseObject(ship);
+    }
+    _deadShips.clear();
 }
 
 void GameplayLayer::close(float delay) {

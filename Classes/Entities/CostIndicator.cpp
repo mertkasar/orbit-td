@@ -51,9 +51,9 @@ bool CostIndicator::init() {
 
 void CostIndicator::update(int cost) {
     if (cost < 0) {
-        setColor(Color::RED);
+        setColor(Palette::RED);
     } else if (cost > 0) {
-        setColor(Color::GREEN);
+        setColor(Palette::GREEN);
     }
 
     std::stringstream ss;
