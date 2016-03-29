@@ -8,13 +8,13 @@
 	<string>raptor.png</string>
 	<key>max_hp</key>
 	<real>4.0</real>
+	<key>hp_ratio_per_wave</key>
+	<real>2.5</real>
 	<key>reward</key>
-	<real>5.0</real>
+	<real>7.0</real>
 	<key>mass</key>
 	<real>0.7</real>
 	<key>max_velocity</key>
 	<real>100.0</real>
-	<key>hp_ratio_per_wave</key>
-	<real>1</real>
 </dict>
 </plist>

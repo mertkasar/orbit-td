@@ -79,16 +79,15 @@ protected:
     EnemyShip *_target;
     cocos2d::Vector<EnemyShip *> _targetList;
 
-    //cocos2d::ValueMap &_model;
-
     unsigned int _cost;
     float _base_range;
     float _range;
     float _damage;
     float _cooldown;
+    float _dmgRatio;
+    float _CDRatio;
 
     unsigned int _level;
-    float _dmgRatioPerWave;
     float _nextShooting;
     bool _verbose;
 };

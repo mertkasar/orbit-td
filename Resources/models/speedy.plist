@@ -7,9 +7,9 @@
 	<key>sprite</key>
 	<string>speedy.png</string>
 	<key>max_hp</key>
-	<real>2.0</real>
+	<real>1.0</real>
 	<key>hp_ratio_per_wave</key>
-	<real>1</real>
+	<real>2</real>
 	<key>reward</key>
 	<real>3.0</real>
 	<key>mass</key>

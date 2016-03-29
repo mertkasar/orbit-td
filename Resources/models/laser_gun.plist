@@ -7,14 +7,16 @@
 	<key>gun_sprite_name</key>
 	<string>laser_gun.png</string>
 	<key>base_cost</key>
-	<real>60.0</real>
+	<real>120.0</real>
 	<key>base_range</key>
 	<real>150.0</real>
 	<key>base_damage</key>
 	<real>0.25</real>
 	<key>base_cd</key>
-	<real>0.0</real>
+	<real>0.01</real>
 	<key>dmg_ratio_per_wave</key>
-	<real>0.08</real>
+	<real>0.1</real>
+	<key>cd_ratio_per_level</key>
+	<real>0</real>
 </dict>
 </plist>

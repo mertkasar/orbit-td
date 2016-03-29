@@ -23,7 +23,7 @@
 
 #include <sstream>
 
-#define STARTING_COIN 4000
+#define STARTING_COIN 75
 #define STARTING_LIFE 20
 
 USING_NS_CC;

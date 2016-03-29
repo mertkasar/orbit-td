@@ -7,7 +7,7 @@
 	<key>gun_sprite_name</key>
 	<string>machine_gun.png</string>
 	<key>base_cost</key>
-	<real>30.0</real>
+	<real>50.0</real>
 	<key>base_range</key>
 	<real>150.0</real>
 	<key>base_damage</key>
@@ -15,6 +15,8 @@
 	<key>base_cd</key>
 	<real>0.3</real>
 	<key>dmg_ratio_per_wave</key>
-	<real>1</real>
+	<real>0.1</real>
+	<key>cd_ratio_per_level</key>
+	<real>0.2</real>
 </dict>
 </plist>

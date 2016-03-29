@@ -7,9 +7,9 @@
 	<key>sprite</key>
 	<string>pulsar.png</string>
 	<key>max_hp</key>
-	<real>10.0</real>
+	<real>4.0</real>
 	<key>hp_ratio_per_wave</key>
-	<real>1</real>
+	<real>1.8</real>
 	<key>reward</key>
 	<real>15.0</real>
 	<key>mass</key>

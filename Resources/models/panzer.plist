@@ -7,9 +7,9 @@
 	<key>sprite</key>
 	<string>panzer.png</string>
 	<key>max_hp</key>
-	<real>100.0</real>
+	<real>50.0</real>
 	<key>hp_ratio_per_wave</key>
-	<real>1</real>
+	<real>2</real>
 	<key>reward</key>
 	<real>20.0</real>
 	<key>mass</key>
