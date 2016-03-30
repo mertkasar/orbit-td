@@ -108,7 +108,7 @@ void World::resetGame() {
 bool World::placeTower(ModelID type, Vec2 tile) {
     auto traversed = _mapLayer->traverseAgainst(tile, 1);
 
-    if (!_mapLayer->isPathClear(traversed)) {
+    if (tile != _mapLayer->_goal && !_mapLayer->isPathClear(traversed)) {
         _hudLayer->notify('E', "You can't block the path!");
         return false;
     };

@@ -98,8 +98,8 @@ public:
 private:
     World *_world;
 
-    unsigned int _totalPoint;
-    unsigned int _totalEnergy;
+    int _totalPoint;
+    int _totalEnergy;
     unsigned int _life;
 
     bool _paused;

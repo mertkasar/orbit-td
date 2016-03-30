@@ -53,17 +53,18 @@ void SpawnManager::update(float delta) {
         if (!_spawned) {
             if (!isCleared()) {
                 scheduleOnce([&](float) { _world->_mapLayer->drawPath(); }, 1.f, "draw_path");
-                scheduleOnce(CC_SCHEDULE_SELECTOR(SpawnManager::spawnNextWave), 5.f);
+                scheduleOnce([&](float) { spawnNextWave(); }, 5.f, "next_wave");
                 _spawned = true;
             } else {
                 _world->_hudLayer->notify('I', "All waves are cleared!");
-                _world->endGame(false);
+                _world->endGame(true);
+                unscheduleUpdate();
             }
         }
     }
 }
 
-void SpawnManager::spawnNextWave(float delta) {
+void SpawnManager::spawnNextWave() {
     auto tier = getTier();
     ValueVector wave;
 

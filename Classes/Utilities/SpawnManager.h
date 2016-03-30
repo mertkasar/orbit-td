@@ -27,7 +27,7 @@ public:
 
     virtual void update(float delta);
 
-    void spawnNextWave(float delta);
+    void spawnNextWave();
 
     void reset();
 

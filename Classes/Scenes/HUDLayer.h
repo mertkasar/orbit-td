@@ -12,6 +12,8 @@ namespace cocos2d {
 
     namespace ui {
         class Layout;
+
+        class Button;
     }
 }
 
@@ -68,6 +70,8 @@ private:
 
     cocos2d::ui::Layout *_shieldBar;
     cocos2d::ui::Layout *_energy;
+
+    cocos2d::ui::Button *_nextButton;
 
     DialogBox *_dialogBox;
     Pool<CostIndicator> _costIndicatorPool;

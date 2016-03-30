@@ -7,6 +7,7 @@
 #include "../Entities/WheelMenu.h"
 #include "../Utilities/SpawnManager.h"
 
+#include <base/CCScheduler.h>
 #include <2d/CCMenu.h>
 #include <2d/CCActionInterval.h>
 #include <2d/CCActionInstant.h>
@@ -54,14 +55,14 @@ bool HUDLayer::init() {
     _topPanel->setPosition(Vec2(0, 720));
     _topPanel->setOpacity(0);
 
-    auto button = ui::Button::create("btn_next_n.png", "btn_next_t.png", "", ui::Widget::TextureResType::PLIST);
-    button->setName("next_button");
-    button->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-    button->setPosition(Vec2(140.f, 90.f));
-    button->addTouchEventListener(CC_CALLBACK_2(HUDLayer::nextButtonCallback, this));
-    _topPanel->addChild(button);
+    _nextButton = ui::Button::create("btn_next_n.png", "btn_next_t.png", "", ui::Widget::TextureResType::PLIST);
+    _nextButton->setName("next_button");
+    _nextButton->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _nextButton->setPosition(Vec2(140.f, 90.f));
+    _nextButton->addTouchEventListener(CC_CALLBACK_2(HUDLayer::nextButtonCallback, this));
+    _topPanel->addChild(_nextButton);
 
-    button = ui::Button::create("btn_menu_n.png", "btn_menu_t.png", "", ui::Widget::TextureResType::PLIST);
+    auto button = ui::Button::create("btn_menu_n.png", "btn_menu_t.png", "", ui::Widget::TextureResType::PLIST);
     button->setName("menu_button");
     button->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     button->setPosition(Vec2(1220.f, 90.f));
@@ -88,7 +89,7 @@ bool HUDLayer::init() {
     auto text = ui::Text::create("Waves:0/0", "fonts/kenvector_future.ttf", 28);
     text->setName("#wave_text");
     text->setTextHorizontalAlignment(TextHAlignment::CENTER);
-    text->setPosition(Vec2(300.f, 90.f));
+    text->setPosition(Vec2(350.f, 90.f));
     _topPanel->addChild(text);
 
     _shieldBar = ui::Layout::create();
@@ -145,6 +146,10 @@ void HUDLayer::update(float delta) {
 
     auto text = static_cast<ui::Text *>(_energy->getChildByName("#energy_text"));
     text->setString(ss_c.str());
+
+    if (!_nextButton->isEnabled() && _world->_gameplayLayer->getEnemyShips().size() <= 0) {
+        _nextButton->setEnabled(true);
+    }
 }
 
 void HUDLayer::notify(char type, std::string message, float duration) {
@@ -285,8 +290,16 @@ void HUDLayer::menuButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::Tou
 
 void HUDLayer::nextButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType type) {
     if (type == ui::Widget::TouchEventType::ENDED) {
-        if (!_world->_spawnManager->isCleared()) {
-            _world->_spawnManager->spawnNextWave(0.f);
+        SpawnManager *spawnManager = _world->_spawnManager;
+
+        if (!spawnManager->isCleared()) {
+            if (spawnManager->isScheduled("next_wave")) {
+                spawnManager->unschedule("next_wave");
+                spawnManager->spawnNextWave();
+            } else {
+                _nextButton->setEnabled(false);
+                spawnManager->spawnNextWave();
+            }
             notify('W', "Coming next wave!");
         } else
             notify('E', "No waves remained!");
