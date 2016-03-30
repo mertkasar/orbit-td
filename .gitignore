@@ -37,6 +37,7 @@ linux-build/
 .classpath
 .project
 .cproject
+gradle.properties
 
 # backup files
 *.bak
