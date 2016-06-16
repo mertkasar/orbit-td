@@ -4,6 +4,7 @@
 #include "../Globals.h"
 #include "../Utilities/Pool.h"
 #include "../Entities/Missile.h"
+#include "World.h"
 
 #include <2d/CCLayer.h>
 #include <base/CCValue.h>
@@ -71,7 +72,7 @@ public:
         return _ships;
     }
 
-    unsigned int getTotalPoint() const{
+    unsigned int getTotalPoint() const {
         return _totalPoint;
     }
 
@@ -83,7 +84,7 @@ public:
         return _life;
     }
 
-    unsigned int getEnemiesPresent() const{
+    unsigned int getEnemiesPresent() const {
         return (unsigned int) _ships.size();
     }
 
@@ -92,7 +93,8 @@ public:
     }
 
     void balanceTotalEnergy(int balance) {
-        _totalEnergy = _totalEnergy + balance;
+        if (!_world->_debugMode)
+            _totalEnergy = _totalEnergy + balance;
     }
 
 private:

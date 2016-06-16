@@ -83,6 +83,9 @@ public:
 private:
     void loadModels();
 
+    void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
+
+
 private:
     cocos2d::PhysicsWorld *__physicsWorld;
 
@@ -106,6 +109,8 @@ public:
     GameplayLayer *_gameplayLayer;
     SpawnManager *_spawnManager;
     HUDLayer *_hudLayer;
+
+    bool _debugMode;
 };
 
 #endif // WORLD_H

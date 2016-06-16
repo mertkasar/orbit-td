@@ -26,6 +26,7 @@
 #include <platform/CCFileUtils.h>
 
 #include <sstream>
+#include <base/CCEventListenerKeyboard.h>
 
 USING_NS_CC;
 
@@ -57,6 +58,8 @@ bool World::init() {
         return false;
     }
 
+    _debugMode = false;
+
     _visibleSize = Director::getInstance()->getVisibleSize();
     _origin = Director::getInstance()->getVisibleOrigin();
     _canvasCenter = Vec2(_visibleSize / 2.f) + _origin;
@@ -87,6 +90,12 @@ bool World::init() {
         _audioEngine->setBackgroundMusicVolume(0.f);
         _audioEngine->setEffectsVolume(0.f);
     }
+
+    // creating a keyboard event listener
+    auto listener = EventListenerKeyboard::create();
+    listener->onKeyReleased = CC_CALLBACK_2(World::onKeyReleased, this);
+
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     return true;
 }
@@ -236,3 +245,18 @@ void World::loadModels() {
         _models.insert(std::make_pair(key, data));
     }
 }
+
+void World::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event *event) {
+    switch (keyCode) {
+        case EventKeyboard::KeyCode::KEY_D:
+            _debugMode = !_debugMode;
+            break;
+        case EventKeyboard::KeyCode::KEY_R:
+            resetGame();
+            break;
+        default:
+            Layer::onKeyReleased(keyCode, event);
+    }
+}
+
+

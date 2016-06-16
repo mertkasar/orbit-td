@@ -55,13 +55,14 @@ private:
     std::map<cocos2d::Vec2, cocos2d::Sprite *> _slotMap;
 
     cocos2d::Node *_pathCanvas;
-    cocos2d::DrawNode *_debugCanvas;
 
 public:
     Grid _grid;
     Path _path;
     cocos2d::Vec2 _start;
     cocos2d::Vec2 _goal;
+
+    cocos2d::DrawNode *_debugCanvas;
 
     void reset();
 };

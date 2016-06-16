@@ -147,7 +147,11 @@ void HUDLayer::update(float delta) {
     auto text = static_cast<ui::Text *>(_energy->getChildByName("#energy_text"));
     text->setString(ss_c.str());
 
-    if (!_nextButton->isEnabled() && _world->_gameplayLayer->getEnemyShips().size() <= 0) {
+    if (!_world->_debugMode) {
+        if (!_nextButton->isEnabled() && _world->_gameplayLayer->getEnemyShips().size() <= 0) {
+            _nextButton->setEnabled(true);
+        }
+    } else if (!_nextButton->isEnabled()) {
         _nextButton->setEnabled(true);
     }
 }

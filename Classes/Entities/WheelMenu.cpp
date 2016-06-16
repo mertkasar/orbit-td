@@ -209,9 +209,15 @@ void WheelMenu::updateButtonStates() {
         bool enabled;
         for (unsigned int i = 0; i < 3; ++i) {
             btn = static_cast<ui::Button *>(_purchaseMenu->getChildByTag(i));
-            enabled = _lastCoin >= _world->getModel(i).at("base_cost").asFloat();
-            btn->setEnabled(enabled);
-            btn->setBright(enabled);
+
+            if (!_world->_debugMode) {
+                enabled = _lastCoin >= _world->getModel(i).at("base_cost").asFloat();
+                btn->setEnabled(enabled);
+                btn->setBright(enabled);
+            } else {
+                btn->setEnabled(true);
+                btn->setBright(true);
+            }
         }
     } else if (_state == VERBOSE) {
         auto tower = _world->_gameplayLayer->getTower(_currentTile);
@@ -220,8 +226,14 @@ void WheelMenu::updateButtonStates() {
         auto enabled = tower->getLevel() < 2 && _lastCoin >= towerCost;
 
         auto btn = static_cast<ui::Button *>(_verboseMenu->getChildByTag(UPGRADE));
-        btn->setEnabled(enabled);
-        btn->setBright(enabled);
+
+        if (!_world->_debugMode) {
+            btn->setEnabled(enabled);
+            btn->setBright(enabled);
+        } else {
+            btn->setEnabled(true);
+            btn->setBright(true);
+        }
     }
 }
 
