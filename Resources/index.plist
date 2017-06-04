@@ -14,10 +14,6 @@
 	</array>
 	<key>audio</key>
 	<dict>
-		<key>background</key>
-		<array>
-			<string>audio/ambient.mp3</string>
-		</array>
 		<key>effect</key>
 		<array>
 			<string>audio/explosion_1.wav</string>

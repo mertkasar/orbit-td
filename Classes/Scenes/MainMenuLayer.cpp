@@ -104,19 +104,17 @@ void MainMenuLayer::soundButtonCallback(cocos2d::Ref *sender, cocos2d::ui::Widge
     if (type == ui::Widget::TouchEventType::ENDED) {
         _muted = !_muted;
         _world->_prefs->setBoolForKey("muted", _muted);
+        
+        _world->_audioEngine->playEffect("audio/click.wav");
 
         auto button = static_cast<ui::Button *>(sender);
         if (_muted) {
             button->loadTextures("btn_mute_n.png", "btn_mute_t.png", "", ui::Widget::TextureResType::PLIST);
-            _world->_audioEngine->setBackgroundMusicVolume(0.f);
             _world->_audioEngine->setEffectsVolume(0.f);
         } else {
-            _world->_audioEngine->setBackgroundMusicVolume(0.6f);
             _world->_audioEngine->setEffectsVolume(1.f);
             button->loadTextures("btn_unmute_n.png", "btn_unmute_t.png", "", ui::Widget::TextureResType::PLIST);
         }
-
-        _world->_audioEngine->playEffect("audio/click.wav");
     }
 }
 

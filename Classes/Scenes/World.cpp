@@ -82,12 +82,7 @@ bool World::init() {
     setState(MAIN_MENU);
 
     auto muted = _prefs->getBoolForKey("muted");
-    _audioEngine->playBackgroundMusic("audio/ambient.mp3", true);
-
-    if (!muted) {
-        _audioEngine->setBackgroundMusicVolume(0.6f);
-    } else {
-        _audioEngine->setBackgroundMusicVolume(0.f);
+    if (muted) {
         _audioEngine->setEffectsVolume(0.f);
     }
 
@@ -253,6 +248,9 @@ void World::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Even
             break;
         case EventKeyboard::KeyCode::KEY_R:
             resetGame();
+            break;
+        case EventKeyboard::KeyCode::KEY_ESCAPE:
+            Director::getInstance()->end();
             break;
         default:
             Layer::onKeyReleased(keyCode, event);

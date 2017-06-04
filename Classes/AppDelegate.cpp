@@ -5,7 +5,7 @@
 
 USING_NS_CC;
 
-const Size RESOLUTION = Size(1280, 720);
+const Size DESIGN_RESOLUTION = Size(1280, 720);
 
 AppDelegate::AppDelegate() {
 
@@ -28,8 +28,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto director = Director::getInstance();
     auto glview = director->getOpenGLView();
     if (!glview) {
-        glview = GLViewImpl::create("Orbit TD");
-        glview->setFrameSize(RESOLUTION.width, RESOLUTION.height);
+        //glview = GLViewImpl::create("Orbit TD");
+        
+        glview = GLViewImpl::createWithFullScreen("Orbit TD");
         director->setOpenGLView(glview);
     }
 
@@ -37,7 +38,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     director->setAnimationInterval(1.f / 60.f);
 
-    glview->setDesignResolutionSize(RESOLUTION.width, RESOLUTION.height, ResolutionPolicy::EXACT_FIT);
+    glview->setDesignResolutionSize(DESIGN_RESOLUTION.width, DESIGN_RESOLUTION.height, ResolutionPolicy::EXACT_FIT);
 
     register_all_packages();
 

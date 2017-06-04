@@ -77,10 +77,6 @@ void SplashScene::loadResources() {
     auto textureCache = Director::getInstance()->getTextureCache();
 
     auto audio = index.at("audio").asValueMap();
-    for (auto bg : audio.at("background").asValueVector()) {
-        audioEngine->preloadBackgroundMusic(bg.asString().c_str());
-    }
-
     for (auto effect : audio.at("effect").asValueVector()) {
         audioEngine->preloadEffect(effect.asString().c_str());
     }
