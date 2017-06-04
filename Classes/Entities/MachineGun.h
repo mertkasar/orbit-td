@@ -1,7 +1,7 @@
 #ifndef MACHINE_GUN_H
 #define MACHINE_GUN_H
 
-#include <Entities/Turret.h>
+#include "Turret.h"
 
 class MachineGun : public Turret {
 public:

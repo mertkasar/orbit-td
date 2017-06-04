@@ -1,7 +1,7 @@
 #include <AppDelegate.h>
 
 #include <audio/include/SimpleAudioEngine.h>
-#include <Scenes/SplashScene.h>
+#include "Scenes/SplashScene.h"
 
 USING_NS_CC;
 

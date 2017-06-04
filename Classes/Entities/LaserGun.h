@@ -1,7 +1,7 @@
 #ifndef LASER_GUN_H
 #define LASER_GUN_H
 
-#include <Entities/Turret.h>
+#include "Turret.h"
 
 class LaserBeam;
 
